@@ -21,8 +21,10 @@ const LandingContactBar: FC<IContactBar> = ({ contacts, emails }) => {
             }
           />
           <div className={"flex flex-row gap-4"}>
-            {contacts.map((contact) => (
-              <span className="self-stretch my-auto">{contact}</span>
+            {contacts.map((contact, index) => (
+              <span key={index} className="self-stretch my-auto">
+                {contact}
+              </span>
             ))}
           </div>
         </div>
@@ -33,8 +35,10 @@ const LandingContactBar: FC<IContactBar> = ({ contacts, emails }) => {
             className="object-contain shrink-0 self-stretch my-auto w-6 aspect-square"
           />
           <div className={"flex flex-row gap-4"}>
-            {emails.map((email) => (
-              <span className="self-stretch my-auto">{email}</span>
+            {emails.map((email, index) => (
+              <span key={index} className="self-stretch my-auto">
+                {email}
+              </span>
             ))}
           </div>
         </div>
