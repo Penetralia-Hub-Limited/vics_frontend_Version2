@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-primary-900: oklch(24.42% 0.0566 157.21); /* #012815 */
+  --color-primary-800: oklch(28.63% 0.0677 156.63); /* #01341C */
+  --color-primary-700: oklch(33.68% 0.0816 155.58); /* #014324 */
+  --color-primary-600: oklch(39.79% 0.1004 153.47); /* #02562C */
+  --color-primary-500: oklch(42.66% 0.1059 154.38); /* #025F33 */
+  --color-primary-400: oklch(53.96% 0.0927 160.3); /* #357F5C */
+  --color-primary-300: oklch(61.52% 0.0804 162.13); /* #559476 */
+  --color-primary-200: oklch(73.69% 0.0536 164.26); /* #8BB5A1 */
+  --color-primary-100: oklch(82.38% 0.0351 165.82); /* #B1CDC0 */
+  --color-primary-50: oklch(94.42% 0.0109 167.79); /* #E6EFEB */
+
+  --color-neutral-900: oklch(46.18% 0.003 164.97); /* #575958 */
+  --color-neutral-800: oklch(55.6% 0.004 174.38); /* #717473 */
+  --color-neutral-700: oklch(66.92% 0.0055 164.93); /* #929694 */
+  --color-neutral-600: oklch(80.33% 0.0062 170.4); /* #BBC0BE */
+  --color-neutral-500: oklch(86.24% 0.0061 170.42); /* #CED3D1 */
+  --color-neutral-400: oklch(89.08% 0.0051 164.99); /* #D8DCDA */
+  --color-neutral-300: oklch(90.91% 0.0051 165); /* #DEE2E0 */
+  --color-neutral-200: oklch(93.75% 0.0035 174.48); /* #E8EBEA */
+  --color-neutral-100: oklch(95.74% 0.0011 197.14); /* #F0F1F1 */
+  --color-neutral-50: oklch(98.71% 0.0017 145.56); /* #FAFBFA */
+
+  --color-black: oklch(17.76% 0 0); /* #111111 */
+  --color-white: oklch(100% 0 0); /* #FFFFFF */
+}

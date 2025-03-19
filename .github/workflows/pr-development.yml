@@ -1,0 +1,31 @@
+name: PR Checks for Development
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  format-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Node.js dependencies
+        run: npm ci # Ensures a clean install of dependencies
+
+      - name: Run linters
+        run: npm run lint
+
+      - name: Run format
+        run: npm run format
