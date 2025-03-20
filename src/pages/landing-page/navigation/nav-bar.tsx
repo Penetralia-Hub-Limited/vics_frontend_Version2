@@ -7,7 +7,7 @@ const LPNavBar = () => {
   return (
     <nav
       className={
-        "flex flex-col justify-center px-5 px-12 md:px-24 xl:px-40 py-6 w-full bg-white"
+        "flex flex-col justify-center px-4 md:px-12 md:w-[100%] py-6 w-full bg-white"
       }
     >
       <div

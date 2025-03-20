@@ -35,10 +35,10 @@ const LandingRegistration = () => {
   ];
 
   return (
-    <section className={"relative border border-red-400"}>
+    <section className={"relative"}>
       <div
         className={
-          "my-20 max-md:mt-10 px-4 md:px-18 md:w-[78%] self-stretch max-md:max-w-full"
+          "my-20 max-md:mt-10 px-4 md:px-12 md:w-[78%] self-stretch max-md:max-w-full"
         }
       >
         <div
