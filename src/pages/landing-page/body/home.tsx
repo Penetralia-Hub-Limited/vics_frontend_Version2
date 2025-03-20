@@ -5,7 +5,6 @@ import LandingRegistration from "./registration-steps";
 import { hotline, supportMail } from "@/common/constant";
 import WhiteLogo from "@/assets/logo/icon_white.svg";
 import Footer from "../navigation/footer";
-import KWLogo from "@/assets/logo/KW-logo.svg";
 
 const LandingPage = () => {
   return (
