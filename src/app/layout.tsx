@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import StoreProvider from "./store-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,14 +17,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "VICS",
   description: "Vehicle Identification and Verification System",
-  // icons: {
-  //   icon: [
-  //     {
-  //       url: "",
-  //       href: "",
-  //     },
-  //   ],
-  // },
 };
 
 export default function RootLayout({
@@ -36,7 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+        <AppRouterCacheProvider>
+          <StoreProvider>{children}</StoreProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
