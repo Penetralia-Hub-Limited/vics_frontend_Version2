@@ -1,7 +1,6 @@
 import { FC } from "react";
-import ArrowIcon from "@/assets/icons/arrow_icon.svg";
-import Image from "next/image";
 import Link from "next/link";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 
 interface IGetStartedButton {
   link: string;
@@ -22,7 +21,10 @@ const GetStartedButton: FC<IGetStartedButton> = ({ link }) => {
       >
         Get started here
       </p>
-      <Image src={ArrowIcon} alt={"arrow icon"} className={"w-5 h-5"} />
+
+      <ArrowOutwardIcon
+        className={"text-primary-500 group-hover:text-primary-500/50"}
+      />
     </Link>
   );
 };
