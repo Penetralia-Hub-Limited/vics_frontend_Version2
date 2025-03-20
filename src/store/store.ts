@@ -1,7 +1,6 @@
 import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist";
+import { persistReducer } from "redux-persist";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import authReducer from "./auth/auth-slice";
 import vehicleReducer from "./vehicle/vehicle-slice";
