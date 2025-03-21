@@ -256,7 +256,9 @@ export const ManagementSVG: FC<SVGProps<SVGElement>> = ({
   </>
 );
 
-export const BarChartIcon = () => (
+export const BarChartIcon: FC<SVGProps<SVGElement>> = ({
+  color = "#717473",
+}) => (
   <svg
     width="16"
     height="16"
@@ -267,12 +269,11 @@ export const BarChartIcon = () => (
   >
     <path
       d="M5.66667 8H3C2.44772 8 2 8.44772 2 9V13C2 13.5523 2.44772 14 3 14H5.66667C6.21895 14 6.66667 13.5523 6.66667 13V9C6.66667 8.44772 6.21895 8 5.66667 8Z"
-      fill="#111111"
+      fill={color}
     />
     <path
       d="M13 2H10.3333C9.78105 2 9.33333 2.44772 9.33333 3V13C9.33333 13.5523 9.78105 14 10.3333 14H13C13.5523 14 14 13.5523 14 13V3C14 2.44772 13.5523 2 13 2Z"
-      fill="#111111"
+      fill={color}
     />
   </svg>
 );
-
