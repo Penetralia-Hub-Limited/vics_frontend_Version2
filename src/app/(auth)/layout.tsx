@@ -10,22 +10,20 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <nav>
-          <LandingContactBar contacts={hotline} emails={supportMail} />
-          <LPNavBar />
-        </nav>
+    <main>
+      <nav>
+        <LandingContactBar contacts={hotline} emails={supportMail} />
+        <LPNavBar />
+      </nav>
 
-        <main className="h-96">{children}</main>
+      <main className="h-96">{children}</main>
 
-        <Footer
-          icon={WhiteLogo}
-          hotline={hotline}
-          support={supportMail}
-          state={"Kwara state"}
-        />
-      </body>
-    </html>
+      <Footer
+        icon={WhiteLogo}
+        hotline={hotline}
+        support={supportMail}
+        state={"Kwara state"}
+      />
+    </main>
   );
 }
