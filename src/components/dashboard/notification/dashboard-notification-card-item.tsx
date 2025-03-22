@@ -14,7 +14,7 @@ interface IDashboardNotificationCardItem {
 const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
   notification,
 }) => {
-  const formattedDate = format(notification.date, "d MMM yyyy");
+  const formattedDate = format(notification.date, "h:m:s aaa");
 
   return (
     <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
@@ -24,7 +24,7 @@ const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
           <p className={"text-base font-medium leading-none"}>
             {notification.title}
           </p>
-          <p className={"text-sm font-medium leading-none text-neutral-800"}>
+          <p className={"text-sm leading-none text-neutral-800"}>
             {formattedDate}
           </p>
         </div>
