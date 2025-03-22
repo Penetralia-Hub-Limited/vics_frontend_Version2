@@ -13,3 +13,11 @@ export interface IHotline {
   id: number;
   line: string;
 }
+
+export interface IFieldItems {
+  id: string;
+  label: string;
+  placeholder: string;
+  type: string;
+  htmlfor: string;
+}
