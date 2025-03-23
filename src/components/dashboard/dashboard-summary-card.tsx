@@ -15,7 +15,9 @@ interface ISummaryCard {
 const SummaryCard: FC<ISummaryCard> = ({ title, amount, currency }) => {
   return (
     <div
-      className={"flex flex-col gap-4 border border-neutral-200 rounded-lg p-5"}
+      className={
+        "w-full flex flex-col gap-4 border border-neutral-200 rounded-lg p-5"
+      }
     >
       <div className={"flex flex-row justify-between items-center"}>
         <div className={"w-fit border border-neutral-200 rounded-lg p-2"}>
@@ -28,7 +30,7 @@ const SummaryCard: FC<ISummaryCard> = ({ title, amount, currency }) => {
 
       <div className={"flex flex-row justify-between items-center"}>
         <div className={""}>
-          <p className={""}>{title}</p>
+          <p className={"text-sm"}>{title}</p>
           <p className={"text-base md:text-lg font-bold"}>
             {currency ? formattedAmount(amount) : amount}
           </p>
