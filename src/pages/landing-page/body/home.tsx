@@ -1,10 +1,10 @@
-import LPNavBar from "../navigation/nav-bar";
 import HeroSection from "./hero-section";
-import LandingContactBar from "../navigation/contact-bar";
+import Footer from "../navigation/footer";
+import LPNavBar from "../navigation/nav-bar";
+import WhiteLogo from "@/assets/logo/icon_white.svg";
 import LandingRegistration from "./registration-steps";
 import { hotline, supportMail } from "@/common/constant";
-import WhiteLogo from "@/assets/logo/icon_white.svg";
-import Footer from "../navigation/footer";
+import LandingContactBar from "../navigation/contact-bar";
 
 const LandingPage = () => {
   return (

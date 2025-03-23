@@ -38,3 +38,20 @@ export const signUpFieldItems = [
     htmlfor: "confirmpassword",
   },
 ];
+
+export const loginFieldItems = [
+  {
+    id: "email",
+    label: "email",
+    placeholder: "userexample@gmail.com",
+    type: "email",
+    htmlfor: "email",
+  },
+  {
+    id: "password",
+    label: "Password",
+    placeholder: "Enter Password",
+    type: "password",
+    htmlfor: "password",
+  },
+];
