@@ -20,15 +20,21 @@ const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
     <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0 border-b-1 border-neutral-500 last:border-b-0">
       <span className="flex h-2 w-2 translate-y-1 rounded-full bg-primary-500" />
       <div className="space-y-3">
-        <div className={"flex flex-row items-center justify-between"}>
-          <p className={"text-base font-medium leading-none"}>
+        <div className={"flex flex-row items-start justify-between"}>
+          <p
+            className={"text-sm md:text-base font-medium leading-none w-[70%]"}
+          >
             {notification.title}
           </p>
-          <p className={"text-sm leading-none text-neutral-700"}>
+          <p
+            className={
+              "text-xs md:text-sm leading-none text-neutral-700 w-[30%]"
+            }
+          >
             {formattedDate}
           </p>
         </div>
-        <p className="text-sm text-neutral-800 line-clamp-1">
+        <p className="text-xs md:text-sm text-neutral-800 line-clamp-1">
           {notification.description}
         </p>
         <Button variant={"outline"}>View</Button>

@@ -47,7 +47,7 @@ const SelectDateRange = () => {
 
   return (
     <Select onValueChange={handleSelect} defaultValue={selectedRange}>
-      <SelectTrigger className="text-neutral-800 w-fit">
+      <SelectTrigger className="text-neutral-700 w-fit">
         <SelectValue placeholder="Select Date Range">
           {DATE_RANGES[selectedRange].label}
         </SelectValue>
