@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <div className={"flex flex-col w-full items-center justify-center"}>
       <FormComp
-        title={"Account Log"}
+        title={"Account Login"}
         description={"Login with your Email address and password"}
         fields={loginFieldItems}
       />
