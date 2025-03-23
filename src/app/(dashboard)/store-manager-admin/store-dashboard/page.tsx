@@ -9,7 +9,7 @@ export default function Page() {
   const formattedDate = format(currentDate, "LLL. d yyyy ; h:maaa");
   return (
     <main>
-      <div className={"py-5 flex flex-row justify-between items-center"}>
+      <div className={"pt-3 pb-8  flex flex-row justify-between items-center"}>
         <p className={"text-lg md:text-3xl font-bold"}>Welcome, Username</p>
         <p className={"text-sm text-neutral-700"}>{formattedDate}</p>
       </div>
