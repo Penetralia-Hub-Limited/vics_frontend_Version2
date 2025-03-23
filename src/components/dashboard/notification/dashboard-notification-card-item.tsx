@@ -24,14 +24,14 @@ const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
           <p className={"text-base font-medium leading-none"}>
             {notification.title}
           </p>
-          <p className={"text-sm leading-none text-neutral-800"}>
+          <p className={"text-sm leading-none text-neutral-700"}>
             {formattedDate}
           </p>
         </div>
         <p className="text-sm text-neutral-800 line-clamp-1">
           {notification.description}
         </p>
-        <Button>View</Button>
+        <Button variant={"outline"}>View</Button>
       </div>
     </div>
   );

@@ -1,12 +1,17 @@
+"use client";
+
 import { DashboardNotificationsComp } from "@/components/dashboard/notification/dashboard-notifications";
 import SummaryCard from "@/components/dashboard/dashboard-summary-card";
+import { format } from "date-fns";
 
 export default function Page() {
+  const currentDate = new Date();
+  const formattedDate = format(currentDate, "LLL. d yyyy ; h:maaa");
   return (
     <main>
       <div className={"py-5 flex flex-row justify-between items-center"}>
-        <div>Welcome, Username</div>
-        <div>Feb 27, 2025...</div>
+        <p className={"text-lg md:text-3xl font-bold"}>Welcome, Username</p>
+        <p className={"text-sm text-neutral-700"}>{formattedDate}</p>
       </div>
 
       <div className={"grid grid-cols-[2fr_auto] gap-2"}>

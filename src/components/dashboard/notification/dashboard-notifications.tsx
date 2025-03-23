@@ -26,9 +26,10 @@ const notifications = [
 ];
 
 export function DashboardNotificationsComp({ className, ...props }: CardProps) {
+  const divide = notifications.length - 1;
   return (
     <Card className={cn("w-fill", className)} {...props}>
-      <CardHeader className={"my-0 py-5 bg-neutral-300 rounded-t-xl"}>
+      <CardHeader className={"my-0 py-5 bg-neutral-300 rounded-t-lg"}>
         <CardTitle>Notifications</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4">
