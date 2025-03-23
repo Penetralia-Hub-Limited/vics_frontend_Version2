@@ -20,8 +20,14 @@ export default function Page() {
             <SummaryCard title={"Plate Request"} amount={2900} />
           </div>
           <div className={"flex flex-col gap-4"}>
-            {[{}, {}, {}].map(() => {
-              return <SummaryCard title={"Plate Request"} amount={2900} />;
+            {[{}, {}, {}].map((_, index) => {
+              return (
+                <SummaryCard
+                  key={index}
+                  title={"Plate Request"}
+                  amount={2900}
+                />
+              );
             })}
           </div>
         </div>
