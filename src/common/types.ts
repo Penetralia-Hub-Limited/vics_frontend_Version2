@@ -16,6 +16,14 @@ export interface IHotline {
   line: string;
 }
 
+export interface IFieldItems {
+  id: string;
+  label: string;
+  placeholder: string;
+  type: string;
+  htmlfor: string;
+}
+
 export interface IVehiceManagement {
   id: number;
   title: string;
