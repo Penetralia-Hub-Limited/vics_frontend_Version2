@@ -1,4 +1,24 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { IUserCredentials } from "./auth-user-types";
+import { loginAuth } from "@/utils/auth";
+
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (userCredentials: IUserCredentials, { rejectWithValue }) => {
+    try {
+      const response = await loginAuth(userCredentials);
+      const userData = response.data;
+
+      // Save to localStorage
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      return userData;
+    } catch (error) {
+      const errorMessage = error as unknown as string;
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
 
 interface AuthState {
   user: null | { id: string; email: string };
