@@ -1,5 +1,3 @@
-import { Navigation } from "@toolpad/core/AppProvider";
-
 export interface IlandingPageNavigation {
   id: number;
   label: string;
@@ -14,22 +12,4 @@ export interface ISupportMail {
 export interface IHotline {
   id: number;
   line: string;
-}
-
-export interface IVehiceManagement {
-  id: number;
-  title: string;
-  Icon: React.ElementType;
-  dropdown: Array<{
-    id: number;
-    title: string;
-    Icon: React.ElementType;
-  }>;
-}
-
-export interface NavigationItemBase extends Navigation {
-  title: string;
-  kind?: "page"; // Optional for headers and dividers
-  segment?: string; // Used for navigation items
-  icon?: React.ReactNode; // Icon component
 }
