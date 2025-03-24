@@ -1,5 +1,5 @@
 import FormComp from "@/components/auth/form";
-import { signUpFieldItems } from "@/common/data";
+import { signUpFieldItems } from "@/common/nav-data";
 
 export default function Page() {
   return (

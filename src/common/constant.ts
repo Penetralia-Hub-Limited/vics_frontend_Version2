@@ -34,3 +34,164 @@ export const supportMail: ISupportMail[] = [
     mail: "helpdesk@kw-ivas.gov.ng",
   },
 ];
+
+export const forgetPasswordFieldItems = [
+  {
+    id: "email",
+    label: "email",
+    placeholder: "userexample@gmail.com",
+    type: "email",
+    htmlfor: "email",
+  },
+];
+
+export const signUpFieldItems = [
+  {
+    id: "name",
+    label: "Name",
+    placeholder: "Names",
+    type: "text",
+    htmlfor: "name",
+  },
+  {
+    id: "email",
+    label: "email",
+    placeholder: "userexample@gmail.com",
+    type: "email",
+    htmlfor: "email",
+  },
+  {
+    id: "password",
+    label: "Password",
+    placeholder: "Enter Password",
+    type: "password",
+    htmlfor: "password",
+  },
+  {
+    id: "confirmpassword",
+    label: "Confirm Password",
+    placeholder: "Repeat Password",
+    type: "password",
+    htmlfor: "confirmpassword",
+  },
+];
+
+export const loginFieldItems = [
+  {
+    id: "email",
+    label: "email",
+    placeholder: "userexample@gmail.com",
+    type: "email",
+    htmlfor: "email",
+  },
+  {
+    id: "password",
+    label: "Password",
+    placeholder: "Enter Password",
+    type: "password",
+    htmlfor: "password",
+  },
+];
+
+export const tableHeader = [
+  {
+    title: "S/N",
+  },
+  {
+    title: "LGA",
+  },
+  {
+    title: "Range",
+  },
+  {
+    title: "End Code",
+  },
+  {
+    title: "Type",
+  },
+  {
+    title: "Created By",
+  },
+  {
+    title: "Date",
+  },
+  {
+    title: "Initial Quantity",
+  },
+  {
+    title: "Current Quantity",
+  },
+];
+
+export const tableInvoices = [
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+];

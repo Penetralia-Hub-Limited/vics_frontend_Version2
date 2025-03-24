@@ -1,5 +1,5 @@
 import Form from "@/components/auth/form";
-import { forgetPasswordFieldItems } from "@/common/data";
+import { forgetPasswordFieldItems } from "@/common/nav-data";
 
 export default function Page() {
   return (
