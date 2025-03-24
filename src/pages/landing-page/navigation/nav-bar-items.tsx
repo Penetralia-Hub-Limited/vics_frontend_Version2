@@ -2,14 +2,19 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { landingPageNavigation } from "@/common/constant";
 
 const NavBarItems = () => {
   const router = useRouter();
+  const pathName = usePathname();
+
   return (
     <div
-      className={"flex flex-col items-center justify-center md:flex-row gap-8"}
+      className={
+        "flex flex-col items-center justify-center md:flex-row gap-8 w-full"
+      }
     >
       <div
         className={
@@ -17,7 +22,14 @@ const NavBarItems = () => {
         }
       >
         {landingPageNavigation.map(({ id, label, link }) => (
-          <Link className={"capitalize text-center"} key={id} href={link}>
+          <Link
+            className={`capitalize text-center pb-2 w-[5rem] 
+            ${pathName === link ? "border-b-2 border-primary-500" : ""}
+            focus-visible:border-b-2 focus-visible:border-primary-500`}
+            key={id}
+            href={link}
+            shallow
+          >
             {label}
           </Link>
         ))}
