@@ -7,11 +7,13 @@ import { demoTheme } from "@/styles/styles";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
-import { sideBarItems } from "@/common/navdata";
+// import { sideBarItems } from "@/common/navdata";
 import Logo from "../../assets/logo/icon_green.svg";
+import { Navigation } from "@toolpad/core/AppProvider";
 
 interface IDashboardCompLayout {
   children: React.ReactNode;
+  sidebarItems: Navigation;
   window?: Window;
 }
 
@@ -42,6 +44,7 @@ const LogoComponent = () => {
 const DashboardCompLayout: FC<IDashboardCompLayout> = ({
   children,
   window,
+  sidebarItems,
 }) => {
   const [mounted, setMounted] = useState(false);
 
@@ -55,7 +58,7 @@ const DashboardCompLayout: FC<IDashboardCompLayout> = ({
 
   return (
     <AppProvider
-      navigation={sideBarItems}
+      navigation={sidebarItems}
       router={router}
       theme={demoTheme}
       window={demoWindow}
