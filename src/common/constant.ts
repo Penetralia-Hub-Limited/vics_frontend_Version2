@@ -93,34 +93,13 @@ export const loginFieldItems = [
   },
 ];
 
-export const tableHeader = [
-  {
-    title: "S/N",
-  },
-  {
-    title: "LGA",
-  },
-  {
-    title: "Range",
-  },
-  {
-    title: "End Code",
-  },
-  {
-    title: "Type",
-  },
-  {
-    title: "Created By",
-  },
-  {
-    title: "Date",
-  },
-  {
-    title: "Initial Quantity",
-  },
-  {
-    title: "Current Quantity",
-  },
+export const tableHeaders = [
+  { title: "LGA", key: "lga" },
+  { title: "Plate Number Type", key: "type" },
+  { title: "Created By", key: "createdby" },
+  { title: "Date", key: "Date" },
+  { title: "Initial Qty", key: "initialQty" },
+  { title: "Current Qty", key: "currentQty" },
 ];
 
 export const tableInvoices = [

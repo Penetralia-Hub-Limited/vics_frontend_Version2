@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
-import { tableInvoices, tableHeader } from "@/common/constant";
+import { tableInvoices, tableHeaders } from "@/common/constant";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
@@ -15,10 +15,12 @@ export default function Page() {
           {
             label: "Dashboard",
             Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            link: "/store-manager-admin/dashboard",
           },
           {
             label: "Plate Number Request",
             Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            link: "/store-manager-admin/plate-number-request",
           },
         ]}
       />
@@ -41,7 +43,7 @@ export default function Page() {
         <div
           className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
         >
-          <DashboardTable header={tableHeader} data={tableInvoices} />
+          <DashboardTable headers={tableHeaders} data={tableInvoices} />
         </div>
         <div className={"p-5 ml-auto"}>
           <Pagination />

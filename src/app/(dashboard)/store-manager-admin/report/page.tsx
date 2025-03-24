@@ -9,10 +9,12 @@ export default function Page() {
           {
             label: "Dashboard",
             Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            link: "/store-manager-admin/dashboard",
           },
           {
             label: "Store Report Dashboard",
             Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            link: "/store-manager-admin/report",
           },
         ]}
       />
