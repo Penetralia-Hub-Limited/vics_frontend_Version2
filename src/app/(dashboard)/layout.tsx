@@ -1,4 +1,5 @@
-import DashboardCompLayout from "@/components/dashboard/dashboard-layout";
+import "@radix-ui/themes/styles.css";
+import "./globals.css";
 
 export default function DashboardLayout({
   children,
@@ -6,8 +7,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <DashboardCompLayout>
-      <main>{children}</main>
-    </DashboardCompLayout>
+    <html lang="en">
+      <body>{children}</body>
+    </html>
   );
 }
