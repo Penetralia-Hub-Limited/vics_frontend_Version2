@@ -22,7 +22,7 @@ jobs:
           node-version: 18
 
       - name: Install Node.js dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Run linters
         run: npm run lint
