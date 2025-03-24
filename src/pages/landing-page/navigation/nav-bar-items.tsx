@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { landingPageNavigation } from "@/common/constant";
 
 const NavBarItems = () => {
+  const router = useRouter();
   return (
     <div
       className={"flex flex-col items-center justify-center md:flex-row gap-8"}
@@ -19,7 +23,9 @@ const NavBarItems = () => {
         ))}
       </div>
 
-      <Button className={"text-white"}>Login</Button>
+      <Button onClick={() => router.push("/login")} className={"text-white"}>
+        Login
+      </Button>
     </div>
   );
 };
