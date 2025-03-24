@@ -26,8 +26,3 @@ export const loginAuth = async (userData: IUserCredentials) => {
     throw new Error(error as unknown as string);
   }
 };
-
-export const forgotPasswordAuth = async () => {
-  try {
-  } catch (error) {}
-};

@@ -14,7 +14,7 @@ export const loginUser = createAsyncThunk(
 
       return userData;
     } catch (error) {
-      const errorMessage = (error as any).response?.data || "Login failed";
+      const errorMessage = error as unknown as string;
       return rejectWithValue(errorMessage);
     }
   }
