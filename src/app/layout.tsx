@@ -26,15 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AppRouterCacheProvider>
-        <StoreProvider>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            {children}
-          </body>
-        </StoreProvider>
-      </AppRouterCacheProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AppRouterCacheProvider>
+          <StoreProvider>{children}</StoreProvider>
+        </AppRouterCacheProvider>
+      </body>
     </html>
   );
 }
