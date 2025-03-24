@@ -34,3 +34,106 @@ export const supportMail: ISupportMail[] = [
     mail: "helpdesk@kw-ivas.gov.ng",
   },
 ];
+
+export const tableHeader = [
+  {
+    title: "S/N",
+  },
+  {
+    title: "LGA",
+  },
+  {
+    title: "Range",
+  },
+  {
+    title: "End Code",
+  },
+  {
+    title: "Type",
+  },
+  {
+    title: "Created By",
+  },
+  {
+    title: "Date",
+  },
+  {
+    title: "Initial Quantity",
+  },
+  {
+    title: "Current Quantity",
+  },
+];
+
+export const tableInvoices = [
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+];
