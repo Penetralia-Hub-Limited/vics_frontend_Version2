@@ -1,12 +1,38 @@
 "use client";
 
-import { DashboardNotificationsComp } from "@/components/dashboard/notification/dashboard-notifications";
-import SummaryCard from "@/components/dashboard/dashboard-summary-card";
+import { useState, SetStateAction } from "react";
 import { format } from "date-fns";
+import { DateRange } from "@/common/enum";
+import SummaryCard from "@/components/dashboard/dashboard-summary-card";
+import { DashboardNotificationsComp } from "@/components/dashboard/notification/dashboard-notifications";
+
+const summaryItems1 = [
+  { title: "Plate Requests", amount: 318 },
+  { title: "Stock Level", amount: 1743, isCurrency: true },
+];
 
 export default function Page() {
   const currentDate = new Date();
   const formattedDate = format(currentDate, "LLL. d yyyy ; h:maaa");
+
+  const [selectedRanges1, setSelectedRanges1] = useState<
+    Record<string, DateRange>
+  >({
+    "Plate Requests": DateRange.TODAY,
+    "Stock Level": DateRange.TODAY,
+  });
+
+  const updateDateRange1 =
+    (title: string) => (newRange: SetStateAction<DateRange>) => {
+      setSelectedRanges1((prev) => ({
+        ...prev,
+        [title]:
+          typeof newRange === "function"
+            ? newRange(prev[title] || DateRange.TODAY)
+            : newRange,
+      }));
+    };
+
   return (
     <main>
       <div
@@ -22,11 +48,19 @@ export default function Page() {
         <div className={"flex flex-col gap-4 w-full"}>
           <div
             className={
-              "flex flex-row flex-wrap gap-2 justify-betweeen items-center w-full"
+              "flex flex-col md:flex-row gap-2 justify-between items-center w-full"
             }
           >
-            <SummaryCard title={"Plate Request"} amount={2900} />
-            <SummaryCard title={"Plate Request"} amount={2900} />
+            {summaryItems1.map(({ title, amount, isCurrency }) => (
+              <SummaryCard
+                key={title}
+                title={title}
+                amount={amount}
+                isCurrency={isCurrency}
+                selectedRange={selectedRanges1[title] || DateRange.TODAY}
+                setSelectedRange={updateDateRange1(title)}
+              />
+            ))}
           </div>
 
           <div className={"flex flex-col flex-wrap gap-4"}>
@@ -35,7 +69,10 @@ export default function Page() {
                 <SummaryCard
                   key={index}
                   title={"Plate Request"}
-                  amount={2900}
+                  amount={30000}
+                  isCurrency={false}
+                  selectedRange={DateRange.TODAY}
+                  setSelectedRange={() => {}}
                 />
               );
             })}
