@@ -26,7 +26,7 @@ const DashboardCompSelect: FC<IDashboardCompSelect> = ({
         <SelectTrigger
           className={"w-full border-1 border-neutral-500 rounded-lg"}
         >
-          <SelectValue placeholder={placeholder} />
+          <SelectValue className={"capitalize"} placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {items.map((item, index) => (

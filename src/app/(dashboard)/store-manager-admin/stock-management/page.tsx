@@ -13,8 +13,16 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 
 export default function Page() {
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+
+  const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
+  const paginatedData = tableInvoices.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 py-4"}>
@@ -79,10 +87,10 @@ export default function Page() {
         <div
           className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
         >
-          <DashboardTable headers={tableHeaders} data={tableInvoices} />
+          <DashboardTable headers={tableHeaders} data={paginatedData} />
         </div>
         <div className={"p-5 ml-auto"}>
-          <Pagination />
+          <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
     </main>

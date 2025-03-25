@@ -1,97 +1,89 @@
 "use client";
 
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import { Select } from "@/components/ui/select"; // FIXED IMPORT
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import DashboardTable from "@/components/dashboard/dashboard-table";
-
-const tableHeader = [
-  { title: "S/N" },
-  { title: "Tracking ID" },
-  { title: "Plate Number Type" },
-  { title: "No. of Plate Requested" },
-  { title: "No. of Plate Recommended" },
-  { title: "No. Assigned" },
-  { title: "Date" },
-  { title: "Recommending Officer" },
-];
-
-const tableData = [
-  {
-    lga: "Kwara State",
-    range: "FNR-202503044323",
-    endcode: "Private (Direct)",
-    type: "Vehicle",
-    createdby: "Akanbi S.",
-    Date: new Date("2025-03-04T09:32:44"),
-    initialQty: 12,
-    currentQty: 0,
-  },
-  {
-    lga: "Kwara State",
-    range: "FNR-202503044324",
-    endcode: "Commercial",
-    type: "Vehicle",
-    createdby: "Sheik A.",
-    Date: new Date("2025-03-04T09:32:44"),
-    initialQty: 5,
-    currentQty: 0,
-  },
-];
+import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
+import DatePicker from "@/components/dashboard/dashboard-datepicker";
+import { mlatableInvoices, mlaTableHeaders } from "@/common/constant";
 
 export default function Page() {
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
+
+  const totalPages = Math.ceil(mlatableInvoices.length / itemsPerPage);
+  const paginatedData = mlatableInvoices.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <main className="flex flex-col gap-8 md:gap-12 py-4">
       {/* Page Breadcrumb Navigation */}
-      <DashboardPath
-        pathdata={[
-          {
-            label: "Dashboard",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
-          },
-          {
-            label: "Plate Number Request",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
-          },
-        ]}
-      />
+      <div className={"flex flex-row justify-between items-center"}>
+        <DashboardPath
+          pathdata={[
+            {
+              label: "Dashboard",
+              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              link: "/mla-admin/dashboard",
+            },
+            {
+              label: "Plate Number Request",
+              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              link: "/mla-admin/dashboard/plate-number-request",
+            },
+          ]}
+        />
+        <Button>Create New Stock</Button>
+      </div>
 
       {/* Search and Filter Section */}
-      <CardContainer>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <Input placeholder="Tracking ID" />
-          <Select>
-            <option value="" disabled selected>
-              Plate Number Type
-            </option>
-            <option value="Private">Private</option>
-            <option value="Commercial">Commercial</option>
-            <option value="Motorcycle">Motorcycle</option>
-          </Select>
-          <Select>
-            <option value="" disabled selected>
-              Insurance Status
-            </option>
-            <option value="Valid">Valid</option>
-            <option value="Expired">Expired</option>
-            <option value="Pending">Pending</option>
-          </Select>
-          <Select>
-            <option value="" disabled selected>
-              Request Status
-            </option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-          </Select>
-          <Input type="date" placeholder="Start Date" />
-          <Input type="date" placeholder="End Date" />
+      <CardContainer className={"flex flex-col gap-5"}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <div className={"flex flex-col gap-3"}>
+            <p className={"font-semibold"}>Tracking ID</p>
+            <Input placeholder="Tracking Id" />
+          </div>
+
+          <DashboardCompSelect
+            title={"Plate Number Type"}
+            placeholder={"-- Select Type --"}
+            items={["Private", "Commercial"]}
+          />
+
+          <DashboardCompSelect
+            title={"Insurance Status"}
+            placeholder={"-- Select Status --"}
+            items={["private", "commercial"]}
+          />
         </div>
-        <div className="flex justify-end mt-4">
+
+        <div
+          className={
+            "grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_1fr] gap-4 mt-4 items-end"
+          }
+        >
+          <DashboardCompSelect
+            title={"Request Status"}
+            placeholder={"-- Select Status --"}
+            items={["private", "commercial"]}
+          />
+
+          <DatePicker
+            date={startDate}
+            setDate={setStartDate}
+            title={"Start Date"}
+          />
+          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+
           <Button>Search</Button>
         </div>
       </CardContainer>
@@ -99,10 +91,10 @@ export default function Page() {
       {/* Table Section */}
       <div className="flex flex-col gap-3 border border-neutral-300 rounded-lg">
         <div className="border-t border-neutral-300 rounded-lg overflow-hidden">
-          <DashboardTable header={tableHeader} data={tableData} />
+          <DashboardTable headers={mlaTableHeaders} data={paginatedData} />
         </div>
         <div className="p-5 ml-auto">
-          <Pagination />
+          <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
     </main>
