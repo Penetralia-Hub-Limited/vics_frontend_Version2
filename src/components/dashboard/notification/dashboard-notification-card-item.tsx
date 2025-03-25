@@ -20,7 +20,7 @@ const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
     <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0 border-b-1 border-neutral-300 last:border-b-0">
       <span className="flex h-2 w-2 translate-y-1 rounded-full bg-primary-500" />
       <div className="space-y-3">
-        <div className={"flex flex-row items-start justify-between"}>
+        <div className={"flex flex-row items-start justify-between w-full"}>
           <p
             className={"text-sm md:text-base font-medium leading-none w-[70%]"}
           >
@@ -28,7 +28,7 @@ const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
           </p>
           <p
             className={
-              "text-xs md:text-sm leading-none text-neutral-700 w-[30%]"
+              "text-xs md:text-sm leading-none text-neutral-700 ml-auto"
             }
           >
             {formattedDate}
