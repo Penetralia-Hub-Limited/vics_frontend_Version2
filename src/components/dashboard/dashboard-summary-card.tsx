@@ -28,7 +28,7 @@ const SummaryCard: FC<ISummaryCard> = ({
         <div className="w-fit border border-neutral-200 rounded-lg p-2">
           <BarChartIcon />
         </div>
-        <div>
+        <div className={"ml-auto"}>
           <SelectDateRange
             selectedRange={selectedRange}
             setSelectedRange={setSelectedRange}
@@ -40,7 +40,7 @@ const SummaryCard: FC<ISummaryCard> = ({
         <div>
           <p className="text-sm">{title}</p>
           <p className="text-base md:text-lg font-bold">
-            {isCurrency ? formattedAmount(amount) : amount}
+            {isCurrency ? formattedAmount(amount) : amount.toLocaleString()}
           </p>
         </div>
 
