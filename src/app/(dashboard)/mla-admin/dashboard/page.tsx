@@ -63,9 +63,9 @@ export default function Page() {
         <p className="text-sm text-neutral-700">{formattedDate}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[2fr_auto] gap-6 items-start">
-        <div className="flex flex-col gap-6 w-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-[2fr_auto] gap-2 items-start">
+        <div className="flex flex-col md:gap-3 gap-6 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
             {summaryItems1.map(({ title, amount, isCurrency }) => (
               <SummaryCard
                 key={title}
