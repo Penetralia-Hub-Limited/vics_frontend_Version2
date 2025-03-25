@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const Pagination = ({ totalPages = 30 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+interface IPagination {
+  totalPages: number;
+  setCurrentPage: (page: number) => void;
+}
+
+const Pagination: FC<IPagination> = ({ totalPages, setCurrentPage }) => {
+  const [currentPage, setPage] = useState(1);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
+      setPage(page);
       setCurrentPage(page);
     }
   };
@@ -19,7 +25,7 @@ const Pagination = ({ totalPages = 30 }) => {
       </span>
 
       {/* Page Numbers */}
-      {[...Array(5)].map((_, index) => {
+      {[...Array(totalPages)].map((_, index) => {
         const startPage = Math.floor((currentPage - 1) / 5) * 5 + 1;
         const page = startPage + index;
 

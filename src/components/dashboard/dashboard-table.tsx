@@ -21,9 +21,14 @@ interface TableData {
 interface IDashboardTable {
   headers: TableHeader[];
   data: TableData[];
+  itemsPerPage?: number;
 }
 
-const DashboardTable: FC<IDashboardTable> = ({ headers, data }) => {
+const DashboardTable: FC<IDashboardTable> = ({
+  headers,
+  data,
+  itemsPerPage,
+}) => {
   return (
     <Table>
       <TableHeader>
@@ -39,7 +44,7 @@ const DashboardTable: FC<IDashboardTable> = ({ headers, data }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((row, rowIndex) => (
+        {data.slice(0, itemsPerPage).map((row, rowIndex) => (
           <TableRow key={rowIndex}>
             {headers.map((header, colIndex) => (
               <TableCell key={colIndex} className="text-xs text-center">
