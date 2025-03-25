@@ -41,3 +41,10 @@ export interface NavigationItemBase extends Navigation {
   segment?: string; // Used for navigation items
   icon?: React.ReactNode; // Icon component
 }
+
+export interface IPlateData {
+  sn: number;
+  plateNumber: string;
+  plateType: string;
+  selected?: boolean;
+}
