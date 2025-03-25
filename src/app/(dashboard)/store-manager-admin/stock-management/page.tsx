@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
-import { tableInvoices, tableHeader } from "@/common/constant";
+import { tableInvoices, tableHeaders } from "@/common/constant";
 import CardContainer from "@/components/general/card-container";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
@@ -24,10 +24,12 @@ export default function Page() {
             {
               label: "Dashboard",
               Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              link: "/store-manager-admin/dashboard",
             },
             {
               label: "Manage Stock",
               Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              link: "/store-manager-admin/stock-management",
             },
           ]}
         />
@@ -77,7 +79,7 @@ export default function Page() {
         <div
           className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
         >
-          <DashboardTable header={tableHeader} data={tableInvoices} />
+          <DashboardTable headers={tableHeaders} data={tableInvoices} />
         </div>
         <div className={"p-5 ml-auto"}>
           <Pagination />

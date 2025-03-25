@@ -9,14 +9,17 @@ export default function Page() {
           {
             label: "Dashboard",
             Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            link: "/store-manager-admin/dashboard",
           },
           {
             label: "Plate Number Request",
             Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            link: "/store-manager-admin/plate-number-request",
           },
           {
             label: "Assessment",
             Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            link: "/store-manager-admin/assessment",
           },
         ]}
       />
