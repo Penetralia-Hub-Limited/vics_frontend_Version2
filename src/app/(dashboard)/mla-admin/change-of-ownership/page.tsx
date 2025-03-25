@@ -10,6 +10,9 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { format } from "date-fns";
 import { useState } from "react";
+import { TableColumn } from "@/components/dashboard/dashboard-table";
+
+
 
 export default function Page() {
   const currentDate = new Date();
@@ -93,10 +96,10 @@ export default function Page() {
           </div>
           <Button className="w-full md:w-auto">Search</Button>
         </div>
-      </CardContainer>
+      </CardContainer>      
 
       {/* Table Component with Proper Props */}
-      <DashboardTable headers={tableHeaders} data={tableData} />
+      <DashboardTable headers={tableHeaders as TableColumn[]} data={tableData} />
 
       <div className="mt-4 flex justify-end">
         {/* Fixing Pagination Props */}

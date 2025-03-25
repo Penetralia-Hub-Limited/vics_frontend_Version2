@@ -14,6 +14,11 @@ interface TableHeader {
   key: string;
 }
 
+export interface TableColumn {
+  key: string;
+  title: string;
+}
+
 interface TableData {
   [key: string]: string | number | Date;
 }
@@ -24,11 +29,18 @@ interface IDashboardTable {
   itemsPerPage?: number;
 }
 
-const DashboardTable: FC<IDashboardTable> = ({
-  headers,
-  data,
-  itemsPerPage,
-}) => {
+const tableHeaders: TableColumn[] = [
+  { key: "sn", title: "S/N" },
+  { key: "trackingId", title: "Tracking ID" },
+  { key: "plateNumberType", title: "Plate Number Type" },
+  { key: "platesRequested", title: "No. of Plate Requested" },
+  { key: "platesRecommended", title: "No. of Plate Recommended" },
+  { key: "platesAssigned", title: "No. Assigned" },
+  { key: "date", title: "Date" },
+  { key: "officer", title: "Recommending Officer" },
+];
+
+const DashboardTable: FC<IDashboardTable> = ({ headers, data, itemsPerPage }) => {
   return (
     <Table>
       <TableHeader>
@@ -48,7 +60,7 @@ const DashboardTable: FC<IDashboardTable> = ({
           <TableRow key={rowIndex}>
             {headers.map((header, colIndex) => (
               <TableCell key={colIndex} className="text-xs text-center">
-                {header.key === "Date" && row[header.key] instanceof Date
+                {header.key === "date" && row[header.key] instanceof Date
                   ? format(row[header.key] as Date, "LLL. d yyyy hh:mm:ss a")
                   : row[header.key]?.toString()}
               </TableCell>
