@@ -1,25 +1,27 @@
 "use client";
 
-import { FC } from "react";
+import { FC, Dispatch, SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { BarChartIcon } from "@/common/svgs";
 import SelectDateRange from "./notification/dashboard-select";
-
-const formattedAmount = (amount: number) => {
-  return new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-  }).format(amount);
-};
+import { DateRange } from "@/common/enum";
+import { formattedAmount } from "@/common/helpers";
 
 interface ISummaryCard {
   title: string;
   amount: number;
-  currency?: boolean;
-  period?: string;
+  selectedRange: DateRange;
+  setSelectedRange: Dispatch<SetStateAction<DateRange>>;
+  isCurrency?: boolean;
 }
 
-const SummaryCard: FC<ISummaryCard> = ({ title, amount, currency }) => {
+const SummaryCard: FC<ISummaryCard> = ({
+  title,
+  amount,
+  isCurrency,
+  selectedRange,
+  setSelectedRange,
+}) => {
   return (
     <div className="w-full flex flex-col gap-4 border border-neutral-200 rounded-lg p-5">
       <div className="flex flex-row justify-between items-center">
@@ -27,7 +29,10 @@ const SummaryCard: FC<ISummaryCard> = ({ title, amount, currency }) => {
           <BarChartIcon />
         </div>
         <div>
-          <SelectDateRange />
+          <SelectDateRange
+            selectedRange={selectedRange}
+            setSelectedRange={setSelectedRange}
+          />
         </div>
       </div>
 
@@ -35,7 +40,7 @@ const SummaryCard: FC<ISummaryCard> = ({ title, amount, currency }) => {
         <div>
           <p className="text-sm">{title}</p>
           <p className="text-base md:text-lg font-bold">
-            {currency ? formattedAmount(amount) : amount}
+            {isCurrency ? formattedAmount(amount) : amount}
           </p>
         </div>
 

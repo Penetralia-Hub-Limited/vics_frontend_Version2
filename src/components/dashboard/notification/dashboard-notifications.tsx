@@ -27,7 +27,7 @@ const notifications = [
 
 export function DashboardNotificationsComp({ className, ...props }: CardProps) {
   return (
-    <Card className={cn("w-fill", className)} {...props}>
+    <Card className={cn("w-full", className)} {...props}>
       <CardHeader className={"my-0 py-5 bg-neutral-300 rounded-t-lg"}>
         <CardTitle>Notifications</CardTitle>
       </CardHeader>
