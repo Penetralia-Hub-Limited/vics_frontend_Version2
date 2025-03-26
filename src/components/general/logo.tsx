@@ -8,7 +8,7 @@ interface ILogoComp {
 
 const LogoComponent: FC<ILogoComp> = ({ logo, state }) => {
   return (
-    <div className={"flex items-center"}>
+    <div className={"flex gap-2 items-center"}>
       <Image
         src={logo}
         alt="Logo"
