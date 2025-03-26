@@ -1,5 +1,5 @@
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import { DashboardSVG, ReportSVG } from "@/common/svgs";
 
 export default function Page() {
   return (
@@ -8,12 +8,12 @@ export default function Page() {
         pathdata={[
           {
             label: "Dashboard",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            Icon: DashboardSVG,
             link: "/store-manager-admin/dashboard",
           },
           {
             label: "Store Report Dashboard",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            Icon: ReportSVG,
             link: "/store-manager-admin/report",
           },
         ]}

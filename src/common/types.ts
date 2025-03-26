@@ -11,6 +11,13 @@ export interface ISupportMail {
   mail: string;
 }
 
+export interface IPlateData {
+  sn: number;
+  plateNumber: string;
+  plateType: string;
+  selected?: boolean;
+}
+
 export interface IHotline {
   id: number;
   line: string;
@@ -35,7 +42,7 @@ export interface IVehiceManagement {
   }>;
 }
 
-interface CustomSVGProps {
+export interface CustomSVGProps {
   className?: string;
 }
 
@@ -51,7 +58,7 @@ interface NavigationItem {
   id: number;
   title: string;
   Icon?: FC<CustomSVGProps>;
-  url: string;
+  url?: string;
   dropdown?: DropdownItem[];
 }
 

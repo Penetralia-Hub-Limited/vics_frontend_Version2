@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import UserProfile from "./user-profile";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-const DashboardNavBar = () => {
+interface IDashboardNavBar {
+  pageTitle: string;
+}
+
+const DashboardNavBar: FC<IDashboardNavBar> = ({ pageTitle }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   return (
     <div className="flex items-center justify-between w-full px-4 py-3 bg-white">
       <div className="w-full flex items-center gap-6">
-        <p className="font-bold text-lg">STORE TITLE</p>
+        <p className="font-bold text-lg uppercase">{pageTitle}</p>
 
         <div className="relative w-full max-w-md">
           <Search

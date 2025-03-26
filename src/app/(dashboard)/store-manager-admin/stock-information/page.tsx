@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
@@ -6,9 +9,18 @@ import CardContainer from "@/components/general/card-container";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import { DashboardSVG, ManagementSVG } from "@/common/svgs";
 
 export default function Page() {
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
+  const paginatedData = tableInvoices.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <main className={"flex flex-col gap-8 md:gap-12 py-4"}>
       <div className={""}>
@@ -16,17 +28,17 @@ export default function Page() {
           pathdata={[
             {
               label: "Dashboard",
-              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              Icon: DashboardSVG,
               link: "/store-manager-admin/dashboard",
             },
             {
               label: "Manage Stock",
-              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              Icon: ManagementSVG,
               link: "/store-manager-admin/dashboard",
             },
             {
               label: "Stock Information",
-              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              Icon: ManagementSVG,
               link: "/store-manager-admin/stock-information",
             },
           ]}
@@ -55,10 +67,10 @@ export default function Page() {
         <div
           className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
         >
-          <DashboardTable headers={tableHeaders} data={tableInvoices} />
+          <DashboardTable headers={tableHeaders} data={paginatedData} />
         </div>
         <div className={"p-5 ml-auto"}>
-          <Pagination />
+          <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
     </main>

@@ -6,8 +6,8 @@ import ArrowButton from "@/components/general/arrow-button";
 import { IPlateData } from "@/common/types";
 import { Button } from "@/components/ui/button";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import CardContainer from "@/components/general/card-container";
+import { DashboardSVG, VICSSVG } from "@/common/svgs";
 
 export const generatePlates = (): IPlateData[] => {
   return [
@@ -80,22 +80,22 @@ const PlateSelectionPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8 mx-auto w-full max-w-7xl">
+    <div className="py-4 flex flex-col gap-8 mx-auto w-full max-w-7xl">
       <DashboardPath
         pathdata={[
           {
             label: "Dashboard",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            Icon: DashboardSVG,
             link: "/store-manager-admin/dashboard",
           },
           {
             label: "Plate Number Request",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            Icon: VICSSVG,
             link: "/store-manager-admin/plate-number-request",
           },
           {
             label: "Assign Plate Number",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            Icon: VICSSVG,
             link: "/store-manager-admin/assessment",
           },
         ]}

@@ -1,15 +1,18 @@
+"use client";
+
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
-
-import { mainDashboardSideBarItems, vehiceManagement } from "@/common/side-bar";
+import useGetPathName from "@/hooks/usePathName";
+import { mlaSideBarItems } from "@/common/side-bar";
 
 export default function MLADashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const mlaSideBarItems = [...mainDashboardSideBarItems, ...vehiceManagement];
+  const { getPathName } = useGetPathName("mla");
+
   return (
     <SidebarProvider>
       <AppSidebar sidebarData={mlaSideBarItems} />
@@ -18,7 +21,7 @@ export default function MLADashboardLayout({
           <div className={"block md:hidden"}>
             <SidebarTrigger />
           </div>
-          <DashboardNavBar />
+          <DashboardNavBar pageTitle={getPathName()} />
         </div>
         <div className={"px-4 py-8 bg-neutral-100/30"}>{children}</div>
       </main>
