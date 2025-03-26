@@ -1,4 +1,4 @@
-import { Navigation } from "@toolpad/core/AppProvider";
+import { FC } from "react";
 
 export interface IlandingPageNavigation {
   id: number;
@@ -35,32 +35,22 @@ export interface IVehiceManagement {
   }>;
 }
 
-export interface NavigationItemBase extends Navigation {
-  title: string;
-  kind?: "page"; // Optional for headers and dividers
-  segment?: string; // Used for navigation items
-  icon?: React.ReactNode; // Icon component
-}
-
-export interface IPlateData {
-  sn: number;
-  plateNumber: string;
-  plateType: string;
-  selected?: boolean;
+interface CustomSVGProps {
+  className?: string;
 }
 
 interface DropdownItem {
   id: number;
   title: string;
-  url: string;
-  Icon?: React.ReactNode;
+  url?: string;
+  Icon?: FC<CustomSVGProps>;
   dropdown?: DropdownItem[];
 }
 
 interface NavigationItem {
   id: number;
   title: string;
-  Icon?: React.ReactNode;
+  Icon?: FC<CustomSVGProps>;
   url: string;
   dropdown?: DropdownItem[];
 }
