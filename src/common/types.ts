@@ -27,7 +27,7 @@ export interface IFieldItems {
 export interface IVehiceManagement {
   id: number;
   title: string;
-  Icon: React.ElementType;
+  Icon: React.ReactNode;
   dropdown: Array<{
     id: number;
     title: string;
@@ -47,4 +47,26 @@ export interface IPlateData {
   plateNumber: string;
   plateType: string;
   selected?: boolean;
+}
+
+interface DropdownItem {
+  id: number;
+  title: string;
+  url: string;
+  Icon?: React.ReactNode;
+  dropdown?: DropdownItem[];
+}
+
+interface NavigationItem {
+  id: number;
+  title: string;
+  Icon?: React.ReactNode;
+  url: string;
+  dropdown?: DropdownItem[];
+}
+
+export interface ISideBarProps {
+  id: number;
+  groupName: string;
+  navigation: NavigationItem[];
 }

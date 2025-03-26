@@ -48,7 +48,7 @@ export const VICSSVG: FC<CustomSVGProps> = ({
   </svg>
 );
 
-export const DashboardSVG: FC<SVGProps<SVGElement>> = ({
+export const DashboardSVG: FC<CustomSVGProps> = ({
   color = "#575958",
 }): ReactNode => (
   <svg
@@ -82,7 +82,7 @@ export const SalesSVG: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 );
 
-export const ReportSVG: FC<SVGProps<SVGElement>> = ({
+export const ReportSVG: FC<CustomSVGProps> = ({
   color = "#575958",
 }): ReactNode => (
   <svg
@@ -118,7 +118,7 @@ export const VehicleSVG: FC<CustomSVGProps> = ({
   </svg>
 );
 
-export const TaxPayerSVG: FC<SVGProps<SVGElement>> = ({
+export const TaxPayerSVG: FC<CustomSVGProps> = ({
   color = "#717473",
 }): ReactNode => (
   <svg
@@ -135,7 +135,7 @@ export const TaxPayerSVG: FC<SVGProps<SVGElement>> = ({
   </svg>
 );
 
-export const RenewalsSVG: FC<SVGProps<SVGElement>> = ({
+export const RenewalsSVG: FC<CustomSVGProps> = ({
   color = "#717473",
 }): ReactNode => (
   <svg
@@ -152,7 +152,7 @@ export const RenewalsSVG: FC<SVGProps<SVGElement>> = ({
   </svg>
 );
 
-export const PenSVG: FC<SVGProps<SVGElement>> = ({
+export const PenSVG: FC<CustomSVGProps> = ({
   color = "#717473",
 }): ReactNode => (
   <svg
@@ -169,7 +169,7 @@ export const PenSVG: FC<SVGProps<SVGElement>> = ({
   </svg>
 );
 
-export const InsuranceSVG: FC<SVGProps<SVGElement>> = ({
+export const InsuranceSVG: FC<CustomSVGProps> = ({
   color = "#717473",
 }): ReactNode => (
   <svg
@@ -186,7 +186,7 @@ export const InsuranceSVG: FC<SVGProps<SVGElement>> = ({
   </svg>
 );
 
-export const OwnershipSVG: FC<SVGProps<SVGElement>> = ({
+export const OwnershipSVG: FC<CustomSVGProps> = ({
   color = "#717473",
 }): ReactNode => (
   <svg
@@ -203,7 +203,7 @@ export const OwnershipSVG: FC<SVGProps<SVGElement>> = ({
   </svg>
 );
 
-export const CollectionsSVG: FC<SVGProps<SVGElement>> = ({
+export const CollectionsSVG: FC<CustomSVGProps> = ({
   color = "#717473",
 }): ReactNode => (
   <>
@@ -222,7 +222,7 @@ export const CollectionsSVG: FC<SVGProps<SVGElement>> = ({
   </>
 );
 
-export const AssessmentSVG: FC<SVGProps<SVGElement>> = ({
+export const AssessmentSVG: FC<CustomSVGProps> = ({
   color = "#717473",
 }): ReactNode => (
   <>
@@ -241,7 +241,7 @@ export const AssessmentSVG: FC<SVGProps<SVGElement>> = ({
   </>
 );
 
-export const ManagementSVG: FC<SVGProps<SVGElement>> = ({
+export const ManagementSVG: FC<CustomSVGProps> = ({
   color = "#717473",
 }): ReactNode => (
   <>
@@ -260,9 +260,7 @@ export const ManagementSVG: FC<SVGProps<SVGElement>> = ({
   </>
 );
 
-export const BarChartIcon: FC<SVGProps<SVGElement>> = ({
-  color = "#717473",
-}) => (
+export const BarChartIcon: FC<CustomSVGProps> = ({ color = "#717473" }) => (
   <svg
     width="16"
     height="16"
