@@ -29,18 +29,11 @@ interface IDashboardTable {
   itemsPerPage?: number;
 }
 
-const tableHeaders: TableColumn[] = [
-  { key: "sn", title: "S/N" },
-  { key: "trackingId", title: "Tracking ID" },
-  { key: "plateNumberType", title: "Plate Number Type" },
-  { key: "platesRequested", title: "No. of Plate Requested" },
-  { key: "platesRecommended", title: "No. of Plate Recommended" },
-  { key: "platesAssigned", title: "No. Assigned" },
-  { key: "date", title: "Date" },
-  { key: "officer", title: "Recommending Officer" },
-];
-
-const DashboardTable: FC<IDashboardTable> = ({ headers, data, itemsPerPage }) => {
+const DashboardTable: FC<IDashboardTable> = ({
+  headers,
+  data,
+  itemsPerPage,
+}) => {
   return (
     <Table>
       <TableHeader>
