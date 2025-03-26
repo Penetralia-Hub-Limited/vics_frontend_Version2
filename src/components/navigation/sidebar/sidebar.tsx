@@ -28,10 +28,9 @@ interface ISideBar {
 const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
   return (
     <Sidebar className={"border-neutral-300"}>
-      <SidebarHeader>
+      <SidebarHeader className={"py-6"}>
         <LogoComponent logo={Logo} state="kwara state" />
       </SidebarHeader>
-
       <SidebarContent>
         {sidebarData.map(({ navigation, groupName }, index) => (
           <SidebarGroup
