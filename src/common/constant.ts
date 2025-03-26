@@ -93,7 +93,9 @@ export const loginFieldItems = [
   },
 ];
 
+/** STORE ADMIN START */
 export const tableHeaders = [
+  { title: "S/N", key: "id" },
   { title: "LGA", key: "lga" },
   { title: "Plate Number Type", key: "type" },
   { title: "Created By", key: "createdby" },
@@ -104,6 +106,7 @@ export const tableHeaders = [
 
 export const tableInvoices = [
   {
+    id: 1,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -114,6 +117,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 2,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -124,6 +128,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 3,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -134,6 +139,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 4,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -144,6 +150,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 5,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -154,6 +161,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 6,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -164,6 +172,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 7,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -174,6 +183,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 8,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -184,6 +194,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 9,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -194,6 +205,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 10,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -204,6 +216,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 11,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -214,6 +227,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 12,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -224,6 +238,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 13,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -234,6 +249,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 14,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -244,6 +260,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 15,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -254,6 +271,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 16,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -264,6 +282,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 17,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -274,6 +293,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 18,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -284,3 +304,140 @@ export const tableInvoices = [
     currentQty: 401,
   },
 ];
+/** STORE ADMIN END */
+
+/** MLA DATA START */
+export const mlaTableHeaders = [
+  { title: "S/N", key: "id" },
+  { title: "LGA", key: "lga" },
+  { title: "Plate Number Type", key: "type" },
+  { title: "Created By", key: "createdby" },
+  { title: "Date", key: "Date" },
+  { title: "Initial Quantity", key: "initialQty" },
+  { title: "Current Quantity", key: "currentQty" },
+];
+
+export const mlatableInvoices = [
+  {
+    id: 1,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 2,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 3,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 4,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 5,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 6,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 7,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 8,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 9,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 10,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 11,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+];
+/** MLA DATA END */

@@ -8,10 +8,15 @@ import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import DashboardTable from "@/components/dashboard/dashboard-table";
+import DatePicker from "@/components/dashboard/dashboard-datepicker";
+import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
+import { Input } from "@/components/ui/input";
 
 export default function Page() {
   const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
 
   const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
   const paginatedData = tableInvoices.slice(
@@ -36,28 +41,39 @@ export default function Page() {
         ]}
       />
 
-      <CardContainer>
-        <div className="grid grid-cols-1 md:grid-cols-[2.5fr_auto] gap-4 items-end">
+      <CardContainer className={"flex flex-col gap-5"}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <DashboardCompSelect
+            title={"LGA"}
+            placeholder={"-- Select LGA --"}
+            items={["lagos", "abuja"]}
+          />
+
+          <DashboardCompSelect
+            title={"Type"}
+            placeholder={"-- Select Type --"}
+            items={["private", "commercial"]}
+          />
+
           <div className={"flex flex-col gap-3"}>
-            <p className={"font-semibold"}>
-              Enter the number of the plate you wish to assign
-            </p>
-            <div
-              className={
-                "grid grid-cols-[3fr_1fr] items-center jusity-between border border-neutral-300 rounded-md"
-              }
-            >
-              <input
-                type={"text"}
-                placeholder={"placeholder"}
-                className={"border-0 p-3 focus:none w-full text-sm ring-0"}
-              />
-              <p className={"px-2 text-sm font-semibold ml-auto"}>
-                of {tableInvoices.length} plates in store
-              </p>
-            </div>
+            <p className={"font-semibold"}>placeholder</p>
+            <Input placeholder="placeholder" />
           </div>
-          <Button>Assign Plate Numbers</Button>
+        </div>
+
+        <div
+          className={
+            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
+          }
+        >
+          <DatePicker
+            date={startDate}
+            setDate={setStartDate}
+            title={"Start Date"}
+          />
+          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+
+          <Button>Search Store</Button>
         </div>
       </CardContainer>
 

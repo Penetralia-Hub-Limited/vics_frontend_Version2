@@ -7,6 +7,7 @@ import { IPlateData } from "@/common/types";
 import { Button } from "@/components/ui/button";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import CardContainer from "@/components/general/card-container";
 
 export const generatePlates = (): IPlateData[] => {
   return [
@@ -101,6 +102,31 @@ const PlateSelectionPage: React.FC = () => {
       />
 
       <div className="flex flex-col gap-8 mx-auto w-full max-w-7xl">
+        <CardContainer>
+          <div className="grid grid-cols-1 md:grid-cols-[2.5fr_auto] gap-4 items-end">
+            <div className={"flex flex-col gap-3"}>
+              <p className={"font-semibold"}>
+                Enter the number of the plate you wish to assign
+              </p>
+              <div
+                className={
+                  "grid grid-cols-[3fr_1fr] items-center jusity-between border border-neutral-300 rounded-md"
+                }
+              >
+                <input
+                  type={"text"}
+                  placeholder={"placeholder"}
+                  className={"border-0 p-3 focus:none w-full text-sm ring-0"}
+                />
+                <p className={"px-2 text-sm font-semibold ml-auto"}>
+                  of {allPlates.length} plates in store
+                </p>
+              </div>
+            </div>
+            <Button>Assign Plate Numbers</Button>
+          </div>
+        </CardContainer>
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
           <div className="flex items-center">
             <label

@@ -21,7 +21,7 @@ const DatePicker: FC<IDatePicker> = ({ title, date, setDate }) => {
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="">
+          <Button variant="outline" className="border border-neutral-500">
             {date ? date.toLocaleDateString() : "mm/dd/yy"}
             <CalendarIcon className="ml-auto" />
           </Button>
