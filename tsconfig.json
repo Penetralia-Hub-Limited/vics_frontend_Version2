@@ -24,11 +24,13 @@
     }
   },
   "include": [
+    "svgr.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/(dashboard)/store-manager-admin/plate-number-request"
+    "src/app/(dashboard)/store-manager-admin/dashboard/plate-number-request",
+    "src/app/(dashboard)/store-manager-admin/dashboard/assign-plate-number"
   ],
   "exclude": ["node_modules"]
 }

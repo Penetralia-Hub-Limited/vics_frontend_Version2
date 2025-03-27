@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import { tableInvoices, tableHeaders } from "@/common/constant";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
-import { Input } from "@/components/ui/input";
+import { DashboardSVG, VICSSVG } from "@/common/svgs";
 
 export default function Page() {
   const itemsPerPage = 10;
@@ -25,17 +25,17 @@ export default function Page() {
   );
 
   return (
-    <main className={"flex flex-col gap-8 md:gap-12 py-4"}>
+    <main className={"flex flex-col gap-8 md:gap-12"}>
       <DashboardPath
         pathdata={[
           {
             label: "Dashboard",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            Icon: DashboardSVG,
             link: "/store-manager-admin/dashboard",
           },
           {
             label: "Plate Number Request",
-            Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+            Icon: VICSSVG,
             link: "/store-manager-admin/plate-number-request",
           },
         ]}

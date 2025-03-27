@@ -10,7 +10,7 @@ import DashboardTable from "@/components/dashboard/dashboard-table";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import { DashboardSVG, ManagementSVG } from "@/common/svgs";
 
 export default function Page() {
   const itemsPerPage = 10;
@@ -25,18 +25,22 @@ export default function Page() {
   );
 
   return (
-    <main className={"flex flex-col gap-8 md:gap-12 py-4"}>
-      <div className={"flex flex-row justify-between items-center"}>
+    <main className={"flex flex-col gap-8 md:gap-12"}>
+      <div
+        className={
+          "flex flex-col gap-5 md:flex-row justify-between items-center"
+        }
+      >
         <DashboardPath
           pathdata={[
             {
               label: "Dashboard",
-              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              Icon: DashboardSVG,
               link: "/store-manager-admin/dashboard",
             },
             {
               label: "Manage Stock",
-              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              Icon: ManagementSVG,
               link: "/store-manager-admin/stock-management",
             },
           ]}
@@ -60,7 +64,7 @@ export default function Page() {
           />
 
           <div className={"flex flex-col gap-3"}>
-            <p className={"font-semibold"}>placeholder</p>
+            <p className={"font-semibold capitalize"}>placeholder</p>
             <Input placeholder="placeholder" />
           </div>
         </div>

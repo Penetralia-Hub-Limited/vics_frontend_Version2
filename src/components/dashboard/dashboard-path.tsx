@@ -1,10 +1,11 @@
-import { FC, ReactElement } from "react";
+import { FC } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { CustomSVGProps } from "@/common/types";
 
 interface IDashboardPath {
   pathdata: {
-    Icon: ReactElement;
+    Icon: FC<CustomSVGProps>;
     label: string;
     link: string;
   }[];
@@ -23,11 +24,17 @@ const DashboardPath: FC<IDashboardPath> = ({ pathdata, active }) => {
             <Link
               href={data?.link}
               className={cn(
-                "cursor-pointer flex flex-row gap-2 items-center hover:text-primary-500",
+                "cursor-pointer flex flex-row gap-2 items-center hover:text-primary-500 group",
                 active
               )}
             >
-              {data.Icon}
+              {data.Icon && (
+                <data.Icon
+                  className={
+                    "group-hover:fill-primary-500 fill-neutral-700 w-4 h-4"
+                  }
+                />
+              )}
               <p>{data.label}</p>
             </Link>
             {index < pathdata.length - 1 && <p className={"text-lg"}>/</p>}

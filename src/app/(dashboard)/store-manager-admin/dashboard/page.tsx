@@ -37,7 +37,7 @@ export default function Page() {
     <main>
       <div
         className={
-          "pt-3 pb-8 flex md:flex-row xl:flex-row flex-col md:justify-between items-center gap-8 md:gap-12"
+          "pb-8 flex md:flex-row xl:flex-row flex-col md:justify-between items-center gap-8 md:gap-12"
         }
       >
         <p className={"text-lg md:text-3xl font-bold"}>Welcome, Username</p>

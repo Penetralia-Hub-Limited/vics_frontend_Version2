@@ -25,7 +25,7 @@ const PlateRow: React.FC<PlateRowProps> = ({
             onCheckedChange={(checked) => onSelectChange(plate, !!checked)}
             className={
               isSelected
-                ? "bg-green-500 border-green-500 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
+                ? "bg-primary-500 border-green-500 data-[state=checked]:bg-primary-500 data-[state=checked]:border-primary-500"
                 : ""
             }
           />

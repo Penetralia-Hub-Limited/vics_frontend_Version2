@@ -1,4 +1,4 @@
-import { Navigation } from "@toolpad/core/AppProvider";
+import { FC } from "react";
 
 export interface IlandingPageNavigation {
   id: number;
@@ -9,6 +9,13 @@ export interface IlandingPageNavigation {
 export interface ISupportMail {
   id: number;
   mail: string;
+}
+
+export interface IPlateData {
+  sn: number;
+  plateNumber: string;
+  plateType: string;
+  selected?: boolean;
 }
 
 export interface IHotline {
@@ -27,7 +34,7 @@ export interface IFieldItems {
 export interface IVehiceManagement {
   id: number;
   title: string;
-  Icon: React.ElementType;
+  Icon: React.ReactNode;
   dropdown: Array<{
     id: number;
     title: string;
@@ -35,16 +42,28 @@ export interface IVehiceManagement {
   }>;
 }
 
-export interface NavigationItemBase extends Navigation {
-  title: string;
-  kind?: "page"; // Optional for headers and dividers
-  segment?: string; // Used for navigation items
-  icon?: React.ReactNode; // Icon component
+export interface CustomSVGProps {
+  className?: string;
 }
 
-export interface IPlateData {
-  sn: number;
-  plateNumber: string;
-  plateType: string;
-  selected?: boolean;
+interface DropdownItem {
+  id: number;
+  title: string;
+  url?: string;
+  Icon?: FC<CustomSVGProps>;
+  dropdown?: DropdownItem[];
+}
+
+interface NavigationItem {
+  id: number;
+  title: string;
+  Icon?: FC<CustomSVGProps>;
+  url?: string;
+  dropdown?: DropdownItem[];
+}
+
+export interface ISideBarProps {
+  id: number;
+  groupName: string;
+  navigation: NavigationItem[];
 }
