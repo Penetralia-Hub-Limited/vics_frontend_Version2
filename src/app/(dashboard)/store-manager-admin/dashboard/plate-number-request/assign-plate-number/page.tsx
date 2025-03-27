@@ -80,7 +80,7 @@ const PlateSelectionPage: React.FC = () => {
   };
 
   return (
-    <div className="py-4 flex flex-col gap-8 mx-auto w-full max-w-7xl">
+    <div className="flex flex-col gap-8 mx-auto w-full max-w-7xl">
       <DashboardPath
         pathdata={[
           {

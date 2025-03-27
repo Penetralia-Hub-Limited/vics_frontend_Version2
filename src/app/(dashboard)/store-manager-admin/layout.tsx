@@ -12,7 +12,11 @@ export default function StoreManagerDashboardLayout({
     <SidebarProvider>
       <AppSidebar sidebarData={storeManagerSidebarItems} />
       <main className={"flex flex-col w-full"}>
-        <div className={"flex flex items-center h-20"}>
+        <div
+          className={
+            "flex flex items-center h-20 border-b border-neutral-500 sticky top-0 z-40 bg-white"
+          }
+        >
           <div className={"block md:hidden"}>
             <SidebarTrigger />
           </div>

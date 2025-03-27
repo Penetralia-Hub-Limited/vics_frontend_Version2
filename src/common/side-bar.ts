@@ -692,6 +692,11 @@ export const storeManagerSidebarItems = [
                 title: "Requests",
                 url: "/store-manager-admin/dashboard/plate-number-request",
               },
+              {
+                id: 2,
+                title: "Assign Plate Number",
+                url: "/store-manager-admin/dashboard/plate-number-request/assign-plate-number",
+              },
             ],
           },
           {

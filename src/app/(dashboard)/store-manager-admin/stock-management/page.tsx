@@ -25,8 +25,12 @@ export default function Page() {
   );
 
   return (
-    <main className={"flex flex-col gap-8 md:gap-12 py-4"}>
-      <div className={"flex flex-row justify-between items-center"}>
+    <main className={"flex flex-col gap-8 md:gap-12"}>
+      <div
+        className={
+          "flex flex-col gap-5 md:flex-row justify-between items-center"
+        }
+      >
         <DashboardPath
           pathdata={[
             {
@@ -60,7 +64,7 @@ export default function Page() {
           />
 
           <div className={"flex flex-col gap-3"}>
-            <p className={"font-semibold"}>placeholder</p>
+            <p className={"font-semibold capitalize"}>placeholder</p>
             <Input placeholder="placeholder" />
           </div>
         </div>

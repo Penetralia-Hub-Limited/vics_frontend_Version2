@@ -13,9 +13,11 @@ const DashboardNavBar: FC<IDashboardNavBar> = ({ pageTitle }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   return (
-    <div className="flex items-center justify-between w-full px-4 py-3 bg-white">
+    <div className="flex items-center justify-between gap-4 w-full px-4 py-3 bg-white ">
       <div className="w-full flex items-center gap-6">
-        <p className="font-bold text-lg uppercase">{pageTitle}</p>
+        <p className="font-bold text-lg uppercase hidden md:block">
+          {pageTitle}
+        </p>
 
         <div className="relative w-full max-w-md">
           <Search

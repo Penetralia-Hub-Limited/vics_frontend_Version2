@@ -25,7 +25,7 @@ export default function Page() {
   );
 
   return (
-    <main className={"flex flex-col gap-8 md:gap-12 py-4"}>
+    <main className={"flex flex-col gap-8 md:gap-12"}>
       <DashboardPath
         pathdata={[
           {

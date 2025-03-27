@@ -3,7 +3,7 @@ import { DashboardSVG, ReportSVG } from "@/common/svgs";
 
 export default function Page() {
   return (
-    <main className={"flex flex-col gap-8 md:gap-12 py-4 h-96"}>
+    <main className={"flex flex-col gap-8 md:gap-12 h-96"}>
       <div className={""}>
         <DashboardPath
           pathdata={[

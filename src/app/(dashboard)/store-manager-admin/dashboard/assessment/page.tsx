@@ -3,7 +3,7 @@ import { DashboardSVG, VICSSVG, AssessmentSVG } from "@/common/svgs";
 
 export default function Page() {
   return (
-    <main className={"py-4 h-96"}>
+    <main className={"h-96"}>
       <DashboardPath
         pathdata={[
           {

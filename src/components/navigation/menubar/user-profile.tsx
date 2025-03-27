@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useState } from "react";
-import Image from "next/image";
 import { ArrowDropDown } from "@mui/icons-material";
 
 interface IUserProfile {
@@ -12,7 +11,6 @@ interface IUserProfile {
 
 const UserProfile: FC<IUserProfile> = ({ fullName, role, profileImage }) => {
   // const router = useRouter();
-
   const [openDropDown, setOpenDropDown] = useState<boolean>(false);
 
   const handleDropDown = () => {
@@ -20,9 +18,16 @@ const UserProfile: FC<IUserProfile> = ({ fullName, role, profileImage }) => {
   };
 
   return (
-    <div className={"flex flex-row items-center gap-2"}>
+    <div className={"flex flex-row items-center gap-2 pr-3"}>
       {profileImage ? (
-        <Image src={profileImage} alt={"user profile image"} />
+        <img
+          loading={"lazy"}
+          src={profileImage}
+          width={50}
+          height={50}
+          alt={"user profile image"}
+          className={"w-10 h-10 object-cover object-center rounded-full"}
+        />
       ) : (
         <div
           className={
@@ -47,10 +52,12 @@ const UserProfile: FC<IUserProfile> = ({ fullName, role, profileImage }) => {
 
           {openDropDown && (
             <div
-              className={"absolute top-[100%] cursor-pointer"}
+              className={
+                "absolute top-[100%] bg-white cursor-pointer mt-2 p-3 border border-neutral-500 rounded-md z-40 shadow-sm"
+              }
               // onClick={handleLogOut}
             >
-              <p className={"text-xs text-white font-semibold"}>Log Out</p>
+              <p className={"text-xs font-semibold"}>Log Out</p>
             </div>
           )}
         </div>
