@@ -210,8 +210,8 @@ export const superAdminSidebar = [
             Icon: SalesSVG,
             url: "/super-admin/dashboard/sales",
             dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
+              { id: 1, title: "Sales Report", url: "" },
+              { id: 2, title: "New Plate Sales", url: "" },
             ],
           },
           {

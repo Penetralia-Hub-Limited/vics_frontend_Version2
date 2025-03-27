@@ -48,9 +48,18 @@ const DashboardTable: FC<IDashboardTable> = ({
           <TableRow key={rowIndex}>
             {headers.map((header, colIndex) => (
               <TableCell key={colIndex} className="text-xs text-center">
-                {header.key === "Date" && row[header.key] instanceof Date
-                  ? format(row[header.key] as Date, "LLL. d yyyy hh:mm:ss a")
-                  : row[header.key]?.toString()}
+                {header.key === "Date" && row[header.key] instanceof Date ? (
+                  <div className={"flex flex-col gap-1"}>
+                    <p>
+                      {format(row[header.key] as Date, "LLL. d yyyy") ?? "--"}
+                    </p>
+                    <p className={"font-light"}>
+                      {format(row[header.key] as Date, "hh:mm:ss a") ?? ""}
+                    </p>
+                  </div>
+                ) : (
+                  (row[header.key]?.toString() ?? "--")
+                )}
               </TableCell>
             ))}
           </TableRow>

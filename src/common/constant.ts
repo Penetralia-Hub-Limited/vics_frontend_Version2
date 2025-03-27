@@ -100,8 +100,8 @@ export const tableHeaders = [
   { title: "Plate Number Type", key: "type" },
   { title: "Created By", key: "createdby" },
   { title: "Date", key: "Date" },
-  { title: "Initial Qty", key: "initialQty" },
-  { title: "Current Qty", key: "currentQty" },
+  { title: "Initial Quantity", key: "initialQty" },
+  { title: "Current Quantity", key: "currentQty" },
 ];
 
 export const tableInvoices = [
