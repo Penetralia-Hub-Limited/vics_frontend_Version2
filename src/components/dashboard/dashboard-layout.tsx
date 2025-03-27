@@ -7,33 +7,29 @@ import { demoTheme } from "@/styles/styles";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
-// import { sideBarItems } from "@/common/navdata";
+import { Navigation } from "@toolpad/core/AppProvider"; // Ensure correct import
 import Logo from "../../assets/logo/icon_green.svg";
-import { Navigation } from "@toolpad/core/AppProvider";
 
 interface IDashboardCompLayout {
   children: React.ReactNode;
   sidebarItems: Navigation;
   window?: Window;
+  title: string;
 }
 
 const LogoComponent = () => {
   return (
-    <div className={"flex items-center"}>
+    <div className="flex items-center">
       <Image
         src={Logo}
         alt="Logo"
-        className={"object-contain shrink-0 self-stretch my-auto h-full"}
+        className="object-contain shrink-0 self-stretch my-auto h-full"
       />
-      <div className={"hidden lg:block self-stretch"}>
-        <p
-          className={
-            "text-lg font-bold uppercase text-primary-600 tracking-widest w-full text-justify"
-          }
-        >
+      <div className="hidden lg:block self-stretch">
+        <p className="text-lg font-bold uppercase text-primary-600 tracking-widest w-full text-justify">
           Kwara state
         </p>
-        <p className={"text-[7px] text-primary-600 tracking-[0.002rem]"}>
+        <p className="text-[7px] text-primary-600 tracking-[0.002rem]">
           Vehicle Identification and Certification System
         </p>
       </div>
@@ -54,11 +50,12 @@ const DashboardCompLayout: FC<IDashboardCompLayout> = ({
 
   const router = useDemoRouter("/dashboard");
   if (!mounted) return null;
+
   const demoWindow = typeof window !== "undefined" ? window : undefined;
 
   return (
     <AppProvider
-      navigation={sidebarItems}
+      navigation={sidebarItems} // ✅ `sidebarItems` is being used correctly
       router={router}
       theme={demoTheme}
       window={demoWindow}
