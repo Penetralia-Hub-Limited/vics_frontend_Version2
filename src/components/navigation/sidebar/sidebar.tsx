@@ -123,7 +123,7 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                       <SidebarMenuButton asChild>
                         <a
                           href={url}
-                          className="h-10 flex items-center gap-2 p-2 text-sm text-neutral-900 rounded-md hover:bg-gray-200 transition-all hover:bg-primary-500 hover:text-white"
+                          className="h-10 flex items-center gap-2 p-2 text-sm text-neutral-900 rounded-md transition-all hover:bg-primary-500 hover:text-white"
                         >
                           {Icon && <Icon className="fill-neutral-800" />}
                           {title}
