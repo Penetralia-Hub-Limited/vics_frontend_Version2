@@ -76,6 +76,8 @@ export const signUpFieldItems = [
   },
 ];
 
+
+
 export const loginFieldItems = [
   {
     id: "email",

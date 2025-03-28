@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import {
   Table,
   TableBody,
@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { format } from "date-fns";
 
 interface TableHeader {
   title: string;
@@ -15,7 +14,7 @@ interface TableHeader {
 }
 
 interface TableData {
-  [key: string]: string | number | Date;
+  [key: string]: string | number | boolean | ReactNode | null | undefined;
 }
 
 interface IDashboardTable {
@@ -44,13 +43,11 @@ const DashboardTable: FC<IDashboardTable> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.slice(0, itemsPerPage).map((row, rowIndex) => (
+        {data.slice(0, itemsPerPage || data.length).map((row, rowIndex) => (
           <TableRow key={rowIndex}>
             {headers.map((header, colIndex) => (
               <TableCell key={colIndex} className="text-xs text-center">
-                {header.key === "Date" && row[header.key] instanceof Date
-                  ? format(row[header.key] as Date, "LLL. d yyyy hh:mm:ss a")
-                  : row[header.key]?.toString()}
+                {row[header.key]}
               </TableCell>
             ))}
           </TableRow>

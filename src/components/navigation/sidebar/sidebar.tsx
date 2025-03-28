@@ -1,8 +1,8 @@
 import { FC } from "react";
-
 import LogoComponent from "../../general/logo";
 import Logo from "@/assets/logo/icon_green.svg";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
 import {
   Sidebar,
   SidebarContent,
@@ -14,11 +14,13 @@ import {
   SidebarMenuItem,
   SidebarHeader,
 } from "@/components/ui/sidebar";
+
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+
 import { ISideBarProps } from "@/common/types";
 
 interface ISideBar {
@@ -27,15 +29,15 @@ interface ISideBar {
 
 const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
   return (
-    <Sidebar className={"border-neutral-300"}>
-      <SidebarHeader className={"py-6"}>
+    <Sidebar className="border-neutral-300">
+      <SidebarHeader className="py-6">
         <LogoComponent logo={Logo} state="kwara state" />
       </SidebarHeader>
       <SidebarContent>
         {sidebarData.map(({ navigation, groupName }, index) => (
           <SidebarGroup
             key={index}
-            className={"pb-2 border-b border-neutral-300"}
+            className="pb-2 border-b border-neutral-300"
           >
             <SidebarGroupLabel>{groupName}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -45,11 +47,11 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                     dropdown.some(
                       (sub) => sub.dropdown && sub.dropdown.length > 0
                     ) ? (
-                      /** ✅ Multi-Level Dropdown → Keep nested collapsibles */
+                      /** ✅ Multi-Level Dropdown */
                       <Collapsible key={id}>
-                        <CollapsibleTrigger className="group flex items-center justify-between w-full h-12 p-2 rounded-md hover:text-white hover:fill-white hover:bg-primary-500 transition-all ease-in-out duration-150 cursor-pointer">
+                        <CollapsibleTrigger className="group flex items-center justify-between w-full h-12 p-2 rounded-md hover:bg-primary-500 hover:text-white transition-colors duration-200 cursor-pointer">
                           <div className="flex items-center gap-2">
-                            {Icon && <Icon className={"fill-neutral-800"} />}
+                            {Icon && <Icon className="fill-neutral-800" />}
                             <span className="text-sm">{title}</span>
                           </div>
                           <ArrowDropDownIcon className="text-neutral-800 ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -57,18 +59,14 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                         <CollapsibleContent className="pl-2">
                           {dropdown.map((sub) => (
                             <Collapsible key={sub.id}>
-                              <CollapsibleTrigger className="group flex items-center justify-between w-full h-12 p-2 rounded-md hover:text-white hover:fill-white hover:bg-primary-500 transition-all ease-in-out duration-150 cursor-pointer">
+                              <CollapsibleTrigger className="group flex items-center justify-between w-full h-12 p-2 rounded-md hover:bg-primary-500 hover:text-white transition-colors duration-200 cursor-pointer">
                                 <div className="flex items-center gap-2">
                                   {sub.Icon && (
                                     <sub.Icon className="fill-neutral-800" />
                                   )}
                                   <span>{sub.title}</span>
                                 </div>
-                                <ArrowDropDownIcon
-                                  className={
-                                    "text-neutral-800 ml-auto transition-transform duration-200 ease-in-out data-[state=open]:rotate-180"
-                                  }
-                                />
+                                <ArrowDropDownIcon className="text-neutral-800 ml-auto transition-transform duration-200 data-[state=open]:rotate-180" />
                               </CollapsibleTrigger>
                               <CollapsibleContent className="pl-4">
                                 {sub.dropdown?.map((inner) => (
@@ -76,7 +74,7 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                                     <SidebarMenuButton asChild>
                                       <a
                                         href={inner.url}
-                                        className="hover:bg-primary-500 hover:text-white h-10 block p-2 text-sm text-neutral-900 rounded-md"
+                                        className="hover:bg-primary-500 hover:text-white h-10 block p-2 text-sm text-neutral-900 rounded-md transition-colors duration-200"
                                       >
                                         {inner.title}
                                       </a>
@@ -89,11 +87,11 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                         </CollapsibleContent>
                       </Collapsible>
                     ) : (
-                      /** ✅ Single-Level Dropdown → Top-level collapsible, dropdown items are links */
+                      /** ✅ Single-Level Dropdown */
                       <Collapsible key={id}>
-                        <CollapsibleTrigger className="group flex items-center justify-between w-full h-12 p-2 rounded-md hover:text-white hover:bg-primary-500 transition-all ease-in-out duration-150 cursor-pointer">
+                        <CollapsibleTrigger className="group flex items-center justify-between w-full h-12 p-2 rounded-md hover:bg-primary-500 hover:text-white transition-colors duration-200 cursor-pointer">
                           <div className="flex items-center gap-2">
-                            {Icon && <Icon className={"fill-neutral-800"} />}
+                            {Icon && <Icon className="fill-neutral-800" />}
                             <span className="text-sm">{title}</span>
                           </div>
                           <ArrowDropDownIcon className="text-neutral-800 ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -104,7 +102,7 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                               <SidebarMenuButton asChild>
                                 <a
                                   href={sub.url}
-                                  className="h-10 flex items-center gap-2 p-2 text-sm text-neutral-900 rounded-md cursor-pointer hover:bg-primary-500 hover:text-white"
+                                  className="h-10 flex items-center gap-2 p-2 text-sm text-neutral-900 rounded-md hover:bg-primary-500 hover:text-white transition-colors duration-200"
                                 >
                                   {sub.Icon && (
                                     <sub.Icon className="fill-neutral-800" />
@@ -123,7 +121,7 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                       <SidebarMenuButton asChild>
                         <a
                           href={url}
-                          className="h-10 flex items-center gap-2 p-2 text-sm text-neutral-900 rounded-md hover:bg-gray-200 transition-all hover:bg-primary-500 hover:text-white"
+                          className="h-10 flex items-center gap-2 p-2 text-sm text-neutral-900 rounded-md hover:bg-primary-500 hover:text-white transition-colors duration-200"
                         >
                           {Icon && <Icon className="fill-neutral-800" />}
                           {title}
