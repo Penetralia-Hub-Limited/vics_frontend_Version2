@@ -14,7 +14,7 @@ import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-butto
 const tableColumns = [
   { key: "id" as const, label: "S/N" },
   { key: "platenumber" as const, label: "Number of Plates" },
-  { key: "type" as const, label: "Type" },
+  { key: "type" as const, label: "Plate Type" },
   { key: "category" as const, label: "Category" },
   { key: "chasisNo" as const, label: "Chasis Number" },
   { key: "engineNo" as const, label: "Engine Number" },
@@ -96,7 +96,7 @@ export default function Page() {
   ];
 
   return (
-    <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
+    <main className={"flex flex-col gap-8 md:gap-12"}>
       <div
         className={
           "flex flex-col gap-5 md:flex-row justify-between items-center"

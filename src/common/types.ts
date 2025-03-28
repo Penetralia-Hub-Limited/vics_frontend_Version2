@@ -67,3 +67,11 @@ export interface ISideBarProps {
   groupName: string;
   navigation: NavigationItem[];
 }
+
+export interface TaxPayerInfo {
+  fullName: string;
+  email: string;
+  phone: string;
+  address: string;
+  profileImage?: string;
+}

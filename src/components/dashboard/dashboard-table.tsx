@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
+import { PaymentStatus } from "@/common/enum";
 
 interface TableHeader {
   title: string;
@@ -15,7 +16,7 @@ interface TableHeader {
 }
 
 interface TableData {
-  [key: string]: string | number | Date;
+  [key: string]: string | number | Date | PaymentStatus;
 }
 
 interface IDashboardTable {
@@ -23,6 +24,11 @@ interface IDashboardTable {
   data: TableData[];
   itemsPerPage?: number;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isPaymentStatus = (value: any): value is PaymentStatus => {
+  return Object.values(PaymentStatus).includes(value as PaymentStatus);
+};
 
 const DashboardTable: FC<IDashboardTable> = ({
   headers,
@@ -46,22 +52,37 @@ const DashboardTable: FC<IDashboardTable> = ({
       <TableBody>
         {data.slice(0, itemsPerPage).map((row, rowIndex) => (
           <TableRow key={rowIndex}>
-            {headers.map((header, colIndex) => (
-              <TableCell key={colIndex} className="text-xs text-center">
-                {header.key === "Date" && row[header.key] instanceof Date ? (
-                  <div className={"flex flex-col gap-1"}>
-                    <p>
-                      {format(row[header.key] as Date, "LLL. d yyyy") ?? "--"}
-                    </p>
-                    <p className={"font-light"}>
-                      {format(row[header.key] as Date, "hh:mm:ss a") ?? ""}
-                    </p>
-                  </div>
-                ) : (
-                  (row[header.key]?.toString() ?? "--")
-                )}
-              </TableCell>
-            ))}
+            {headers.map((header, colIndex) => {
+              const cellValue = row[header.key];
+
+              return (
+                <TableCell key={colIndex} className="text-xs text-center">
+                  {/* Date Formatting */}
+                  {cellValue instanceof Date ? (
+                    <div className="flex flex-col gap-1">
+                      <p>{format(cellValue, "LLL. d yyyy")}</p>
+                      <p className="font-light">
+                        {format(cellValue, "hh:mm:ss a")}
+                      </p>
+                    </div>
+                  ) : isPaymentStatus(cellValue) ? (
+                    <span
+                      className={`capitalize px-3 py-1 rounded-full ${
+                        cellValue === PaymentStatus.PAID
+                          ? "bg-success-100"
+                          : cellValue === PaymentStatus.PENDING
+                            ? "bg-pending"
+                            : "bg-failed"
+                      }`}
+                    >
+                      {cellValue}
+                    </span>
+                  ) : (
+                    (cellValue?.toString() ?? "--")
+                  )}
+                </TableCell>
+              );
+            })}
           </TableRow>
         ))}
       </TableBody>
