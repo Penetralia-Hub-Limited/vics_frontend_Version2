@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import { mlatableInvoices, mlaTableHeaders } from "@/common/constant";
+import { DashboardSVG, VICSSVG } from "@/common/svgs";
 
 export default function Page() {
   const itemsPerPage = 10;
@@ -32,12 +32,12 @@ export default function Page() {
           pathdata={[
             {
               label: "Dashboard",
-              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              Icon: DashboardSVG,
               link: "/mla-admin/dashboard",
             },
             {
               label: "Plate Number Request",
-              Icon: <SpaceDashboardIcon sx={{ fontSize: 15 }} />,
+              Icon: VICSSVG,
               link: "/mla-admin/dashboard/plate-number-request",
             },
           ]}

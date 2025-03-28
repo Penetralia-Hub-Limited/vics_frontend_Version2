@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -48,6 +49,7 @@ const tableData = [
 ];
 
 export default function Page() {
+  const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
@@ -75,7 +77,11 @@ export default function Page() {
 
   const getRowActions = (row: TableRow): RowAction[] => [
     {
-      label: "View",
+      label: "Preview",
+      action: () => router.push("/super-admin/tax-payer/tax-payer-information"),
+    },
+    {
+      label: "Edit",
       action: () => console.log("Viewing details for:", row),
     },
   ];

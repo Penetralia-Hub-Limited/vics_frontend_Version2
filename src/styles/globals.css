@@ -30,6 +30,7 @@
   --color-white: oklch(100% 0 0); /* #FFFFFF */
 
   --color-success-100: oklch(89.48% 0.0561 146.68); /* #c5e7c7 */
+  --color-success-500: oklch(62.86% 0.1556 144.16); /* #42A046 */
   --color-pending: oklch(94.24% 0.0446 72.68); /* #ffe8cc */
   --color-failed: oklch(93.87% 0.030868 17.7148); /* #ffe3e3 */
   --color-danger: oklch(63.24% 0.2144 25.84); /* #f03e3e */

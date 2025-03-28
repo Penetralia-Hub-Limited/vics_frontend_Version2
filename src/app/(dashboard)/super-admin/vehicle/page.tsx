@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VehicleSVG } from "@/common/svgs";
-
+import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
@@ -88,7 +87,7 @@ export default function Page() {
     action: () => void;
   }
 
-  const getRowActions = (row: TableRow): RowAction[] => [
+  const getRowActions: (row: TableRow) => RowAction[] = (row: TableRow) => [
     {
       label: "View",
       action: () => console.log("Viewing details for:", row),
@@ -122,10 +121,15 @@ export default function Page() {
 
       <CardContainer className={"flex flex-col gap-5"}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-          <div className={"flex flex-col gap-3"}>
-            <p className={"font-semibold capitalize"}>Plate Number</p>
-            <Input placeholder="placeholder" />
-          </div>
+          <InputWithLabel
+            items={{
+              id: "platenumber",
+              label: "Plate Number",
+              placeholder: "Plate Number",
+              type: "text",
+              htmlfor: "platenumber",
+            }}
+          />
 
           <DatePicker
             date={startDate}
