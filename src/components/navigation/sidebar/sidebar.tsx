@@ -76,7 +76,7 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                                     <SidebarMenuButton asChild>
                                       <a
                                         href={inner.url}
-                                        className="hover:bg-primary-500 hover:text-white h-10 block p-2 text-sm text-neutral-900 rounded-md"
+                                        className="hover:bg-primary-500 hover:text-white h-10 block p-2 text-sm rounded-md"
                                       >
                                         {inner.title}
                                       </a>
@@ -104,7 +104,7 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                               <SidebarMenuButton asChild>
                                 <a
                                   href={sub.url}
-                                  className="h-10 flex items-center gap-2 p-2 text-sm text-neutral-900 rounded-md cursor-pointer hover:bg-primary-500 hover:text-white"
+                                  className="h-10 flex items-center gap-2 p-2 text-sm rounded-md cursor-pointer hover:bg-primary-500 hover:text-white"
                                 >
                                   {sub.Icon && (
                                     <sub.Icon className="fill-neutral-800" />
@@ -123,7 +123,7 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                       <SidebarMenuButton asChild>
                         <a
                           href={url}
-                          className="h-10 flex items-center gap-2 p-2 text-sm text-neutral-900 rounded-md hover:bg-gray-200 transition-all hover:bg-primary-500 hover:text-white"
+                          className="h-10 flex items-center gap-2 p-2 text-sm rounded-md hover:bg-gray-200 transition-all hover:bg-primary-500 hover:text-white"
                         >
                           {Icon && <Icon className="fill-neutral-800" />}
                           {title}

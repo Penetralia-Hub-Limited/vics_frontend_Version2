@@ -2,6 +2,7 @@
 
 import { FC, useState } from "react";
 import { ArrowDropDown } from "@mui/icons-material";
+import AvatarProfile from "@/components/general/avatar-profile";
 
 interface IUserProfile {
   fullName: string;
@@ -10,7 +11,6 @@ interface IUserProfile {
 }
 
 const UserProfile: FC<IUserProfile> = ({ fullName, role, profileImage }) => {
-  // const router = useRouter();
   const [openDropDown, setOpenDropDown] = useState<boolean>(false);
 
   const handleDropDown = () => {
@@ -19,25 +19,11 @@ const UserProfile: FC<IUserProfile> = ({ fullName, role, profileImage }) => {
 
   return (
     <div className={"flex flex-row items-center gap-2 pr-3"}>
-      {profileImage ? (
-        <img
-          loading={"lazy"}
-          src={profileImage}
-          width={50}
-          height={50}
-          alt={"user profile image"}
-          className={"w-10 h-10 object-cover object-center rounded-full"}
-        />
-      ) : (
-        <div
-          className={
-            "flex items-center justify-center bg-primary-500 w-10 h-10 rounded-full"
-          }
-        >
-          <p>DI</p>
-        </div>
-      )}
-
+      <AvatarProfile
+        classname={"w-10 h-10"}
+        profileImage={profileImage}
+        initials={"DE"}
+      />
       <div className={"flex flex-col"}>
         <p className={"text-sm font-semibold uppercase"}>{fullName}</p>
 

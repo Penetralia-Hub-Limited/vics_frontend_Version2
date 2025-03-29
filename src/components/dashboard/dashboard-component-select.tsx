@@ -20,7 +20,7 @@ const DashboardCompSelect: FC<IDashboardCompSelect> = ({
 }) => {
   return (
     <div className={"flex flex-col gap-3"}>
-      <p className={"font-semibold"}>{title}</p>
+      <p className={"text-sm font-semibold"}>{title}</p>
 
       <Select>
         <SelectTrigger
