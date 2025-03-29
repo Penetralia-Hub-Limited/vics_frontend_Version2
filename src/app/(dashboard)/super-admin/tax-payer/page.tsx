@@ -13,12 +13,12 @@ import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
-  { key: "id" as const, label: "S/N" },
-  { key: "firstname" as const, label: "First Name" },
-  { key: "lastname" as const, label: "last Name" },
-  { key: "phonenumber" as const, label: "Phone Number" },
-  { key: "email" as const, label: "Email" },
-  { key: "date" as const, label: "Date" },
+  { key: "id" as const, title: "S/N" },
+  { key: "firstname" as const, title: "First Name" },
+  { key: "lastname" as const, title: "last Name" },
+  { key: "phonenumber" as const, title: "Phone Number" },
+  { key: "email" as const, title: "Email" },
+  { key: "date" as const, title: "Date" },
 ];
 
 const tableData = [
@@ -71,20 +71,24 @@ export default function Page() {
   }
 
   interface RowAction {
-    label: string;
+    title: string;
     action: () => void;
   }
 
-  const getRowActions = (row: TableRow): RowAction[] => [
-    {
-      label: "Preview",
-      action: () => router.push("/super-admin/tax-payer/tax-payer-information"),
-    },
-    {
-      label: "Edit",
-      action: () => console.log("Viewing details for:", row),
-    },
-  ];
+  const getRowActions = (row: unknown): RowAction[] => {
+    const tableRow = row as TableRow;
+    return [
+      {
+        title: "Preview",
+        action: () =>
+          router.push("/super-admin/tax-payer/tax-payer-information"),
+      },
+      {
+        title: "Edit",
+        action: () => console.log("Viewing details for:", tableRow),
+      },
+    ];
+  };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -171,7 +175,7 @@ export default function Page() {
           className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
         >
           <DataTableWButton
-            columns={tableColumns}
+            headers={tableColumns}
             data={paginatedData}
             rowActions={getRowActions}
           />

@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -8,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import { PaymentStatus } from "@/common/enum";
+import { PaymentStatus, PlateNumberStatus } from "@/common/enum";
 
 interface TableHeader {
   title: string;
@@ -16,7 +17,7 @@ interface TableHeader {
 }
 
 interface TableData {
-  [key: string]: string | number | Date | PaymentStatus;
+  [key: string]: string | number | Date | PaymentStatus | PlateNumberStatus;
 }
 
 interface IDashboardTable {
@@ -25,9 +26,12 @@ interface IDashboardTable {
   itemsPerPage?: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isPaymentStatus = (value: any): value is PaymentStatus => {
+const isPaymentStatus = (value: unknown): value is PaymentStatus => {
   return Object.values(PaymentStatus).includes(value as PaymentStatus);
+};
+
+const isPlateNumberStatus = (value: unknown): value is PlateNumberStatus => {
+  return Object.values(PlateNumberStatus).includes(value as PlateNumberStatus);
 };
 
 const DashboardTable: FC<IDashboardTable> = ({
@@ -60,20 +64,25 @@ const DashboardTable: FC<IDashboardTable> = ({
                   {/* Date Formatting */}
                   {cellValue instanceof Date ? (
                     <div className="flex flex-col gap-1">
-                      <p>{format(cellValue, "LLL. d yyyy")}</p>
+                      <p>{format(cellValue.toDateString(), "LLL. d yyyy")}</p>
                       <p className="font-light">
-                        {format(cellValue, "hh:mm:ss a")}
+                        {format(cellValue.toDateString(), "hh:mm:ss a")}
                       </p>
                     </div>
-                  ) : isPaymentStatus(cellValue) ? (
+                  ) : isPaymentStatus(cellValue) ||
+                    isPlateNumberStatus(cellValue) ? (
                     <span
-                      className={`capitalize px-3 py-1 rounded-full ${
-                        cellValue === PaymentStatus.PAID
+                      className={cn(
+                        "capitalize px-4 py-1 rounded-full",
+                        cellValue === PaymentStatus.PAID ||
+                          cellValue === PlateNumberStatus.ASSIGNED
                           ? "bg-success-100"
-                          : cellValue === PaymentStatus.PENDING
-                            ? "bg-pending"
-                            : "bg-failed"
-                      }`}
+                          : "",
+                        cellValue === PaymentStatus.UNPAID ||
+                          cellValue === PlateNumberStatus.UNASSIGNED
+                          ? "bg-failed"
+                          : ""
+                      )}
                     >
                       {cellValue}
                     </span>

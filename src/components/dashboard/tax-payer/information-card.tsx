@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import AvatarProfile from "@/components/general/avatar-profile";
 import { TaxPayerInfo } from "@/common/types";
 
 interface TaxPayerCardProps {
@@ -19,19 +19,11 @@ export const TaxPayerInformationCard: FC<TaxPayerCardProps> = ({
     <div>
       <div className={"flex flex-col md:flex-row"}>
         <div className="flex-shrink-0 p-6 flex items-center justify-center md:border-r border-gray-100">
-          <Avatar className="w-[10rem] h-[10rem] md:h-[15rem] md:w-[15rem] rounded-full">
-            {profileImage ? (
-              <AvatarImage
-                src={profileImage}
-                alt={fullName}
-                className={"object-cover"}
-              />
-            ) : (
-              <AvatarFallback className="text-white text-2xl bg-primary-500 text-neutral-500">
-                {initials}
-              </AvatarFallback>
-            )}
-          </Avatar>
+          <AvatarProfile
+            classname={"w-[10rem] h-[10rem] md:h-[18rem] md:w-[18rem]"}
+            profileImage={profileImage}
+            initials={initials}
+          />
         </div>
         <div className="flex-grow p-6">
           <h2 className="text-xl font-semibold mb-6 pb-4">

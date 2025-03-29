@@ -13,15 +13,15 @@ import { DashboardSVG, ManagementSVG } from "@/common/svgs";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
-  { key: "id" as const, label: "S/N" },
-  { key: "endCode" as const, label: "End Code" },
-  { key: "type" as const, label: "Type" },
-  { key: "createdBy" as const, label: "Created By" },
-  { key: "date" as const, label: "Date" },
-  { key: "initialQuantity" as const, label: "Initial Quantity" },
-  { key: "currentQuantity" as const, label: "Current Quantity" },
-  { key: "assigned" as const, label: "Quantity Assigned" },
-  { key: "sold" as const, label: "Quantity Sold" },
+  { key: "id" as const, title: "S/N" },
+  { key: "endCode" as const, title: "End Code" },
+  { key: "type" as const, title: "Type" },
+  { key: "createdBy" as const, title: "Created By" },
+  { key: "date" as const, title: "Date" },
+  { key: "initialQuantity" as const, title: "Initial Quantity" },
+  { key: "currentQuantity" as const, title: "Current Quantity" },
+  { key: "assigned" as const, title: "Quantity Assigned" },
+  { key: "sold" as const, title: "Quantity Sold" },
 ];
 
 const tableData = [
@@ -85,16 +85,19 @@ export default function Page() {
   }
 
   interface RowAction {
-    label: string;
+    title: string;
     action: () => void;
   }
 
-  const getRowActions = (row: TableRow): RowAction[] => [
-    {
-      label: "View",
-      action: () => console.log("Viewing details for:", row),
-    },
-  ];
+  const getRowActions = (row: unknown): RowAction[] => {
+    const tableRow = row as TableRow;
+    return [
+      {
+        title: "View",
+        action: () => console.log("Viewing details for:", tableRow),
+      },
+    ];
+  };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -162,7 +165,7 @@ export default function Page() {
       >
         <div className={"border-t-1 border-neutral-300 rounded-lg"}>
           <DataTableWButton
-            columns={tableColumns}
+            headers={tableColumns}
             data={paginatedData}
             rowActions={getRowActions}
           />

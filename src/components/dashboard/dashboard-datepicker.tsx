@@ -17,7 +17,7 @@ interface IDatePicker {
 const DatePicker: FC<IDatePicker> = ({ title, date, setDate }) => {
   return (
     <div className={"flex flex-col gap-3"}>
-      <p className={"font-semibold"}>{title}</p>
+      <p className={"text-sm font-semibold"}>{title}</p>
 
       <Popover>
         <PopoverTrigger asChild>

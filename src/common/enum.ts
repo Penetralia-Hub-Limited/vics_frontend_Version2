@@ -6,7 +6,11 @@ export enum DateRange {
 }
 
 export enum PaymentStatus {
-  PENDING = "Pending",
   PAID = "Paid",
-  FAILED = "Failed",
+  UNPAID = "Unpaid",
+}
+
+export enum PlateNumberStatus {
+  ASSIGNED = "Assigned",
+  UNASSIGNED = "Unassigned",
 }

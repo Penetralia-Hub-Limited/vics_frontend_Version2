@@ -329,7 +329,7 @@ export const superAdminSidebar = [
         id: 4,
         title: "Renewals",
         Icon: RenewalsSVG,
-        url: "/super-admin/renewals",
+        url: "/super-admin/renewal",
       },
       {
         id: 5,

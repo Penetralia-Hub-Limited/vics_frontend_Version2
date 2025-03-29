@@ -10,7 +10,7 @@ interface InputWithLabelProps extends InputHTMLAttributes<HTMLInputElement> {
 const InputWithLabel: FC<InputWithLabelProps> = ({ items, ...rest }) => {
   return (
     <div className={"grid w-full items-center gap-3"}>
-      <Label className={"capitalize"} htmlFor={items.htmlfor}>
+      <Label className={"capitalize text-sm"} htmlFor={items.htmlfor}>
         {items.label}
       </Label>
       <Input

@@ -11,15 +11,15 @@ import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
-  { key: "id" as const, label: "S/N" },
-  { key: "platenumber" as const, label: "Number of Plates" },
-  { key: "type" as const, label: "Plate Type" },
-  { key: "category" as const, label: "Category" },
-  { key: "chasisNo" as const, label: "Chasis Number" },
-  { key: "engineNo" as const, label: "Engine Number" },
-  { key: "vehiclemake" as const, label: "Vehicle Make" },
-  { key: "model" as const, label: "Model" },
-  { key: "year" as const, label: "Year" },
+  { key: "id" as const, title: "S/N" },
+  { key: "platenumber" as const, title: "Number of Plates" },
+  { key: "type" as const, title: "Plate Type" },
+  { key: "category" as const, title: "Category" },
+  { key: "chasisNo" as const, title: "Chasis Number" },
+  { key: "engineNo" as const, title: "Engine Number" },
+  { key: "vehiclemake" as const, title: "Vehicle Make" },
+  { key: "model" as const, title: "Model" },
+  { key: "year" as const, title: "Year" },
 ];
 
 const tableData = [
@@ -83,16 +83,19 @@ export default function Page() {
   }
 
   interface RowAction {
-    label: string;
+    title: string;
     action: () => void;
   }
 
-  const getRowActions: (row: TableRow) => RowAction[] = (row: TableRow) => [
-    {
-      label: "View",
-      action: () => console.log("Viewing details for:", row),
-    },
-  ];
+  const getRowActions = (row: unknown): RowAction[] => {
+    const tableRow = row as TableRow;
+    return [
+      {
+        title: "View",
+        action: () => console.log("Viewing details for:", tableRow),
+      },
+    ];
+  };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12"}>
@@ -147,7 +150,7 @@ export default function Page() {
       >
         <div className={"border-t-1 border-neutral-300 rounded-lg"}>
           <DataTableWButton
-            columns={tableColumns}
+            headers={tableColumns}
             data={paginatedData}
             rowActions={getRowActions}
           />

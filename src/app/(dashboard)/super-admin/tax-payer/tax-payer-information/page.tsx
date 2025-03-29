@@ -1,8 +1,3 @@
-"use client";
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, TaxPayerSVG } from "@/common/svgs";
@@ -25,46 +20,22 @@ const taxPayerInfo = {
 };
 
 export default function Page() {
-  const itemsPerPage = 10;
-  const [currentVehiclePage, setCurrentVehiclePage] = useState<number>(1);
-  const [currentInvoicePage, setCurrentInvoicePage] = useState<number>(1);
-
-  const totalVehiclePages = Math.ceil(vehicleData?.length / itemsPerPage);
-  const totalInvoicePages = Math.ceil(invoiceData?.length / itemsPerPage);
-
-  const paginatedVehicleData = vehicleData.slice(
-    (currentVehiclePage - 1) * itemsPerPage,
-    currentVehiclePage * itemsPerPage
-  );
-  const paginatedInvoiceData = invoiceData.slice(
-    (currentInvoicePage - 1) * itemsPerPage,
-    currentInvoicePage * itemsPerPage
-  );
-
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
-      <div
-        className={
-          "flex flex-col gap-5 md:flex-row justify-between items-center"
-        }
-      >
-        <DashboardPath
-          pathdata={[
-            {
-              label: "Dashboard",
-              Icon: DashboardSVG,
-              link: "/store-manager-admin/dashboard",
-            },
-            {
-              label: "Tax Payer Dashboard",
-              Icon: TaxPayerSVG,
-              link: "/store-manager-admin/tax-payer",
-            },
-          ]}
-        />
-
-        <Button>Create New Tax Payer</Button>
-      </div>
+      <DashboardPath
+        pathdata={[
+          {
+            label: "Dashboard",
+            Icon: DashboardSVG,
+            link: "/store-manager-admin/dashboard",
+          },
+          {
+            label: "Tax Payer Dashboard",
+            Icon: TaxPayerSVG,
+            link: "/store-manager-admin/tax-payer",
+          },
+        ]}
+      />
 
       <CardContainer className={"flex flex-col gap-5"}>
         <TaxPayerInformationCard taxPayerInfo={taxPayerInfo} />
@@ -75,16 +46,7 @@ export default function Page() {
       >
         <div className={"border-t-1 border-neutral-300 rounded-lg"}>
           <p className={"font-bold p-4"}>Vehicle(s) Information</p>
-          <DashboardTable
-            headers={vehicleColumns}
-            data={paginatedVehicleData}
-          />
-        </div>
-        <div className={"p-5 ml-auto"}>
-          <Pagination
-            totalPages={totalVehiclePages}
-            setCurrentPage={setCurrentVehiclePage}
-          />
+          <DashboardTable headers={vehicleColumns} data={vehicleData} />
         </div>
       </div>
 
@@ -93,16 +55,7 @@ export default function Page() {
       >
         <div className={"border-t-1 border-neutral-300 rounded-lg"}>
           <p className={"font-bold p-4"}>Invoice(s) Information</p>
-          <DashboardTable
-            headers={invoiceColumns}
-            data={paginatedInvoiceData}
-          />
-        </div>
-        <div className={"p-5 ml-auto"}>
-          <Pagination
-            totalPages={totalInvoicePages}
-            setCurrentPage={setCurrentInvoicePage}
-          />
+          <DashboardTable headers={invoiceColumns} data={invoiceData} />
         </div>
       </div>
     </main>

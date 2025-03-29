@@ -10,7 +10,7 @@ import { AddVehicleStep1 } from "@/components/dashboard/vehicle/new-vehicle/step
 import { AddVehicleStep2 } from "@/components/dashboard/vehicle/new-vehicle/step2";
 import { AddVehicleStep3 } from "@/components/dashboard/vehicle/new-vehicle/step3";
 import { ChevronRight, ChevronLeft } from "lucide-react";
-import StepsDetails from "@/components/dashboard/vehicle/steps-details";
+import StepsDetails from "@/components/dashboard/steps-details";
 import SuccessModal from "@/components/general/success-response";
 
 const stepdetails = [

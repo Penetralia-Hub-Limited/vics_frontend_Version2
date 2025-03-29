@@ -6,6 +6,7 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,34 +16,54 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { format } from "date-fns";
+import { PaymentStatus, PlateNumberStatus } from "@/common/enum";
 
-interface Column<T> {
-  key: keyof T;
-  label: string;
-  render?: (value: T[keyof T], row: T) => React.ReactNode;
+interface TableHeader {
+  title: string;
+  key: string;
 }
 
-type DataTableProps<T> = {
-  columns: Column<T>[];
-  data: T[];
-  rowActions?: (row: T) => { label: string; action: () => void }[];
+interface TableData {
+  [key: string]: string | number | Date | PaymentStatus | PlateNumberStatus;
+}
+
+interface RowAction {
+  title: string;
+  action: () => void;
+}
+
+type DataTableProps = {
+  headers: TableHeader[];
+  data: TableData[];
+  itemsPerPage?: number;
+  rowActions?: (row: TableData) => RowAction[];
 };
 
-export function DataTableWButton<T>({
-  columns,
+// Utility function to check if a value is of type PaymentStatus
+const isPaymentStatus = (value: unknown): value is PaymentStatus => {
+  return Object.values(PaymentStatus).includes(value as PaymentStatus);
+};
+
+const isPlateNumberStatus = (value: unknown): value is PlateNumberStatus => {
+  return Object.values(PlateNumberStatus).includes(value as PlateNumberStatus);
+};
+
+export function DataTableWButton({
+  headers,
   data,
+  itemsPerPage,
   rowActions,
-}: DataTableProps<T>) {
+}: DataTableProps) {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          {columns.map((col) => (
+          {headers.map((header) => (
             <TableHead
               className="text-center font-semibold text-xs w-[100px]"
-              key={String(col.key)}
+              key={String(header.key)}
             >
-              {col.label}
+              {header.title}
             </TableHead>
           ))}
           <TableHead className="text-center text-xs w-[100px]">
@@ -51,29 +72,51 @@ export function DataTableWButton<T>({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((row, rowIndex) => (
+        {data.slice(0, itemsPerPage).map((row, rowIndex) => (
           <TableRow key={rowIndex}>
-            {columns.map((header, colIndex) => (
-              <TableCell key={colIndex} className="text-xs text-center">
-                {header.key === "date" && row[header.key] instanceof Date ? (
-                  <div className={"flex flex-col gap-1"}>
-                    <p>
-                      {format(row[header.key] as Date, "LLL. d yyyy") ?? "--"}
-                    </p>
-                    <p className={"font-light"}>
-                      {format(row[header.key] as Date, "hh:mm:ss a") ?? ""}
-                    </p>
-                  </div>
-                ) : (
-                  (row[header.key]?.toString() ?? "--")
-                )}
-              </TableCell>
-            ))}
+            {headers.map((header, colIndex) => {
+              const cellValue = row[header.key];
+              return (
+                <TableCell key={colIndex} className="text-xs text-center">
+                  {/* Date Formatting */}
+                  {cellValue instanceof Date ? (
+                    <div className="flex flex-col gap-1">
+                      <p>
+                        {format(cellValue.toDateString(), "LLL. d yyyy") ??
+                          "--"}
+                      </p>
+                      <p className="font-light">
+                        {format(cellValue.toDateString(), "hh:mm:ss a") ?? ""}
+                      </p>
+                    </div>
+                  ) : isPaymentStatus(cellValue) ||
+                    isPlateNumberStatus(cellValue) ? (
+                    <span
+                      className={cn(
+                        "capitalize px-4 py-1 rounded-full",
+                        cellValue === PaymentStatus.PAID ||
+                          cellValue === PlateNumberStatus.ASSIGNED
+                          ? "bg-success-100"
+                          : "",
+                        cellValue === PaymentStatus.UNPAID ||
+                          cellValue === PlateNumberStatus.UNASSIGNED
+                          ? "bg-failed"
+                          : ""
+                      )}
+                    >
+                      {cellValue}
+                    </span>
+                  ) : (
+                    (cellValue?.toString() ?? "--")
+                  )}
+                </TableCell>
+              );
+            })}
             <TableCell className="text-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    className={"border border-neutral-300 p-2 rounded-md"}
+                    className="border border-neutral-300 p-2 rounded-md"
                     variant="ghost"
                     size="icon"
                   >
@@ -86,9 +129,9 @@ export function DataTableWButton<T>({
                       <DropdownMenuItem
                         key={idx}
                         onClick={action.action}
-                        className={"cursor-pointer hover:bg-neutral-50"}
+                        className="cursor-pointer hover:bg-neutral-50"
                       >
-                        {action.label}
+                        {action.title}
                       </DropdownMenuItem>
                     ))}
                 </DropdownMenuContent>
