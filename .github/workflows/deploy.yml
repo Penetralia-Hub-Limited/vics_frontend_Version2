@@ -27,17 +27,10 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: |
-          npm install
-          # Ensure @radix-ui/themes is installed
-          npm list @radix-ui/themes || npm install @radix-ui/themes
-          
-      - name: Check for missing globals.css
-        run: |
-          if [ ! -f "./src/app/\(dashboard\)/globals.css" ]; then
-            echo "globals.css file is missing, creating a default one...";
-            echo "body { margin: 0; font-family: sans-serif; }" > ./src/app/\(dashboard\)/globals.css
-          fi
+        run: npm install
+
+      - name: Check TypeScript types
+        run: npx tsc --noEmit
 
       - name: Build Next.js App
         run: npm run build
