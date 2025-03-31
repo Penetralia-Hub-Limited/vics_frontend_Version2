@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Image from "next/image";
-import HeroImg from "@/assets/landing-page/home_hero.jpg";
+import HeroImg from "@/assets/landing-page/home_hero.jpg";  // Image import
 import NeedHelp from "../components/need-help";
 
 interface IHeroSection {
@@ -13,7 +13,7 @@ const HeroSection: FC<IHeroSection> = ({ state, icon }) => {
   return (
     <div
       className={"relative bg-cover bg-center h-[30rem]"}
-      style={{ backgroundImage: `url(${HeroImg})` }}  {/* Fixed: Using HeroImg directly */}
+      style={{ backgroundImage: `url(${HeroImg})` }}  {/* Fix: Used HeroImg directly */}
     >
       <div
         className={
