@@ -34,9 +34,9 @@ jobs:
           
       - name: Check for missing globals.css
         run: |
-          if [ ! -f "./src/app/(dashboard)/globals.css" ]; then
+          if [ ! -f "./src/app/\(dashboard\)/globals.css" ]; then
             echo "globals.css file is missing, creating a default one...";
-            echo "body { margin: 0; font-family: sans-serif; }" > ./src/app/(dashboard)/globals.css
+            echo "body { margin: 0; font-family: sans-serif; }" > ./src/app/\(dashboard\)/globals.css
           fi
 
       - name: Build Next.js App
@@ -72,4 +72,20 @@ jobs:
           echo "Starting deployment to AWS Lightsail..."
           
           # Ensure the target directory exists with proper permissions
-          ssh -i ~/.ssh
+          ssh -i ~/.ssh/git_hub ubuntu@$LIGHTSAIL_APP_IP "
+            sudo mkdir -p /var/www/html/nextjs &&
+            sudo chown -R ubuntu:ubuntu /var/www/html/nextjs
+          "
+
+          # Sync build files to Lightsail
+          rsync -avzO --no-perms --delete --exclude='.git' --exclude='node_modules' \
+            --exclude='*.log' --exclude='.next/cache' \
+            -e "ssh -i ~/.ssh/git_hub" . \
+            ubuntu@$LIGHTSAIL_APP_IP:/var/www/html/nextjs
+
+          # Restart Next.js App using PM2
+          ssh -i ~/.ssh/git_hub ubuntu@$LIGHTSAIL_APP_IP "
+            cd /var/www/html/nextjs &&
+            npm install --production &&
+            pm2 restart next-app || pm2 start npm --name 'next-app' -- start
+          "
