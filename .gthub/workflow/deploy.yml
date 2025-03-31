@@ -1,0 +1,64 @@
+name: Next.js CI/CD Pipeline for AWS Lightsail
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Build Next.js App
+        run: |
+          npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: nextjs-build
+          path: .next/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: nextjs-build
+          path: .next/
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.AWS_SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Next.js to AWS Lightsail
+        run: |
+          scp -r .next/* ubuntu@${{ secrets.AWS_SERVER_IP }}:/var/www/html/nextjs/
+
+      - name: Restart Server
+        run: |
+          ssh ubuntu@${{ secrets.AWS_SERVER_IP }} << 'EOF'
+            cd /var/www/html/nextjs
+            npm install --production
+            pm2 restart next-app || pm2 start npm --name "next-app" -- start
+          EOF
