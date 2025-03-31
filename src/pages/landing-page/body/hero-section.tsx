@@ -13,7 +13,7 @@ const HeroSection: FC<IHeroSection> = ({ state, icon }) => {
   return (
     <div
       className={"relative bg-cover bg-center h-[30rem]"}
-      style={{ backgroundImage: `url(${HeroImg.src})` }}
+      style={{ backgroundImage: `url(${HeroImg})` }}  {/* Fixed: Using HeroImg directly */}
     >
       <div
         className={
