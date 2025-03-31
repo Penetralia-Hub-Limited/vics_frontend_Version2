@@ -33,7 +33,7 @@ jobs:
         run: npm run build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nextjs-build
           path: .next/
@@ -53,6 +53,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/git_hub
           chmod 600 ~/.ssh/git_hub
+          ssh-keyscan -H 13.43.41.67 >> ~/.ssh/known_hosts
 
       - name: Deploy Next.js App to AWS Lightsail
         env:
@@ -61,7 +62,7 @@ jobs:
           echo "Starting deployment to AWS Lightsail..."
           
           # Ensure the target directory exists with proper permissions
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/git_hub ubuntu@$LIGHTSAIL_APP_IP "
+          ssh -i ~/.ssh/git_hub ubuntu@$LIGHTSAIL_APP_IP "
             sudo mkdir -p /var/www/html/nextjs &&
             sudo chown -R ubuntu:ubuntu /var/www/html/nextjs
           "
@@ -69,11 +70,11 @@ jobs:
           # Sync build files to Lightsail
           rsync -avzO --no-perms --delete --exclude='.git' --exclude='node_modules' \
             --exclude='*.log' --exclude='.next/cache' \
-            -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/git_hub" . \
+            -e "ssh -i ~/.ssh/git_hub" . \
             ubuntu@$LIGHTSAIL_APP_IP:/var/www/html/nextjs
 
           # Restart Next.js App using PM2
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/git_hub ubuntu@$LIGHTSAIL_APP_IP "
+          ssh -i ~/.ssh/git_hub ubuntu@$LIGHTSAIL_APP_IP "
             cd /var/www/html/nextjs &&
             npm install --production &&
             pm2 restart next-app || pm2 start npm --name 'next-app' -- start
