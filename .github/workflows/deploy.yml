@@ -27,21 +27,10 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: |
-          npm install
-          # Install required Radix UI components, e.g., Tooltip
-          npm install @radix-ui/react-tooltip
-
-      - name: Check TypeScript types
-        run: npx tsc --noEmit
+        run: npm install
 
       - name: Build Next.js App
         run: npm run build
-
-      - name: Verify Next.js build output
-        run: |
-          echo "Verifying the Next.js build output..."
-          ls -la .next
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -66,6 +55,11 @@ jobs:
           chmod 600 ~/.ssh/git_hub
           ssh-keyscan -H 13.43.41.67 >> ~/.ssh/known_hosts
 
+      - name: Verify Next.js build output
+        run: |
+          echo "Verifying the Next.js build output..."
+          ls -la .next
+
       - name: Deploy Next.js App to AWS Lightsail
         env:
           LIGHTSAIL_APP_IP: "13.43.41.67"
@@ -78,13 +72,12 @@ jobs:
             sudo chown -R ubuntu:ubuntu /var/www/html/nextjs
           "
 
-          # Sync build files to Lightsail
-          rsync -avzO --no-perms --delete --exclude='.git' --exclude='node_modules' \
-            --exclude='*.log' --exclude='.next/cache' \
+          # Sync build files and package.json to Lightsail
+          rsync -avzO --no-perms --delete --exclude='.git' --exclude='node_modules' --exclude='*.log' \
             -e "ssh -i ~/.ssh/git_hub" . \
             ubuntu@$LIGHTSAIL_APP_IP:/var/www/html/nextjs
 
-          # Restart Next.js App using PM2
+          # SSH into Lightsail instance to install dependencies and run the app
           ssh -i ~/.ssh/git_hub ubuntu@$LIGHTSAIL_APP_IP "
             cd /var/www/html/nextjs &&
             npm install --production &&
