@@ -29,8 +29,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          # Ensure Radix UI dependencies are installed
-          npm install @radix-ui/react-themes
+          # Install required Radix UI components, e.g., Tooltip
+          npm install @radix-ui/react-tooltip
 
       - name: Check TypeScript types
         run: npx tsc --noEmit
