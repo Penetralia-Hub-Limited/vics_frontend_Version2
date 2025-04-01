@@ -27,13 +27,21 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          # Ensure Radix UI dependencies are installed
+          npm install @radix-ui/react-themes
 
       - name: Check TypeScript types
         run: npx tsc --noEmit
 
       - name: Build Next.js App
         run: npm run build
+
+      - name: Verify Next.js build output
+        run: |
+          echo "Verifying the Next.js build output..."
+          ls -la .next
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -57,11 +65,6 @@ jobs:
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/git_hub
           chmod 600 ~/.ssh/git_hub
           ssh-keyscan -H 13.43.41.67 >> ~/.ssh/known_hosts
-
-      - name: Verify Next.js build output
-        run: |
-          echo "Verifying the Next.js build output..."
-          ls -la .next
 
       - name: Deploy Next.js App to AWS Lightsail
         env:
