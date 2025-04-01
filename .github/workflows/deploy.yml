@@ -58,12 +58,17 @@ jobs:
           chmod 600 ~/.ssh/git_hub
           ssh-keyscan -H 13.43.41.67 >> ~/.ssh/known_hosts
 
+      - name: Verify Next.js build output
+        run: |
+          echo "Verifying the Next.js build output..."
+          ls -la .next
+
       - name: Deploy Next.js App to AWS Lightsail
         env:
           LIGHTSAIL_APP_IP: "13.43.41.67"
         run: |
           echo "Starting deployment to AWS Lightsail..."
-          
+
           # Ensure the target directory exists with proper permissions
           ssh -i ~/.ssh/git_hub ubuntu@$LIGHTSAIL_APP_IP "
             sudo mkdir -p /var/www/html/nextjs &&
