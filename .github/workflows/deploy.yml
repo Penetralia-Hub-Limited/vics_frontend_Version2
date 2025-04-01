@@ -27,7 +27,15 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          # Ensure radix-ui themes package is installed if not in package.json
+          npm install @radix-ui/themes
+
+      - name: Check for globals.css file
+        run: |
+          echo "Verifying if globals.css exists..."
+          ls -la ./src/styles/globals.css || echo "globals.css not found, please check the file path."
 
       - name: Build Next.js App
         run: npm run build
@@ -53,16 +61,22 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/git_hub
           chmod 600 ~/.ssh/git_hub
-          ssh-keyscan -H 13.43.41.67 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.LIGHTSAIL_APP_IP }} >> ~/.ssh/known_hosts
 
       - name: Verify Next.js build output
         run: |
           echo "Verifying the Next.js build output..."
           ls -la .next
 
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nextjs-build
+          path: .next/
+
       - name: Deploy Next.js App to AWS Lightsail
         env:
-          LIGHTSAIL_APP_IP: "13.43.41.67"
+          LIGHTSAIL_APP_IP: ${{ secrets.LIGHTSAIL_APP_IP }}
         run: |
           echo "Starting deployment to AWS Lightsail..."
 
