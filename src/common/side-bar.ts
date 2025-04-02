@@ -16,6 +16,7 @@ import {
   InsuranceSVG,
   OwnershipSVG,
   CollectionsSVG,
+  ConfigurationSVG,
 } from "./svgs";
 import { ISideBarProps } from "./types";
 
@@ -195,10 +196,17 @@ export const superAdminSidebar = [
         id: 3,
         title: "Assessment",
         Icon: AssessmentSVG,
-        url: "/super-admin/dashboard/assessment",
         dropdown: [
-          { id: 1, title: "Requests", url: "" },
-          { id: 2, title: "Assigned Plate Numbers", url: "" },
+          {
+            id: 1,
+            title: "Sales Assessment",
+            url: "/super-admin/assessment/sales-assessment",
+          },
+          {
+            id: 2,
+            title: "Renewal Assessment",
+            url: "/super-admin/assessment/renewal-assessment",
+          },
         ],
       },
       {
@@ -219,11 +227,22 @@ export const superAdminSidebar = [
         id: 5,
         title: "Reports",
         Icon: ReportSVG,
-        url: "/super-admin/dashboard/report",
         dropdown: [
-          { id: 1, title: "Plate Number Sales", url: "" },
-          { id: 2, title: "Assigned Plate Numbers", url: "" },
-          { id: 2, title: "MLA Stock", url: "" },
+          {
+            id: 1,
+            title: "Plate Number Sales",
+            url: "/super-admin/report/plate-number-sales",
+          },
+          {
+            id: 2,
+            title: "Assigned Plate Numbers",
+            url: "/super-admin/report/assigned-plate-number-report",
+          },
+          {
+            id: 3,
+            title: "MLA Stock",
+            url: "/super-admin/report/mla-stock-report",
+          },
         ],
       },
     ],
@@ -240,25 +259,37 @@ export const superAdminSidebar = [
         dropdown: [
           {
             id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "Manage Users",
+            url: "/super-admin/user/manage-users",
+          },
+          {
+            id: 2,
+            title: "Manage Users Roles",
+            url: "/super-admin/user/manage-user-roles",
           },
         ],
       },
       {
         id: 2,
         title: "Configuration",
-        Icon: DashboardSVG,
+        Icon: ConfigurationSVG,
         dropdown: [
-          { id: 1, title: "Manage Service", url: "" },
-          { id: 2, title: "Manage Workflow", url: "" },
-          { id: 2, title: "Vehicle Make & Model", url: "" },
-          { id: 2, title: "Invoice to Tax", url: "" },
+          {
+            id: 1,
+            title: "Manage Service",
+            url: "/super-admin/configuration/manage-services",
+          },
+          {
+            id: 2,
+            title: "Manage Workflow",
+            url: "/super-admin/configuration/manage-workflow",
+          },
+          {
+            id: 3,
+            title: "Vehicle Make & Model",
+            url: "/super-admin/configuration/vehicle-make-model",
+          },
+          { id: 4, title: "Invoice to Tax", url: "" },
         ],
       },
       {
@@ -269,9 +300,9 @@ export const superAdminSidebar = [
       },
       {
         id: 4,
-        title: "Audit Trail",
+        title: "Audit Trial",
         Icon: AuditTrialSVG,
-        url: "/super-admin/audit-trail",
+        url: "/super-admin/audit-trial",
       },
     ],
   },

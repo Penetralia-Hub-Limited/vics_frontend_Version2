@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -9,19 +8,19 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ManagementSVG } from "@/common/svgs";
-
+import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
-  { key: "id" as const, title: "S/N" },
-  { key: "endCode" as const, title: "End Code" },
-  { key: "type" as const, title: "Type" },
-  { key: "createdBy" as const, title: "Created By" },
-  { key: "date" as const, title: "Date" },
-  { key: "initialQuantity" as const, title: "Initial Quantity" },
-  { key: "currentQuantity" as const, title: "Current Quantity" },
-  { key: "assigned" as const, title: "Quantity Assigned" },
-  { key: "sold" as const, title: "Quantity Sold" },
+  { key: "id", title: "S/N" },
+  { key: "endCode", title: "End Code" },
+  { key: "type", title: "Type" },
+  { key: "createdBy", title: "Created By" },
+  { key: "date", title: "Date" },
+  { key: "initialQuantity", title: "Initial Quantity" },
+  { key: "currentQuantity", title: "Current Quantity" },
+  { key: "assigned", title: "Quantity Assigned" },
+  { key: "sold", title: "Quantity Sold" },
 ];
 
 const tableData = [
@@ -62,9 +61,23 @@ const tableData = [
 
 export default function Page() {
   const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+
+  const [value, setValue] = useState<{
+    lgaValue: string;
+    plateNumberType: string;
+    plateNumberEndCode: string;
+  }>({
+    lgaValue: "",
+    plateNumberType: "",
+    plateNumberEndCode: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue((prev) => ({ ...prev, plateNumberEndCode: e.target.value }));
+  };
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -99,13 +112,11 @@ export default function Page() {
     ];
   };
 
+  console.log();
+
   return (
-    <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
-      <div
-        className={
-          "flex flex-col gap-5 md:flex-row justify-between items-center"
-        }
-      >
+    <main className="flex flex-col gap-8 md:gap-12 overflow-hidden">
+      <div className="flex flex-col gap-5 md:flex-row justify-between items-center">
         <DashboardPath
           pathdata={[
             {
@@ -120,57 +131,70 @@ export default function Page() {
             },
           ]}
         />
-
         <Button>Create New Stock</Button>
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+        <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 items-end"}>
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
             items={["lagos", "abuja"]}
+            onSelect={(selected) =>
+              setValue((prev) => ({
+                ...prev,
+                lgaValue: selected ? String(selected) : "",
+              }))
+            }
+            selected={value.lgaValue}
           />
 
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
             items={["private", "commercial"]}
+            onSelect={(selected) =>
+              setValue((prev) => ({
+                ...prev,
+                plateNumberType: selected ? String(selected) : "",
+              }))
+            }
+            selected={value.plateNumberType}
           />
 
-          <div className={"flex flex-col gap-3"}>
-            <p className={"font-semibold capitalize"}>Plate Number End Code</p>
-            <Input placeholder="placeholder" />
-          </div>
+          <InputWithLabel
+            items={{
+              id: "platenumberendcode",
+              label: "Plate Number End Code",
+              placeholder: "Plate Number End Code",
+              type: "text",
+              htmlfor: "platenumberendcode",
+            }}
+            value={value.plateNumberEndCode}
+            onChange={handleInputChange}
+          />
         </div>
 
-        <div
-          className={
-            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
-          }
-        >
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end">
           <DatePicker
             date={startDate}
             setDate={setStartDate}
-            title={"Start Date"}
+            title="Start Date"
           />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
-
+          <DatePicker date={endDate} setDate={setEndDate} title="End Date" />
           <Button>Search Store</Button>
         </div>
       </CardContainer>
 
-      <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
-      >
-        <div className={"border-t-1 border-neutral-300 rounded-lg"}>
+      <div className="flex flex-col gap-3 border border-neutral-300 rounded-lg">
+        <div className="border-t border-neutral-300 rounded-lg">
           <DataTableWButton
             headers={tableColumns}
             data={paginatedData}
             rowActions={getRowActions}
           />
         </div>
-        <div className={"p-5 ml-auto"}>
+        <div className="p-5 ml-auto">
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>

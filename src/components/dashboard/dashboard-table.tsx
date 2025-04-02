@@ -9,7 +9,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import { PaymentStatus, PlateNumberStatus } from "@/common/enum";
+import {
+  PaymentStatus,
+  PlateNumberStatus,
+  Role,
+  UserStatus,
+  ApprovalStatus,
+} from "@/common/enum";
 
 interface TableHeader {
   title: string;
@@ -17,7 +23,17 @@ interface TableHeader {
 }
 
 interface TableData {
-  [key: string]: string | number | Date | PaymentStatus | PlateNumberStatus;
+  [key: string]:
+    | null
+    | undefined
+    | string
+    | number
+    | Date
+    | PaymentStatus
+    | PlateNumberStatus
+    | Role
+    | UserStatus
+    | ApprovalStatus;
 }
 
 interface IDashboardTable {
@@ -26,12 +42,25 @@ interface IDashboardTable {
   itemsPerPage?: number;
 }
 
+// Utility function to check if a value is of type PaymentStatus
 const isPaymentStatus = (value: unknown): value is PaymentStatus => {
   return Object.values(PaymentStatus).includes(value as PaymentStatus);
 };
 
 const isPlateNumberStatus = (value: unknown): value is PlateNumberStatus => {
   return Object.values(PlateNumberStatus).includes(value as PlateNumberStatus);
+};
+
+const isUserRole = (value: unknown): value is Role => {
+  return Object.values(Role).includes(value as Role);
+};
+
+const isUserStatus = (value: unknown): value is UserStatus => {
+  return Object.values(UserStatus).includes(value as UserStatus);
+};
+
+const isApprovalStatus = (value: unknown): value is ApprovalStatus => {
+  return Object.values(ApprovalStatus).includes(value as ApprovalStatus);
 };
 
 const DashboardTable: FC<IDashboardTable> = ({
@@ -70,18 +99,24 @@ const DashboardTable: FC<IDashboardTable> = ({
                       </p>
                     </div>
                   ) : isPaymentStatus(cellValue) ||
-                    isPlateNumberStatus(cellValue) ? (
+                    isPlateNumberStatus(cellValue) ||
+                    isUserRole(cellValue) ||
+                    isUserStatus(cellValue) ||
+                    isApprovalStatus(cellValue) ? (
                     <span
                       className={cn(
                         "capitalize px-4 py-1 rounded-full",
-                        cellValue === PaymentStatus.PAID ||
-                          cellValue === PlateNumberStatus.ASSIGNED
-                          ? "bg-success-100"
-                          : "",
-                        cellValue === PaymentStatus.UNPAID ||
-                          cellValue === PlateNumberStatus.UNASSIGNED
-                          ? "bg-failed"
-                          : ""
+                        (cellValue === PaymentStatus.PAID ||
+                          cellValue === PlateNumberStatus.ASSIGNED ||
+                          cellValue === UserStatus.ACTIVE ||
+                          cellValue === ApprovalStatus.APPROVED) &&
+                          "bg-success-100 text-success-500",
+                        (cellValue === PaymentStatus.UNPAID ||
+                          cellValue === PlateNumberStatus.UNASSIGNED ||
+                          cellValue === UserStatus.DEACTIVATED ||
+                          cellValue === ApprovalStatus.NOTAPPROVED) &&
+                          "bg-failed text-danger",
+                        isUserRole(cellValue) && "bg-role text-white"
                       )}
                     >
                       {cellValue}

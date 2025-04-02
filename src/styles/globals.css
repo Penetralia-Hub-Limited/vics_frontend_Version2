@@ -34,4 +34,5 @@
   --color-pending: oklch(94.24% 0.0446 72.68); /* #ffe8cc */
   --color-failed: oklch(93.87% 0.030868 17.7148); /* #ffe3e3 */
   --color-danger: oklch(63.24% 0.2144 25.84); /* #f03e3e */
+  --color-role: oklch(0.56 0.1784 255.99); /* #1671D9 */
 }

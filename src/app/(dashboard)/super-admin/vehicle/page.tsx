@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -11,15 +12,15 @@ import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
-  { key: "id" as const, title: "S/N" },
-  { key: "platenumber" as const, title: "Number of Plates" },
-  { key: "type" as const, title: "Plate Type" },
-  { key: "category" as const, title: "Category" },
-  { key: "chasisNo" as const, title: "Chasis Number" },
-  { key: "engineNo" as const, title: "Engine Number" },
-  { key: "vehiclemake" as const, title: "Vehicle Make" },
-  { key: "model" as const, title: "Model" },
-  { key: "year" as const, title: "Year" },
+  { key: "id", title: "S/N" },
+  { key: "platenumber", title: "Number of Plates" },
+  { key: "type", title: "Plate Type" },
+  { key: "category", title: "Category" },
+  { key: "chasisNo", title: "Chasis Number" },
+  { key: "engineNo", title: "Engine Number" },
+  { key: "vehiclemake", title: "Vehicle Make" },
+  { key: "model", title: "Model" },
+  { key: "year", title: "Year" },
 ];
 
 const tableData = [
@@ -59,6 +60,7 @@ const tableData = [
 ];
 
 export default function Page() {
+  const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
@@ -91,8 +93,10 @@ export default function Page() {
     const tableRow = row as TableRow;
     return [
       {
-        title: "View",
-        action: () => console.log("Viewing details for:", tableRow),
+        title: "View Details",
+        action: () => {
+          router.push(`/super-admin/vehicle/vehicle-preview/${tableRow.id}`);
+        },
       },
     ];
   };

@@ -16,7 +16,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { format } from "date-fns";
-import { PaymentStatus, PlateNumberStatus } from "@/common/enum";
+import {
+  PaymentStatus,
+  PlateNumberStatus,
+  Role,
+  UserStatus,
+  ApprovalStatus,
+} from "@/common/enum";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface TableHeader {
   title: string;
@@ -24,7 +31,17 @@ interface TableHeader {
 }
 
 interface TableData {
-  [key: string]: string | number | Date | PaymentStatus | PlateNumberStatus;
+  [key: string]:
+    | null
+    | undefined
+    | string
+    | number
+    | Date
+    | PaymentStatus
+    | PlateNumberStatus
+    | Role
+    | UserStatus
+    | ApprovalStatus;
 }
 
 interface RowAction {
@@ -37,6 +54,7 @@ type DataTableProps = {
   data: TableData[];
   itemsPerPage?: number;
   rowActions?: (row: TableData) => RowAction[];
+  isLoading?: boolean;
 };
 
 // Utility function to check if a value is of type PaymentStatus
@@ -48,11 +66,24 @@ const isPlateNumberStatus = (value: unknown): value is PlateNumberStatus => {
   return Object.values(PlateNumberStatus).includes(value as PlateNumberStatus);
 };
 
+const isUserRole = (value: unknown): value is Role => {
+  return Object.values(Role).includes(value as Role);
+};
+
+const isUserStatus = (value: unknown): value is UserStatus => {
+  return Object.values(UserStatus).includes(value as UserStatus);
+};
+
+const isApprovalStatus = (value: unknown): value is ApprovalStatus => {
+  return Object.values(ApprovalStatus).includes(value as ApprovalStatus);
+};
+
 export function DataTableWButton({
   headers,
   data,
   itemsPerPage,
   rowActions,
+  isLoading,
 }: DataTableProps) {
   return (
     <Table>
@@ -66,9 +97,7 @@ export function DataTableWButton({
               {header.title}
             </TableHead>
           ))}
-          <TableHead className="text-center text-xs w-[100px]">
-            Actions
-          </TableHead>
+          <TableHead className="text-center text-xs w-[100px]">{""}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -90,18 +119,24 @@ export function DataTableWButton({
                       </p>
                     </div>
                   ) : isPaymentStatus(cellValue) ||
-                    isPlateNumberStatus(cellValue) ? (
+                    isPlateNumberStatus(cellValue) ||
+                    isUserRole(cellValue) ||
+                    isUserStatus(cellValue) ||
+                    isApprovalStatus(cellValue) ? (
                     <span
                       className={cn(
                         "capitalize px-4 py-1 rounded-full",
-                        cellValue === PaymentStatus.PAID ||
-                          cellValue === PlateNumberStatus.ASSIGNED
-                          ? "bg-success-100"
-                          : "",
-                        cellValue === PaymentStatus.UNPAID ||
-                          cellValue === PlateNumberStatus.UNASSIGNED
-                          ? "bg-failed"
-                          : ""
+                        (cellValue === PaymentStatus.PAID ||
+                          cellValue === PlateNumberStatus.ASSIGNED ||
+                          cellValue === UserStatus.ACTIVE ||
+                          cellValue === ApprovalStatus.APPROVED) &&
+                          "bg-success-100 text-success-500",
+                        (cellValue === PaymentStatus.UNPAID ||
+                          cellValue === PlateNumberStatus.UNASSIGNED ||
+                          cellValue === UserStatus.DEACTIVATED ||
+                          cellValue === ApprovalStatus.NOTAPPROVED) &&
+                          "bg-failed text-danger",
+                        isUserRole(cellValue) && "bg-role text-white"
                       )}
                     >
                       {cellValue}
@@ -120,7 +155,11 @@ export function DataTableWButton({
                     variant="ghost"
                     size="icon"
                   >
-                    <MoreHorizontal className="h-5 w-5" />
+                    {isLoading ? (
+                      <CircularProgress />
+                    ) : (
+                      <MoreHorizontal className="h-5 w-5" />
+                    )}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -129,7 +168,7 @@ export function DataTableWButton({
                       <DropdownMenuItem
                         key={idx}
                         onClick={action.action}
-                        className="cursor-pointer hover:bg-neutral-50"
+                        className={"cursor-pointer hover:bg-neutral-50"}
                       >
                         {action.title}
                       </DropdownMenuItem>

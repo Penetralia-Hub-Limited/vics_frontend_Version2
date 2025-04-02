@@ -14,3 +14,21 @@ export enum PlateNumberStatus {
   ASSIGNED = "Assigned",
   UNASSIGNED = "Unassigned",
 }
+
+export enum Role {
+  SUPERADMIN = "Super Admin",
+  MLA = "MLA",
+  Chairman = "Chairman",
+  SMR = "SMR",
+  STOREADMIN = "Store Admin",
+}
+
+export enum UserStatus {
+  DEACTIVATED = "Deactivated",
+  ACTIVE = "Active",
+}
+
+export enum ApprovalStatus {
+  APPROVED = "Approved",
+  NOTAPPROVED = "Not Approved",
+}
