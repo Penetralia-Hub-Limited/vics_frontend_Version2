@@ -1,71 +1,56 @@
-import { FC, ReactNode } from "react";
-import { X } from "lucide-react";
+import { FC, ReactNode, ReactElement } from "react";
 import { Button } from "../ui/button";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface IModal {
   title: string;
   content: ReactNode;
-  buttonText: string;
+  btnText: string;
+  footerBtn: ReactElement;
+  btnVariant?:
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "date"
+    | "secondary"
+    | "ghost"
+    | "pagination"
+    | null
+    | undefined;
 }
 
-const Modal: FC<IModal> = ({ title, buttonText, content }) => {
+const Modal: FC<IModal> = ({
+  title,
+  btnText,
+  content,
+  footerBtn,
+
+  btnVariant = "default",
+}) => {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button>{buttonText}</Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent className={"p-0 m-0 overflow-hidden"}>
-        <AlertDialogHeader className={"flex bg-neutral-300 h-15 p-3"}>
-          <div className={"flex flex-row item-center justify-between"}>
-            <AlertDialogTitle>{title}</AlertDialogTitle>
-            <AlertDialogCancel className="border-1 rounded-full shadow-none focus:ring-0 ring-0 border-danger hover:border-danger">
-              <X className={"text-danger"} />
-            </AlertDialogCancel>
-          </div>
-          <AlertDialogDescription className={"p-4"}>
-            <div>{content}</div>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter className={"p-3"}>
-          <AlertDialogAction>Continue</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant={btnVariant}>{btnText}</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[700px] p-0 m-0 overflow-hidden">
+        <DialogHeader className={"bg-neutral-300 p-4 h-15"}>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <div>{content}</div>
+        <DialogFooter className={"p-4"}>{footerBtn}</DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
 export default Modal;
-
-export function AlertDialogDemo() {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}

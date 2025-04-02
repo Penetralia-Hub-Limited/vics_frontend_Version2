@@ -10,6 +10,11 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VehicleSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import Modal from "@/components/general/modal";
+import { IDTaxPayerMeans } from "@/common/enum";
+import { VehicleModalElements } from "@/components/dashboard/vehicle/vehicle-modal-element";
+import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
+import SuccessModal from "@/components/general/success-response";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -65,6 +70,15 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [identificationMeans, setIdentificationMeans] =
+    useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
+  const [identificationInput, setIdentificationInput] = useState<{
+    nin: string;
+    phoneNumber: string;
+  }>({
+    nin: "",
+    phoneNumber: "",
+  });
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -84,11 +98,6 @@ export default function Page() {
     year: string;
   }
 
-  interface RowAction {
-    title: string;
-    action: () => void;
-  }
-
   const getRowActions = (row: unknown): RowAction[] => {
     const tableRow = row as TableRow;
     return [
@@ -99,6 +108,41 @@ export default function Page() {
         },
       },
     ];
+  };
+
+  const validateModal = () => {
+    return (
+      <SuccessModal
+        title={`${identificationMeans} Verified Successfully`}
+        content={
+          <div className={"flex flex-col gap-4 py-3"}>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p>Name:</p>
+              <p className={"font-semibold justify-self-end"}>Akan E</p>
+            </div>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p>Phone Number:</p>
+              <p className={"font-semibold justify-self-end"}>
+                {identificationInput.phoneNumber}
+              </p>
+            </div>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p>Address:</p>
+              <p className={"font-semibold justify-self-end"}>
+                Omru Oran Ojo, Ibadan 2343423
+              </p>
+            </div>
+          </div>
+        }
+        footerBtnText={"Continue"}
+        btnText={"Validate Tax Payer"}
+        trigger={() => {
+          {
+            router.push("/super-admin/vehicle/add-new-vehicle");
+          }
+        }}
+      />
+    );
   };
 
   return (
@@ -123,7 +167,19 @@ export default function Page() {
           ]}
         />
 
-        <Button>Add New Vehicle</Button>
+        <Modal
+          title={"Add New Vehicle"}
+          content={
+            <VehicleModalElements
+              selected={identificationMeans}
+              onSelect={setIdentificationMeans}
+              input={identificationInput}
+              setInput={setIdentificationInput}
+            />
+          }
+          btnText={"Add New Vehicle"}
+          footerBtn={validateModal()}
+        />
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>

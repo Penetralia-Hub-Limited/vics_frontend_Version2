@@ -48,12 +48,12 @@ export default function Page() {
           {
             label: "Dashboard",
             Icon: DashboardSVG,
-            link: "/store-manager-admin/dashboard",
+            link: "/super-admin/dashboard",
           },
           {
             label: "Vehicle Dashboard",
             Icon: VehicleSVG,
-            link: "/store-manager-admin/vehicle",
+            link: "/super-admin/vehicle",
           },
           {
             label: "Add New Vehicle",
@@ -96,14 +96,11 @@ export default function Page() {
 
               {currentStep === totalSteps ? (
                 <SuccessModal
-                  button={
-                    <Button>
-                      <p>Proceed</p>
-                    </Button>
-                  }
-                  successText={"New Vehicle was registered successfully"}
-                  btnText={"Done"}
+                  title={"Success"}
+                  content={<p>New Vehicle was Registered Successfully</p>}
+                  btnText={"Proceed"}
                   trigger={() => router.push("/super-admin/vehicle")}
+                  footerBtnText={"Done"}
                 />
               ) : (
                 <Button

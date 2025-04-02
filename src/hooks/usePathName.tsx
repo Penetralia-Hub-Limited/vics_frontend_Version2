@@ -53,6 +53,7 @@ const useGetPathName = (identifier: string) => {
       taxpayer: "Tax Payer Dashboard",
       vehicle: "Vehicle Dashboard",
       preview: "Vehicle Dashboard",
+      addnewvehicle: "Vehicle Dashboard",
       platenumberrequest: "Plate Number Request",
       stockmanagement: "Stock Management",
       manageservices: "Configuration Dashboard",
@@ -60,7 +61,11 @@ const useGetPathName = (identifier: string) => {
       vehiclemakemodel: "Configuration Dashboard",
       salesassessment: "Assessment Dashboard",
       renewalassessment: "Assessment Dashboard",
-      changerequest: "Change Request",
+      taxpayerrequest: "Change Request",
+      vehiclechangerequest: "Change Request",
+      renewal: "Renewal dashboard",
+      printcardsstickers: "Print Management",
+      printdocument: "Print Management",
     },
   };
 

@@ -44,7 +44,7 @@ interface TableData {
     | ApprovalStatus;
 }
 
-interface RowAction {
+export interface RowAction {
   title: string;
   action: () => void;
 }
@@ -131,7 +131,7 @@ export function DataTableWButton({
                           cellValue === UserStatus.ACTIVE ||
                           cellValue === ApprovalStatus.APPROVED) &&
                           "bg-success-100 text-success-500",
-                        (cellValue === PaymentStatus.UNPAID ||
+                        (cellValue === PaymentStatus.NOTPAID ||
                           cellValue === PlateNumberStatus.UNASSIGNED ||
                           cellValue === UserStatus.DEACTIVATED ||
                           cellValue === ApprovalStatus.NOTAPPROVED) &&

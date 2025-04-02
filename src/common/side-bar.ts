@@ -213,15 +213,7 @@ export const superAdminSidebar = [
         id: 4,
         title: "Sales",
         Icon: SalesSVG,
-        url: "/super-admin/sales",
-        dropdown: [
-          { id: 1, title: "Sales Report", url: "/super-admin/sales" },
-          {
-            id: 2,
-            title: "New Plate Sales",
-            url: "/super-admin/sell-new-plates",
-          },
-        ],
+        dropdown: [{ id: 1, title: "Sales Report", url: "/super-admin/sales" }],
       },
       {
         id: 5,
@@ -344,7 +336,7 @@ export const superAdminSidebar = [
           {
             id: 1,
             title: "Print Cards & Stickers",
-            url: "/super-admin/print-management/print-cards-&-stickers",
+            url: "/super-admin/print-management/print-cards-stickers",
           },
           {
             id: 2,
@@ -363,12 +355,10 @@ export const superAdminSidebar = [
         id: 5,
         title: "Payment",
         Icon: PaymentSVG,
-        url: "/super-admin/payment",
         dropdown: [
           {
             id: 1,
             title: "VIO Approval",
-            // Icon: VICSSVG,
             url: "/super-admin/vio-approval",
           },
         ],
@@ -382,20 +372,17 @@ export const superAdminSidebar = [
           {
             id: 1,
             title: "Tax Payer Change Request",
-            // Icon: VICSSVG,
-            url: "/super-admin/tax-payer-change-request",
+            url: "/super-admin/change-request/tax-payer-request",
           },
           {
             id: 2,
             title: "Vehicle Change Request",
-            // Icon: VICSSVG,
-            url: "/super-admin/tax-payer-change-request",
+            url: "/super-admin/change-request/vehicle-change-request",
           },
           {
             id: 3,
             title: "Check Payment Status",
-            // Icon: VICSSVG,
-            url: "/super-admin/tax-payer-change-request",
+            url: "/super-admin/change-request/check-payment-status",
           },
         ],
       },

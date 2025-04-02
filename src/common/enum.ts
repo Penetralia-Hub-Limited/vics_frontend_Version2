@@ -7,7 +7,7 @@ export enum DateRange {
 
 export enum PaymentStatus {
   PAID = "Paid",
-  UNPAID = "Unpaid",
+  NOTPAID = "Not Paid",
 }
 
 export enum PlateNumberStatus {
@@ -51,4 +51,9 @@ export enum SelectCardType {
   STICKER = "Sticker",
   HEAVY = "Heavy",
   LEARNER = "Learner",
+}
+
+export enum IDTaxPayerMeans {
+  NIN = "National Identification Number (NIN)",
+  PHONENO = "Phone Number",
 }

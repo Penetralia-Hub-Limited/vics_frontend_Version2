@@ -111,7 +111,7 @@ const DashboardTable: FC<IDashboardTable> = ({
                           cellValue === UserStatus.ACTIVE ||
                           cellValue === ApprovalStatus.APPROVED) &&
                           "bg-success-100 text-success-500",
-                        (cellValue === PaymentStatus.UNPAID ||
+                        (cellValue === PaymentStatus.NOTPAID ||
                           cellValue === PlateNumberStatus.UNASSIGNED ||
                           cellValue === UserStatus.DEACTIVATED ||
                           cellValue === ApprovalStatus.NOTAPPROVED) &&

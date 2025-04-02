@@ -1,23 +1,25 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import ModalComp from "./pop-over";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { AlertDialogAction } from "@/components/ui/alert-dialog";
 
 interface ISuccessModal {
-  button: React.ReactElement;
-  successText: string;
+  title: string;
+  content: ReactNode;
   btnText: string;
+  footerBtnText: string;
   trigger: () => void;
 }
 
 const SuccessModal: FC<ISuccessModal> = ({
-  button,
-  successText,
+  title,
+  content,
   btnText,
   trigger,
+  footerBtnText,
 }) => {
   return (
-    <ModalComp button={button}>
+    <ModalComp btnText={btnText}>
       <div className={"flex flex-col gap-4 items-center justify-center"}>
         <DotLottieReact
           aria-hidden="true"
@@ -28,9 +30,9 @@ const SuccessModal: FC<ISuccessModal> = ({
           loop
           autoplay
         />
-        <p className={"text-lg font-bold"}>Success</p>
-        <p>{successText}</p>
-        <AlertDialogAction onClick={trigger}>{btnText}</AlertDialogAction>
+        <p className={"text-lg text-center font-bold"}>{title}</p>
+        <div>{content}</div>
+        <AlertDialogAction onClick={trigger}>{footerBtnText}</AlertDialogAction>
       </div>
     </ModalComp>
   );
