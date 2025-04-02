@@ -444,13 +444,13 @@ export const mlatableInvoices = [
 /** MLA DATA END */
 
 export const vehicleColumns = [
-  { key: "id" as const, title: "S/N" },
-  { key: "chasisno" as const, title: "Chasis Number" },
-  { key: "engineno" as const, title: "Engine Number" },
-  { key: "vehiclemake" as const, title: "Vehicle Make" },
-  { key: "vehiclemodel" as const, title: "Vehicle Model" },
-  { key: "category" as const, title: "Category" },
-  { key: "plateno" as const, title: "Plate Number" },
+  { key: "id", title: "S/N" },
+  { key: "chasisno", title: "Chasis Number" },
+  { key: "engineno", title: "Engine Number" },
+  { key: "vehiclemake", title: "Vehicle Make" },
+  { key: "vehiclemodel", title: "Vehicle Model" },
+  { key: "category", title: "Category" },
+  { key: "plateno", title: "Plate Number" },
 ];
 
 export const vehicleData = [
@@ -466,12 +466,12 @@ export const vehicleData = [
 ];
 
 export const invoiceColumns = [
-  { key: "id" as const, title: "S/N" },
-  { key: "invoiceid" as const, title: "Invoice ID" },
-  { key: "amount" as const, title: "Amount" },
-  { key: "paymentreference" as const, title: "Payment Reference" },
+  { key: "id", title: "S/N" },
+  { key: "invoiceid", title: "Invoice ID" },
+  { key: "amount", title: "Amount" },
+  { key: "paymentreference", title: "Payment Reference" },
   { key: "paymentstatus" as PaymentStatus, title: "Payment Status" },
-  { key: "date" as const, title: "Date" },
+  { key: "date", title: "Date" },
 ];
 
 export const invoiceData = [

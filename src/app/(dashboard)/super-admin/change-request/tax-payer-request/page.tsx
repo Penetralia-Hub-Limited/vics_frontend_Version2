@@ -14,71 +14,68 @@ import DashboardTable from "@/components/dashboard/dashboard-table";
 const tableColumns = [
   { key: "id", title: "S/N" },
   { key: "name", title: "Name" },
-  { key: "platenumber", title: "Plate Number" },
-  { key: "category", title: "Category" },
-  { key: "chasisnumber", title: "Chasis Number" },
-  { key: "enginenumber", title: "Engine Number" },
-  { key: "platetype", title: "Plate Type" },
-  { key: "vehiclemake", title: "Vehicle Make" },
-  { key: "model", title: "Model" },
-  { key: "year", title: "Year" },
+  { key: "email", title: "Email Address" },
+  { key: "phonenumber", title: "Phone Number" },
   { key: "approvalstatus", title: "Approval Status" },
+  { key: "date", title: "Date Created" },
 ];
 
 const tableData = [
   {
     id: 1,
     name: "JK",
-    platenumber: "Private (Direct)",
-    category: "Akanbi S.",
-    chasisnumber: 34535343,
-    enginenumber: 43234201,
-    platetype: "Private (Direct)",
-    vehiclemake: "Toyota CE",
-    model: "2018FE",
-    year: 2025,
+    email: "Private (Direct)",
+    phonenumber: "Akanbi S.",
     approvalstatus: ApprovalStatus.APPROVED,
+    date: new Date(),
   },
   {
     id: 2,
     name: "JK",
-    platenumber: "Private (Direct)",
-    category: "Akanbi S.",
-    chasisnumber: 34535343,
-    enginenumber: 43234201,
-    platetype: "Private (Direct)",
-    vehiclemake: "Toyota CE",
-    model: "2018FE",
-    year: 2025,
-    approvalstatus: ApprovalStatus.APPROVED,
+    email: "Private (Direct)",
+    phonenumber: "Akanbi S.",
+    approvalstatus: ApprovalStatus.NOTAPPROVED,
+    date: new Date(),
   },
   {
     id: 3,
     name: "JK",
-    platenumber: "Private (Direct)",
-    category: "Akanbi S.",
-    chasisnumber: 34535343,
-    enginenumber: 43234201,
-    platetype: "Private (Direct)",
-    vehiclemake: "Toyota CE",
-    model: "2018FE",
-    year: 2025,
-    approvalstatus: ApprovalStatus.NOTAPPROVED,
+    email: "Private (Direct)",
+    phonenumber: "Akanbi S.",
+    approvalstatus: ApprovalStatus.APPROVED,
+    date: new Date(),
   },
 ];
 
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [fromDate, setFromDate] = useState<Date | undefined>();
-  const [toDate, setToDate] = useState<Date | undefined>();
-  const [plateNumber, setPlateNumber] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [inputValues, setInputValues] = useState<{
+    name: string;
+    email: string;
+    phoneNumber: string;
+  }>({
+    name: "",
+    email: "",
+    phoneNumber: "",
+  });
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValues((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  console.log(inputValues);
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -90,7 +87,7 @@ export default function Page() {
             link: "/super-admin/dashboard",
           },
           {
-            label: "Vehicle Change Requests",
+            label: "Tax Payer Requests",
             Icon: PenSVG,
             link: "/super-admin/change-request/vehicle-change-request",
           },
@@ -98,22 +95,51 @@ export default function Page() {
       />
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
+        <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 items-end"}>
           <InputWithLabel
             items={{
-              id: "platenumber",
-              label: "Plate Number",
-              placeholder: "Plate Number",
+              id: "name",
+              label: "Name",
+              placeholder: "Name",
               type: "text",
-              htmlfor: "platenumber",
+              htmlfor: "name",
             }}
-            value={plateNumber}
-            onChange={(e) => setPlateNumber(e.target.value)}
+            value={inputValues.name}
+            onChange={handleInputChange}
           />
 
-          <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
-          <DatePicker date={toDate} setDate={setToDate} title={"To"} />
+          <InputWithLabel
+            items={{
+              id: "email",
+              label: "Email Address",
+              placeholder: "Email Address",
+              type: "text",
+              htmlfor: "email",
+            }}
+            value={inputValues.email}
+            onChange={handleInputChange}
+          />
 
+          <InputWithLabel
+            items={{
+              id: "phoneNumber",
+              label: "Phone Number",
+              placeholder: "Phone Number",
+              type: "text",
+              htmlfor: "phoneNumber",
+            }}
+            value={inputValues.phoneNumber}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end">
+          <DatePicker
+            date={startDate}
+            setDate={setStartDate}
+            title="Start Date"
+          />
+          <DatePicker date={endDate} setDate={setEndDate} title="End Date" />
           <Button>Search</Button>
         </div>
       </CardContainer>

@@ -32,3 +32,23 @@ export enum ApprovalStatus {
   APPROVED = "Approved",
   NOTAPPROVED = "Not Approved",
 }
+
+export enum CardStatus {
+  PENDING = "Pending",
+  FAILED = "Failed",
+  SUCCESS = "Success",
+}
+
+export enum SelectCardStatus {
+  PRINTED = "Printed",
+  NOTPRINTED = "Not Printed",
+  NOTPAID = "Not Paid",
+}
+
+export enum SelectCardType {
+  COMPUTERIZED = "Computerized",
+  CARD = "Card",
+  STICKER = "Sticker",
+  HEAVY = "Heavy",
+  LEARNER = "Learner",
+}

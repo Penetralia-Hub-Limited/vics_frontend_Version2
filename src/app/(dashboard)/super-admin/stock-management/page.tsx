@@ -112,8 +112,6 @@ export default function Page() {
     ];
   };
 
-  console.log();
-
   return (
     <main className="flex flex-col gap-8 md:gap-12 overflow-hidden">
       <div className="flex flex-col gap-5 md:flex-row justify-between items-center">

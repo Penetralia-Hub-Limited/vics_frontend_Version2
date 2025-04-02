@@ -340,19 +340,16 @@ export const superAdminSidebar = [
         id: 3,
         title: "Print Management",
         Icon: PrintSVG,
-        url: "/super-admin/print-management",
         dropdown: [
           {
             id: 1,
             title: "Print Cards & Stickers",
-            // Icon: VICSSVG,
-            url: "/super-admin/print-management/cards-stickers",
+            url: "/super-admin/print-management/print-cards-&-stickers",
           },
           {
             id: 2,
             title: "Print Document",
-            // Icon: VICSSVG,
-            url: "/super-admin/print-document",
+            url: "/super-admin/print-management/print-document",
           },
         ],
       },
