@@ -359,7 +359,7 @@ export const superAdminSidebar = [
           {
             id: 1,
             title: "VIO Approval",
-            url: "/super-admin/vio-approval",
+            url: "/super-admin/payment/vio-approval",
           },
         ],
       },

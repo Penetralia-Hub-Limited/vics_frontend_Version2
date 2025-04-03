@@ -12,6 +12,10 @@ import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-butto
 import { Role, UserStatus } from "@/common/enum";
 import Pagination from "@/components/general/pagination";
 import Modal from "@/components/general/modal";
+import {
+  AddUserModalProp,
+  AddNewUserInfo,
+} from "@/components/dashboard/user/add-new-user-modal-info";
 
 export const manageUserHeader = [
   { key: "id", title: "S/N" },
@@ -96,6 +100,18 @@ export default function Page() {
     status: "",
     role: "",
   });
+  const [modalInput, setModalInput] = useState<AddUserModalProp>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    zone: "",
+    taxOffice: "",
+    roles: undefined,
+  });
+
+  console.log(modalInput);
 
   const totalPages = Math.ceil(manageUserData.length / itemsPerPage);
   const paginatedData = manageUserData.slice(
@@ -131,8 +147,6 @@ export default function Page() {
     ];
   };
 
-  console.log(inputValues);
-
   return (
     <main className={"flex flex-col gap-8 md:gap-12"}>
       <div
@@ -157,8 +171,11 @@ export default function Page() {
 
         <Modal
           title={"Create A New Workflow Stage"}
-          content={undefined}
-          buttonText={"Add New User"}
+          content={
+            <AddNewUserInfo input={modalInput} setInput={setModalInput} />
+          }
+          btnText={"Add New User"}
+          footerBtn={<Button type="submit">Submit</Button>}
         />
       </div>
 

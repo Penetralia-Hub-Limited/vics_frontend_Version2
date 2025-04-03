@@ -57,3 +57,21 @@ export enum IDTaxPayerMeans {
   NIN = "National Identification Number (NIN)",
   PHONENO = "Phone Number",
 }
+
+export enum SuperAdminPermissions {
+  CANVIEWINVOICERECEIPT = "Can View Invoice/Receipt",
+  CANVIEWPLATESALESREPORT = "Can View Plate Sales Report",
+  CANSELLPLATES = "Can Sell Plates",
+  DEFAULT = "Default",
+  CANVIEWACTIVITYLOG = "Can View Activity Log",
+  CANUPLOADSTOCK = "Can Upload Stock",
+  CANAPPROVEPLATENUMBER = "Can Approve Plate Number",
+  CANDELETESTOCK = "Can Delete Stock",
+  CANAUDITROLES = "Can Audit Roles",
+  CANVIEWVEHICLEMANAGEMENT = "Can View Vehicle Management",
+  CANVIEWSALES = "Can View Sales",
+  CANCREATEUSER = "Can Create User",
+  CANCREATEROLES = "Can Create Roles",
+  CANPRINTDOCUMENT = "Can Print Document",
+  CANVIEWMLASTOCK = "Can View MLA Stock",
+}

@@ -15,6 +15,7 @@ import {
   Role,
   UserStatus,
   ApprovalStatus,
+  CardStatus,
 } from "@/common/enum";
 
 interface TableHeader {
@@ -33,7 +34,8 @@ interface TableData {
     | PlateNumberStatus
     | Role
     | UserStatus
-    | ApprovalStatus;
+    | ApprovalStatus
+    | CardStatus;
 }
 
 interface IDashboardTable {
@@ -61,6 +63,10 @@ const isUserStatus = (value: unknown): value is UserStatus => {
 
 const isApprovalStatus = (value: unknown): value is ApprovalStatus => {
   return Object.values(ApprovalStatus).includes(value as ApprovalStatus);
+};
+
+const isCardStatus = (value: unknown): value is CardStatus => {
+  return Object.values(CardStatus).includes(value as CardStatus);
 };
 
 const DashboardTable: FC<IDashboardTable> = ({
@@ -102,7 +108,8 @@ const DashboardTable: FC<IDashboardTable> = ({
                     isPlateNumberStatus(cellValue) ||
                     isUserRole(cellValue) ||
                     isUserStatus(cellValue) ||
-                    isApprovalStatus(cellValue) ? (
+                    isApprovalStatus(cellValue) ||
+                    isCardStatus(cellValue) ? (
                     <span
                       className={cn(
                         "capitalize px-4 py-1 rounded-full",
@@ -116,6 +123,8 @@ const DashboardTable: FC<IDashboardTable> = ({
                           cellValue === UserStatus.DEACTIVATED ||
                           cellValue === ApprovalStatus.NOTAPPROVED) &&
                           "bg-failed text-danger",
+                        cellValue === CardStatus.PENDING &&
+                          "text-pending-500 bg-pending-100",
                         isUserRole(cellValue) && "bg-role text-white"
                       )}
                     >

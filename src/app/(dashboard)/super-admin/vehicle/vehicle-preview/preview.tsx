@@ -84,6 +84,11 @@ export default function VehiclePreview({
             Icon: VehicleSVG,
             link: "/store-manager-admin/stock-management",
           },
+          {
+            label: "Mercedez CEE",
+            Icon: VehicleSVG,
+            link: "/store-manager-admin/stock-management",
+          },
         ]}
       />
 

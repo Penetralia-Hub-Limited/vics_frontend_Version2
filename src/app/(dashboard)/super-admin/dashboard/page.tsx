@@ -51,7 +51,7 @@ export default function Page() {
         <div className={"flex flex-col gap-4 w-full"}>
           <div
             className={
-              "flex flex-col md:flex-row gap-2 justify-between items-center w-full"
+              "flex flex-col xl:flex-row gap-2 justify-between items-center w-full"
             }
           >
             {summaryItems1.map(({ title, amount, isCurrency }) => (

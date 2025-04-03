@@ -52,7 +52,7 @@ const useGetPathName = (identifier: string) => {
       taxpayerinformation: "Tax Payer Information",
       taxpayer: "Tax Payer Dashboard",
       vehicle: "Vehicle Dashboard",
-      preview: "Vehicle Dashboard",
+      vehiclepreview: "Vehicle Dashboard",
       addnewvehicle: "Vehicle Dashboard",
       platenumberrequest: "Plate Number Request",
       stockmanagement: "Stock Management",
@@ -66,6 +66,8 @@ const useGetPathName = (identifier: string) => {
       renewal: "Renewal dashboard",
       printcardsstickers: "Print Management",
       printdocument: "Print Management",
+      vioapproval: "Payment Report",
+      audittrial: "Audit trial",
     },
   };
 

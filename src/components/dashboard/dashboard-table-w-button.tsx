@@ -22,6 +22,7 @@ import {
   Role,
   UserStatus,
   ApprovalStatus,
+  CardStatus,
 } from "@/common/enum";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -41,7 +42,8 @@ interface TableData {
     | PlateNumberStatus
     | Role
     | UserStatus
-    | ApprovalStatus;
+    | ApprovalStatus
+    | CardStatus;
 }
 
 export interface RowAction {
@@ -76,6 +78,10 @@ const isUserStatus = (value: unknown): value is UserStatus => {
 
 const isApprovalStatus = (value: unknown): value is ApprovalStatus => {
   return Object.values(ApprovalStatus).includes(value as ApprovalStatus);
+};
+
+const isCardStatus = (value: unknown): value is CardStatus => {
+  return Object.values(CardStatus).includes(value as CardStatus);
 };
 
 export function DataTableWButton({
@@ -122,7 +128,8 @@ export function DataTableWButton({
                     isPlateNumberStatus(cellValue) ||
                     isUserRole(cellValue) ||
                     isUserStatus(cellValue) ||
-                    isApprovalStatus(cellValue) ? (
+                    isApprovalStatus(cellValue) ||
+                    isCardStatus(cellValue) ? (
                     <span
                       className={cn(
                         "capitalize px-4 py-1 rounded-full",
@@ -136,6 +143,8 @@ export function DataTableWButton({
                           cellValue === UserStatus.DEACTIVATED ||
                           cellValue === ApprovalStatus.NOTAPPROVED) &&
                           "bg-failed text-danger",
+                        cellValue === CardStatus.PENDING &&
+                          "text-pending-500 bg-pending-100",
                         isUserRole(cellValue) && "bg-role text-white"
                       )}
                     >
