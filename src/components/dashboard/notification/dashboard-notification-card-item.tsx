@@ -1,4 +1,6 @@
-import { FC } from "react";
+"use client";
+
+import { FC, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 
@@ -14,7 +16,8 @@ interface IDashboardNotificationCardItem {
 const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
   notification,
 }) => {
-  const formattedDate = format(notification.date, "h:m:s aaa");
+  const [idate] = useState<Date>(notification?.date);
+  const formattedDate = format(idate.toDateString(), "h:mm:ss aaa");
 
   return (
     <div className="mb-4 grid grid-cols-[25px_auto] items-start pb-4 last:mb-0 last:pb-0 border-b-1 border-neutral-300 last:border-b-0">
@@ -28,7 +31,7 @@ const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
           </p>
           <p
             className={
-              "text-xs md:text-sm leading-none text-neutral-700 ml-aut0o"
+              "text-xs md:text-sm leading-none text-neutral-700 ml-auto"
             }
           >
             {formattedDate}

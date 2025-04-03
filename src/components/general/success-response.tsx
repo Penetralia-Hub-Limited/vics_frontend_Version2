@@ -1,19 +1,38 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import ModalComp from "./pop-over";
-import { Button } from "../ui/button";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { AlertDialogAction } from "@/components/ui/alert-dialog";
 
 interface ISuccessModal {
-  button: React.ReactElement;
-  successText: string;
+  title: string;
+  content: ReactNode;
+  btnText: string;
+  footerBtnText: string;
+  trigger: () => void;
 }
 
-const SuccessModal: FC<ISuccessModal> = ({ button, successText }) => {
+const SuccessModal: FC<ISuccessModal> = ({
+  title,
+  content,
+  btnText,
+  trigger,
+  footerBtnText,
+}) => {
   return (
-    <ModalComp button={button}>
-      <div className={"flex flex-col gap-4"}>
-        <h1 className={"font-semibold"}>Success</h1>
-        <p>{successText}</p>
-        <Button>Done</Button>
+    <ModalComp btnText={btnText}>
+      <div className={"flex flex-col gap-4 items-center justify-center"}>
+        <DotLottieReact
+          aria-hidden="true"
+          style={{ width: 200, height: 100 }}
+          src={
+            "https://lottie.host/fe46d010-b474-49a8-aa26-ce393f8b3a88/nh99Y4MbDq.lottie"
+          }
+          loop
+          autoplay
+        />
+        <p className={"text-lg text-center font-bold"}>{title}</p>
+        <div>{content}</div>
+        <AlertDialogAction onClick={trigger}>{footerBtnText}</AlertDialogAction>
       </div>
     </ModalComp>
   );

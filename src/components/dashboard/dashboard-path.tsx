@@ -35,7 +35,7 @@ const DashboardPath: FC<IDashboardPath> = ({ pathdata, active }) => {
                   }
                 />
               )}
-              <p>{data.label}</p>
+              <p className={"text-sm"}>{data.label}</p>
             </Link>
             {index < pathdata.length - 1 && <p className={"text-lg"}>/</p>}
           </div>

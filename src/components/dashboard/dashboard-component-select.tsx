@@ -1,4 +1,6 @@
-import { FC } from "react";
+"use client";
+
+import { FC, SetStateAction, Dispatch } from "react";
 import {
   Select,
   SelectContent,
@@ -11,18 +13,22 @@ interface IDashboardCompSelect {
   placeholder: string;
   items: string[];
   title: string;
+  selected: string | undefined;
+  onSelect: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const DashboardCompSelect: FC<IDashboardCompSelect> = ({
   placeholder,
   items,
   title,
+  selected,
+  onSelect,
 }) => {
   return (
     <div className={"flex flex-col gap-3"}>
-      <p className={"font-semibold"}>{title}</p>
+      <p className={"text-sm font-semibold"}>{title}</p>
 
-      <Select>
+      <Select value={selected} onValueChange={onSelect}>
         <SelectTrigger
           className={"w-full border-1 border-neutral-500 rounded-lg"}
         >

@@ -1,4 +1,5 @@
 import { IlandingPageNavigation, IHotline, ISupportMail } from "./types";
+import { PaymentStatus } from "./enum";
 
 export const landingPageNavigation: IlandingPageNavigation[] = [
   {
@@ -100,8 +101,8 @@ export const tableHeaders = [
   { title: "Plate Number Type", key: "type" },
   { title: "Created By", key: "createdby" },
   { title: "Date", key: "Date" },
-  { title: "Initial Qty", key: "initialQty" },
-  { title: "Current Qty", key: "currentQty" },
+  { title: "Initial Quantity", key: "initialQty" },
+  { title: "Current Quantity", key: "currentQty" },
 ];
 
 export const tableInvoices = [
@@ -441,3 +442,46 @@ export const mlatableInvoices = [
   },
 ];
 /** MLA DATA END */
+
+export const vehicleColumns = [
+  { key: "id", title: "S/N" },
+  { key: "chasisno", title: "Chasis Number" },
+  { key: "engineno", title: "Engine Number" },
+  { key: "vehiclemake", title: "Vehicle Make" },
+  { key: "vehiclemodel", title: "Vehicle Model" },
+  { key: "category", title: "Category" },
+  { key: "plateno", title: "Plate Number" },
+];
+
+export const vehicleData = [
+  {
+    id: 1,
+    chasisno: "JKLMMNASKH2342423",
+    engineno: "JKLMMNASKH",
+    vehiclemake: "Mercedez-Benz",
+    vehiclemodel: "Mercedes E-400",
+    category: "Vehicle between 3.0 - 4.0",
+    plateno: "MORO18LM",
+  },
+];
+
+export const invoiceColumns = [
+  { key: "id", title: "S/N" },
+  { key: "invoiceid", title: "Invoice ID" },
+  { key: "amount", title: "Amount" },
+  { key: "paymentreference", title: "Payment Reference" },
+  { key: "paymentstatus" as PaymentStatus, title: "Payment Status" },
+  { key: "date", title: "Date" },
+];
+
+export const invoiceData = [
+  {
+    id: 1,
+    invoiceid: "#INV2525",
+    amount: 23434,
+    paymentreference: "43432343423",
+    paymentstatus: PaymentStatus.PAID,
+    category: "Vehicle between 3.0 - 4.0",
+    date: new Date(),
+  },
+];

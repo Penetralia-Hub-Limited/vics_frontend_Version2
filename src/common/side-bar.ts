@@ -16,6 +16,7 @@ import {
   InsuranceSVG,
   OwnershipSVG,
   CollectionsSVG,
+  ConfigurationSVG,
 } from "./svgs";
 import { ISideBarProps } from "./types";
 
@@ -183,46 +184,56 @@ export const superAdminSidebar = [
         title: "Dashboard",
         Icon: DashboardSVG,
         url: "/super-admin/dashboard",
+      },
+
+      {
+        id: 2,
+        title: "Plate Number Requests",
+        Icon: VICSSVG,
+        url: "/super-admin/plate-number-request",
+      },
+      {
+        id: 3,
+        title: "Assessment",
+        Icon: AssessmentSVG,
         dropdown: [
           {
             id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "Sales Assessment",
+            url: "/super-admin/assessment/sales-assessment",
           },
           {
             id: 2,
-            title: "Assessment",
-            Icon: AssessmentSVG,
-            url: "/super-admin/dashboard/assessment",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "Renewal Assessment",
+            url: "/super-admin/assessment/renewal-assessment",
+          },
+        ],
+      },
+      {
+        id: 4,
+        title: "Sales",
+        Icon: SalesSVG,
+        dropdown: [{ id: 1, title: "Sales Report", url: "/super-admin/sales" }],
+      },
+      {
+        id: 5,
+        title: "Reports",
+        Icon: ReportSVG,
+        dropdown: [
+          {
+            id: 1,
+            title: "Plate Number Sales",
+            url: "/super-admin/report/plate-number-sales",
+          },
+          {
+            id: 2,
+            title: "Assigned Plate Numbers",
+            url: "/super-admin/report/assigned-plate-number-report",
           },
           {
             id: 3,
-            title: "Sales",
-            Icon: SalesSVG,
-            url: "/super-admin/dashboard/sales",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-          {
-            id: 4,
-            title: "Reports",
-            Icon: ReportSVG,
-            url: "/super-admin/dashboard/report",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "MLA Stock",
+            url: "/super-admin/report/mla-stock-report",
           },
         ],
       },
@@ -240,69 +251,50 @@ export const superAdminSidebar = [
         dropdown: [
           {
             id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "Manage Users",
+            url: "/super-admin/user/manage-users",
+          },
+          {
+            id: 2,
+            title: "Manage Users Roles",
+            url: "/super-admin/user/manage-user-roles",
           },
         ],
       },
       {
         id: 2,
         title: "Configuration",
-        Icon: DashboardSVG,
-        url: "/super-admin/dashboard",
+        Icon: ConfigurationSVG,
         dropdown: [
           {
             id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "Manage Service",
+            url: "/super-admin/configuration/manage-services",
           },
+          {
+            id: 2,
+            title: "Manage Workflow",
+            url: "/super-admin/configuration/manage-workflow",
+          },
+          {
+            id: 3,
+            title: "Vehicle Make & Model",
+            url: "/super-admin/configuration/vehicle-make-model",
+          },
+          { id: 4, title: "Invoice to Tax", url: "" },
         ],
       },
       {
         id: 3,
         title: "Stock Management",
         Icon: ManagementSVG,
-        url: "/super-admin/dashboard",
-        dropdown: [
-          {
-            id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-        ],
+        url: "/super-admin/stock-management",
       },
       {
         id: 4,
-        title: "Audit Trail",
+        title: "Audit Trial",
         Icon: AuditTrialSVG,
-        url: "/super-admin/dashboard",
-        dropdown: [
-          {
-            id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-        ],
+        url: "/super-admin/audit-trial",
       },
     ],
   },
@@ -314,19 +306,7 @@ export const superAdminSidebar = [
         id: 1,
         title: "Vehicles",
         Icon: VehicleSVG,
-        url: "/super-admin/vehicles",
-        dropdown: [
-          {
-            id: 1,
-            title: "Vehicles Sub",
-            Icon: VehicleSVG,
-            url: "/super-admin/*",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-        ],
+        url: "/super-admin/vehicle",
       },
       {
         id: 2,
@@ -336,13 +316,15 @@ export const superAdminSidebar = [
         dropdown: [
           {
             id: 1,
-            title: "Tax Payer Sub",
+            title: "Tax Payer Dashboard",
             Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            url: "/super-admin/tax-payer",
+          },
+          {
+            id: 2,
+            title: "Assessment",
+            Icon: VICSSVG,
+            url: "/super-admin/tax-payer/assessment",
           },
         ],
       },
@@ -350,17 +332,16 @@ export const superAdminSidebar = [
         id: 3,
         title: "Print Management",
         Icon: PrintSVG,
-        url: "/super-admin/print-management",
         dropdown: [
           {
             id: 1,
-            title: "Print-management",
-            Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "Print Cards & Stickers",
+            url: "/super-admin/print-management/print-cards-stickers",
+          },
+          {
+            id: 2,
+            title: "Print Document",
+            url: "/super-admin/print-management/print-document",
           },
         ],
       },
@@ -368,35 +349,17 @@ export const superAdminSidebar = [
         id: 4,
         title: "Renewals",
         Icon: RenewalsSVG,
-        url: "/super-admin/renewals",
-        dropdown: [
-          {
-            id: 1,
-            title: "Renewals Sub",
-            Icon: VICSSVG,
-            url: "/super-admin/renewals",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-        ],
+        url: "/super-admin/renewal",
       },
       {
         id: 5,
         title: "Payment",
         Icon: PaymentSVG,
-        url: "/super-admin/payment",
         dropdown: [
           {
             id: 1,
-            title: "Renewals Sub",
-            Icon: VICSSVG,
-            url: "/super-admin/renewals",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "VIO Approval",
+            url: "/super-admin/payment/vio-approval",
           },
         ],
       },
@@ -408,13 +371,18 @@ export const superAdminSidebar = [
         dropdown: [
           {
             id: 1,
-            title: "Change Request Sub",
-            Icon: VICSSVG,
-            url: "/super-admin/renewals",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "Tax Payer Change Request",
+            url: "/super-admin/change-request/tax-payer-request",
+          },
+          {
+            id: 2,
+            title: "Vehicle Change Request",
+            url: "/super-admin/change-request/vehicle-change-request",
+          },
+          {
+            id: 3,
+            title: "Check Payment Status",
+            url: "/super-admin/change-request/check-payment-status",
           },
         ],
       },

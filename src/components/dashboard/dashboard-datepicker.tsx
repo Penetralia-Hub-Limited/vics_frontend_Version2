@@ -17,11 +17,11 @@ interface IDatePicker {
 const DatePicker: FC<IDatePicker> = ({ title, date, setDate }) => {
   return (
     <div className={"flex flex-col gap-3"}>
-      <p className={"font-semibold"}>{title}</p>
+      <p className={"text-sm font-semibold"}>{title}</p>
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="border border-neutral-500">
+          <Button variant="date" className="border border-neutral-500">
             {date ? date.toLocaleDateString() : "mm/dd/yy"}
             <CalendarIcon className="ml-auto" />
           </Button>

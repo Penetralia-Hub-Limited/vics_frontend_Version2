@@ -1,20 +1,42 @@
-import { FC, ReactElement, ReactNode } from "react";
+import { FC, ReactNode } from "react";
+import { Button } from "../ui/button";
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogTrigger,
+  AlertDialogTitle,
+  AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 
 interface IModalComp {
   children: ReactNode;
-  button: ReactElement;
+  btnText: string;
+  btnVariant?:
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "date"
+    | "secondary"
+    | "ghost"
+    | "pagination"
+    | null
+    | undefined;
 }
 
-const ModalComp: FC<IModalComp> = ({ button, children }) => {
+const ModalComp: FC<IModalComp> = ({ btnText, btnVariant, children }) => {
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>{button}</AlertDialogTrigger>
-      <AlertDialogContent>{children}</AlertDialogContent>
+      <AlertDialogTrigger asChild>
+        <Button variant={btnVariant}>{btnText}</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent
+        className={"flex flex-col items-center justify-center w-full"}
+      >
+        <AlertDialogTitle></AlertDialogTitle>
+        <AlertDialogDescription></AlertDialogDescription>
+        {children}
+      </AlertDialogContent>
     </AlertDialog>
   );
 };
