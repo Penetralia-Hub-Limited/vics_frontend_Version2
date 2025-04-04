@@ -75,3 +75,13 @@ export interface TaxPayerInfo {
   address: string;
   profileImage?: string;
 }
+
+export interface Filters {
+  serviceType: string;
+  registrationType: string;
+  zoneOffice: string;
+  mla: string;
+  fromDate: string;
+  toDate: string;
+}
+

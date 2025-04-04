@@ -10,16 +10,36 @@ export default function SMRDashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar sidebarData={SMRAdminSidebar} />
-      <main className={"flex flex-col w-full"}>
-        <div className={"flex flex items-center h-20"}>
-          <div className={"block md:hidden"}>
-            <SidebarTrigger />
+      <div className="flex h-screen bg-neutral-100">
+        {/* Sidebar */}
+        <AppSidebar sidebarData={SMRAdminSidebar} />
+
+        {/* Main Content */}
+        <main className="flex flex-col w-full">
+          {/* Navbar */}
+          <div className="flex items-center h-20 px-4 bg-white shadow-sm">
+            <div className="block md:hidden">
+              <SidebarTrigger />
+            </div>
+            <DashboardNavBar pageTitle="SMR Dashboard" />
           </div>
-          <DashboardNavBar pageTitle={""} />
-        </div>
-        <div className={"px-4 py-8 bg-neutral-100/30"}>{children}</div>
-      </main>
+
+          {/* Content & Notifications */}
+          <div className="grid grid-cols-1 md:grid-cols-[2fr_auto] gap-4 px-6 py-4">
+            {/* Main Content */}
+            <div className="flex flex-col">{children}</div>
+
+            {/* Notifications */}
+            <aside className="w-full max-w-xs bg-white shadow-sm p-4 rounded-lg">
+              {/* Notification Component Placeholder */}
+              <div className="text-lg font-semibold">Notifications</div>
+              <div className="mt-4 text-sm text-neutral-600">
+                No new notifications
+              </div>
+            </aside>
+          </div>
+        </main>
+      </div>
     </SidebarProvider>
   );
 }
