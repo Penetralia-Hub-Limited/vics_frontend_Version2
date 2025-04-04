@@ -6,20 +6,27 @@ import { Button } from "@/components/ui/button";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VehicleSVG } from "@/common/svgs";
-import { AddVehicleStep1 } from "@/components/dashboard/vehicle/new-vehicle/step1";
-import { AddVehicleStep2 } from "@/components/dashboard/vehicle/new-vehicle/step2";
-import { AddVehicleStep3 } from "@/components/dashboard/vehicle/new-vehicle/step3";
+import {} from "@/components/dashboard/vehicle/new-vehicle/step1";
+
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
 import SuccessModal from "@/components/general/success-response";
+
 import {
-  initialValuesStep1,
-  inputVehiclePropsStep1,
-  initialValuesStep2,
-  IAddVehicleStep2Props,
-  initialValuesStep3,
-  inputVehiclePropsStep3,
-} from "@/components/dashboard/vehicle/vehicle-constant";
+  inputSalesPropsStep1,
+  initialSalesValuesStep1,
+  inputSalesPropsStep2,
+  initialSalesValuesStep2,
+  inputSalesPropsStep3,
+  initialSalesValuesStep3,
+  inputSalesPropsStep4,
+  initialSalesValuesStep4,
+} from "@/components/dashboard/sales/sales-constants";
+
+import { NewPlateSalesStep1 } from "@/components/dashboard/sales/new-plate-sells/step1";
+import { NewPlateSalesStep2 } from "@/components/dashboard/sales/new-plate-sells/step2";
+import { NewPlateSalesStep3 } from "@/components/dashboard/sales/new-plate-sells/step3";
+import { NewPlateSalesStep4 } from "@/components/dashboard/sales/new-plate-sells/step4";
 
 const stepdetails = [
   {
@@ -34,20 +41,30 @@ const stepdetails = [
     title: "Plate Number Details",
     description: "Kindly fill out the plate number information",
   },
+  {
+    title: "Insurance Policy",
+    description: "Kindly fill out the insurance policy details",
+  },
 ];
 
 export default function Page() {
   const router = useRouter();
   const totalSteps = stepdetails.length;
   const [currentStep, setCurrentStep] = useState<number>(1);
+
+  // Input values start
   const [step1InputValues, setStep1InputValues] =
-    useState<inputVehiclePropsStep1>(initialValuesStep1);
+    useState<inputSalesPropsStep1>(initialSalesValuesStep1);
 
   const [step2InputValues, setStep2InputValues] =
-    useState<IAddVehicleStep2Props>(initialValuesStep2);
+    useState<inputSalesPropsStep2>(initialSalesValuesStep2);
 
   const [step3InputValues, setStep3InputValues] =
-    useState<inputVehiclePropsStep3>(initialValuesStep3);
+    useState<inputSalesPropsStep3>(initialSalesValuesStep3);
+
+  const [step4InputValues, setStep4InputValues] =
+    useState<inputSalesPropsStep4>(initialSalesValuesStep4);
+  // Input values end
 
   console.log(step1InputValues, step2InputValues, step3InputValues);
 
@@ -84,7 +101,7 @@ export default function Page() {
       <div className="grid grid-cols-[2fr_1fr] gap-2 w-full">
         <CardContainer className="flex flex-col gap-10 items-center justify-center">
           <div className="flex flex-col gap-2 items-center justify-center">
-            <p className="text-lg font-semibold">Registering New Vehicle</p>
+            <p className="text-lg font-semibold">New Plate Sale</p>
             <p className="text-sm font-light">
               {stepdetails[currentStep - 1]?.description}
             </p>
@@ -93,21 +110,27 @@ export default function Page() {
           {/* Steps */}
           <div className="w-full">
             {currentStep === 1 && (
-              <AddVehicleStep1
+              <NewPlateSalesStep1
                 inputValues={step1InputValues}
                 setInputValues={setStep1InputValues}
               />
             )}
             {currentStep === 2 && (
-              <AddVehicleStep2
+              <NewPlateSalesStep2
                 inputValues={step2InputValues}
                 setInputValues={setStep2InputValues}
               />
             )}
             {currentStep === 3 && (
-              <AddVehicleStep3
+              <NewPlateSalesStep3
                 inputValues={step3InputValues}
                 setInputValues={setStep3InputValues}
+              />
+            )}
+            {currentStep === 4 && (
+              <NewPlateSalesStep4
+                inputValues={step4InputValues}
+                setInputValues={setStep4InputValues}
               />
             )}
           </div>
@@ -128,13 +151,17 @@ export default function Page() {
               </Button>
 
               {currentStep === totalSteps ? (
-                <SuccessModal
-                  title={"Success"}
-                  content={<p>New Vehicle was Registered Successfully</p>}
-                  btnText={"Proceed"}
-                  trigger={() => router.push("/super-admin/vehicle")}
-                  footerBtnText={"Done"}
-                />
+                <Button
+                  variant="outline"
+                  className="flex flex-row items-center gap-1"
+                  onClick={() =>
+                    router.push("/super-admin/sales/sales-preview/1")
+                  }
+                  disabled={currentStep === totalSteps}
+                >
+                  <p>Preview</p>
+                  <ChevronRight />
+                </Button>
               ) : (
                 <Button
                   variant="outline"

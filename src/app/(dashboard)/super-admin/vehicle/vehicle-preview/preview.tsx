@@ -6,7 +6,7 @@ import { DashboardSVG, VehicleSVG } from "@/common/svgs";
 import Pagination from "@/components/general/pagination";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import DashboardTable from "@/components/dashboard/dashboard-table";
-import { VehicleInformationCard } from "@/components/dashboard/vehicle/vehicle-information-card";
+import { InformationCard } from "@/components/general/information-card";
 
 const vehicleData = [
   {
@@ -93,14 +93,8 @@ export default function VehiclePreview({
       />
 
       <div className={"flex flex-col md:flex-row gap-4"}>
-        <VehicleInformationCard
-          title={"Buyers Information"}
-          data={vehicleData}
-        />
-        <VehicleInformationCard
-          title={"Vehicle's Information"}
-          data={vehicleData}
-        />
+        <InformationCard title={"Buyers Information"} data={vehicleData} />
+        <InformationCard title={"Vehicle's Information"} data={vehicleData} />
       </div>
 
       <div

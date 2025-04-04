@@ -7,10 +7,24 @@ import CardContainer from "@/components/general/card-container";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import { DashboardSVG, PenSVG } from "@/common/svgs";
+import { DashboardSVG, SalesSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import DashboardTable from "@/components/dashboard/dashboard-table";
 import { PaymentStatus } from "@/common/enum";
+import Modal from "@/components/general/modal";
+import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
+
+interface TableRow {
+  id: number;
+  platenumber: string;
+  platetype: string;
+  amount: string;
+  platerecommended: number | string;
+  createdby: string;
+  buyer: string;
+  paymentstatus: PaymentStatus;
+  date: Date;
+}
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -62,8 +76,8 @@ const tableData = [
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [fromDate, setFromDate] = useState<Date | undefined>();
+  const [toDate, setToDate] = useState<Date | undefined>();
   const [inputValues, setInputValues] = useState<{
     plateNumber: string;
     paymentStatus: string;
@@ -80,24 +94,51 @@ export default function Page() {
     currentPage * itemsPerPage
   );
 
+  const getRowActions = (row: unknown): RowAction[] => {
+    const tableRow = row as TableRow;
+    return [
+      {
+        title: "View Details",
+        action: () => console.log("Viewing details for:", tableRow),
+      },
+      {
+        title: "Print Receipt",
+        action: () => console.log("Viewing details for:", tableRow),
+      },
+    ];
+  };
+
   console.log(inputValues);
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
-      <DashboardPath
-        pathdata={[
-          {
-            label: "Dashboard",
-            Icon: DashboardSVG,
-            link: "/super-admin/dashboard",
-          },
-          {
-            label: "Sales Assessment",
-            Icon: PenSVG,
-            link: "/super-admin/assessment/sales-assessment",
-          },
-        ]}
-      />
+      <div
+        className={
+          "flex flex-col gap-5 md:flex-row justify-between items-center"
+        }
+      >
+        <DashboardPath
+          pathdata={[
+            {
+              label: "Dashboard",
+              Icon: DashboardSVG,
+              link: "/super-admin/dashboard",
+            },
+            {
+              label: "Sales Dashboard",
+              Icon: SalesSVG,
+              link: "/super-admin/sales/sales-report",
+            },
+          ]}
+        />
+
+        <Modal
+          title={"New Plate Sales"}
+          content={<></>}
+          btnText={"New Sales"}
+          footerBtn={<Button type="submit">Validate Phone Number</Button>}
+        />
+      </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
@@ -154,12 +195,8 @@ export default function Page() {
             "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
           }
         >
-          <DatePicker
-            date={startDate}
-            setDate={setStartDate}
-            title={"Start Date"}
-          />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+          <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
+          <DatePicker date={toDate} setDate={setToDate} title={"To"} />
 
           <Button>Search</Button>
         </div>
@@ -171,7 +208,11 @@ export default function Page() {
         <div
           className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
         >
-          <DashboardTable headers={tableColumns} data={paginatedData} />
+          <DataTableWButton
+            headers={tableColumns}
+            data={paginatedData}
+            rowActions={getRowActions}
+          />
         </div>
         <div className={"p-5 ml-auto"}>
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />

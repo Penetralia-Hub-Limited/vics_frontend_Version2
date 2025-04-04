@@ -42,7 +42,7 @@ const tableData = [
     platerecommended: 401,
     createdby: "Akanbi E",
     buyer: "Dave E ",
-    paymentstatus: PaymentStatus.UNPAID,
+    paymentstatus: PaymentStatus.NOTPAID,
     date: new Date(),
   },
   {
@@ -53,7 +53,7 @@ const tableData = [
     platerecommended: 401,
     createdby: "Akanbi E",
     buyer: "Dave E ",
-    paymentstatus: PaymentStatus.UNPAID,
+    paymentstatus: PaymentStatus.NOTPAID,
     date: new Date(),
   },
 ];
