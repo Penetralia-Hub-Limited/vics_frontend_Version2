@@ -66,6 +66,9 @@ jobs:
       run: |
         echo "Deploying Next.js application to AWS Lightsail..."
 
+        # Ensure the target directory exists
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key ubuntu@$LIGHTSAIL_IP "mkdir -p /var/www/html"
+
         # Sync necessary files to the Lightsail instance
         rsync -avz --delete \
           --exclude='.git' \
