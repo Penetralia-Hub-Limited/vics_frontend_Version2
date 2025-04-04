@@ -87,24 +87,33 @@ jobs:
             # Update system and install dependencies if missing
             sudo apt update
 
-            # Install Node.js and npm if missing
+            # Check if Node.js is installed, if not, install it
             if ! command -v node &> /dev/null; then
               echo 'Installing Node.js...'
               curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
               sudo apt-get install -y nodejs
+            else
+              echo 'Node.js is already installed.'
             fi
 
             # Ensure npm is installed
             if ! command -v npm &> /dev/null; then
               echo 'npm is missing, installing...'
               sudo apt install -y npm
+            else
+              echo 'npm is already installed.'
             fi
 
             # Navigate to the deployment directory
             cd /var/www/html
 
             # Ensure dependencies are installed
-            npm ci
+            if [ ! -d "node_modules" ]; then
+              echo 'Installing npm dependencies...'
+              npm ci
+            else
+              echo 'Dependencies are already installed.'
+            fi
 
             # Run Next.js build to generate the '.next' directory
             npm run build
@@ -113,6 +122,8 @@ jobs:
             if ! command -v pm2 &> /dev/null; then
               echo 'Installing PM2...'
               sudo npm install pm2@latest -g
+            else
+              echo 'PM2 is already installed.'
             fi
 
             # Start or restart the application using PM2
