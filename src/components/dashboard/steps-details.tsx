@@ -17,7 +17,7 @@ const StepsDetails: FC<IStepDetails> = ({ activeStep, steps }) => {
         <div className={"flex flex-row gap-5"} key={index}>
           <div
             className={cn(
-              "flex items-center justify-center border border-neutral-500 rounded-full w-12 h-12",
+              "flex items-center justify-center border border-neutral-500 rounded-full w-12 h-12 p-2",
               `${activeStep === index + 1 && "bg-success-100"}`,
               `${activeStep > index + 1 && "bg-success-500"}`
             )}
@@ -25,7 +25,13 @@ const StepsDetails: FC<IStepDetails> = ({ activeStep, steps }) => {
             {activeStep > index + 1 ? (
               <Check className={"text-white"} />
             ) : (
-              <p className={"font-bold text-lg"}>{index + 1}</p>
+              <p
+                className={
+                  "flex items-center justify-center font-bold text-lg w-12 h-12"
+                }
+              >
+                {index + 1}
+              </p>
             )}
           </div>
           <div className={"flex flex-col gap-1"}>

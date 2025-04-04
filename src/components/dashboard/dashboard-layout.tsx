@@ -15,6 +15,7 @@ interface IDashboardCompLayout {
   children: React.ReactNode;
   sidebarItems: Navigation;
   window?: Window;
+  title?: string;
 }
 
 const DashboardCompLayout: FC<IDashboardCompLayout> = ({

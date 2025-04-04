@@ -16,14 +16,16 @@ export default function MLADashboardLayout({
   return (
     <SidebarProvider>
       <AppSidebar sidebarData={mlaSideBarItems} />
-      <main className={"flex flex-col w-full"}>
-        <div className={"flex flex items-center h-20"}>
-          <div className={"block md:hidden"}>
-            <SidebarTrigger />
-          </div>
+      <main className={"flex-1 flex-col w-fit overflow-hidden"}>
+        <div
+          className={
+            "flex flex items-center h-20 border-b border-neutral-500 sticky top-0 z-40 bg-white"
+          }
+        >
+          <SidebarTrigger className={"block md:hidden"} />
           <DashboardNavBar pageTitle={getPathName()} />
         </div>
-        <div className={"px-4 py-8 bg-neutral-100/30"}>{children}</div>
+        <div className="px-4 py-8 bg-neutral-100/30">{children}</div>
       </main>
     </SidebarProvider>
   );
