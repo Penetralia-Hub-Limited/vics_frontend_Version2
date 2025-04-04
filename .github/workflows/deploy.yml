@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Next.js with AWS Lightsail
+name: CI/CD Pipeline for Next.js with AWS
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Add SSH Key for Lightsail
+    - name: Add SSH Key
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
@@ -62,7 +62,7 @@ jobs:
 
     - name: Deploy Next.js Application to AWS Lightsail
       env:
-        LIGHTSAIL_IP: "13.43.41.67"  # Replace with your Lightsail instance's public IP
+        LIGHTSAIL_IP: "13.43.41.67"
       run: |
         echo "Deploying Next.js application to AWS Lightsail..."
 
