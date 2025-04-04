@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Next.js with AWS
+name: CI/CD Pipeline for Next.js with AWS Lightsail
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Add SSH Key
+      - name: Add SSH Key for Lightsail
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
@@ -60,19 +60,25 @@ jobs:
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/lightsail_key
           chmod 600 ~/.ssh/lightsail_key
 
-      - name: Deploy Next.js Application to AWS
+      - name: Deploy Next.js Application to AWS Lightsail
         env:
-          LIGHTSAIL_IP: "13.43.41.67"
+          LIGHTSAIL_IP: "13.43.41.67"  # Ensure this is your Lightsail instance's public IP
         run: |
-          echo "Deploying Next.js application to AWS..."
+          echo "Deploying Next.js application to AWS Lightsail..."
 
           # Ensure the target directory exists and set proper ownership
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key ubuntu@$LIGHTSAIL_IP "
             sudo mkdir -p /var/www/html
             sudo chown -R ubuntu:ubuntu /var/www/html
+
+            # Backup existing deployment with sudo
+            if [ -d /var/www/html ]; then
+              echo 'Backing up current deployment...'
+              sudo cp -r /var/www/html /var/www/html_backup_$(date +%F_%T)
+            fi
           "
 
-          # Sync necessary files to the instance
+          # Sync necessary files to the Lightsail instance
           rsync -avz --delete \
             --exclude='.git' \
             --exclude='node_modules' \
@@ -108,7 +114,7 @@ jobs:
             cd /var/www/html
 
             # Ensure dependencies are installed
-            if [ ! -d "node_modules" ]; then
+            if [ ! -d 'node_modules' ]; then
               echo 'Installing npm dependencies...'
               npm ci
             else
@@ -116,7 +122,11 @@ jobs:
             fi
 
             # Run Next.js build to generate the '.next' directory
-            npm run build
+            npm run build || { 
+              echo 'Build failed! Rolling back...'; 
+              sudo mv /var/www/html_backup_* /var/www/html; 
+              exit 1;
+            }
 
             # Install PM2 globally if not installed
             if ! command -v pm2 &> /dev/null; then
