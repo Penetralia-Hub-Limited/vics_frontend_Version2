@@ -7,13 +7,12 @@ import CardContainer from "@/components/general/card-container";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import { DashboardSVG, PenSVG } from "@/common/svgs";
+import { DashboardSVG, SalesSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { PaymentStatus, ApprovalStatus } from "@/common/enum";
+import { PaymentStatus } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
-import { VerifyPlateNumber } from "@/components/dashboard/mla-admin/change-of-ownership/verify-plate-number";
 
 interface TableRow {
   id: number;
@@ -32,7 +31,6 @@ const tableColumns = [
   { key: "platenumber", title: "Plate Number" },
   { key: "platetype", title: "Plates Type" },
   { key: "amount", title: "Amount" },
-  { key: "approvalstatus", title: "Approval Status" },
   { key: "buyer", title: "Buyer" },
   { key: "date", title: "Date Sold" },
   { key: "paymentstatus", title: "Payment Status" },
@@ -44,7 +42,6 @@ const tableData = [
     platenumber: "JK34FSK",
     platetype: "Private (Direct)",
     amount: "Akanbi S.",
-    approvalstatus: ApprovalStatus.APPROVED,
     platerecommended: 401,
     buyer: "Dave E ",
     paymentstatus: PaymentStatus.PAID,
@@ -55,7 +52,6 @@ const tableData = [
     platenumber: "JK34FSK",
     platetype: "Private (Direct)",
     amount: "Akanbi S.",
-    approvalstatus: ApprovalStatus.APPROVED,
     platerecommended: 401,
     buyer: "Dave E ",
     paymentstatus: PaymentStatus.NOTPAID,
@@ -66,7 +62,6 @@ const tableData = [
     platenumber: "JK34FSK",
     platetype: "Private (Direct)",
     amount: "Akanbi S.",
-    approvalstatus: ApprovalStatus.NOTAPPROVED,
     platerecommended: 401,
     buyer: "Dave E ",
     paymentstatus: PaymentStatus.NOTPAID,
@@ -79,7 +74,6 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
-  const [verifyPlateNumber, setVerifyPlateNumber] = useState<string>("");
   const [inputValues, setInputValues] = useState<{
     plateNumber: string;
     paymentStatus: string;
@@ -124,26 +118,21 @@ export default function Page() {
             {
               label: "Dashboard",
               Icon: DashboardSVG,
-              link: "/mla-admin/dashboard",
+              link: "/super-admin/dashboard",
             },
             {
-              label: "Change of Ownership",
-              Icon: PenSVG,
-              link: "/mla-admin/change-of-ownership",
+              label: "Sales Dashboard",
+              Icon: SalesSVG,
+              link: "/super-admin/sales/sales-report",
             },
           ]}
         />
 
         <Modal
-          title={"Request New Change of Ownership"}
-          content={
-            <VerifyPlateNumber
-              plateNumber={verifyPlateNumber}
-              setPlateNumber={setVerifyPlateNumber}
-            />
-          }
-          btnText={"Request new C-of-O"}
-          footerBtn={<Button type="submit">Validate Plate Number</Button>}
+          title={"New Plate Sales"}
+          content={<></>}
+          btnText={"New Sales"}
+          footerBtn={<Button type="submit">Validate Phone Number</Button>}
         />
       </div>
 

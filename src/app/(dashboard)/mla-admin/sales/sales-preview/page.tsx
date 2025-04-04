@@ -68,12 +68,12 @@ export default function Page() {
           {
             label: "Sales Dashboard",
             Icon: SalesSVG,
-            link: "/super-admin/sales/sales-report",
+            link: "/mla-admin/sales/dashboard",
           },
           {
             label: "Sales Preview",
             Icon: SalesSVG,
-            link: "/super-admin/sales/sales-preview",
+            link: "/mla-admin/sales/sales-preview",
           },
         ]}
       />
