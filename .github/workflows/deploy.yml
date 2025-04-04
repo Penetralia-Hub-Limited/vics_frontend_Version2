@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Next.js with AWS Lightsail
+name: CI/CD Pipeline for Next.js with AWS
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Add SSH Key for Lightsail
+      - name: Add SSH Key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
@@ -60,11 +60,11 @@ jobs:
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/lightsail_key
           chmod 600 ~/.ssh/lightsail_key
 
-      - name: Deploy Next.js Application to AWS Lightsail
+      - name: Deploy Next.js Application to AWS
         env:
-          LIGHTSAIL_IP: "13.43.41.67"  # Replace with your Lightsail instance's public IP
+          LIGHTSAIL_IP: "13.43.41.67"
         run: |
-          echo "Deploying Next.js application to AWS Lightsail..."
+          echo "Deploying Next.js application to AWS..."
 
           # Ensure the target directory exists and set proper ownership
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key ubuntu@$LIGHTSAIL_IP "
@@ -72,7 +72,7 @@ jobs:
             sudo chown -R ubuntu:ubuntu /var/www/html
           "
 
-          # Sync necessary files to the Lightsail instance
+          # Sync necessary files to the instance
           rsync -avz --delete \
             --exclude='.git' \
             --exclude='node_modules' \
