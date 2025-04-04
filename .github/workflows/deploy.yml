@@ -51,6 +51,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Ensures all files are fetched from the repo
+
+    - name: Debug Current Directory
+      run: |
+        echo "Current directory: $(pwd)"
+        ls -la
 
     - name: Add SSH Key
       env:
@@ -66,14 +73,20 @@ jobs:
       run: |
         echo "Deploying Next.js application to AWS Lightsail..."
 
-        # Sync necessary files to the Lightsail instance
+        # Verify that the GitHub workspace exists
+        if [ ! -d ${{ github.workspace }} ]; then
+          echo "ERROR: GitHub workspace directory does not exist!"
+          exit 1
+        fi
+
+        # Sync files to the Lightsail instance
         rsync -avz --delete \
           --exclude='.git' \
           --exclude='node_modules' \
           --exclude='.next/cache' \
           --exclude='.env' \  # Exclude .env from direct sync
           -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key" \
-          ./ ubuntu@$LIGHTSAIL_IP:/var/www/html
+          ${{ github.workspace }}/ ubuntu@$LIGHTSAIL_IP:/var/www/html
 
         # Securely transfer .env file if exists in GitHub Secrets
         if [ -n "${{ secrets.ENV_FILE }}" ]; then
@@ -83,7 +96,7 @@ jobs:
         # SSH into the instance to configure the application
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key ubuntu@$LIGHTSAIL_IP "
           echo 'Configuring Next.js application on Lightsail...'
-          
+
           # Set correct ownership & permissions
           sudo chown -R ubuntu:ubuntu /var/www/html
 
