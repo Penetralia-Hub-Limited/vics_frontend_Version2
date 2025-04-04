@@ -1,14 +1,14 @@
 import { FC, Dispatch, SetStateAction } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "../../dashboard-component-select";
-import { IAddVehicleStep2Props } from "../vehicle-constant";
+import { inputSalesPropsStep2 } from "../sales-constants";
 
-interface IAddVehicleStep2 {
-  inputValues: IAddVehicleStep2Props;
-  setInputValues: Dispatch<SetStateAction<IAddVehicleStep2Props>>;
+interface INewPlateSalesStep2 {
+  inputValues: inputSalesPropsStep2;
+  setInputValues: Dispatch<SetStateAction<inputSalesPropsStep2>>;
 }
 
-export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
+export const NewPlateSalesStep2: FC<INewPlateSalesStep2> = ({
   inputValues,
   setInputValues,
 }) => {

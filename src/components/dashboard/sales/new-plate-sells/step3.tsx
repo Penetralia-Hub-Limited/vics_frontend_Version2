@@ -1,17 +1,13 @@
 import { FC, Dispatch, SetStateAction } from "react";
 import DashboardCompSelect from "../../dashboard-component-select";
+import { inputSalesPropsStep3 } from "../sales-constants";
 
-export type IAddVehicleStep3Props = {
-  plateNumber: string;
-  plateNumberType: string;
-};
-
-interface IAddVehicleStep3 {
-  inputValues: IAddVehicleStep3Props;
-  setInputValues: Dispatch<SetStateAction<IAddVehicleStep3Props>>;
+interface INewPlateSalesStep3 {
+  inputValues: inputSalesPropsStep3;
+  setInputValues: Dispatch<SetStateAction<inputSalesPropsStep3>>;
 }
 
-export const AddVehicleStep3: FC<IAddVehicleStep3> = ({
+export const NewPlateSalesStep3: FC<INewPlateSalesStep3> = ({
   inputValues,
   setInputValues,
 }) => {

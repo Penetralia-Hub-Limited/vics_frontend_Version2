@@ -66,7 +66,7 @@ const tableData = [
     account: 902222222,
     buyer: "Askaair Dokk",
     date: new Date(),
-    paymentstatus: PaymentStatus.UNPAID,
+    paymentstatus: PaymentStatus.NOTPAID,
   },
   {
     id: 6,
@@ -93,7 +93,7 @@ const tableData = [
     account: 902222222,
     buyer: "Askaair Dokk",
     date: new Date(),
-    paymentstatus: PaymentStatus.UNPAID,
+    paymentstatus: PaymentStatus.NOTPAID,
   },
 ];
 

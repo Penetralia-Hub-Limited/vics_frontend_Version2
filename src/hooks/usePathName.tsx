@@ -68,6 +68,8 @@ const useGetPathName = (identifier: string) => {
       printdocument: "Print Management",
       vioapproval: "Payment Report",
       audittrial: "Audit trial",
+      salesreport: "Sales Dashboard",
+      salespreview: "Super admin sales dashboard",
     },
   };
 
