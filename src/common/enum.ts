@@ -39,10 +39,21 @@ export enum CardStatus {
   SUCCESS = "Success",
 }
 
+export enum RequestStatus {
+  PENDING = "Pending",
+  FAILED = "Failed",
+  SUCCESS = "Success",
+}
+
 export enum SelectCardStatus {
   PRINTED = "Printed",
   NOTPRINTED = "Not Printed",
   NOTPAID = "Not Paid",
+}
+
+export enum InsuranceStatus {
+  APPROVED = "Approved",
+  NOTAPPROVED = "Not Approved",
 }
 
 export enum SelectCardType {

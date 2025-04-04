@@ -5,25 +5,23 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import { DashboardSVG, SalesSVG } from "@/common/svgs";
+import { DashboardSVG, RenewalsSVG } from "@/common/svgs";
+import { RenewPlateNumberStep1 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step1";
+import { RenewPlateNumberStep2 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step2";
+import { RenewPlateNumberStep3 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step3";
+import { RenewPlateNumberStep4 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step4";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
-
+import SuccessModal from "@/components/general/success-response";
 import {
-  inputSalesPropsStep1,
-  initialSalesValuesStep1,
-  inputSalesPropsStep2,
-  initialSalesValuesStep2,
-  inputSalesPropsStep3,
-  initialSalesValuesStep3,
-  inputSalesPropsStep4,
-  initialSalesValuesStep4,
-} from "@/components/dashboard/sales/sales-constants";
-
-import { NewPlateSalesStep1 } from "@/components/dashboard/sales/new-plate-sells/step1";
-import { NewPlateSalesStep2 } from "@/components/dashboard/sales/new-plate-sells/step2";
-import { NewPlateSalesStep3 } from "@/components/dashboard/sales/new-plate-sells/step3";
-import { NewPlateSalesStep4 } from "@/components/dashboard/sales/new-plate-sells/step4";
+  initialValuesStep1,
+  inputRenewPlateNumberPropsStep1,
+  initialValuesStep2,
+  inputRenewPlateNumberPropsStep2,
+  initialValuesStep3,
+  inputRenewPlateNumberPropsStep3,
+  inputRenewPlateNumberPropsStep4,
+} from "@/components/dashboard/mla-admin/renewals/renew-plate-number/renew-plate-constant";
 
 const stepdetails = [
   {
@@ -39,8 +37,8 @@ const stepdetails = [
     description: "Kindly fill out the plate number information",
   },
   {
-    title: "Insurance Policy",
-    description: "Kindly fill out the insurance policy details",
+    title: "Applicable Services",
+    description: "Select applicable services for plate number renewal",
   },
 ];
 
@@ -48,22 +46,19 @@ export default function Page() {
   const router = useRouter();
   const totalSteps = stepdetails.length;
   const [currentStep, setCurrentStep] = useState<number>(1);
-
-  // Input values start
   const [step1InputValues, setStep1InputValues] =
-    useState<inputSalesPropsStep1>(initialSalesValuesStep1);
+    useState<inputRenewPlateNumberPropsStep1>(initialValuesStep1);
 
   const [step2InputValues, setStep2InputValues] =
-    useState<inputSalesPropsStep2>(initialSalesValuesStep2);
+    useState<inputRenewPlateNumberPropsStep2>(initialValuesStep2);
 
   const [step3InputValues, setStep3InputValues] =
-    useState<inputSalesPropsStep3>(initialSalesValuesStep3);
+    useState<inputRenewPlateNumberPropsStep3>(initialValuesStep3);
 
   const [step4InputValues, setStep4InputValues] =
-    useState<inputSalesPropsStep4>(initialSalesValuesStep4);
-  // Input values end
-
-  console.log(step1InputValues, step2InputValues, step3InputValues);
+    useState<inputRenewPlateNumberPropsStep4>({
+      selectedServices: {},
+    });
 
   const handleNextStep = () => {
     setCurrentStep((prev) => (prev < totalSteps ? prev + 1 : prev));
@@ -83,14 +78,14 @@ export default function Page() {
             link: "/super-admin/dashboard",
           },
           {
-            label: "Sales Dashboard",
-            Icon: SalesSVG,
-            link: "/super-admin/sales/dashboard",
+            label: "Renewal Dashboard",
+            Icon: RenewalsSVG,
+            link: "/super-admin/vehicle",
           },
           {
-            label: "Sell New Plate",
-            Icon: SalesSVG,
-            link: "/store-manager-admin/sales/new-plate-sales",
+            label: "Renew Plate Number",
+            Icon: RenewalsSVG,
+            link: "/store-manager-admin/vehicle/add-new-vehicle",
           },
         ]}
       />
@@ -98,7 +93,7 @@ export default function Page() {
       <div className="grid grid-cols-[2fr_1fr] gap-2 w-full">
         <CardContainer className="flex flex-col gap-10 items-center justify-center">
           <div className="flex flex-col gap-2 items-center justify-center">
-            <p className="text-lg font-semibold">New Plate Sale</p>
+            <p className="text-lg font-semibold">Renew Plate Number</p>
             <p className="text-sm font-light">
               {stepdetails[currentStep - 1]?.description}
             </p>
@@ -107,25 +102,25 @@ export default function Page() {
           {/* Steps */}
           <div className="w-full">
             {currentStep === 1 && (
-              <NewPlateSalesStep1
+              <RenewPlateNumberStep1
                 inputValues={step1InputValues}
                 setInputValues={setStep1InputValues}
               />
             )}
             {currentStep === 2 && (
-              <NewPlateSalesStep2
+              <RenewPlateNumberStep2
                 inputValues={step2InputValues}
                 setInputValues={setStep2InputValues}
               />
             )}
             {currentStep === 3 && (
-              <NewPlateSalesStep3
+              <RenewPlateNumberStep3
                 inputValues={step3InputValues}
                 setInputValues={setStep3InputValues}
               />
             )}
             {currentStep === 4 && (
-              <NewPlateSalesStep4
+              <RenewPlateNumberStep4
                 inputValues={step4InputValues}
                 setInputValues={setStep4InputValues}
               />
@@ -148,15 +143,13 @@ export default function Page() {
               </Button>
 
               {currentStep === totalSteps ? (
-                <Button
-                  className="flex flex-row items-center gap-1"
-                  onClick={() =>
-                    router.push("/super-admin/sales/sales-preview")
-                  }
-                >
-                  <p>Preview</p>
-                  <ChevronRight />
-                </Button>
+                <SuccessModal
+                  title={"Success"}
+                  content={<p>Invoice Issued Successfully</p>}
+                  btnText={"Proceed"}
+                  trigger={() => router.push("/mla-admin/renewal/dashboard")}
+                  footerBtnText={"Done"}
+                />
               ) : (
                 <Button
                   variant="outline"

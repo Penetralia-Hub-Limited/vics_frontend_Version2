@@ -25,7 +25,7 @@ export default function SuperAdminDashboardLayout({
           <SidebarTrigger className={"block md:hidden"} />
           <DashboardNavBar pageTitle={getPathName()} />
         </div>
-        <div className={"px-4 py-8 bg-neutral-100/30"}>{children}</div>
+        <div className="px-4 py-8 bg-neutral-100/30">{children}</div>
       </main>
     </SidebarProvider>
   );

@@ -497,22 +497,41 @@ export const mlaSideBarItems = [
         title: "Dashboard",
         Icon: DashboardSVG,
         url: "mla-admin/dashboard",
+      },
+      {
+        id: 2,
+        title: "Plate Number Requests",
+        Icon: VICSSVG,
         dropdown: [
           {
             id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            url: "mla-admin/dashboard/plate-number-request",
-            dropdown: [
-              {
-                id: 1,
-                title: "Requests",
-                url: "dashboard/plate-number-request",
-              },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
+            title: "Plate Requests",
+            url: "mla-admin/plate-number-request",
           },
         ],
+      },
+      {
+        id: 3,
+        title: "Sales",
+        Icon: SalesSVG,
+        dropdown: [
+          {
+            id: 1,
+            title: "Sales Dashboard",
+            url: "/mla-admin/sales/dashboard",
+          },
+          {
+            id: 2,
+            title: "Drafts",
+            url: "/mla-admin/sales/drafts",
+          },
+        ],
+      },
+      {
+        id: 4,
+        title: "Reports",
+        Icon: ReportSVG,
+        url: "/mla-admin/report",
       },
     ],
   },
@@ -541,8 +560,18 @@ export const mlaSideBarItems = [
         dropdown: [
           {
             id: 1,
-            title: "Tax Payer Sub",
-            Icon: TaxPayerSVG,
+            title: "Tax Payer Dashboard",
+            url: "/mla-admin/tax-payer/dashboard",
+          },
+          {
+            id: 2,
+            title: "Assessment",
+            url: "/mla-admin/tax-payer/assessment",
+          },
+          {
+            id: 3,
+            title: "Invoice to Tax",
+            url: "/mla-admin/tax-payer/invoice-to-tax",
           },
         ],
       },
@@ -550,12 +579,11 @@ export const mlaSideBarItems = [
         id: 3,
         title: "Renewals",
         Icon: RenewalsSVG,
-        url: "/mla-admin/renewals",
         dropdown: [
           {
             id: 1,
-            title: "Renewal Sub",
-            Icon: PenSVG,
+            title: "Renewal Dashboard",
+            url: "/mla-admin/renewal/dashboard",
           },
         ],
       },
@@ -629,14 +657,6 @@ export const mlaSideBarItems = [
         title: "Change of Ownership",
         Icon: PenSVG,
         url: "/mla-admin/change-of-ownership",
-        dropdown: [
-          {
-            id: 1,
-            title: "Change of Ownership Sub",
-            Icon: PenSVG,
-            url: "",
-          },
-        ],
       },
     ],
   },
