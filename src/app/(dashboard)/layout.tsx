@@ -1,5 +1,4 @@
-import "@radix-ui/themes/styles.css";
-import "./globals.css";
+import "../../styles/globals.css";
 
 export default function DashboardLayout({
   children,
