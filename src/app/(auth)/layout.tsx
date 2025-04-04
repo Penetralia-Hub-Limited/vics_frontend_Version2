@@ -1,7 +1,7 @@
-import LPNavBar from "@/pages/landing-page/navigation/nav-bar";
-import Footer from "@/pages/landing-page/navigation/footer";
+import LPNavBar from "@/components/landingpage/navigation/nav-bar";
+import Footer from "@/components/landingpage/navigation/footer";
 import { hotline, supportMail } from "@/common/constant";
-import LandingContactBar from "@/pages/landing-page/navigation/contact-bar";
+import LandingContactBar from "@/components/landingpage/navigation/contact-bar";
 import WhiteLogo from "@/assets/logo/icon_white.svg";
 
 export default function AuthLayout({

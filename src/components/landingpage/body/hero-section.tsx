@@ -11,9 +11,7 @@ interface IHeroSection {
 
 const HeroSection: FC<IHeroSection> = ({ state, icon }) => {
   return (
-    <div
-      className={"relative bg-cover bg-center h-[30rem]"}
-    >
+    <div className={"relative bg-cover bg-center h-[30rem]"}>
       <Image
         src={HeroImg}
         alt="Hero Image"
