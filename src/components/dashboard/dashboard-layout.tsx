@@ -1,5 +1,5 @@
 "use client";
-
+// OLD LAYOUT DESIGN
 import { FC, useState, useEffect } from "react";
 import LogoComponent from "../general/logo";
 import { useDemoRouter } from "@/hooks/useDemoRouter";
@@ -7,7 +7,6 @@ import { demoTheme } from "@/styles/styles";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
-// import { sideBarItems } from "@/common/navdata";
 import Logo from "../../assets/logo/icon_green.svg";
 import { Navigation } from "@toolpad/core/AppProvider";
 

@@ -31,7 +31,7 @@ interface TableHeader {
   key: string;
 }
 
-interface TableData {
+export interface TableData {
   [key: string]:
     | null
     | undefined
@@ -49,6 +49,7 @@ interface TableData {
 export interface RowAction {
   title: string;
   action: () => void;
+  rowData?: TableData;
 }
 
 type DataTableProps = {
@@ -164,7 +165,7 @@ export function DataTableWButton({
                     variant="ghost"
                     size="icon"
                   >
-                    {isLoading ? (
+                    {isLoading && rowIndex + 1 === row.id ? (
                       <CircularProgress />
                     ) : (
                       <MoreHorizontal className="h-5 w-5" />
@@ -177,7 +178,9 @@ export function DataTableWButton({
                       <DropdownMenuItem
                         key={idx}
                         onClick={action.action}
-                        className={"cursor-pointer hover:bg-neutral-50"}
+                        className={
+                          "flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50"
+                        }
                       >
                         {action.title}
                       </DropdownMenuItem>

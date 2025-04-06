@@ -13,7 +13,7 @@ import { PaymentStatus, ApprovalStatus } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
-import { VerifyPlateNumber } from "@/components/dashboard/mla-admin/change-of-ownership/verify-plate-number";
+import { VerifyPlateNumber } from "@/components/dashboard/verification-forms/verify-plate-number";
 
 interface TableRow {
   id: number;

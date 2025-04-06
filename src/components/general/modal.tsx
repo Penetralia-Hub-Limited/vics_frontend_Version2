@@ -13,8 +13,8 @@ import {
 interface IModal {
   title: string;
   content: ReactNode;
-  btnText: string;
-  footerBtn: ReactElement;
+  btnText?: string;
+  footerBtn?: ReactElement;
   btnVariant?:
     | "link"
     | "default"
@@ -24,6 +24,7 @@ interface IModal {
     | "secondary"
     | "ghost"
     | "pagination"
+    | "modal"
     | null
     | undefined;
 }
@@ -33,7 +34,6 @@ const Modal: FC<IModal> = ({
   btnText,
   content,
   footerBtn,
-
   btnVariant = "default",
 }) => {
   return (

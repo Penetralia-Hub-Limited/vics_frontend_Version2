@@ -1,6 +1,10 @@
 import currency from "currency.js";
 import { subDays } from "date-fns";
 import { DateRange } from "@/common/enum";
+import {
+  RowAction,
+  TableData,
+} from "@/components/dashboard/dashboard-table-w-button";
 
 /**
  * Format currency to naira
@@ -31,4 +35,17 @@ export const DATE_RANGES: Record<
     label: "Last 30 Days",
     range: [subDays(new Date(), 30), new Date()],
   },
+};
+
+/**
+ * Trigger Row Table Actions
+ * @param row
+ * @param actions
+ * @returns
+ */
+export const getRowActions = (
+  row: TableData,
+  actions: RowAction[]
+): RowAction[] => {
+  return actions.map((action) => ({ ...action, rowData: row }));
 };

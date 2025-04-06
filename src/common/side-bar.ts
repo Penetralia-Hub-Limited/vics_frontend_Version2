@@ -399,51 +399,25 @@ export const SMRAdminSidebar = [
         id: 1,
         title: "Dashboard",
         Icon: DashboardSVG,
-        url: "/super-admin/dashboard",
-        dropdown: [
-          {
-            id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-          {
-            id: 2,
-            title: "Assessment",
-            Icon: AssessmentSVG,
-            url: "/super-admin/dashboard/assessment",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-          {
-            id: 3,
-            title: "Sales",
-            Icon: SalesSVG,
-            dropdown: [
-              {
-                id: 1,
-                title: "Sales Report",
-                url: "/super-admin/sales/sales-report",
-              },
-            ],
-          },
-          {
-            id: 4,
-            title: "Reports",
-            Icon: ReportSVG,
-            url: "/super-admin/dashboard/report",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-        ],
+        url: "/smr-admin/dashboard",
+      },
+      {
+        id: 2,
+        title: "Plate Number Requests",
+        Icon: VICSSVG,
+        url: "/smr-admin/plate-number-request",
+      },
+      {
+        id: 3,
+        title: "Assessment",
+        Icon: AssessmentSVG,
+        url: "/smr-admin/assessment",
+      },
+      {
+        id: 4,
+        title: "Reports",
+        Icon: ReportSVG,
+        url: "/smr-admin/report",
       },
     ],
   },
@@ -455,33 +429,13 @@ export const SMRAdminSidebar = [
         id: 1,
         title: "Reports",
         Icon: ReportSVG,
-        url: "/smr-admin/reports",
-        dropdown: [
-          {
-            id: 1,
-            title: "Vehicles Sub",
-            Icon: ReportSVG,
-            url: "/super-admin/*",
-            dropdown: [
-              { id: 1, title: "Requests", url: "" },
-              { id: 2, title: "Assigned Plate Numbers", url: "" },
-            ],
-          },
-        ],
+        url: "/smr-admin/sales/service-sales-report",
       },
       {
         id: 2,
         title: "Change of Ownership",
         Icon: PenSVG,
         url: "/smr-admin/change-of-ownership",
-        dropdown: [
-          {
-            id: 1,
-            title: "Change sub",
-            Icon: PenSVG,
-            url: "/super-admin/dashboard/plate-number-request",
-          },
-        ],
       },
     ],
   },
@@ -506,7 +460,7 @@ export const mlaSideBarItems = [
           {
             id: 1,
             title: "Plate Requests",
-            url: "mla-admin/plate-number-request",
+            url: "/mla-admin/plate-number-request",
           },
         ],
       },

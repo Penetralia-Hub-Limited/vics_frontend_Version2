@@ -1,10 +1,10 @@
 "use client";
 
-import { DashboardNotificationsComp } from "@/components/dashboard/notification/dashboard-notifications";
-import SummaryCard from "@/components/dashboard/dashboard-summary-card";
-import { format } from "date-fns";
 import { SetStateAction, useState } from "react";
+import { format } from "date-fns";
 import { DateRange } from "@/common/enum";
+import SummaryCard from "@/components/dashboard/dashboard-summary-card";
+import { DashboardNotificationsComp } from "@/components/dashboard/notification/dashboard-notifications";
 
 const summaryItems1 = [
   { title: "Plate Requests", amount: 318 },
@@ -18,7 +18,10 @@ const summaryItems2 = [
 
 export default function Page() {
   const currentDate = new Date();
-  const formattedDate = format(currentDate, "MMM. d, yyyy | h:mmaaa");
+  const formattedDate = format(
+    currentDate.toDateString(),
+    "MMM. d, yyyy | h:mmaaa"
+  );
 
   const [selectedRanges1, setSelectedRanges1] = useState<
     Record<string, DateRange>

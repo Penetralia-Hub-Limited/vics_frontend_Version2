@@ -12,6 +12,12 @@ import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { InsuranceStatus, RequestStatus } from "@/common/enum";
+import Modal from "@/components/general/modal";
+import {
+  CreatePlateNumber,
+  PlateNumberInitialValues,
+  PlateNumberTypeProps,
+} from "@/components/dashboard/verification-forms/select-plate-number-type";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -83,25 +89,15 @@ export default function Page() {
     plateNumberType: "",
     requestStatus: "",
   });
+  const [modalInput, setModalInput] = useState<PlateNumberTypeProps>(
+    PlateNumberInitialValues
+  );
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  // type TableData = {
-  //   id: number;
-  //   trackingid: string;
-  //   platenumbertype: string;
-  //   platerequested: string;
-  //   platerecommended: string;
-  //   numberassigned: string;
-  //   date: Date;
-  //   recommendingofficer: string;
-  //   requeststatus: RequestStatus;
-  //   insurancestatus: InsuranceStatus;
-  // };
 
   interface RowAction {
     title: string;
@@ -118,8 +114,6 @@ export default function Page() {
       },
     ];
   };
-
-  // console.log(inputValues);
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -143,7 +137,14 @@ export default function Page() {
           ]}
         />
 
-        <Button>Create New Request</Button>
+        <Modal
+          title={"Create New Plate Number Request"}
+          content={
+            <CreatePlateNumber input={modalInput} setInput={setModalInput} />
+          }
+          btnText={"Create New Request"}
+          footerBtn={<Button type="submit">Submit</Button>}
+        />
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
