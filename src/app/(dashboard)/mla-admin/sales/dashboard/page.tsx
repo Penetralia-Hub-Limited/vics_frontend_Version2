@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -13,6 +14,7 @@ import { PaymentStatus } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
+import { VerifyPhoneNumber } from "@/components/dashboard/verification-forms/verify-phone-number";
 
 interface TableRow {
   id: number;
@@ -70,6 +72,7 @@ const tableData = [
 ];
 
 export default function Page() {
+  const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
@@ -83,6 +86,7 @@ export default function Page() {
     paymentStatus: "",
     InvoiceNumber: "",
   });
+  const [validatePhoneNumber, setValidatePhoneNumber] = useState<string>("");
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -130,9 +134,22 @@ export default function Page() {
 
         <Modal
           title={"New Plate Sales"}
-          content={<></>}
+          content={
+            <VerifyPhoneNumber
+              label="Validate Vehicle Owner Phone Number"
+              phoneNumber={validatePhoneNumber}
+              setPhoneNumber={setValidatePhoneNumber}
+            />
+          }
           btnText={"New Sales"}
-          footerBtn={<Button type="submit">Validate Phone Number</Button>}
+          footerBtn={
+            <Button
+              onClick={() => router.push("/mla-admin/sales/new-sales")}
+              type="submit"
+            >
+              Submit
+            </Button>
+          }
         />
       </div>
 

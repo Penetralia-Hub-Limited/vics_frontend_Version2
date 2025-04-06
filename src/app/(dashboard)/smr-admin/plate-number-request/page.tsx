@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -11,13 +10,15 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
-import { InsuranceStatus, RequestStatus } from "@/common/enum";
-import Modal from "@/components/general/modal";
 import {
-  CreatePlateNumber,
-  PlateNumberInitialValues,
-  PlateNumberTypeProps,
-} from "@/components/dashboard/verification-forms/select-plate-number-type";
+  RecommendPlateNoRequest,
+  RecommendPlateNoRequestProp,
+  RecommendPlateNoRequestInitialValues,
+} from "@/components/dashboard/verification-forms/recommend-and-update";
+import { ApprovalStatus, RequestStatus } from "@/common/enum";
+import { getRowActions } from "@/common/helpers";
+import { ModalX } from "@/components/general/modalX";
+import SuccessModal from "@/components/general/success-response";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -28,9 +29,9 @@ const tableColumns = [
   { key: "numberassigned", title: "No. Assigned" },
   { key: "date", title: "Date" },
   { key: "recommendingofficer", title: "Recommending Officer" },
-  { key: "firstapprovalofficer", title: "First Approval Officer" },
-  { key: "requeststatus", title: "Request Status Officer" },
-  { key: "insurancestatus", title: "Insurance Status" },
+  { key: "finalApprovingOfficer", title: "Final Approving Officer" },
+  { key: "requeststatus", title: "Request Status" },
+  { key: "insuranceStatus", title: "Insurance Status" },
 ];
 
 const tableData = [
@@ -43,8 +44,9 @@ const tableData = [
     numberassigned: 0,
     date: new Date(),
     recommendingofficer: "Dave E ",
+    finalApprovingOfficer: "Dave E ",
     requeststatus: RequestStatus.PENDING,
-    insurancestatus: InsuranceStatus.APPROVED,
+    insuranceStatus: ApprovalStatus.NOTAPPROVED,
   },
   {
     id: 2,
@@ -55,8 +57,9 @@ const tableData = [
     numberassigned: 0,
     date: new Date(),
     recommendingofficer: "Dave E ",
+    finalApprovingOfficer: "Dave E ",
     requeststatus: RequestStatus.PENDING,
-    insurancestatus: InsuranceStatus.APPROVED,
+    insuranceStatus: ApprovalStatus.NOTAPPROVED,
   },
   {
     id: 3,
@@ -67,17 +70,18 @@ const tableData = [
     numberassigned: 0,
     date: new Date(),
     recommendingofficer: "Dave E ",
+    finalApprovingOfficer: "Dave E ",
     requeststatus: RequestStatus.PENDING,
-    insurancestatus: InsuranceStatus.APPROVED,
+    insuranceStatus: ApprovalStatus.APPROVED,
   },
 ];
 
 export default function Page() {
-  const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<{
     trackingid: string;
     insuranceStatus: string;
@@ -89,9 +93,11 @@ export default function Page() {
     plateNumberType: "",
     requestStatus: "",
   });
-  const [modalInput, setModalInput] = useState<PlateNumberTypeProps>(
-    PlateNumberInitialValues
+  const [modalInput, setModalIinput] = useState<RecommendPlateNoRequestProp>(
+    RecommendPlateNoRequestInitialValues
   );
+
+  console.log(modalInput);
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -99,53 +105,37 @@ export default function Page() {
     currentPage * itemsPerPage
   );
 
-  interface RowAction {
-    title: string;
-    action: () => void;
-  }
-
-  const getRowActions = (row: unknown): RowAction[] => {
-    console.log(row);
-    return [
-      {
-        title: "View",
-        action: () =>
-          router.push("/super-admin/tax-payer/tax-payer-information"),
-      },
-    ];
-  };
+  const rowActions = [
+    {
+      title: "Approve",
+      action: () => {},
+    },
+    {
+      title: "Recommend & Approve",
+      action: () => setOpenModal(true),
+    },
+    {
+      title: "Disapprove",
+      action: () => console.log("Disapprove"),
+    },
+  ];
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
-      <div
-        className={
-          "flex flex-col gap-5 md:flex-row justify-between items-center"
-        }
-      >
-        <DashboardPath
-          pathdata={[
-            {
-              label: "Dashboard",
-              Icon: DashboardSVG,
-              link: "/mla-admin/dashboard",
-            },
-            {
-              label: "Plate Number Request",
-              Icon: VICSSVG,
-              link: "/mla-admin/plate-number-request",
-            },
-          ]}
-        />
-
-        <Modal
-          title={"Create New Plate Number Request"}
-          content={
-            <CreatePlateNumber input={modalInput} setInput={setModalInput} />
-          }
-          btnText={"Create New Request"}
-          footerBtn={<Button type="submit">Submit</Button>}
-        />
-      </div>
+      <DashboardPath
+        pathdata={[
+          {
+            label: "Dashboard",
+            Icon: DashboardSVG,
+            link: "/store-manager-admin/dashboard",
+          },
+          {
+            label: "Plate Number Request",
+            Icon: VICSSVG,
+            link: "/super-admin/plate-number-request",
+          },
+        ]}
+      />
 
       <CardContainer className={"flex flex-col gap-5"}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
@@ -227,13 +217,31 @@ export default function Page() {
           <DataTableWButton
             headers={tableColumns}
             data={paginatedData}
-            rowActions={getRowActions}
+            rowActions={(row) => getRowActions(row, rowActions)}
           />
         </div>
         <div className={"p-5 ml-auto"}>
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
+
+      {openModal && (
+        <ModalX
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          content={
+            <RecommendPlateNoRequest
+              input={modalInput}
+              setInput={setModalIinput}
+            />
+          }
+          title={"Recommend and Update Plate Number Request"}
+          footerBtn={
+            <Button className="w-fit m-auto">Recommend and Update</Button>
+          }
+          onAction={() => {}}
+        />
+      )}
     </main>
   );
 }

@@ -4,19 +4,21 @@ import InputWithLabel from "@/components/auth/input-comp";
 interface IVerifyPlateNumber {
   phoneNumber: string;
   setPhoneNumber: Dispatch<SetStateAction<string>>;
+  label?: string;
 }
 
 export const VerifyPhoneNumber: FC<IVerifyPlateNumber> = ({
   phoneNumber,
   setPhoneNumber,
+  label,
 }) => {
   return (
     <div className={"p-4"}>
       <InputWithLabel
         items={{
           id: "phoneNumber",
-          label: "Phone Number",
-          placeholder: "Phone Number",
+          label: label ? label : "Phone Number",
+          placeholder: "Enter Phone Number",
           type: "text",
           htmlfor: "phoneNumber",
         }}

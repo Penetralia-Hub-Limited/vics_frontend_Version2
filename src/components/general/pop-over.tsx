@@ -1,4 +1,6 @@
-import { FC, ReactNode } from "react";
+"use client";
+
+import { FC, useRef, useEffect, ReactNode } from "react";
 import { Button } from "../ui/button";
 import {
   AlertDialog,
@@ -22,13 +24,33 @@ interface IModalComp {
     | "pagination"
     | null
     | undefined;
+  autoClickAfterMs?: number;
 }
 
-const ModalComp: FC<IModalComp> = ({ btnText, btnVariant, children }) => {
+const ModalComp: FC<IModalComp> = ({
+  btnText,
+  btnVariant,
+  children,
+  autoClickAfterMs,
+}) => {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (autoClickAfterMs) {
+      const timer = setTimeout(() => {
+        triggerRef.current?.click(); // ⬅️ Simulate click
+      }, autoClickAfterMs);
+
+      return () => clearTimeout(timer);
+    }
+  }, [autoClickAfterMs]);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant={btnVariant}>{btnText}</Button>
+        <Button ref={triggerRef} variant={btnVariant}>
+          {btnText}
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent
         className={"flex flex-col items-center justify-center w-full"}

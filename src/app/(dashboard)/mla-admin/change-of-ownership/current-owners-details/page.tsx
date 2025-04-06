@@ -6,7 +6,7 @@ import { DashboardSVG, PenSVG } from "@/common/svgs";
 import { InformationCard } from "@/components/general/information-card";
 import Modal from "@/components/general/modal";
 import { Button } from "@/components/ui/button";
-import { VerifyPhoneNumber } from "@/components/dashboard/mla-admin/change-of-ownership/verify-phone-number";
+import { VerifyPhoneNumber } from "@/components/dashboard/verification-forms/verify-phone-number";
 
 const data = [
   {

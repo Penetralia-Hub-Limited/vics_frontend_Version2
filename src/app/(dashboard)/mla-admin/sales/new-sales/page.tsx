@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, SalesSVG } from "@/common/svgs";
-import {} from "@/components/dashboard/vehicle/new-vehicle/step1";
-
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
+
 import {
   inputSalesPropsStep1,
   initialSalesValuesStep1,
@@ -20,6 +19,7 @@ import {
   inputSalesPropsStep4,
   initialSalesValuesStep4,
 } from "@/components/dashboard/sales/sales-constants";
+
 import { NewPlateSalesStep1 } from "@/components/dashboard/sales/new-plate-sells/step1";
 import { NewPlateSalesStep2 } from "@/components/dashboard/sales/new-plate-sells/step2";
 import { NewPlateSalesStep3 } from "@/components/dashboard/sales/new-plate-sells/step3";
@@ -85,12 +85,12 @@ export default function Page() {
           {
             label: "Sales Dashboard",
             Icon: SalesSVG,
-            link: "/mla-admin/sales/dashboard",
+            link: "/super-admin/sales/dashboard",
           },
           {
             label: "Sell New Plate",
             Icon: SalesSVG,
-            link: "/mla-admin/sales/new-plate-sales",
+            link: "/store-manager-admin/sales/new-plate-sales",
           },
         ]}
       />

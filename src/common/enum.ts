@@ -86,3 +86,21 @@ export enum SuperAdminPermissions {
   CANPRINTDOCUMENT = "Can Print Document",
   CANVIEWMLASTOCK = "Can View MLA Stock",
 }
+
+export enum PlateNumberType {
+  COMMERCIAL = "Commercial",
+  COMMERCIALMOTORCYCLE = "Commericial Motocycle",
+  COMMERCIALTRICYCLE = "Commercial Tricycle",
+  DEALER = "Dealer",
+  FANCY = "Fancy",
+  GOVERNFANCY = "Government Fancy",
+  GOVERNOFFICIAL = "Government Official",
+  OUTOFSERIES = "Out of Series",
+  PRIVATE = "Private",
+  PRIVATEMOTORCYCLE = "Private Motorcycle",
+}
+
+export enum PlateNumberSubType {
+  PRIVATE = "Private",
+  PRIVATEDIRECT = "Private (Direct)",
+}

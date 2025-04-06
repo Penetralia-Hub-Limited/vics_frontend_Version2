@@ -1,4 +1,6 @@
-import { FC, ReactNode } from "react";
+"use client";
+
+import { FC, ReactNode, useRef, useEffect } from "react";
 import ModalComp from "./pop-over";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { AlertDialogAction } from "@/components/ui/alert-dialog";
@@ -9,6 +11,7 @@ interface ISuccessModal {
   btnText: string;
   footerBtnText: string;
   trigger: () => void;
+  autoClickAfterMs?: number;
 }
 
 const SuccessModal: FC<ISuccessModal> = ({
@@ -17,9 +20,22 @@ const SuccessModal: FC<ISuccessModal> = ({
   btnText,
   trigger,
   footerBtnText,
+  autoClickAfterMs,
 }) => {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (autoClickAfterMs) {
+      const timer = setTimeout(() => {
+        triggerRef.current?.click(); // ⬅️ Simulate click
+      }, autoClickAfterMs);
+
+      return () => clearTimeout(timer);
+    }
+  }, [autoClickAfterMs]);
+
   return (
-    <ModalComp btnText={btnText}>
+    <ModalComp autoClickAfterMs={autoClickAfterMs} btnText={btnText}>
       <div className={"flex flex-col gap-4 items-center justify-center"}>
         <DotLottieReact
           aria-hidden="true"

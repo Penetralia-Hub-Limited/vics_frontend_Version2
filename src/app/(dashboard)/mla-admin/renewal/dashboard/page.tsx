@@ -12,7 +12,7 @@ import InputWithLabel from "@/components/auth/input-comp";
 import { PaymentStatus } from "@/common/enum";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import Modal from "@/components/general/modal";
-import { VerifyPlateNumber } from "@/components/dashboard/mla-admin/renewals/verify-plate-number";
+import { VerifyPlateNumber } from "@/components/dashboard/verification-forms/verify-plate-number";
 
 const tableColumns = [
   { key: "id", title: "S/N" },

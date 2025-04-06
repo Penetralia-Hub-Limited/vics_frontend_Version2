@@ -19,8 +19,10 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./src",  // Added baseUrl for absolute imports
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./*"],  // Adjusted to reflect correct absolute path mapping
+      "@types/*": ["./types/*"]  // Added path for @types alias
     }
   },
   "include": [
