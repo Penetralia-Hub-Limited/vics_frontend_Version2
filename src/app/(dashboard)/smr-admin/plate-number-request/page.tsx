@@ -18,7 +18,6 @@ import {
 import { ApprovalStatus, RequestStatus } from "@/common/enum";
 import { getRowActions } from "@/common/helpers";
 import { ModalX } from "@/components/general/modalX";
-import SuccessModal from "@/components/general/success-response";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -239,7 +238,6 @@ export default function Page() {
           footerBtn={
             <Button className="w-fit m-auto">Recommend and Update</Button>
           }
-          onAction={() => {}}
         />
       )}
     </main>

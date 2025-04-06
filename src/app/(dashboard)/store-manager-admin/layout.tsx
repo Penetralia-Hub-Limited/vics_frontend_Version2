@@ -5,6 +5,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import { storeManagerSidebarItems } from "@/common/side-bar";
+import useGetPathName from "@/hooks/usePathName";
 
 export default function StoreManagerDashboardLayout({
   children,
@@ -12,6 +13,7 @@ export default function StoreManagerDashboardLayout({
   children: React.ReactNode;
 }) {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const { getPathName } = useGetPathName("storeAdmin");
 
   return (
     <SidebarProvider>
@@ -28,7 +30,7 @@ export default function StoreManagerDashboardLayout({
           <DashboardNavBar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            pageTitle={""}
+            pageTitle={getPathName()}
           />
         </div>
         <div className={"px-4 py-8 bg-neutral-100/30"}>{children}</div>

@@ -11,6 +11,7 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import { DashboardSVG, ReportSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { formattedAmount } from "@/common/helpers";
+import { PlateNumberType } from "@/common/enum";
 
 export const plateNoReportHeader = [
   { title: "S/N", key: "id" },
@@ -129,6 +130,14 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [inputValues, setInputValues] = useState<{
+    plateNumberType: PlateNumberType | undefined;
+    plateNumber: string;
+  }>({
+    plateNumberType: undefined,
+    plateNumber: "",
+  });
+
   const totalAmount = plateNoReportData.reduce(
     (sum, item) => sum + item.amount,
     0
@@ -168,12 +177,26 @@ export default function Page() {
               type: "text",
               htmlfor: "platenumber",
             }}
+            value={inputValues.plateNumber}
+            onChange={(e) =>
+              setInputValues((prev) => ({
+                ...prev,
+                plateNumber: e.target.value,
+              }))
+            }
           />
 
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
             items={["Private", "Commercial"]}
+            selected={inputValues.plateNumberType}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                plateNumberType: selected as PlateNumberType | undefined,
+              }))
+            }
           />
         </div>
 

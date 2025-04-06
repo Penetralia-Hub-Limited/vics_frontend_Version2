@@ -49,3 +49,11 @@ export const getRowActions = (
 ): RowAction[] => {
   return actions.map((action) => ({ ...action, rowData: row }));
 };
+
+/**
+ * Download PDF
+ */
+// export const downloadPdf = async () => {
+//   try {
+//   } catch (error) {}
+// };

@@ -8,6 +8,7 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DashboardSVG, ReportSVG } from "@/common/svgs";
+import { PlateNumberType } from "@/common/enum";
 
 export const stockReportHeaders = [
   { title: "S/N", key: "id" },
@@ -112,6 +113,15 @@ export const stockReportHeadersData = [
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [inputValues, setInputValues] = useState<{
+    zoneOffice: string;
+    mla: string;
+    plateNumberType: PlateNumberType | undefined;
+  }>({
+    zoneOffice: "",
+    mla: "",
+    plateNumberType: undefined,
+  });
 
   const totalPages = Math.ceil(stockReportHeadersData.length / itemsPerPage);
   const paginatedData = stockReportHeadersData.slice(
@@ -143,18 +153,39 @@ export default function Page() {
             title={"Zone Office"}
             placeholder={"-- Select Office --"}
             items={["Private", "Commercial"]}
+            selected={inputValues.zoneOffice}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                zoneOffice: (selected as string) ?? "",
+              }))
+            }
           />
 
           <DashboardCompSelect
             title={"MLA"}
             placeholder={"-- Select MLA --"}
             items={["Private", "Commercial"]}
+            selected={inputValues.mla}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                mla: (selected as string) ?? "",
+              }))
+            }
           />
 
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
             items={["Private", "Commercial"]}
+            selected={inputValues.plateNumberType}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                plateNumberType: selected as PlateNumberType | undefined,
+              }))
+            }
           />
 
           <Button>Download Report</Button>

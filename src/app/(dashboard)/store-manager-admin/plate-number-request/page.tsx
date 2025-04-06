@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import { tableInvoices, tableHeaders } from "@/common/constant";
@@ -11,12 +10,23 @@ import DashboardTable from "@/components/dashboard/dashboard-table";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
+import InputWithLabel from "@/components/auth/input-comp";
+import { PlateNumberType } from "@/common/enum";
 
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [inputValues, setInputValues] = useState<{
+    plateNumberEndCode: string;
+    lga: string;
+    plateNumberType: PlateNumberType | undefined;
+  }>({
+    plateNumberEndCode: "",
+    lga: "",
+    plateNumberType: undefined,
+  });
 
   const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
   const paginatedData = tableInvoices.slice(
@@ -47,18 +57,44 @@ export default function Page() {
             title={"LGA"}
             placeholder={"-- Select LGA --"}
             items={["lagos", "abuja"]}
+            selected={inputValues.lga}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                lga: selected ? String(selected) : "",
+              }))
+            }
           />
 
           <DashboardCompSelect
-            title={"Type"}
+            title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
-            items={["private", "commercial"]}
+            items={[...Object.values(PlateNumberType)]}
+            selected={inputValues.plateNumberType}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                plateNumberType: selected as PlateNumberType | undefined,
+              }))
+            }
           />
 
-          <div className={"flex flex-col gap-3"}>
-            <p className={"font-semibold"}>placeholder</p>
-            <Input placeholder="placeholder" />
-          </div>
+          <InputWithLabel
+            items={{
+              id: "plateNumber",
+              label: "Plate Number End Code",
+              placeholder: "Plate Number",
+              type: "text",
+              htmlfor: "plateNumber",
+            }}
+            value={inputValues.plateNumberEndCode}
+            onChange={(e) =>
+              setInputValues((prev) => ({
+                ...prev,
+                plateNumberEndCode: e.target.value,
+              }))
+            }
+          />
         </div>
 
         <div

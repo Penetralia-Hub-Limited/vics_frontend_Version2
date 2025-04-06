@@ -625,49 +625,25 @@ export const storeManagerSidebarItems = [
         id: 1,
         title: "Dashboard",
         Icon: DashboardSVG,
-        dropdown: [
-          {
-            id: 1,
-            title: "Plate Number Requests",
-            Icon: VICSSVG,
-            dropdown: [
-              {
-                id: 1,
-                title: "Requests",
-                url: "/store-manager-admin/dashboard/plate-number-request",
-              },
-              {
-                id: 2,
-                title: "Assign Plate Number",
-                url: "/store-manager-admin/dashboard/plate-number-request/assign-plate-number",
-              },
-            ],
-          },
-          {
-            id: 2,
-            title: "Assessment",
-            Icon: AssessmentSVG,
-            dropdown: [
-              {
-                id: 1,
-                title: "Assessment",
-                url: "/store-manager-admin/dashboard/assessment",
-              },
-            ],
-          },
-          {
-            id: 3,
-            title: "Reports",
-            Icon: ReportSVG,
-            dropdown: [
-              {
-                id: 1,
-                title: "Report",
-                url: "/store-manager-admin/dashboard/report",
-              },
-            ],
-          },
-        ],
+        url: "/store-manager-admin/dashboard",
+      },
+      {
+        id: 2,
+        title: "Plate Number Requests",
+        Icon: VICSSVG,
+        url: "/store-manager-admin/plate-number-request",
+      },
+      {
+        id: 3,
+        title: "Assessment",
+        Icon: AssessmentSVG,
+        url: "/store-manager-admin/assessment",
+      },
+      {
+        id: 4,
+        title: "Reports",
+        Icon: ReportSVG,
+        url: "/store-manager-admin/report",
       },
     ],
   },
@@ -691,27 +667,13 @@ export const storeManagerSidebarItems = [
         id: 1,
         title: "Reports",
         Icon: ReportSVG,
-        dropdown: [
-          {
-            id: 1,
-            title: "Report Sub",
-            Icon: ReportSVG,
-            url: "/store-manager-admin/reports",
-          },
-        ],
+        url: "/store-manager-admin/reports",
       },
       {
         id: 2,
         title: "Change of Ownership",
         Icon: PenSVG,
-        dropdown: [
-          {
-            id: 1,
-            title: "Change of Ownership Sub",
-            Icon: PenSVG,
-            url: "/store-manager-admin/change-of-ownership",
-          },
-        ],
+        url: "/store-manager-admin/change-of-ownership",
       },
     ],
   },
