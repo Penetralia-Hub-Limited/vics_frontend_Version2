@@ -35,12 +35,12 @@ export default function Page() {
           {
             label: "Sales Dashboard",
             Icon: SalesSVG,
-            link: "/mla-amin/sales",
+            link: "/mla-admin/sales",
           },
           {
             label: "Vehicle Dashboard",
             Icon: DraftSVG,
-            link: "/mla-amin/sales/drafts",
+            link: "/mla-admin/sales/drafts",
           },
         ]}
       />
