@@ -108,8 +108,6 @@ export default function Page() {
     ];
   };
 
-  console.log(inputValues);
-
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
       <div

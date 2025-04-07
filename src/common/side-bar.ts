@@ -213,7 +213,13 @@ export const superAdminSidebar = [
         id: 4,
         title: "Sales",
         Icon: SalesSVG,
-        dropdown: [{ id: 1, title: "Sales Report", url: "/super-admin/sales" }],
+        dropdown: [
+          {
+            id: 1,
+            title: "Sales Report",
+            url: "/super-admin/sales/sales-report",
+          },
+        ],
       },
       {
         id: 5,
