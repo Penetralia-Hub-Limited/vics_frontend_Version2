@@ -67,11 +67,11 @@ export default function Page() {
   const [inputValues, setInputValues] = useState<{
     plateNumber: string;
     paymentStatus: string;
-    InvoiceNumber: string;
+    invoiceNumber: string;
   }>({
     plateNumber: "",
     paymentStatus: "",
-    InvoiceNumber: "",
+    invoiceNumber: "",
   });
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
@@ -139,11 +139,11 @@ export default function Page() {
               type: "text",
               htmlfor: "invoiceNumber",
             }}
-            value={inputValues.InvoiceNumber}
+            value={inputValues.invoiceNumber}
             onChange={(e) =>
               setInputValues((prev) => ({
                 ...prev,
-                InvoiceNumber: e.target.value,
+                invoiceNumber: e.target.value,
               }))
             }
           />
