@@ -1,3 +1,5 @@
+"use client";
+
 import { usePathname } from "next/navigation";
 
 const useGetPathName = (identifier: string) => {
@@ -18,13 +20,12 @@ const useGetPathName = (identifier: string) => {
   const normalizeSegment = (segment: string) => segment.split("-").join(""); // Remove dashes
   const lastSegment = normalizeSegment(lastSegmentRaw);
 
-  console.log("Identifier:", identifier, "Last Segment:", lastSegment);
-
   // Define different mappings for each identifier
   const pathMappings: Record<string, Record<string, string>> = {
     storeAdmin: {
       dashboard: "Store Dashboard",
       platenumberrequest: "Plate Number Request",
+      assignplatenumber: "Plate Number Request",
       stockmanagement: "Stock Management",
       report: "Store Report Dashboard",
       reports: "Vehicle Report Dashboard",

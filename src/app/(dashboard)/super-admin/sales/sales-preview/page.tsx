@@ -23,7 +23,7 @@ const salesData = [
   },
 ];
 
-export const tableHeaders = [
+const tableHeaders = [
   { key: "id", title: "S/N" },
   { key: "paymentdescription", title: "Payment Description" },
   { key: "qty", title: "Quantity" },
@@ -31,7 +31,7 @@ export const tableHeaders = [
   { key: "totalamount", title: "Total Amount" },
 ];
 
-export const tableData = [
+const tableData = [
   {
     id: 1,
     paymentdescription: "JKLMMNASKH2342423",

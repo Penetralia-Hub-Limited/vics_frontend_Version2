@@ -9,7 +9,7 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import CardContainer from "@/components/general/card-container";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 
-export const generatePlates = (): IPlateData[] => {
+const generatePlates = (): IPlateData[] => {
   return [
     { sn: 1, plateNumber: "ASA113JK", plateType: "Private (Direct)" },
     { sn: 2, plateNumber: "ASA114JK", plateType: "Private (Direct)" },
@@ -29,9 +29,6 @@ export const generatePlates = (): IPlateData[] => {
 const PlateSelectionPage: React.FC = () => {
   const [allPlates, setAllPlates] = useState<IPlateData[]>([]);
   const [selectedPlates, setSelectedPlates] = useState<Set<number>>(new Set());
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [requestedNumber, setRequestedNumber] = useState<number>(20);
-  // const [currentPage, setCurrentPage] = useState<number>(1);
 
   // Initialize plates data
   useEffect(() => {
@@ -61,22 +58,6 @@ const PlateSelectionPage: React.FC = () => {
     } else {
       setSelectedPlates(new Set());
     }
-  };
-
-  // const handlePageChange = (page: number) => {
-  //   setCurrentPage(page);
-  // };
-
-  const handleAssign = () => {
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-
-      // assign functionality
-      console.log(isLoading);
-    }, 1000);
   };
 
   return (
@@ -162,7 +143,7 @@ const PlateSelectionPage: React.FC = () => {
             </div>
           </div>
 
-          <Button onClick={handleAssign}>Assign</Button>
+          <Button onClick={() => {}}>Assign</Button>
         </div>
 
         <PlateTable

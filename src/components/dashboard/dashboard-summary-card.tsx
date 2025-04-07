@@ -1,5 +1,3 @@
-"use client";
-
 import { FC, Dispatch, SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { BarChartIcon } from "@/common/svgs";

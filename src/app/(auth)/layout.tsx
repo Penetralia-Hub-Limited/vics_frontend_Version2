@@ -1,9 +1,9 @@
 import WhiteLogo from "@/assets/logo/icon_white.svg";
 import { hotline, supportMail } from "@/common/constant";
 import BG from "../../assets/landing-page/login_hero.jpg";
-import Footer from "@/pages/landing-page/navigation/footer";
-import LPNavBar from "@/pages/landing-page/navigation/nav-bar";
-import LandingContactBar from "@/pages/landing-page/navigation/contact-bar";
+import Footer from "@/components/landing-page/navigation/footer";
+import LPNavBar from "@/components/landing-page/navigation/nav-bar";
+import LandingContactBar from "@/components/landing-page/navigation/contact-bar";
 
 export default function AuthLayout({
   children,

@@ -27,14 +27,14 @@ const vehicleData = [
   },
 ];
 
-export const tableHeaders = [
+const tableHeaders = [
   { key: "id" as const, title: "S/N" },
   { key: "paymentreference" as const, title: "Payment Reference" },
   { key: "amount" as const, title: "Amount" },
   { key: "paymentstatus" as const, title: "Payment Status" },
 ];
 
-export const tableData = [
+const tableData = [
   {
     id: 1,
     paymentreference: "JKLMMNASKH2342423",

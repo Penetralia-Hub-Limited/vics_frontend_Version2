@@ -72,7 +72,7 @@ const LandingRegistration = () => {
           </div>
 
           <div className={"pl-12 lg:pl-15"}>
-            <GetStartedButton link="/" />
+            <GetStartedButton link="/signup" />
           </div>
         </div>
       </div>
