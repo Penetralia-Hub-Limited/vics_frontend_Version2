@@ -1,19 +1,92 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
-import { tableInvoices, tableHeaders } from "@/common/constant";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import DashboardTable from "@/components/dashboard/dashboard-table";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { PlateNumberType } from "@/common/enum";
+import {
+  PlateNumberType,
+  InsuranceStatus,
+  ApprovalStatus,
+} from "@/common/enum";
+import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import {
+  RowAction,
+  TableData,
+} from "@/components/dashboard/dashboard-table-w-button";
+
+const tableHeaders = [
+  { key: "id", title: "S/N" },
+  { key: "mla", title: "MLA" },
+  { key: "mlaStations", title: "MLA Stations" },
+  { key: "trackingid", title: "Tracking ID" },
+  { key: "platenumbertype", title: "Plate Number Type" },
+  { key: "noPlateRequested", title: "No. of Plate Requested" },
+  { key: "noPlateRecommended", title: "No. of Plate Recommended" },
+  { key: "noAssigned", title: "No. Assigned" },
+  { key: "date", title: "Date Sold" },
+  { key: "recommendingOfficer", title: "Recommending Officer" },
+  { key: "finalApprovingOfficer", title: "Final Approving Officer" },
+  { key: "requestStatus", title: "Request Status" },
+  { key: "insuranceStatus", title: "Insurance Status" },
+];
+
+const tableData = [
+  {
+    id: 1,
+    mla: "Akanbi S.",
+    mlaStations: "FEDDSS",
+    trackingid: "HSDGJG3434",
+    platenumbertype: "Private (Direct)",
+    noPlateRequested: 40,
+    noPlateRecommended: 30,
+    noAssigned: 30,
+    date: new Date(),
+    recommendingOfficer: "David E",
+    finalApprovingOfficer: "David E",
+    requestStatus: ApprovalStatus.APPROVED,
+    insuranceStatus: InsuranceStatus.NOTAPPROVED,
+  },
+  {
+    id: 2,
+    mla: "Akanbi S.",
+    mlaStations: "FEDDSS",
+    trackingid: "HSDGJG3434",
+    platenumbertype: "Private (Direct)",
+    noPlateRequested: 40,
+    noPlateRecommended: 30,
+    noAssigned: 30,
+    date: new Date(),
+    recommendingOfficer: "David E",
+    finalApprovingOfficer: "David E",
+    requestStatus: ApprovalStatus.APPROVED,
+    insuranceStatus: InsuranceStatus.NOTAPPROVED,
+  },
+  {
+    id: 3,
+    mla: "Akanbi S.",
+    mlaStations: "FEDDSS",
+    trackingid: "HSDGJG3434",
+    platenumbertype: "Private (Direct)",
+    noPlateRequested: 40,
+    noPlateRecommended: 30,
+    noAssigned: 30,
+    date: new Date(),
+    recommendingOfficer: "David E",
+    finalApprovingOfficer: "David E",
+    requestStatus: ApprovalStatus.NOTAPPROVED,
+    insuranceStatus: InsuranceStatus.NOTAPPROVED,
+  },
+];
 
 export default function Page() {
+  const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
@@ -28,11 +101,25 @@ export default function Page() {
     plateNumberType: undefined,
   });
 
-  const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
-  const paginatedData = tableInvoices.slice(
+  const totalPages = Math.ceil(tableData.length / itemsPerPage);
+  const paginatedData = tableData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const getRowActions = (row: unknown): RowAction[] => {
+    const tableRow = row as TableData;
+
+    return [
+      {
+        title: "View Details",
+        action: () =>
+          router.push(
+            `/store-manager-admin/plate-number-request/assign-plate-number?${tableRow}`
+          ),
+      },
+    ];
+  };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12"}>
@@ -119,7 +206,11 @@ export default function Page() {
         <div
           className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
         >
-          <DashboardTable headers={tableHeaders} data={paginatedData} />
+          <DataTableWButton
+            headers={tableHeaders}
+            data={paginatedData}
+            rowActions={getRowActions}
+          />
         </div>
         <div className={"p-5 ml-auto"}>
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />

@@ -24,10 +24,11 @@ const useGetPathName = (identifier: string) => {
   const pathMappings: Record<string, Record<string, string>> = {
     storeAdmin: {
       dashboard: "Store Dashboard",
-      transactions: "Store Transactions",
-      inventoryFinancing: "Store Inventory Financing",
-      support: "Store Support",
-      products: "Store Products", // Example dynamic route
+      platenumberrequest: "Plate Number Request",
+      stockmanagement: "Stock Management",
+      report: "Store Report Dashboard",
+      reports: "Vehicle Report Dashboard",
+      changeofownership: "Change of Ownership",
     },
     mla: {
       dashboard: "MLA Dashboard",
