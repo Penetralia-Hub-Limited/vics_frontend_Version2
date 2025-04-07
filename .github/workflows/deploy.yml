@@ -71,6 +71,13 @@ jobs:
             sudo mkdir -p /var/www/html
             sudo chown -R ubuntu:ubuntu /var/www/html
 
+            # Backup existing deployment with sudo
+            if [ -d /var/www/html ]; then
+              echo 'Backing up current deployment...'
+              sudo cp -r /var/www/html /var/www/html_backup_$(date +%F_%T)
+            fi
+          "
+
           # Sync necessary files to the Lightsail instance
           rsync -avz --delete \
             --exclude='.git' \
