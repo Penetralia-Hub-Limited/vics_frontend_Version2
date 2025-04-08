@@ -25,10 +25,11 @@ export interface IHotline {
 
 export interface IFieldItems {
   id: string;
-  label: string;
-  placeholder: string;
-  type: string;
   htmlfor: string;
+  label: string;
+  name?: string;
+  type?: string;
+  placeholder?: string;
 }
 
 export interface IVehiceManagement {
@@ -84,4 +85,3 @@ export interface Filters {
   fromDate: string;
   toDate: string;
 }
-

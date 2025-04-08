@@ -25,6 +25,10 @@ interface AuthState {
   token: string | null;
 }
 
+interface RootState {
+  auth: AuthState;
+}
+
 const initialState: AuthState = {
   user: null,
   token: null,
@@ -50,3 +54,7 @@ const authSlice = createSlice({
 
 export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;
+export const selectCurrentUser = (state: RootState): AuthState["user"] =>
+  state.auth.user;
+export const selectCurrentToken = (state: RootState): AuthState["token"] =>
+  state.auth.token;
