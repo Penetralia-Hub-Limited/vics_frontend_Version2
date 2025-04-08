@@ -11,13 +11,18 @@ interface IHeroSection {
 
 const HeroSection: FC<IHeroSection> = ({ state, icon }) => {
   return (
-    <div
-      className={"relative bg-cover bg-center h-[30rem]"}
-      style={{ backgroundImage: `url(${HeroImg.src})` }}
-    >
+    <div className={"relative bg-cover bg-center h-[30rem]"}>
+      <Image
+        src={HeroImg}
+        alt="Hero Image"
+        layout="fill"
+        objectFit="cover"
+        quality={100}
+        className="absolute top-0 left-0 z-0"
+      />
       <div
         className={
-          "flex flex-col md:flex-row md:gap-0 gap-4 items-center justify-center w-full h-full"
+          "flex flex-col md:flex-row md:gap-0 gap-4 items-center justify-center w-full h-full z-10"
         }
       >
         <Image src={icon} alt={"icon"} className={"w-[12rem] h-[12rem]"} />
