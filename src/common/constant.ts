@@ -1,4 +1,5 @@
 import { IlandingPageNavigation, IHotline, ISupportMail } from "./types";
+import { PaymentStatus } from "./enum";
 
 export const landingPageNavigation: IlandingPageNavigation[] = [
   {
@@ -93,38 +94,64 @@ export const loginFieldItems = [
   },
 ];
 
-export const tableHeader = [
-  {
-    title: "S/N",
-  },
-  {
-    title: "LGA",
-  },
-  {
-    title: "Range",
-  },
-  {
-    title: "End Code",
-  },
-  {
-    title: "Type",
-  },
-  {
-    title: "Created By",
-  },
-  {
-    title: "Date",
-  },
-  {
-    title: "Initial Quantity",
-  },
-  {
-    title: "Current Quantity",
-  },
+/** STORE ADMIN START */
+export const tableHeaders = [
+  { title: "S/N", key: "id" },
+  { title: "LGA", key: "lga" },
+  { title: "Plate Number Type", key: "type" },
+  { title: "Created By", key: "createdby" },
+  { title: "Date", key: "Date" },
+  { title: "Initial Quantity", key: "initialQty" },
+  { title: "Current Quantity", key: "currentQty" },
 ];
 
 export const tableInvoices = [
   {
+    id: 1,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 2,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 3,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 4,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 5,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -135,6 +162,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 6,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -145,6 +173,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 7,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -155,6 +184,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 8,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -165,6 +195,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 9,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -175,6 +206,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 10,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -185,6 +217,7 @@ export const tableInvoices = [
     currentQty: 401,
   },
   {
+    id: 11,
     lga: "INV001",
     range: "Paid",
     endcode: "$250.00",
@@ -193,5 +226,262 @@ export const tableInvoices = [
     Date: new Date(),
     initialQty: 401,
     currentQty: 401,
+  },
+  {
+    id: 12,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 13,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 14,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 15,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 16,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 17,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 18,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+];
+/** STORE ADMIN END */
+
+/** MLA DATA START */
+export const mlaTableHeaders = [
+  { title: "S/N", key: "id" },
+  { title: "LGA", key: "lga" },
+  { title: "Plate Number Type", key: "type" },
+  { title: "Created By", key: "createdby" },
+  { title: "Date", key: "Date" },
+  { title: "Initial Quantity", key: "initialQty" },
+  { title: "Current Quantity", key: "currentQty" },
+];
+
+export const mlatableInvoices = [
+  {
+    id: 1,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 2,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 3,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 4,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 5,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 6,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 7,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 8,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 9,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 10,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+  {
+    id: 11,
+    lga: "INV001",
+    range: "Paid",
+    endcode: "$250.00",
+    type: "Credit Card",
+    createdby: "Bernard IK",
+    Date: new Date(),
+    initialQty: 401,
+    currentQty: 401,
+  },
+];
+/** MLA DATA END */
+
+export const vehicleColumns = [
+  { key: "id", title: "S/N" },
+  { key: "chasisno", title: "Chasis Number" },
+  { key: "engineno", title: "Engine Number" },
+  { key: "vehiclemake", title: "Vehicle Make" },
+  { key: "vehiclemodel", title: "Vehicle Model" },
+  { key: "category", title: "Category" },
+  { key: "plateno", title: "Plate Number" },
+];
+
+export const vehicleData = [
+  {
+    id: 1,
+    chasisno: "JKLMMNASKH2342423",
+    engineno: "JKLMMNASKH",
+    vehiclemake: "Mercedez-Benz",
+    vehiclemodel: "Mercedes E-400",
+    category: "Vehicle between 3.0 - 4.0",
+    plateno: "MORO18LM",
+  },
+];
+
+export const invoiceColumns = [
+  { key: "id", title: "S/N" },
+  { key: "invoiceid", title: "Invoice ID" },
+  { key: "amount", title: "Amount" },
+  { key: "paymentreference", title: "Payment Reference" },
+  { key: "paymentstatus" as PaymentStatus, title: "Payment Status" },
+  { key: "date", title: "Date" },
+];
+
+export const invoiceData = [
+  {
+    id: 1,
+    invoiceid: "#INV2525",
+    amount: 23434,
+    paymentreference: "43432343423",
+    paymentstatus: PaymentStatus.PAID,
+    category: "Vehicle between 3.0 - 4.0",
+    date: new Date(),
   },
 ];

@@ -26,7 +26,9 @@ const FormComp: FC<IForm> = ({ title, description, fields }) => {
             </div>
           );
         })}
-        <Button type="submit">Submit</Button>
+        <Button variant={"default"} type={"submit"}>
+          Submit
+        </Button>
       </Form>
     </div>
   );

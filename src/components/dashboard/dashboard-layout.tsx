@@ -1,13 +1,12 @@
 "use client";
-
+// OLD LAYOUT DESIGN
 import { FC, useState, useEffect } from "react";
-import Image from "next/image";
+import LogoComponent from "../general/logo";
 import { useDemoRouter } from "@/hooks/useDemoRouter";
 import { demoTheme } from "@/styles/styles";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
-// import { sideBarItems } from "@/common/navdata";
 import Logo from "../../assets/logo/icon_green.svg";
 import { Navigation } from "@toolpad/core/AppProvider";
 
@@ -15,31 +14,8 @@ interface IDashboardCompLayout {
   children: React.ReactNode;
   sidebarItems: Navigation;
   window?: Window;
+  title?: string;
 }
-
-const LogoComponent = () => {
-  return (
-    <div className={"flex items-center"}>
-      <Image
-        src={Logo}
-        alt="Logo"
-        className={"object-contain shrink-0 self-stretch my-auto h-full"}
-      />
-      <div className={"hidden lg:block self-stretch"}>
-        <p
-          className={
-            "text-lg font-bold uppercase text-primary-600 tracking-widest w-full text-justify"
-          }
-        >
-          Kwara state
-        </p>
-        <p className={"text-[7px] text-primary-600 tracking-[0.002rem]"}>
-          Vehicle Identification and Certification System
-        </p>
-      </div>
-    </div>
-  );
-};
 
 const DashboardCompLayout: FC<IDashboardCompLayout> = ({
   children,
@@ -63,9 +39,9 @@ const DashboardCompLayout: FC<IDashboardCompLayout> = ({
       theme={demoTheme}
       window={demoWindow}
       branding={{
-        logo: <LogoComponent />,
+        logo: <LogoComponent logo={Logo} state={"Kwara state"} />,
         title: "",
-        homeUrl: "/mla-admin",
+        homeUrl: "/",
       }}
     >
       <DashboardLayout>

@@ -1,12 +1,24 @@
-import { FC } from "react";
+import { FC, HTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-interface ICardContainer {
+interface ICardContainer extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
+  className?: string;
 }
 
-const CardContainer: FC<ICardContainer> = ({ children }) => {
+const CardContainer: FC<ICardContainer> = ({
+  children,
+  className,
+  ...rest
+}) => {
   return (
-    <div className={"w-full border-1 border-neutral-300 rounded-lg p-5"}>
+    <div
+      className={cn(
+        "w-full border-1 border-neutral-300 rounded-lg p-5",
+        className
+      )}
+      {...rest}
+    >
       {children}
     </div>
   );
