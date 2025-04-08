@@ -10,7 +10,10 @@ import DashboardCompSelect from "@/components/dashboard/dashboard-component-sele
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import {
+  DataTableWButton,
+  RowAction,
+} from "@/components/dashboard/dashboard-table-w-button";
 import { InsuranceStatus, RequestStatus } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import {
@@ -76,8 +79,8 @@ export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [inputValues, setInputValues] = useState<{
     trackingid: string;
     insuranceStatus: string;
@@ -98,11 +101,6 @@ export default function Page() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  interface RowAction {
-    title: string;
-    action: () => void;
-  }
 
   const getRowActions = (row: unknown): RowAction[] => {
     console.log(row);

@@ -1,7 +1,3 @@
 export default function Page() {
-  return (
-    <main>
-      <div>Invoice renewal</div>
-    </main>
-  );
+  return <div>Invoice renewal</div>;
 }

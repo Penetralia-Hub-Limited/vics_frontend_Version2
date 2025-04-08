@@ -17,7 +17,7 @@ import {
   AddNewUserInfo,
 } from "@/components/dashboard/user/add-new-user-modal-info";
 
-export const manageUserHeader = [
+const manageUserHeader = [
   { key: "id", title: "S/N" },
   { key: "name", title: "Name" },
   { key: "phonenumber", title: "Phone Number" },
@@ -27,7 +27,7 @@ export const manageUserHeader = [
   { key: "date", title: "Date Created" },
 ];
 
-export const manageUserData = [
+const manageUserData = [
   {
     id: 1,
     name: "Lola K",

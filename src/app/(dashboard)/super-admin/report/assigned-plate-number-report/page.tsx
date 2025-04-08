@@ -12,7 +12,7 @@ import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { PlateNumberStatus, PlateNumberType } from "@/common/enum";
 
-export const assignedReportHeader = [
+const assignedReportHeader = [
   { key: "id" as const, title: "S/N" },
   { key: "platenumber" as const, title: "Plate Number" },
   { key: "platetype" as const, title: "Plate Type" },
@@ -20,8 +20,7 @@ export const assignedReportHeader = [
   { key: "platenostatus" as const, title: "Plate Number Status" },
   { key: "date" as const, title: "Date Assigned" },
 ];
-
-export const assignedReportData = [
+const assignedReportData = [
   {
     id: 1,
     platenumber: "ILHST76",

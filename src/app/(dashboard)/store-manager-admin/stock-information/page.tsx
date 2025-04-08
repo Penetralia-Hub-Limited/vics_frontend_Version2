@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import InputWithLabel from "@/components/auth/input-comp";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import { tableInvoices, tableHeaders } from "@/common/constant";
@@ -10,10 +10,18 @@ import DashboardTable from "@/components/dashboard/dashboard-table";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ManagementSVG } from "@/common/svgs";
+import { PaymentStatus } from "@/common/enum";
 
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [inputValues, setInputValues] = useState<{
+    plateNumber: string;
+    paymentStatus: PaymentStatus | undefined;
+  }>({
+    plateNumber: "",
+    paymentStatus: undefined,
+  });
 
   const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
   const paginatedData = tableInvoices.slice(
@@ -47,14 +55,34 @@ export default function Page() {
 
       <CardContainer className={"flex flex-col gap-5"}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <div className={"flex flex-col gap-3"}>
-            <p className={"font-semibold"}>placeholder</p>
-            <Input placeholder="placeholder" />
-          </div>
+          <InputWithLabel
+            items={{
+              id: "plateNumber",
+              label: "Plate Number",
+              placeholder: "Plate Number",
+              type: "text",
+              htmlfor: "plateNumber",
+            }}
+            value={inputValues.plateNumber}
+            onChange={(e) =>
+              setInputValues((prev) => ({
+                ...prev,
+                plateNumber: e.target.value,
+              }))
+            }
+          />
+
           <DashboardCompSelect
-            title={"Type"}
-            placeholder={"-- Select Type --"}
+            title={"Status"}
+            placeholder={"-- Select Status --"}
             items={["private", "commercial"]}
+            selected={inputValues.paymentStatus}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                paymentStatus: selected as PaymentStatus | undefined,
+              }))
+            }
           />
 
           <Button>Search Store</Button>

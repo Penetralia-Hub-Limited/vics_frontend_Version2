@@ -10,7 +10,7 @@ import DashboardCompSelect from "@/components/dashboard/dashboard-component-sele
 import { DashboardSVG, ReportSVG } from "@/common/svgs";
 import { PlateNumberType } from "@/common/enum";
 
-export const stockReportHeaders = [
+const stockReportHeaders = [
   { title: "S/N", key: "id" },
   { title: "MLA", key: "mla" },
   { title: "Station", key: "station" },
@@ -19,7 +19,7 @@ export const stockReportHeaders = [
   { title: "Stock Level", key: "stocklevel" },
 ];
 
-export const stockReportHeadersData = [
+const stockReportHeadersData = [
   {
     id: 1,
     mla: "INV001",

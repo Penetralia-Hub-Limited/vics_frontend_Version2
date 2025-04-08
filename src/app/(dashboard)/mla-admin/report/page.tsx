@@ -12,7 +12,7 @@ import { DashboardSVG, ReportSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { formattedAmount } from "@/common/helpers";
 
-export const plateNoReportHeader = [
+const plateNoReportHeader = [
   { title: "S/N", key: "id" },
   { title: "MLA", key: "mla" },
   { title: "Plate Number", key: "platenumber" },
@@ -22,7 +22,7 @@ export const plateNoReportHeader = [
   { title: "Amount", key: "amount" },
 ];
 
-export const plateNoReportData = [
+const plateNoReportData = [
   {
     id: 1,
     mla: "INV001",
