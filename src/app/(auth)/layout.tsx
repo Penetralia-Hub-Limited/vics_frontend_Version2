@@ -1,8 +1,9 @@
-import LPNavBar from "@/components/landingpage/navigation/nav-bar";
-import Footer from "@/components/landingpage/navigation/footer";
-import { hotline, supportMail } from "@/common/constant";
-import LandingContactBar from "@/components/landingpage/navigation/contact-bar";
 import WhiteLogo from "@/assets/logo/icon_white.svg";
+import { hotline, supportMail } from "@/common/constant";
+import BG from "../../assets/landing-page/login_hero.jpg";
+import Footer from "@/components/landing-page/navigation/footer";
+import LPNavBar from "@/components/landing-page/navigation/nav-bar";
+import LandingContactBar from "@/components/landing-page/navigation/contact-bar";
 
 export default function AuthLayout({
   children,
@@ -16,7 +17,14 @@ export default function AuthLayout({
         <LPNavBar />
       </nav>
 
-      <main className="h-96">{children}</main>
+      <div
+        className={
+          "py-18 h-full bg-cover bg-center flex w-full items-center justify-center grayscale-[0.5]"
+        }
+        style={{ backgroundImage: `url(${BG.src})` }}
+      >
+        {children}
+      </div>
 
       <Footer
         icon={WhiteLogo}

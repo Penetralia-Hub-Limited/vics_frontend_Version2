@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
   --color-primary-900: oklch(24.42% 0.0566 157.21); /* #012815 */
   --color-primary-800: oklch(28.63% 0.0677 156.63); /* #01341C */
@@ -26,4 +28,15 @@
 
   --color-black: oklch(17.76% 0 0); /* #111111 */
   --color-white: oklch(100% 0 0); /* #FFFFFF */
+
+  --color-success-100: oklch(89.48% 0.0561 146.68); /* #c5e7c7 */
+  --color-success-500: oklch(62.86% 0.1556 144.16); /* #42A046 */
+  --color-pending: oklch(94.24% 0.0446 72.68); /* #ffe8cc */
+  --color-failed: oklch(93.87% 0.030868 17.7148); /* #ffe3e3 */
+  --color-danger: oklch(63.24% 0.2144 25.84); /* #f03e3e */
+
+  --color-role: oklch(0.56 0.1784 255.99); /* #1671D9 */
+
+  --color-pending-100: oklch(0.95 0.0218 250.22); /* #e3effc */
+  --color-pending-500: oklch(0.2 0.0478 250.96); /* #04172b */
 }
