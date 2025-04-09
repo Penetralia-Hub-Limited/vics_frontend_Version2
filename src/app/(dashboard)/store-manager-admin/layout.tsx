@@ -8,7 +8,7 @@ import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import { storeManagerSidebarItems } from "@/common/side-bar";
 import useGetPathName from "@/hooks/usePathName";
 import Loading from "../loading";
-import { IsAuth } from "@/components/general/ia-auth";
+import { IsAuth } from "@/components/general/is-auth";
 
 export default function StoreManagerDashboardLayout({
   children,

@@ -11,16 +11,16 @@ interface IsAuthProps {
 
 export const IsAuth: FC<IsAuthProps> = ({ children }) => {
   const router = useRouter();
-  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
+  const { isLoggedIn } = useSelector((state) => (state as RootState).auth);
 
   useEffect(() => {
-    if (true) {
+    if (!isLoggedIn) {
       router.push("/");
     }
   }, [isLoggedIn, router]);
 
   // to avoid flashing protected content before redirect
-  if (!isLoggedIn) return null;
+  if (false) return null;
 
   return <>{children}</>;
 };
