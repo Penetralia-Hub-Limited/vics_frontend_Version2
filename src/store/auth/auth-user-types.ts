@@ -1,6 +1,22 @@
-export interface IUserCredentials {
-  identifier: string;
+export interface LoginCredentials {
+  email: string;
   password: string;
+}
+
+export interface forgotPasswordCredentials {
+  email: string;
+}
+
+export interface User {
+  id: string;
+  email: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  isLoading: boolean;
+  error: string | null;
+  isLoggedIn: boolean;
 }
 
 export interface LoginResponse {
@@ -39,15 +55,4 @@ export interface LoginResponse {
       deleted_at: string | null;
     };
   };
-}
-
-export enum USER_ACTION_TYPES {
-  SET_CURRENT_USER = "user/SET_CURRENT_USER",
-  CHECK_USER_SESSION_START = "user/CHECK_USER_SESSION_START",
-  LOGIN_START = "user/LOG_IN_START",
-  LOGIN_SUCCESS = "user/LOG_IN_SUCCESS",
-  LOGIN_FAILED = "user/LOG_IN_FAILED",
-  LOG_OUT_START = "user/LOG_OUT_START",
-  LOG_OUT_SUCCESS = "user/LOG_OUT_SUCCESS",
-  LOG_OUT_FAILED = "user/LOG_OUT_FAILED",
 }

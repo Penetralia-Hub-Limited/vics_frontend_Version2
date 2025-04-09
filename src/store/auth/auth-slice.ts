@@ -1,60 +1,48 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { IUserCredentials } from "./auth-user-types";
-import { loginAuth } from "@/utils/auth";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { decryptToken, generateToken, initialAuthState } from "@/utils/helpers";
 
-export const loginUser = createAsyncThunk(
-  "auth/loginUser",
-  async (userCredentials: IUserCredentials, { rejectWithValue }) => {
-    try {
-      const response = await loginAuth(userCredentials);
-      const userData = response.data;
+const getLoggedState = () => {
+  if (typeof window !== "undefined" && window.localStorage) {
+    const mlToken = localStorage.getItem("mlToken");
 
-      // Save to localStorage
-      localStorage.setItem("user", JSON.stringify(userData));
-
-      return userData;
-    } catch (error) {
-      const errorMessage = error as unknown as string;
-      return rejectWithValue(errorMessage);
+    if (mlToken) {
+      const parsedToken = decryptToken(mlToken);
+      if (parsedToken.success) {
+        const authData = parsedToken.data;
+        console.log("Parsed State Returned");
+        return { ...initialAuthState, isLoggedIn: true, user: authData };
+      }
     }
+    console.log("Default State Returned");
   }
-);
-
-interface AuthState {
-  user: null | { id: string; email: string };
-  token: string | null;
-}
-
-interface RootState {
-  auth: AuthState;
-}
-
-const initialState: AuthState = {
-  user: null,
-  token: null,
+  return initialAuthState;
 };
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: getLoggedState(),
   reducers: {
-    login: (
-      state,
-      action: PayloadAction<{ user: AuthState["user"]; token: string }>
-    ) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
+    authStart: (state) => {
+      state.isLoading = true;
+      state.error = null;
     },
-    logout: (state) => {
-      state.user = null;
-      state.token = null;
+    authSuccess: (state, action: PayloadAction<any>) => {
+      const token = generateToken(action.payload, "1d");
+      localStorage.setItem("mlToken", token);
+      state.isLoading = false;
+      state.user = action.payload;
+      state.isLoggedIn = true;
+    },
+    authFail: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    logout: () => {
+      localStorage.removeItem("mlToken");
+      return { isLoading: false, isLoggedIn: false, user: null, error: null };
     },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { authStart, authSuccess, authFail, logout } = authSlice.actions;
 export default authSlice.reducer;
-export const selectCurrentUser = (state: RootState): AuthState["user"] =>
-  state.auth.user;
-export const selectCurrentToken = (state: RootState): AuthState["token"] =>
-  state.auth.token;

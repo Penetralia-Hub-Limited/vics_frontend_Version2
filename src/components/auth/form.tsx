@@ -6,9 +6,16 @@ interface IForm {
   description: string;
   children: ReactNode;
   onSubmit: () => void;
+  isLoading: boolean;
 }
 
-const FormLayout: FC<IForm> = ({ title, description, children, onSubmit }) => {
+const FormLayout: FC<IForm> = ({
+  title,
+  description,
+  children,
+  onSubmit,
+  isLoading,
+}) => {
   return (
     <div className="bg-white rounded-lg py-10 px-5 md:px-12 w-[80%] md:w-[50%]">
       <div className="flex flex-col gap-3 w-full items-center justify-center">
@@ -26,7 +33,7 @@ const FormLayout: FC<IForm> = ({ title, description, children, onSubmit }) => {
         {children}
 
         <Button variant="default" type="submit">
-          Submit
+          {isLoading ? "loading..." : "Submit"}
         </Button>
       </form>
     </div>

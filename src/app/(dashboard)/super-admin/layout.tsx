@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
+// import { useSelector } from "react-redux";
 import { StoreProvider } from "@/app/store-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
@@ -8,6 +9,7 @@ import { superAdminSidebar } from "@/common/side-bar";
 import useGetPathName from "@/hooks/usePathName";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import Loading from "../loading";
+// import { AuthState } from "@/store/auth/auth-user-types";
 
 export default function SuperAdminDashboardLayout({
   children,
@@ -16,6 +18,9 @@ export default function SuperAdminDashboardLayout({
 }) {
   const { getPathName } = useGetPathName("superAdmin");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  // const { user } = useSelector((state: { auth: AuthState }) => state.auth);
+
+  // console.log(user);
 
   return (
     <StoreProvider>

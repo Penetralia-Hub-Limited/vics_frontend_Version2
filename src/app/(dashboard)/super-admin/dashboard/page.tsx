@@ -44,7 +44,7 @@ export default function Page() {
         }
       >
         <p className={"text-lg md:text-3xl font-bold"}>Welcome, Username</p>
-        <p className={"text-sm text-neutral-700"}>{formattedDate.toString()}</p>
+        <p className={"text-sm text-neutral-700"}>{formattedDate}</p>
       </div>
 
       <div className={"grid grid-cols-1 lg:grid-cols-[2fr_auto] gap-2"}>

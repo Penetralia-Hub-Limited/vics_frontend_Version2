@@ -5,24 +5,30 @@ import Link from "next/link";
 import FormLayout from "@/components/auth/form";
 import InputWithLabel from "@/components/auth/input-comp";
 import CheckboxItem from "@/components/general/check-box";
+import { AppDispatch } from "@/store/store";
+import { LoginCredentials } from "@/store/auth/auth-user-types";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "@/store/auth/auth-actions";
+import { AuthState } from "@/store/auth/auth-user-types";
 
 export default function Page() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading } = useSelector((state: { auth: AuthState }) => state.auth);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [input, setInput] = useState<{
-    email: string;
-    password: string;
-  }>({
+  const [input, setInput] = useState<LoginCredentials>({
     email: "",
     password: "",
   });
 
   const handleSubmit = () => {
-    console.log("Input values: ", input);
+    dispatch(loginUser(input));
   };
 
   return (
     <div className="flex flex-col w-full items-center justify-center">
       <FormLayout
+        isLoading={isLoading}
         title="Login"
         description="Enter your email address to login"
         onSubmit={handleSubmit}
