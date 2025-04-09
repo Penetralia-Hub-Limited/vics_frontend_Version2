@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, Suspense } from "react";
-// import { useSelector } from "react-redux";
 import { StoreProvider } from "@/app/store-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
@@ -9,7 +8,7 @@ import { superAdminSidebar } from "@/common/side-bar";
 import useGetPathName from "@/hooks/usePathName";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import Loading from "../loading";
-// import { AuthState } from "@/store/auth/auth-user-types";
+import { IsAuth } from "@/components/general/ia-auth";
 
 export default function SuperAdminDashboardLayout({
   children,
@@ -18,32 +17,31 @@ export default function SuperAdminDashboardLayout({
 }) {
   const { getPathName } = useGetPathName("superAdmin");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  // const { user } = useSelector((state: { auth: AuthState }) => state.auth);
-
-  // console.log(user);
 
   return (
-    <StoreProvider>
-      <SidebarProvider>
-        <AppSidebar sidebarData={superAdminSidebar} />
-        <Suspense fallback={<Loading />}>
-          <main className={"flex-1 flex-col w-fit overflow-hidden"}>
-            <div
-              className={
-                "pl-4 md:pl-0 flex flex items-center h-20 border-b border-neutral-500 sticky top-0 z-40 bg-white"
-              }
-            >
-              <SidebarTrigger className={"block md:hidden"} />
-              <DashboardNavBar
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                pageTitle={getPathName()}
-              />
-            </div>
-            <div className="px-4 py-8 bg-neutral-100/30">{children}</div>
-          </main>
-        </Suspense>
-      </SidebarProvider>
-    </StoreProvider>
+    <IsAuth>
+      <StoreProvider>
+        <SidebarProvider>
+          <AppSidebar sidebarData={superAdminSidebar} />
+          <Suspense fallback={<Loading />}>
+            <main className={"flex-1 flex-col w-fit overflow-hidden"}>
+              <div
+                className={
+                  "pl-4 md:pl-0 flex flex items-center h-20 border-b border-neutral-500 sticky top-0 z-40 bg-white"
+                }
+              >
+                <SidebarTrigger className={"block md:hidden"} />
+                <DashboardNavBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  pageTitle={getPathName()}
+                />
+              </div>
+              <div className="px-4 py-8 bg-neutral-100/30">{children}</div>
+            </main>
+          </Suspense>
+        </SidebarProvider>
+      </StoreProvider>
+    </IsAuth>
   );
 }
