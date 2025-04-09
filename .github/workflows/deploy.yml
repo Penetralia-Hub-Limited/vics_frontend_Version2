@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Next.js with AWS Lightsail
+name: CI/CD Pipeline for Next.js to AWS Lightsail
 
 on:
   push:
@@ -13,36 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20.x"
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          node-version: '20'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify build script
-        run: |
-          if ! grep -q '"build":' package.json; then
-            echo "ERROR: No build script found in package.json!" >&2
-            exit 1
-          fi
+      - name: Run linter
+        run: npm run lint
 
-      - name: Build Next.js Application
+      - name: Build application
         run: npm run build
-
-      - name: Run tests
-        run: |
-          echo "Running tests..."
-          npm test || echo "No tests defined or some tests failed."
 
   deploy:
     runs-on: ubuntu-latest
@@ -75,11 +58,12 @@ jobs:
             --exclude='.git' \
             --exclude='node_modules' \
             --exclude='.next/cache' \
-            -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key" \
+            -e 'ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key' \
             ./ ubuntu@$LIGHTSAIL_IP:/var/www/html
 
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key ubuntu@$LIGHTSAIL_IP "
-            echo 'Configuring Next.js application on Lightsail...'
+            echo 'Setting up app on Lightsail...'
+
             sudo apt update
 
             if ! command -v node &> /dev/null; then
@@ -93,12 +77,18 @@ jobs:
 
             cd /var/www/html
 
-            if [ ! -d 'node_modules' ]; then
-              echo 'Installing npm dependencies...'
-              npm ci
-            fi
+            echo 'Installing npm dependencies...'
+            npm ci
 
-            echo 'Running build...'
+            REQUIRED_PACKAGES=(currency.js html2canvas-pro jspdf)
+            for pkg in \"\${REQUIRED_PACKAGES[@]}\"; do
+              if ! npm ls \$pkg > /dev/null 2>&1; then
+                echo \"ERROR: Missing required package: \$pkg\"
+                exit 1
+              fi
+            done
+
+            echo 'Building application...'
             npm run build
 
             if ! command -v pm2 &> /dev/null; then
@@ -115,6 +105,4 @@ jobs:
           "
 
       - name: Cleanup
-        run: |
-          echo "Cleaning up temporary files..."
-          rm -f ~/.ssh/lightsail_key
+        run: rm -f ~/.ssh/lightsail_key
