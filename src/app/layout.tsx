@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "VICS",
   description: "Vehicle Identification and Verification System",
+  icons: {
+    icon: "/icon_white.ico", 
+  },
 };
 
 export default function RootLayout({
@@ -25,9 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <head>
+        {/* You can also add additional meta tags or links here */}
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
       </body>
     </html>
