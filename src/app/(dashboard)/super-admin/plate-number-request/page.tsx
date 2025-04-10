@@ -10,6 +10,14 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardTable from "@/components/dashboard/dashboard-table";
+// import CreatePlateNumberRequest from "@/components/dashboard/verification-forms/Create-Plate-Request";
+import Modal from "@/components/general/modal";
+
+import {
+  CreatePlateRequestInitialValues,
+  CreatePlateRequestProps,
+} from "@/components/dashboard/verification-forms/Create-Plate-Request";
+import { CreateNewPlatRequest } from "@/components/dashboard/verification-forms/Create-Plate-Request";
 
 const tableColumns = [
   { key: "id" as const, title: "S/N" },
@@ -60,17 +68,15 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
-  const [inputValues, setInputValues] = useState<{
-    trackingid: string;
-    insuranceStatus: string;
-    plateNumberType: string;
-    requestStatus: string;
-  }>({
+  const [inputValues, setInputValues] = useState({
     trackingid: "",
     insuranceStatus: "",
     plateNumberType: "",
     requestStatus: "",
   });
+  const [modalInput, setModalInput] = useState<CreatePlateRequestProps>(
+    CreatePlateRequestInitialValues
+  );
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -79,12 +85,8 @@ export default function Page() {
   );
 
   return (
-    <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
-      <div
-        className={
-          "flex flex-col gap-5 md:flex-row justify-between items-center"
-        }
-      >
+    <main className="flex flex-col gap-8 md:gap-12 overflow-hidden">
+      <div className="flex flex-col gap-5 md:flex-row justify-between items-center">
         <DashboardPath
           pathdata={[
             {
@@ -100,10 +102,17 @@ export default function Page() {
           ]}
         />
 
-        <Button>Create New Request</Button>
+        <Modal
+          title={"Create New Plate Number Request"}
+          content={
+            <CreateNewPlatRequest input={modalInput} setInput={setModalInput} />
+          }
+          btnText={"Create New Request"}
+          footerBtn={<Button type="submit">submit</Button>}
+        />
       </div>
 
-      <CardContainer className={"flex flex-col gap-5"}>
+      <CardContainer className="flex flex-col gap-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <InputWithLabel
             items={{
@@ -149,7 +158,7 @@ export default function Page() {
           />
         </div>
 
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end">
           <DashboardCompSelect
             title={"Request Status"}
             placeholder={"-- Select status --"}
@@ -174,15 +183,11 @@ export default function Page() {
         </div>
       </CardContainer>
 
-      <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
-      >
-        <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
-        >
+      <div className="flex flex-col gap-3 border-1 border-neutral-300 rounded-lg">
+        <div className="border-t-1 border-neutral-300 rounded-lg overflow-hidden">
           <DashboardTable headers={tableColumns} data={paginatedData} />
         </div>
-        <div className={"p-5 ml-auto"}>
+        <div className="p-5 ml-auto">
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>

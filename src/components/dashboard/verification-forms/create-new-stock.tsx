@@ -45,7 +45,7 @@ export const CreateNewStock: FC<ICreateNewStock> = ({ input, setInput }) => {
       />
 
       <div>
-        <p>Enter plate Number Type Information</p>
+        <p className="font-semibold">Enter plate Number Type Information</p>
       </div>
 
       {input.plateNumberType && (
