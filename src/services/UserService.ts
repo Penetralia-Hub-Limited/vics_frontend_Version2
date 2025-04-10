@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "@/utils/axios-instance";
 import { User } from "@/store/auth/auth-user-types";
+import { getCookie } from "cookies-next";
 
 export class UserService {
   private static getAuthHeader() {
-    const token = localStorage.getItem("mlToken");
+    const token = getCookie("mlToken");
     return {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -1,11 +1,9 @@
 import axios from "axios";
 import { toast } from "sonner";
 import { decryptToken } from "./helpers";
-import { makeStore } from "@/store/store";
+import { store, persistor } from "@/store/store";
 import { logout } from "@/store/auth/auth-slice";
-import { getCookie, hasCookie } from "cookies-next";
-
-const store = makeStore();
+import { getCookie } from "cookies-next";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -28,12 +26,12 @@ axiosInstance.interceptors.request.use(
     }
 
     const mlToken = getCookie("mlToken");
-    const isToken = await hasCookie("mlToken");
 
-    if (isToken && typeof mlToken === "string") {
+    if (mlToken && typeof mlToken === "string") {
       const parsedToken = decryptToken(mlToken);
+      console.log("Parsed Token:", parsedToken);
       if (parsedToken.success) {
-        config.headers.Authorization = `Bearer ${parsedToken.data.token}`;
+        config.headers.Authorization = `Bearer ${parsedToken.data.accessToken}`;
       }
     }
 
@@ -57,6 +55,7 @@ axiosInstance.interceptors.response.use(
       toast(`Unauthorized: ${errorMessage}`);
       console.error(`Unauthorized: ${errorMessage}`);
       store.dispatch(logout());
+      persistor.flush(); // to flush persisted state
     } else if (error.response?.status === 403) {
       toast(`Forbidden: ${errorMessage}`);
       console.error(`Forbidden: ${errorMessage}`);

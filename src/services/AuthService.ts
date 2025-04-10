@@ -8,14 +8,17 @@ import {
   logout as logoutAction,
 } from "@/store/auth/auth-slice";
 import { LoginCredentials } from "@/store/auth/auth-user-types";
+import { deleteCookie } from "cookies-next";
+import { AppDispatch } from "@/store/store";
 
 class AuthService {
-  private dispatch: any;
+  private dispatch: AppDispatch;
 
-  constructor(dispatch: any) {
+  constructor(dispatch: AppDispatch) {
     this.dispatch = dispatch;
   }
 
+  // Login user
   async login(credentials: LoginCredentials) {
     this.dispatch(authStart());
     try {
@@ -35,6 +38,7 @@ class AuthService {
     }
   }
 
+  // log out user
   async logout() {
     try {
       await axiosInstance.post(
@@ -43,11 +47,12 @@ class AuthService {
     } catch (error) {
       console.error("Logout failed (API):", error);
     } finally {
-      localStorage.removeItem("mlToken");
+      deleteCookie("mlToken");
       this.dispatch(logoutAction());
     }
   }
 
+  // reset password
   async resetPassword(email: string) {
     this.dispatch(authStart());
     try {

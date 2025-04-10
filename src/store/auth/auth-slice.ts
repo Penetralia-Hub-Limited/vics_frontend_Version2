@@ -38,9 +38,12 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-    logout: () => {
+    logout: (state) => {
       deleteCookie("mlToken");
-      return { isLoading: false, isLoggedIn: false, data: null, error: null };
+      state.isLoggedIn = false;
+      state.data = null;
+      state.isLoading = false;
+      state.error = null;
     },
   },
 });

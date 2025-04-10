@@ -1,26 +1,18 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { makeStore } from "@/store/store";
+import { store } from "@/store/store";
 import { persistStore } from "redux-persist";
+import Loading from "./(dashboard)/loading";
+
+const persistor = persistStore(store);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [store] = useState(() => makeStore());
-  const [persistor, setPersistor] = useState<any>(null);
-
-  useEffect(() => {
-    const _persistor = persistStore(store);
-    setPersistor(_persistor);
-  }, [store]);
-
-  if (!persistor) return null;
-
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={<Loading />} persistor={persistor}>
         {children}
       </PersistGate>
     </Provider>

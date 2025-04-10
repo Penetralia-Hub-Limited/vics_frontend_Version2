@@ -1,9 +1,12 @@
 import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
+import { persistReducer, persistStore } from "redux-persist";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 
+import plateNumberReducer from "./plateNumber/plate-number-slice";
 import authReducer from "./auth/auth-slice";
-import vehicleReducer from "./vehicle/vehicle-slice";
+import userReducer from "./user/user-slice";
+import lgaReducer from "./lgas/lga-slice";
+import stateReducer from "./states/state-slice";
 
 const persistConfig = {
   key: "root",
@@ -14,7 +17,10 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  vehicle: vehicleReducer,
+  user: userReducer,
+  lga: lgaReducer,
+  platenumber: plateNumberReducer,
+  states: stateReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -28,6 +34,9 @@ export const makeStore = () => {
       }),
   });
 };
+
+export const store = makeStore();
+export const persistor = persistStore(store);
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
