@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "VICS",
   description: "Vehicle Identification and Verification System",
   icons: {
-    icon: "/icon_white.ico", 
+    icon: "/icon_green.ico", 
   },
 };
 
