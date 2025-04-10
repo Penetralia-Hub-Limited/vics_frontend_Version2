@@ -1,19 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import FormLayout from "@/components/auth/form";
 import InputWithLabel from "@/components/auth/input-comp";
 import CheckboxItem from "@/components/general/check-box";
 import { AppDispatch } from "@/store/store";
 import { LoginCredentials } from "@/store/auth/auth-user-types";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "@/store/auth/auth-actions";
 import { AuthState } from "@/store/auth/auth-user-types";
+import { Role } from "@/common/enum";
+import AuthService from "@/services/AuthService";
 
 export default function Page() {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading } = useSelector((state: { auth: AuthState }) => state.auth);
+  const authService = new AuthService(dispatch);
+  const { isLoading, isLoggedIn, user } = useSelector(
+    (state: { auth: AuthState }) => state.auth
+  );
+
+  // navigate to super admin if logged in
+  useEffect(() => {
+    if (!(isLoggedIn && user)) return;
+
+    user?.role === Role.SUPERADMIN
+      ? router.push("/super-admin/dashboard")
+      : null;
+  }, [isLoggedIn, user, router]);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [input, setInput] = useState<LoginCredentials>({
@@ -21,8 +36,8 @@ export default function Page() {
     password: "",
   });
 
-  const handleSubmit = () => {
-    dispatch(loginUser(input));
+  const handleSubmit = async () => {
+    await authService.login(input);
   };
 
   return (

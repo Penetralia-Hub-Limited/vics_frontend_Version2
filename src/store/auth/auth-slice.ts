@@ -33,7 +33,7 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isLoggedIn = true;
     },
-    authFail: (state, action: PayloadAction<string>) => {
+    authFail: (state, action: PayloadAction<string | null>) => {
       state.isLoading = false;
       state.error = action.payload;
     },

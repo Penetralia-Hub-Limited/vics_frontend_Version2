@@ -9,7 +9,33 @@ export interface forgotPasswordCredentials {
 
 export interface User {
   id: string;
+  company_id: string;
+  creator_id: string | null;
+  state_id: string;
+  last_updated_id: string | null;
+  area_id: string | null;
+  lga_id: string | null;
+  office_id: string | null;
+  firstname: string;
+  lastname: string;
+  othername: string;
+  image: string | null;
+  nin: string | null;
+  role: string;
   email: string;
+  gender: string;
+  phone: string;
+  address: string;
+  status: string;
+  registeration_type: string;
+  state_verification_no: string | null;
+  date_of_birth: string | null;
+  is_email_verified: boolean;
+  email_verified_at: string | null;
+  date_deactivated: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
 }
 
 export interface AuthState {
@@ -24,35 +50,6 @@ export interface LoginResponse {
   message: string;
   data: {
     accessToken: string;
-    user: {
-      id: string;
-      company_id: string;
-      creator_id: string | null;
-      state_id: string;
-      last_updated_id: string | null;
-      area_id: string | null;
-      lga_id: string | null;
-      office_id: string | null;
-      firstname: string;
-      lastname: string;
-      othername: string;
-      image: string | null;
-      nin: string | null;
-      role: string;
-      email: string;
-      gender: string;
-      phone: string;
-      address: string;
-      status: string;
-      registeration_type: string;
-      state_verification_no: string | null;
-      date_of_birth: string | null;
-      is_email_verified: boolean;
-      email_verified_at: string | null;
-      date_deactivated: string | null;
-      created_at: string;
-      updated_at: string;
-      deleted_at: string | null;
-    };
+    user: User;
   };
 }

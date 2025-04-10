@@ -2,6 +2,8 @@ import { FC, Dispatch, SetStateAction, ChangeEvent } from "react";
 import UserProfile from "./user-profile";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useSelector } from "react-redux";
+import { AuthState } from "@/store/auth/auth-user-types";
 
 interface IDashboardNavBar {
   pageTitle: string;
@@ -14,6 +16,11 @@ const DashboardNavBar: FC<IDashboardNavBar> = ({
   searchQuery,
   setSearchQuery,
 }) => {
+  const { user } = useSelector((state: { auth: AuthState }) => state.auth);
+
+  const firstInitials = user?.firstname.charAt(0);
+  const lastInitials = user?.lastname.charAt(0);
+
   return (
     <div className="flex items-center justify-between gap-4 w-full px-4 py-3 bg-white ">
       <div className="w-full flex items-center gap-6">
@@ -38,7 +45,12 @@ const DashboardNavBar: FC<IDashboardNavBar> = ({
         </div>
       </div>
 
-      <UserProfile fullName="USERNAME" role="Store Admin" />
+      <UserProfile
+        fullName={user?.firstname ?? "USERNAME"}
+        role={user?.role ?? "Admin"}
+        profileImage={user?.image ?? undefined}
+        initials={`${firstInitials}.${lastInitials}`}
+      />
     </div>
   );
 };
