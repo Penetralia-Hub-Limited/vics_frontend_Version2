@@ -5,10 +5,17 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { landingPageNavigation } from "@/common/constant";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "@/store/auth/auth-slice";
+import { AppDispatch } from "@/store/store";
+import { RootState } from "@/store/store";
 
 const NavBarItems = () => {
   const router = useRouter();
   const pathName = usePathname();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
 
   return (
     <div
@@ -35,8 +42,13 @@ const NavBarItems = () => {
         ))}
       </div>
 
-      <Button onClick={() => router.push("/login")} className={"text-white"}>
-        Login
+      <Button
+        onClick={() =>
+          isLoggedIn ? dispatch(logout()) : router.push("/login")
+        }
+        className={"text-white"}
+      >
+        {isLoggedIn ? "Log out" : "Login"}
       </Button>
     </div>
   );

@@ -1,32 +1,52 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface Vehicle {
-  id: string;
-  make: string;
-  model: string;
-  year: number;
-}
+import { VehicleData } from "./vehicle-type";
 
 interface VehicleState {
-  vehicles: Vehicle[];
+  states: VehicleData[];
+  selectedStates: VehicleData | null;
+  isLoading: boolean;
+  error: string | null;
 }
 
 const initialState: VehicleState = {
-  vehicles: [],
+  states: [],
+  selectedStates: null,
+  isLoading: false,
+  error: null,
 };
 
-const vehicleSlice = createSlice({
-  name: "vehicle",
+const lgaSlice = createSlice({
+  name: "vehicles",
   initialState,
   reducers: {
-    addVehicle: (state, action: PayloadAction<Vehicle>) => {
-      state.vehicles.push(action.payload);
+    vehiclesStart(state) {
+      state.isLoading = true;
+      state.error = null;
     },
-    removeVehicle: (state, action: PayloadAction<string>) => {
-      state.vehicles = state.vehicles.filter((v) => v.id !== action.payload);
+    vehiclesSuccess(state, action: PayloadAction<any[]>) {
+      state.isLoading = false;
+      state.states = action.payload;
+    },
+    vehiclesFail(state, action: PayloadAction<string | null>) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    setSelectedVehicles(state, action: PayloadAction<any>) {
+      state.states = action.payload;
+    },
+    clearVehicles(state) {
+      state.states = [];
     },
   },
 });
 
-export const { addVehicle, removeVehicle } = vehicleSlice.actions;
-export default vehicleSlice.reducer;
+export const {
+  vehiclesStart,
+  vehiclesSuccess,
+  vehiclesFail,
+  setSelectedVehicles,
+  clearVehicles,
+} = lgaSlice.actions;
+
+export default lgaSlice.reducer;

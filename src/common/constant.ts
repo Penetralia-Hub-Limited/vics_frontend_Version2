@@ -81,6 +81,7 @@ export const loginFieldItems = [
   {
     id: "email",
     label: "email",
+    name: "email",
     placeholder: "userexample@gmail.com",
     type: "email",
     htmlfor: "email",
@@ -88,6 +89,7 @@ export const loginFieldItems = [
   {
     id: "password",
     label: "Password",
+    name: "password",
     placeholder: "Enter Password",
     type: "password",
     htmlfor: "password",

@@ -25,10 +25,11 @@ export interface IHotline {
 
 export interface IFieldItems {
   id: string;
-  label: string;
-  placeholder: string;
-  type: string;
   htmlfor: string;
+  label: string;
+  name?: string;
+  type?: string;
+  placeholder?: string;
 }
 
 export interface IVehiceManagement {
@@ -85,3 +86,13 @@ export interface Filters {
   toDate: string;
 }
 
+export interface PaginationProp {
+  total: number;
+  per_page: number;
+  current_page: number;
+  last_page: number;
+  from: number;
+  to: 2;
+  next_page_url: string | null;
+  previous_page_url: string | null;
+}

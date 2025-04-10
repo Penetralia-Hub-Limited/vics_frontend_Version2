@@ -2,6 +2,8 @@ import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import { Toaster } from "@/components/ui/sonner";
+import { StoreProvider } from "./store-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,11 +30,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* You can also add additional meta tags or links here */}
-      </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <StoreProvider>
+          <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+        </StoreProvider>
+        <Toaster />
       </body>
     </html>
   );

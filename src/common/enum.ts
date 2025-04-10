@@ -104,3 +104,9 @@ export enum PlateNumberSubType {
   PRIVATE = "Private",
   PRIVATEDIRECT = "Private (Direct)",
 }
+
+export enum AuthType {
+  LOGIN = "Login",
+  SIGNUP = "Sign Up",
+  FORGOTPASSWORD = "ForgotPassword",
+}

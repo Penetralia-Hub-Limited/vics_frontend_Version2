@@ -14,6 +14,7 @@ const InputWithLabel: FC<InputWithLabelProps> = ({ items, ...rest }) => {
         {items.label}
       </Label>
       <Input
+        autoComplete={items.id}
         id={items.id}
         type={items.type}
         placeholder={items.placeholder}

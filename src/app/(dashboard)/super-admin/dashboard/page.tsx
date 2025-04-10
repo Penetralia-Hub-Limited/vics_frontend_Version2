@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import { DateRange } from "@/common/enum";
 import SummaryCard from "@/components/dashboard/dashboard-summary-card";
 import { DashboardNotificationsComp } from "@/components/dashboard/notification/dashboard-notifications";
+import { useSelector } from "react-redux";
+import { AuthState } from "@/store/auth/auth-user-types";
 
 const summaryItems1 = [
   { title: "Plate Requests", amount: 318 },
@@ -12,6 +14,7 @@ const summaryItems1 = [
 ];
 
 export default function Page() {
+  const { data } = useSelector((state: { auth: AuthState }) => state.auth);
   const currentDate = new Date();
   const formattedDate = format(
     currentDate.toDateString(),
@@ -43,8 +46,10 @@ export default function Page() {
           "pb-8 flex md:flex-row xl:flex-row flex-col md:justify-between items-center gap-8 md:gap-12"
         }
       >
-        <p className={"text-lg md:text-3xl font-bold"}>Welcome, Username</p>
-        <p className={"text-sm text-neutral-700"}>{formattedDate.toString()}</p>
+        <p className={"text-lg md:text-3xl font-bold"}>
+          Welcome, {data?.user?.firstname ?? "User"}
+        </p>
+        <p className={"text-sm text-neutral-700"}>{formattedDate}</p>
       </div>
 
       <div className={"grid grid-cols-1 lg:grid-cols-[2fr_auto] gap-2"}>
