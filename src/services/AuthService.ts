@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "@/utils/axios-instance";
 import axios from "axios";
 import {

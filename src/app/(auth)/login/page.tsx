@@ -17,18 +17,18 @@ export default function Page() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const authService = new AuthService(dispatch);
-  const { isLoading, isLoggedIn, user } = useSelector(
+  const { isLoading, isLoggedIn, data } = useSelector(
     (state: { auth: AuthState }) => state.auth
   );
 
   // navigate to super admin if logged in
   useEffect(() => {
-    if (!(isLoggedIn && user)) return;
-
-    user?.role === Role.SUPERADMIN
-      ? router.push("/super-admin/dashboard")
-      : null;
-  }, [isLoggedIn, user, router]);
+    if (isLoggedIn && data?.user) {
+      if (data.user.role === Role.SUPERADMIN) {
+        router.push("/super-admin/dashboard");
+      }
+    }
+  }, [isLoggedIn, data, router]);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [input, setInput] = useState<LoginCredentials>({

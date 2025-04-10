@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { User, AuthState, LoginResponse } from "@/store/auth/auth-user-types";
 import jwt, { SignOptions } from "jsonwebtoken";
 
 export const authTypes = {
@@ -9,19 +11,19 @@ export const authTypes = {
 export interface initialAuthStateProp {
   isLoading: boolean;
   isLoggedIn: boolean;
-  user: null;
+  data: null;
   error: string | null;
 }
 
 export const initialAuthState: initialAuthStateProp = {
   isLoading: false,
   isLoggedIn: false,
-  user: null,
+  data: null,
   error: null,
 };
 
 interface Payload {
-  [key: string]: any;
+  [key: string]: LoginResponse | User | AuthState;
 }
 
 const tokenSecret = process.env.NEXT_PUBLIC_JWT_SECRET as string;

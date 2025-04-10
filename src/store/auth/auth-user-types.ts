@@ -7,6 +7,13 @@ export interface forgotPasswordCredentials {
   email: string;
 }
 
+export interface Data {
+  accessToken: string;
+  user: User;
+  iat: number;
+  exp: number;
+}
+
 export interface User {
   id: string;
   company_id: string;
@@ -39,7 +46,7 @@ export interface User {
 }
 
 export interface AuthState {
-  user: User | null;
+  data: Data | null;
   isLoading: boolean;
   error: string | null;
   isLoggedIn: boolean;

@@ -14,7 +14,7 @@ const summaryItems1 = [
 ];
 
 export default function Page() {
-  const { user } = useSelector((state: { auth: AuthState }) => state.auth);
+  const { data } = useSelector((state: { auth: AuthState }) => state.auth);
   const currentDate = new Date();
   const formattedDate = format(
     currentDate.toDateString(),
@@ -47,7 +47,7 @@ export default function Page() {
         }
       >
         <p className={"text-lg md:text-3xl font-bold"}>
-          Welcome, {user?.firstname ?? "User"}
+          Welcome, {data?.user?.firstname ?? "User"}
         </p>
         <p className={"text-sm text-neutral-700"}>{formattedDate}</p>
       </div>

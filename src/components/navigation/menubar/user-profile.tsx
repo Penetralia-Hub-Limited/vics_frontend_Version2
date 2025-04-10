@@ -28,13 +28,13 @@ const UserProfile: FC<IUserProfile> = ({
 
   const router = useRouter();
 
-  const { isLoggedIn, user, isLoading } = useSelector(
+  const { isLoggedIn, data, isLoading } = useSelector(
     (state: { auth: AuthState }) => state.auth
   );
 
   useEffect(() => {
-    if (!(isLoggedIn && user)) router.push("/");
-  }, [isLoggedIn, user, router]);
+    if (!(isLoggedIn && data)) router.push("/");
+  }, [isLoggedIn, data, router]);
 
   const handleDropDown = () => {
     setOpenDropDown(!openDropDown);

@@ -16,12 +16,10 @@ const DashboardNavBar: FC<IDashboardNavBar> = ({
   searchQuery,
   setSearchQuery,
 }) => {
-  const { user } = useSelector((state: { auth: AuthState }) => state.auth);
+  const { data } = useSelector((state: { auth: AuthState }) => state.auth);
 
-  console.log("USER ", user);
-
-  const firstInitials = user?.firstname?.charAt(0);
-  const lastInitials = user?.lastname?.charAt(0);
+  const firstInitials = data?.user?.firstname?.charAt(0);
+  const lastInitials = data?.user?.lastname?.charAt(0);
 
   return (
     <div className="flex items-center justify-between gap-4 w-full px-4 py-3 bg-white ">
@@ -48,9 +46,9 @@ const DashboardNavBar: FC<IDashboardNavBar> = ({
       </div>
 
       <UserProfile
-        fullName={user?.firstname ?? "USERNAME"}
-        role={user?.role ?? "Admin"}
-        profileImage={user?.image ?? undefined}
+        fullName={data?.user?.firstname ?? "USERNAME"}
+        role={data?.user?.role ?? "Admin"}
+        profileImage={data?.user?.image ?? undefined}
         initials={`${firstInitials}.${lastInitials}`}
       />
     </div>

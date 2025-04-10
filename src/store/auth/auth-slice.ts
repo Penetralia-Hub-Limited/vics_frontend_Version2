@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { decryptToken, generateToken, initialAuthState } from "@/utils/helpers";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
@@ -30,7 +31,7 @@ const authSlice = createSlice({
       const token = generateToken(action.payload, "1d");
       setCookie("mlToken", token);
       state.isLoading = false;
-      state.user = action.payload;
+      state.data = action.payload;
       state.isLoggedIn = true;
     },
     authFail: (state, action: PayloadAction<string | null>) => {
@@ -39,7 +40,7 @@ const authSlice = createSlice({
     },
     logout: () => {
       deleteCookie("mlToken");
-      return { isLoading: false, isLoggedIn: false, user: null, error: null };
+      return { isLoading: false, isLoggedIn: false, data: null, error: null };
     },
   },
 });
