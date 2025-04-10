@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { decryptToken } from "./helpers";
 import { makeStore } from "@/store/store";
 import { logout } from "@/store/auth/auth-slice";
+import { getCookie, hasCookie } from "cookies-next";
 
 const store = makeStore();
 
@@ -18,7 +19,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
+  async (config) => {
     const apiKey = process.env.NEXT_PUBLIC_AUTH_API_KEY;
     const url = process.env.NEXT_PUBLIC_API_URL as string;
 
@@ -26,8 +27,10 @@ axiosInstance.interceptors.request.use(
       config.headers["x-api-key"] = apiKey;
     }
 
-    const mlToken = localStorage.getItem("mlToken");
-    if (mlToken) {
+    const mlToken = getCookie("mlToken");
+    const isToken = await hasCookie("mlToken");
+
+    if (isToken && typeof mlToken === "string") {
       const parsedToken = decryptToken(mlToken);
       if (parsedToken.success) {
         config.headers.Authorization = `Bearer ${parsedToken.data.token}`;

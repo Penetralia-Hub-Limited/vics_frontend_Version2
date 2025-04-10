@@ -18,8 +18,10 @@ const DashboardNavBar: FC<IDashboardNavBar> = ({
 }) => {
   const { user } = useSelector((state: { auth: AuthState }) => state.auth);
 
-  const firstInitials = user?.firstname.charAt(0);
-  const lastInitials = user?.lastname.charAt(0);
+  console.log("USER ", user);
+
+  const firstInitials = user?.firstname?.charAt(0);
+  const lastInitials = user?.lastname?.charAt(0);
 
   return (
     <div className="flex items-center justify-between gap-4 w-full px-4 py-3 bg-white ">

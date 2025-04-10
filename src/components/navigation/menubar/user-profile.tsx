@@ -1,11 +1,13 @@
 "use client";
 
-import { FC, useState } from "react";
-import { useDispatch, UseDispatch } from "react-redux";
+import { FC, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ArrowDropDown } from "@mui/icons-material";
 import AvatarProfile from "@/components/general/avatar-profile";
 import AuthService from "@/services/AuthService";
 import { AppDispatch } from "@/store/store";
+import { useRouter } from "next/navigation";
+import { AuthState } from "@/store/auth/auth-user-types";
 
 interface IUserProfile {
   fullName: string;
@@ -23,6 +25,16 @@ const UserProfile: FC<IUserProfile> = ({
   const dispatch = useDispatch<AppDispatch>();
   const authService = new AuthService(dispatch);
   const [openDropDown, setOpenDropDown] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  const { isLoggedIn, user, isLoading } = useSelector(
+    (state: { auth: AuthState }) => state.auth
+  );
+
+  useEffect(() => {
+    if (!(isLoggedIn && user)) router.push("/");
+  }, [isLoggedIn, user, router]);
 
   const handleDropDown = () => {
     setOpenDropDown(!openDropDown);
@@ -58,7 +70,9 @@ const UserProfile: FC<IUserProfile> = ({
               }
               onClick={handleLogOut}
             >
-              <p className={"text-xs font-semibold"}>Log Out</p>
+              <p className={"text-xs font-semibold"}>
+                {isLoading ? "Loading..." : "Log Out"}
+              </p>
             </div>
           )}
         </div>
