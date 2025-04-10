@@ -1,3 +1,5 @@
+import { PaginationProp } from "@/common/types";
+
 export interface LGAData {
   id: string;
   state_id: string;
@@ -9,9 +11,8 @@ export interface LGAData {
 export interface LGAResponse {
   status: boolean;
   message: string;
-  data: {
-    user: LGAData;
-  };
+  data: LGAData[];
+  pagination: PaginationProp;
 }
 
 export interface CreateLGAProps {

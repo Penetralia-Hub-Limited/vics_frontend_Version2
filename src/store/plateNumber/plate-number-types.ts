@@ -1,3 +1,5 @@
+import { PaginationProp } from "@/common/types";
+
 export interface PlateNumberData {
   id: string;
   company_id: string;
@@ -22,9 +24,9 @@ export interface PlateNumberData {
 export interface PlateNumberResponse {
   status: boolean;
   message: string;
-  data: {
-    user: PlateNumberData;
-  };
+  data: PlateNumberData[];
+
+  pagination: PaginationProp;
 }
 
 export interface PlateNumberProps {

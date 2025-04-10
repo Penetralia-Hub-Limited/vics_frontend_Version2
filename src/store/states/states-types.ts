@@ -1,3 +1,5 @@
+import { PaginationProp } from "@/common/types";
+
 export interface StatesData {
   id: string;
   name: string;
@@ -9,6 +11,7 @@ export interface StatesResponse {
   status: boolean;
   message: string;
   data: StatesData[];
+  pagination: PaginationProp;
 }
 
 export interface StatesProps {

@@ -7,6 +7,13 @@ import authReducer from "./auth/auth-slice";
 import userReducer from "./user/user-slice";
 import lgaReducer from "./lgas/lga-slice";
 import stateReducer from "./states/state-slice";
+import companiesReducer from "./company/company-slice";
+import vehicleReducer from "./vehicle/vehicle-slice";
+import invoiceReducer from "./invoice/invoice-slice";
+import serviceTypeReducer from "./service-type/service-type-slice";
+import invoiceTypeReducer from "./invoice-type/invoice-type-slice";
+import plateNumberOrderReducer from "./plate-number-orders/plate-number-order-slice";
+import offenceReducer from "./offence/offence-slice";
 
 const persistConfig = {
   key: "root",
@@ -19,8 +26,15 @@ const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   lga: lgaReducer,
-  platenumber: plateNumberReducer,
   states: stateReducer,
+  companies: companiesReducer,
+  vehicles: vehicleReducer,
+  servicetype: serviceTypeReducer,
+  invoices: invoiceReducer,
+  invoicetype: invoiceTypeReducer,
+  platenumber: plateNumberReducer,
+  platenumberorder: plateNumberOrderReducer,
+  offences: offenceReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

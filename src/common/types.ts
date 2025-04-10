@@ -85,3 +85,14 @@ export interface Filters {
   fromDate: string;
   toDate: string;
 }
+
+export interface PaginationProp {
+  total: number;
+  per_page: number;
+  current_page: number;
+  last_page: number;
+  from: number;
+  to: 2;
+  next_page_url: string | null;
+  previous_page_url: string | null;
+}

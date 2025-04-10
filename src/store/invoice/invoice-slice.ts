@@ -1,52 +1,52 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CompanyData } from "./company-types";
+import { InvoiceData } from "./invoice-types";
 
 interface CompanyState {
-  companies: CompanyData[];
-  selectedCompany: any | null;
+  invoices: InvoiceData[];
+  selectedInvoice: any | null;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: CompanyState = {
-  companies: [],
-  selectedCompany: null,
+  invoices: [],
+  selectedInvoice: null,
   isLoading: false,
   error: null,
 };
 
 const companySlice = createSlice({
-  name: "companies",
+  name: "invoices",
   initialState,
   reducers: {
-    companyStart(state) {
+    invoiceStart(state) {
       state.isLoading = true;
       state.error = null;
     },
-    companySuccess(state, action: PayloadAction<any[]>) {
+    invoiceSuccess(state, action: PayloadAction<any[]>) {
       state.isLoading = false;
-      state.companies = action.payload;
+      state.invoices = action.payload;
     },
-    companyFail(state, action: PayloadAction<string | null>) {
+    invoiceFail(state, action: PayloadAction<string | null>) {
       state.isLoading = false;
       state.error = action.payload;
     },
-    setSelectedCompany(state, action: PayloadAction<any>) {
-      state.selectedCompany = action.payload;
+    setSelectedInvoice(state, action: PayloadAction<any>) {
+      state.selectedInvoice = action.payload;
     },
-    clearCompany(state) {
-      state.companies = [];
+    clearInvoice(state) {
+      state.invoices = [];
     },
   },
 });
 
 export const {
-  companyStart,
-  companySuccess,
-  companyFail,
-  setSelectedCompany,
-  clearCompany,
+  invoiceStart,
+  invoiceSuccess,
+  invoiceFail,
+  setSelectedInvoice,
+  clearInvoice,
 } = companySlice.actions;
 
 export default companySlice.reducer;
