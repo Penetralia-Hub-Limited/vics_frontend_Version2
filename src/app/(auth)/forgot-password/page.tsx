@@ -4,7 +4,7 @@ import { useState } from "react";
 import FormLayout from "@/components/auth/form";
 import InputWithLabel from "@/components/auth/input-comp";
 import AuthService from "@/services/AuthService";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 
 export default function Page() {
