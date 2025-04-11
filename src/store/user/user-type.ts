@@ -15,12 +15,12 @@ export interface User {
   othername: string;
   image: string | null;
   nin: string | null;
-  role: string;
+  role: Role;
   email: string;
   gender: string;
   phone: string;
   address: string;
-  status: string;
+  status: UserStatus;
   registeration_type: string;
   state_verification_no: string | null;
   date_of_birth: string | null;

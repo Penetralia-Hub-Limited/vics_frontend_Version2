@@ -25,7 +25,6 @@ export interface PlateNumberResponse {
   status: boolean;
   message: string;
   data: PlateNumberData[];
-
   pagination: PaginationProp;
 }
 

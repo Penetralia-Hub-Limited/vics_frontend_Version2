@@ -20,7 +20,7 @@ export enum Role {
   MLA = "MLA",
   Chairman = "Chairman",
   SMR = "SMR",
-  STOREADMIN = "Store Admin",
+  STOREADMIN = "Store Manager Admin",
 }
 
 export enum UserStatus {
@@ -109,4 +109,13 @@ export enum AuthType {
   LOGIN = "Login",
   SIGNUP = "Sign Up",
   FORGOTPASSWORD = "ForgotPassword",
+}
+
+export enum PlateNumberOrderType {
+  REQUEST = "Request",
+  SALE = "Sale",
+}
+
+export enum PlateStatus {
+  SOLD = "Sold",
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -9,9 +10,10 @@ import DashboardCompSelect from "@/components/dashboard/dashboard-component-sele
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import DashboardTable from "@/components/dashboard/dashboard-table";
-// import CreatePlateNumberRequest from "@/components/dashboard/verification-forms/Create-Plate-Request";
 import Modal from "@/components/general/modal";
+import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
+import { InsuranceStatus, RequestStatus } from "@/common/enum";
 
 import {
   CreatePlateRequestInitialValues,
@@ -19,15 +21,28 @@ import {
 } from "@/components/dashboard/verification-forms/Create-Plate-Request";
 import { CreateNewPlatRequest } from "@/components/dashboard/verification-forms/Create-Plate-Request";
 
+interface TableRow {
+  id: number;
+  trackingid: string;
+  platenumbertype: string;
+  platerequested: string;
+  assignedto: string;
+  soldto: string;
+  date: Date;
+}
+
 const tableColumns = [
-  { key: "id" as const, title: "S/N" },
-  { key: "trackingid" as const, title: "Tracking ID" },
-  { key: "platenumbertype" as const, title: "Plate Number Type" },
-  { key: "platerequested" as const, title: "No. of Plate Requested" },
-  { key: "platerecommended" as const, title: "No. of Plate Recommended" },
-  { key: "numberassigned" as const, title: "No. Assigned" },
-  { key: "date" as const, title: "Date" },
-  { key: "recommendingofficer" as const, title: "Recommending Officer" },
+  { key: "id", title: "S/N" },
+  { key: "trackingid", title: "Tracking ID" },
+  { key: "platenumbertype", title: "Plate Number Type" },
+  { key: "platerequested", title: "No. of Plate Requested" },
+  { key: "platerecommended", title: "No. of Plate Recommended" },
+  { key: "numberassigned", title: "No. Assigned" },
+  { key: "date", title: "Date" },
+  { key: "recommendingofficer", title: "Recommending Officer" },
+  { key: "finalapprovingofficer", title: "Final Approving Officer" },
+  { key: "requeststatus", title: "Request Status" },
+  { key: "insuranceStatus", title: "Insurance Status" },
 ];
 
 const tableData = [
@@ -40,6 +55,9 @@ const tableData = [
     numberassigned: 0,
     date: new Date(),
     recommendingofficer: "Dave E ",
+    finalapprovingofficer: "Ikedi Chuks",
+    requeststatus: RequestStatus.PENDING,
+    insuranceStatus: InsuranceStatus.APPROVED,
   },
   {
     id: 2,
@@ -50,6 +68,9 @@ const tableData = [
     numberassigned: 0,
     date: new Date(),
     recommendingofficer: "Dave E ",
+    finalapprovingofficer: "Ikedi Chuks",
+    requeststatus: RequestStatus.PENDING,
+    insuranceStatus: InsuranceStatus.APPROVED,
   },
   {
     id: 3,
@@ -60,10 +81,14 @@ const tableData = [
     numberassigned: 0,
     date: new Date(),
     recommendingofficer: "Dave E ",
+    finalapprovingofficer: "Ikedi Chuks",
+    requeststatus: RequestStatus.PENDING,
+    insuranceStatus: InsuranceStatus.APPROVED,
   },
 ];
 
 export default function Page() {
+  const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
@@ -84,6 +109,17 @@ export default function Page() {
     currentPage * itemsPerPage
   );
 
+  const getRowActions = (row: unknown): RowAction[] => {
+    const tableRow = row as TableRow;
+    return [
+      {
+        title: "View",
+        action: () =>
+          router.push(`/super-admin/plate-number-request/view-request`),
+      },
+    ];
+  };
+
   return (
     <main className="flex flex-col gap-8 md:gap-12 overflow-hidden">
       <div className="flex flex-col gap-5 md:flex-row justify-between items-center">
@@ -92,7 +128,7 @@ export default function Page() {
             {
               label: "Dashboard",
               Icon: DashboardSVG,
-              link: "/store-manager-admin/dashboard",
+              link: "/super-admin/dashboard",
             },
             {
               label: "Plate Number Request",
@@ -108,7 +144,16 @@ export default function Page() {
             <CreateNewPlatRequest input={modalInput} setInput={setModalInput} />
           }
           btnText={"Create New Request"}
-          footerBtn={<Button type="submit">submit</Button>}
+          footerBtn={
+            <Button
+              onClick={() =>
+                router.push(`/super-admin/plate-number-request/view-request`)
+              }
+              type="submit"
+            >
+              submit
+            </Button>
+          }
         />
       </div>
 
@@ -185,7 +230,11 @@ export default function Page() {
 
       <div className="flex flex-col gap-3 border-1 border-neutral-300 rounded-lg">
         <div className="border-t-1 border-neutral-300 rounded-lg overflow-hidden">
-          <DashboardTable headers={tableColumns} data={paginatedData} />
+          <DataTableWButton
+            headers={tableColumns}
+            data={paginatedData}
+            rowActions={getRowActions}
+          />
         </div>
         <div className="p-5 ml-auto">
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
