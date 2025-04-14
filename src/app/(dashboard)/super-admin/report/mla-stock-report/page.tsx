@@ -193,7 +193,7 @@ export default function Page() {
       </CardContainer>
 
       {/* Table Section */}
-      <div className="flex flex-col gap-3 border border-neutral-300 rounded-lg">
+      <div className="flex flex-col gap-3 border border-primary-300 rounded-lg">
         <div className={"p-3"}>
           <p className={"text-sm"}>
             Total Number of MLAs:{" "}

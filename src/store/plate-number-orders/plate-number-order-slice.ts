@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PlateNumberOrderData } from "./plate-number-order-types";
+// import { PaginationProp } from "@/common/types";
 
 interface PlateNumberState {
   plateNumberOrder: PlateNumberOrderData[];
   selectedPlateNumberOrder: any | null;
   isLoading: boolean;
   error: string | null;
+  pagination: any | null;
 }
 
 const initialState: PlateNumberState = {
@@ -14,6 +16,7 @@ const initialState: PlateNumberState = {
   selectedPlateNumberOrder: null,
   isLoading: false,
   error: null,
+  pagination: null,
 };
 
 const plateNumberOrderSlice = createSlice({
@@ -27,6 +30,7 @@ const plateNumberOrderSlice = createSlice({
     plateNumberOrderSuccess(state, action: PayloadAction<any[]>) {
       state.isLoading = false;
       state.plateNumberOrder = action.payload;
+      state.pagination = action.payload;
     },
     plateNumberOrderFail(state, action: PayloadAction<string | null>) {
       state.isLoading = false;

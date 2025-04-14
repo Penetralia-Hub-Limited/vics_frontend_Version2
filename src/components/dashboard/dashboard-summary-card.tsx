@@ -21,9 +21,9 @@ const SummaryCard: FC<ISummaryCard> = ({
   setSelectedRange,
 }) => {
   return (
-    <div className="w-full flex flex-col gap-4 border border-neutral-200 rounded-lg p-5">
+    <div className="w-full flex flex-col gap-4 border border-primary-300 rounded-lg p-5">
       <div className="flex flex-row justify-between items-center">
-        <div className="w-fit border border-neutral-200 rounded-lg p-2">
+        <div className="w-fit border border-primary-200 rounded-lg p-2">
           <BarChartIcon />
         </div>
         <div className={"ml-auto"}>

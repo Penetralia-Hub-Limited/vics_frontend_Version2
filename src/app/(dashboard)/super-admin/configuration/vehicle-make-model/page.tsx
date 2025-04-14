@@ -11,75 +11,40 @@ import CardContainer from "@/components/general/card-container";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
-  { key: "steps", title: "Steps" },
-  { key: "type", title: "Type" },
-  { key: "approvingofficer", title: "Approving Officer" },
-  { key: "superapprover", title: "Super Approver" },
-  { key: "finalstage", title: "Final Stage" },
-  { key: "createdBy", title: "Created By" },
-  { key: "date", title: "Date Created" },
+  { key: "make", title: "Vehicle Make" },
+  { key: "model", title: "Vehicle Model" },
 ];
 
 const tableData = [
   {
     id: 1,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
+    make: "Mercedez-Benz",
+    model: "Mercedex-E400",
   },
   {
     id: 2,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
+    make: "Toyota",
+    model: "Avensis",
   },
   {
     id: 3,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
+    make: "Mercedez-Benz",
+    model: "Mercedex-E400",
   },
   {
     id: 4,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
+    make: "Toyota",
+    model: "Avensis",
   },
   {
     id: 5,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
+    make: "Mercedez-Benz",
+    model: "Mercedex-E400",
   },
   {
     id: 6,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
+    make: "Toyota",
+    model: "Avensis",
   },
 ];
 
@@ -173,10 +138,10 @@ export default function Page() {
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
           <DataTableWButton
             headers={tableColumns}

@@ -13,8 +13,6 @@ export const IsAuth: FC<IsAuthProps> = ({ children }) => {
   const router = useRouter();
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
 
-  console.log("is Logged in ", isLoggedIn);
-
   useEffect(() => {
     if (!isLoggedIn) {
       router.push("/login");

@@ -39,7 +39,7 @@ const manageUserData = [
   },
   {
     id: 2,
-    name: "Lola K",
+    name: "Ikedi K",
     phonenumber: "Private (Direct)",
     email: "user@example@example.com",
     role: Role.STOREADMIN,
@@ -48,7 +48,7 @@ const manageUserData = [
   },
   {
     id: 3,
-    name: "Lola K",
+    name: "John Rasheed",
     phonenumber: "Private (Direct)",
     email: "user@example@example.com",
     role: Role.STOREADMIN,
@@ -57,7 +57,7 @@ const manageUserData = [
   },
   {
     id: 4,
-    name: "Lola K",
+    name: "Habiba Ishaya",
     phonenumber: "Private (Direct)",
     email: "user@example@example.com",
     role: Role.STOREADMIN,
@@ -66,7 +66,7 @@ const manageUserData = [
   },
   {
     id: 5,
-    name: "Lola K",
+    name: "Usman Danfoldio",
     phonenumber: "Private (Direct)",
     email: "user@example@example.com",
     role: Role.SMR,
@@ -75,7 +75,7 @@ const manageUserData = [
   },
   {
     id: 6,
-    name: "Lola K",
+    name: "Daniel Print",
     phonenumber: "Private (Direct)",
     email: "user@example@example.com",
     role: Role.STOREADMIN,
@@ -256,7 +256,7 @@ export default function Page() {
         </div>
       </CardContainer>
 
-      <div className="flex flex-col gap-3 border border-neutral-300 rounded-lg overflow-hidden">
+      <div className="flex flex-col gap-3 border border-primary-300 rounded-lg overflow-hidden">
         <DataTableWButton
           headers={manageUserHeader}
           data={paginatedData}

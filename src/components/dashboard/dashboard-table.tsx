@@ -89,55 +89,56 @@ const DashboardTable: FC<IDashboardTable> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.slice(0, itemsPerPage).map((row, rowIndex) => (
-          <TableRow key={rowIndex}>
-            {headers.map((header, colIndex) => {
-              const cellValue = row[header.key];
+        {data &&
+          data?.slice(0, itemsPerPage).map((row, rowIndex) => (
+            <TableRow key={rowIndex}>
+              {headers.map((header, colIndex) => {
+                const cellValue = row[header.key];
 
-              return (
-                <TableCell key={colIndex} className="text-xs text-center">
-                  {/* Date Formatting */}
-                  {cellValue instanceof Date ? (
-                    <div className="flex flex-col gap-1">
-                      <p>{format(cellValue.toDateString(), "LLL. d yyyy")}</p>
-                      <p className="font-light">
-                        {format(cellValue.toDateString(), "hh:mm:ss a")}
-                      </p>
-                    </div>
-                  ) : isPaymentStatus(cellValue) ||
-                    isPlateNumberStatus(cellValue) ||
-                    isUserRole(cellValue) ||
-                    isUserStatus(cellValue) ||
-                    isApprovalStatus(cellValue) ||
-                    isCardStatus(cellValue) ? (
-                    <span
-                      className={cn(
-                        "capitalize px-4 py-1 rounded-full",
-                        (cellValue === PaymentStatus.PAID ||
-                          cellValue === PlateNumberStatus.ASSIGNED ||
-                          cellValue === UserStatus.ACTIVE ||
-                          cellValue === ApprovalStatus.APPROVED) &&
-                          "bg-success-100 text-success-500",
-                        (cellValue === PaymentStatus.NOTPAID ||
-                          cellValue === PlateNumberStatus.UNASSIGNED ||
-                          cellValue === UserStatus.DEACTIVATED ||
-                          cellValue === ApprovalStatus.NOTAPPROVED) &&
-                          "bg-failed text-danger",
-                        cellValue === CardStatus.PENDING &&
-                          "text-pending-500 bg-pending-100",
-                        isUserRole(cellValue) && "bg-role text-white"
-                      )}
-                    >
-                      {cellValue}
-                    </span>
-                  ) : (
-                    (cellValue?.toString() ?? "--")
-                  )}
-                </TableCell>
-              );
-            })}
-          </TableRow>
-        ))}
+                return (
+                  <TableCell key={colIndex} className="text-xs text-center">
+                    {/* Date Formatting */}
+                    {cellValue instanceof Date ? (
+                      <div className="flex flex-col gap-1">
+                        <p>{format(cellValue.toDateString(), "LLL. d yyyy")}</p>
+                        <p className="font-light">
+                          {format(cellValue.toDateString(), "hh:mm:ss a")}
+                        </p>
+                      </div>
+                    ) : isPaymentStatus(cellValue) ||
+                      isPlateNumberStatus(cellValue) ||
+                      isUserRole(cellValue) ||
+                      isUserStatus(cellValue) ||
+                      isApprovalStatus(cellValue) ||
+                      isCardStatus(cellValue) ? (
+                      <span
+                        className={cn(
+                          "capitalize px-4 py-1 rounded-full",
+                          (cellValue === PaymentStatus.PAID ||
+                            cellValue === PlateNumberStatus.ASSIGNED ||
+                            cellValue === UserStatus.ACTIVE ||
+                            cellValue === ApprovalStatus.APPROVED) &&
+                            "bg-success-100 text-primary-800",
+                          (cellValue === PaymentStatus.NOTPAID ||
+                            cellValue === PlateNumberStatus.UNASSIGNED ||
+                            cellValue === UserStatus.DEACTIVATED ||
+                            cellValue === ApprovalStatus.NOTAPPROVED) &&
+                            "bg-failed text-red-800",
+                          cellValue === CardStatus.PENDING &&
+                            "text-pending-500 bg-pending-100",
+                          isUserRole(cellValue) && "bg-role text-white"
+                        )}
+                      >
+                        {cellValue}
+                      </span>
+                    ) : (
+                      (cellValue?.toString() ?? "--")
+                    )}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );

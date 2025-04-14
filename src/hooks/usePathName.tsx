@@ -60,6 +60,7 @@ const useGetPathName = (identifier: string) => {
       vehiclepreview: "Vehicle Dashboard",
       addnewvehicle: "Vehicle Dashboard",
       platenumberrequest: "Plate Number Request",
+      viewrequest: "Plate Number Request",
       stockmanagement: "Stock Management",
       manageservices: "Configuration Dashboard",
       manageworkflow: "Configuration Dashboard",

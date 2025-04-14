@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { StoreProvider } from "@/app/store-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
@@ -9,14 +9,30 @@ import useGetPathName from "@/hooks/usePathName";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import Loading from "../loading";
 import { IsAuth } from "@/components/general/is-auth";
+import { useDispatch } from "react-redux";
+import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
+import { InvoiceService } from "@/services/InvoiceService";
 
 export default function SuperAdminDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const dispatch = useDispatch();
   const { getPathName } = useGetPathName("superAdmin");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  // trigger services
+  const plateNumberOrderService = new PlateNumberOrderService(dispatch);
+  const invoiceService = new InvoiceService(dispatch);
+
+  // trigger get plate number call
+  useEffect(() => {
+    (async () => {
+      await plateNumberOrderService.getAllPlateNumberOrders();
+      await invoiceService.getAllInvoices();
+    })();
+  }, []);
 
   return (
     <IsAuth>

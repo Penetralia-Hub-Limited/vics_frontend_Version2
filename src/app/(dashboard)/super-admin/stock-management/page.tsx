@@ -184,8 +184,8 @@ export default function Page() {
         </div>
       </CardContainer>
 
-      <div className="flex flex-col gap-3 border border-neutral-300 rounded-lg">
-        <div className="border-t border-neutral-300 rounded-lg">
+      <div className="flex flex-col gap-3 border border-primary-300 rounded-lg">
+        <div className="border-t border-primary-300 rounded-lg">
           <DataTableWButton
             headers={tableColumns}
             data={paginatedData}

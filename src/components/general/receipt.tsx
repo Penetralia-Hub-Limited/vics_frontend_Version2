@@ -167,12 +167,12 @@ export const Receipt: FC<ReceiptProps> = ({ icon, state, data }) => {
             </div>
 
             <CardContainer>
-              <InformationCardX title={"Buyer's Information"} data={cardData} />
+              <InformationCardX title={"Buyer Information"} data={cardData} />
             </CardContainer>
 
             <CardContainer>
               <InformationCardX
-                title={"Vehicle's Information"}
+                title={"Vehicle Information"}
                 data={vehicleData}
               />
             </CardContainer>

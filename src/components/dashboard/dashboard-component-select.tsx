@@ -31,7 +31,7 @@ const DashboardCompSelect: FC<IDashboardCompSelect> = ({
       <Select value={selected} onValueChange={onSelect}>
         <SelectTrigger
           className={
-            "w-full border-1 border-neutral-500 rounded-lg text-neutral-800 capitalize"
+            "w-full border-1 border-primary-500 rounded-lg text-neutral-800 capitalize"
           }
         >
           <SelectValue className={"capitalize"} placeholder={placeholder} />

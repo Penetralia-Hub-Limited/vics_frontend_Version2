@@ -125,7 +125,7 @@ const termsData = [
     terms: "Payment must be made using the invoice number.",
   },
   {
-    terms: "This invoice is valida for 30 days of the invoice date.",
+    terms: "This invoice is valid for 30 days of the invoice date.",
   },
   {
     terms:
@@ -186,12 +186,12 @@ export const Invoice: FC<InvoiceProps> = ({ icon, state, data }) => {
             </div>
 
             <CardContainer>
-              <InformationCardX title={"Buyer's Information"} data={cardData} />
+              <InformationCardX title={"Buyer Information"} data={cardData} />
             </CardContainer>
 
             <CardContainer>
               <InformationCardX
-                title={"Vehicle's Information"}
+                title={"Vehicle Information"}
                 data={vehicleData}
               />
             </CardContainer>

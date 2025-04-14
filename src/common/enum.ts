@@ -19,7 +19,7 @@ export enum Role {
   SUPERADMIN = "Super Admin",
   MLA = "MLA",
   Chairman = "Chairman",
-  SMR = "SMR",
+  SMR = "Store Manager Rep",
   STOREADMIN = "Store Manager Admin",
 }
 

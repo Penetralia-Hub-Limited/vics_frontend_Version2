@@ -29,7 +29,6 @@ axiosInstance.interceptors.request.use(
 
     if (mlToken && typeof mlToken === "string") {
       const parsedToken = decryptToken(mlToken);
-      console.log("Parsed Token:", parsedToken);
       if (parsedToken.success) {
         config.headers.Authorization = `Bearer ${parsedToken.data.accessToken}`;
       }

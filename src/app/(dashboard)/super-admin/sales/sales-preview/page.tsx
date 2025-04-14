@@ -1,8 +1,13 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { DashboardSVG, SalesSVG } from "@/common/svgs";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { InformationCard } from "@/components/general/information-card";
 import { AmountDisplay } from "@/components/general/display-amount";
+import SuccessModal from "@/components/general/success-response";
+import { Button } from "@/components/ui/button";
 
 const salesData = [
   {
@@ -56,6 +61,7 @@ const tableData = [
 ];
 
 export default function Page() {
+  const router = useRouter();
   return (
     <main className={"flex flex-col gap-8 md:gap-12"}>
       <DashboardPath
@@ -84,16 +90,27 @@ export default function Page() {
       </div>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
           <DashboardTable headers={tableHeaders} data={tableData} />
         </div>
-        <div className={"w-full border-t-1 border-neutral-300"}>
+        <div className={"w-full border-t-1 border-primary-300"}>
           <AmountDisplay amount={34230} />
         </div>
+      </div>
+
+      <div className="flex flex-row gap-4 ml-auto">
+        <Button variant={"outline"}>Back</Button>
+        <SuccessModal
+          title={"Success"}
+          content={<p>Invoice Issued Successfully</p>}
+          btnText={"Proceed"}
+          trigger={() => router.push("/super-admin/invoice/1222")}
+          footerBtnText={"Print Invoice"}
+        />
       </div>
     </main>
   );

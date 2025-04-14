@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -13,6 +14,7 @@ import { PaymentStatus } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
+import { VerifyPhoneNumber } from "@/components/dashboard/verification-forms/verify-phone-number";
 
 interface TableRow {
   id: number;
@@ -74,10 +76,12 @@ const tableData = [
 ];
 
 export default function Page() {
+  const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
+  const [verifyPhoneNumber, setVerifyPhoneNumber] = useState<string>("");
   const [inputValues, setInputValues] = useState<{
     plateNumber: string;
     paymentStatus: string;
@@ -99,7 +103,7 @@ export default function Page() {
     return [
       {
         title: "View Details",
-        action: () => console.log("Viewing details for:", tableRow),
+        action: () => router.push("/super-admin/sales/sales-preview"),
       },
       {
         title: "Print Receipt",
@@ -132,9 +136,21 @@ export default function Page() {
 
         <Modal
           title={"New Plate Sales"}
-          content={<></>}
+          content={
+            <VerifyPhoneNumber
+              phoneNumber={verifyPhoneNumber}
+              setPhoneNumber={setVerifyPhoneNumber}
+            />
+          }
           btnText={"New Sales"}
-          footerBtn={<Button type="submit">Validate Phone Number</Button>}
+          footerBtn={
+            <Button
+              onClick={() => router.push("/super-admin/sales/new-plate-sales")}
+              type="submit"
+            >
+              Validate Plate Number
+            </Button>
+          }
         />
       </div>
 
@@ -201,10 +217,10 @@ export default function Page() {
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
           <DataTableWButton
             headers={tableColumns}

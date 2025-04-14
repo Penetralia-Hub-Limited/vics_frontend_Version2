@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, SetStateAction } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { format } from "date-fns";
 import { DateRange } from "@/common/enum";
 import SummaryCard from "@/components/dashboard/dashboard-summary-card";
 import { DashboardNotificationsComp } from "@/components/dashboard/notification/dashboard-notifications";
 import { useSelector } from "react-redux";
 import { AuthState } from "@/store/auth/auth-user-types";
+import { RootState } from "@/store/store";
 
 const summaryItems1 = [
   { title: "Plate Requests", amount: 318 },
@@ -15,11 +16,23 @@ const summaryItems1 = [
 
 export default function Page() {
   const { data } = useSelector((state: { auth: AuthState }) => state.auth);
+  const { plateNumberOrder } = useSelector(
+    (state: RootState) => state.platenumberorder
+  );
+  const { invoices } = useSelector((state: RootState) => state.invoices);
   const currentDate = new Date();
   const formattedDate = format(
     currentDate.toDateString(),
     "LLL. d yyyy ; h:maaa"
   );
+
+  const invoice_id =
+    plateNumberOrder && plateNumberOrder.map((item) => item.invoice_id);
+  const invoice_with_platenumber =
+    invoices && invoices.filter((item) => invoice_id.includes(item.id));
+
+  console.log("INVOICES ", invoices);
+  console.log("PLATE NUMBER ORDER ", plateNumberOrder);
 
   const [selectedRanges1, setSelectedRanges1] = useState<
     Record<string, DateRange>

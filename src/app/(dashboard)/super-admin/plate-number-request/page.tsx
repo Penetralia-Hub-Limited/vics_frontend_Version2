@@ -13,35 +13,27 @@ import InputWithLabel from "@/components/auth/input-comp";
 import Modal from "@/components/general/modal";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
-import { InsuranceStatus, RequestStatus } from "@/common/enum";
+import { InsuranceStatus, RequestStatus, PlateNumberType } from "@/common/enum";
 
 import {
   CreatePlateRequestInitialValues,
   CreatePlateRequestProps,
 } from "@/components/dashboard/verification-forms/Create-Plate-Request";
 import { CreateNewPlatRequest } from "@/components/dashboard/verification-forms/Create-Plate-Request";
-
-interface TableRow {
-  id: number;
-  trackingid: string;
-  platenumbertype: string;
-  platerequested: string;
-  assignedto: string;
-  soldto: string;
-  date: Date;
-}
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "trackingid", title: "Tracking ID" },
-  { key: "platenumbertype", title: "Plate Number Type" },
-  { key: "platerequested", title: "No. of Plate Requested" },
+  { key: "sid", title: "S/N" },
+  { key: "tracking_id", title: "Tracking ID" },
+  { key: "plate_number_type", title: "Plate Number Type" },
+  { key: "total_number_requested", title: "No. of Plate Requested" },
   { key: "platerecommended", title: "No. of Plate Recommended" },
   { key: "numberassigned", title: "No. Assigned" },
-  { key: "date", title: "Date" },
+  { key: "updated_at", title: "Date" },
   { key: "recommendingofficer", title: "Recommending Officer" },
   { key: "finalapprovingofficer", title: "Final Approving Officer" },
-  { key: "requeststatus", title: "Request Status" },
+  { key: "status", title: "Request Status" },
   { key: "insuranceStatus", title: "Insurance Status" },
 ];
 
@@ -103,14 +95,27 @@ export default function Page() {
     CreatePlateRequestInitialValues
   );
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const { plateNumberOrder } = useSelector(
+    (state: RootState) => state.platenumberorder
+  );
+
+  console.log("PLATE NUMBER ORDER ", plateNumberOrder);
+
+  const updatedPlateNumberOrder = plateNumberOrder.map((item, index) => {
+    return {
+      sid: index + 1,
+      ...item,
+    };
+  });
+
+  const totalPages = Math.ceil(plateNumberOrder.length / itemsPerPage);
+  const paginatedData = updatedPlateNumberOrder.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   const getRowActions = (row: unknown): RowAction[] => {
-    const tableRow = row as TableRow;
+    // const tableRow = row as TableRow;
     return [
       {
         title: "View",
@@ -179,7 +184,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
-            items={["private", "commercial"]}
+            items={[...Object.values(PlateNumberType)]}
             selected={inputValues.plateNumberType}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -192,7 +197,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Insurance Status"}
             placeholder={"-- Select status --"}
-            items={["lagos", "abuja"]}
+            items={[...Object.values(InsuranceStatus)]}
             selected={inputValues.insuranceStatus}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -207,7 +212,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Request Status"}
             placeholder={"-- Select status --"}
-            items={["lagos", "abuja"]}
+            items={[...Object.values(RequestStatus)]}
             selected={inputValues.requestStatus}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -228,11 +233,11 @@ export default function Page() {
         </div>
       </CardContainer>
 
-      <div className="flex flex-col gap-3 border-1 border-neutral-300 rounded-lg">
-        <div className="border-t-1 border-neutral-300 rounded-lg overflow-hidden">
+      <div className="flex flex-col gap-3 border-1 border-primary-300 rounded-lg">
+        <div className="border-t-1 border-primary-300 rounded-lg overflow-hidden">
           <DataTableWButton
             headers={tableColumns}
-            data={paginatedData}
+            data={paginatedData ?? tableData}
             rowActions={getRowActions}
           />
         </div>

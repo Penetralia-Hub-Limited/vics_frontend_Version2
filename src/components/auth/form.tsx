@@ -17,7 +17,7 @@ const FormLayout: FC<IForm> = ({
   isLoading,
 }) => {
   return (
-    <div className="bg-white rounded-lg py-10 px-5 md:px-12 w-[80%] md:w-[50%]">
+    <div className="bg-white rounded-lg py-10 px-5 md:px-12 w-[80%] md:w-[50%] border-[15px] border-primary-500">
       <div className="flex flex-col gap-3 w-full items-center justify-center">
         <p className="text-lg font-bold">{title}</p>
         <p>{description}</p>
