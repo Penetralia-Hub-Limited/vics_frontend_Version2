@@ -7,6 +7,7 @@ import {
   plateNumberOrderSuccess,
   plateNumberOrderFail,
   setSelectedPlateNumberOrder,
+  addPlateNumberOrder,
 } from "@/store/plate-number-orders/plate-number-order-slice";
 import { CreatePlateNumberOrderProps } from "@/store/plate-number-orders/plate-number-order-types";
 
@@ -116,7 +117,7 @@ export class PlateNumberOrderService {
         `${PlateNumberOrderService.url}`,
         payload
       );
-      this.dispatch(plateNumberOrderSuccess(res.data.data));
+      this.dispatch(addPlateNumberOrder(res.data.data));
       return res.data;
     } catch (error: any) {
       this.dispatch(

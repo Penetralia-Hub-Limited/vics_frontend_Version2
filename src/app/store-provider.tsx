@@ -12,7 +12,7 @@ const persistor = persistStore(store);
 export function StoreProvider({ children }: { children: ReactNode }) {
   return (
     <Provider store={store}>
-      <PersistGate loading={<Loading />} persistor={persistor}>
+      <PersistGate loading={<Loading screen={"main"} />} persistor={persistor}>
         {children}
       </PersistGate>
     </Provider>

@@ -23,31 +23,31 @@ import {
   UserStatus,
   ApprovalStatus,
   CardStatus,
+  PlateStatus,
 } from "@/common/enum";
 import CircularProgress from "@mui/material/CircularProgress";
-// import { PlateNumberOrderData } from "@/store/plate-number-orders/plate-number-order-types";
+import Loading from "@/app/(dashboard)/loading";
 
 interface TableHeader {
   title: string;
   key: string;
 }
 
-// export interface TableData {
-//   [key: string]:
-//     | null
-//     | undefined
-//     | string
-//     | number
-//     | Date
-//     | PaymentStatus
-//     | PlateNumberStatus
-//     | Role
-//     | UserStatus
-//     | ApprovalStatus
-//     | CardStatus;
-// }
 export interface TableData {
-  [key: string]: any;
+  [key: string]:
+    | null
+    | undefined
+    | string
+    | number
+    | Date
+    | PaymentStatus
+    | PlateNumberStatus
+    | Role
+    | UserStatus
+    | ApprovalStatus
+    | CardStatus
+    | PlateStatus
+    | object;
 }
 
 export interface RowAction {
@@ -89,6 +89,10 @@ const isCardStatus = (value: unknown): value is CardStatus => {
   return Object.values(CardStatus).includes(value as CardStatus);
 };
 
+const isPlateStatus = (value: unknown): value is PlateStatus => {
+  return Object.values(PlateStatus).includes(value as PlateStatus);
+};
+
 export function DataTableWButton({
   headers,
   data,
@@ -111,9 +115,17 @@ export function DataTableWButton({
           <TableHead className="text-center text-xs w-[100px]">{""}</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {data &&
-          data?.slice(0, itemsPerPage).map((row, rowIndex) => (
+      {data.length === 0 ? (
+        <TableBody>
+          <TableRow className="flex items-center justify-center">
+            <TableCell>
+              <Loading screen="default" size={30} />
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      ) : (
+        <TableBody>
+          {data?.slice(0, itemsPerPage).map((row, rowIndex) => (
             <TableRow key={rowIndex}>
               {headers.map((header, colIndex) => {
                 const cellValue = row[header.key];
@@ -135,7 +147,8 @@ export function DataTableWButton({
                       isUserRole(cellValue) ||
                       isUserStatus(cellValue) ||
                       isApprovalStatus(cellValue) ||
-                      isCardStatus(cellValue) ? (
+                      isCardStatus(cellValue) ||
+                      isPlateStatus(cellValue) ? (
                       <span
                         className={cn(
                           "capitalize px-4 py-1 rounded-full",
@@ -149,8 +162,9 @@ export function DataTableWButton({
                             cellValue === UserStatus.DEACTIVATED ||
                             cellValue === ApprovalStatus.NOTAPPROVED) &&
                             "bg-failed text-red-800",
-                          cellValue === CardStatus.PENDING &&
-                            "text-pending-500 bg-pending-100",
+                          (cellValue === PlateStatus.SOLD ||
+                            cellValue === CardStatus.PENDING) &&
+                            "text-pending-800 bg-pending-100",
                           isUserRole(cellValue) && "bg-role text-white"
                         )}
                       >
@@ -195,7 +209,8 @@ export function DataTableWButton({
               </TableCell>
             </TableRow>
           ))}
-      </TableBody>
+        </TableBody>
+      )}
     </Table>
   );
 }

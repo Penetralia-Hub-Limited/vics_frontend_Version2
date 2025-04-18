@@ -16,7 +16,10 @@ import {
   UserStatus,
   ApprovalStatus,
   CardStatus,
+  PlateStatus,
+  RequestStatus,
 } from "@/common/enum";
+import Loading from "@/app/(dashboard)/loading";
 
 interface TableHeader {
   title: string;
@@ -35,7 +38,9 @@ interface TableData {
     | Role
     | UserStatus
     | ApprovalStatus
-    | CardStatus;
+    | CardStatus
+    | PlateStatus
+    | object;
 }
 
 interface IDashboardTable {
@@ -69,6 +74,14 @@ const isCardStatus = (value: unknown): value is CardStatus => {
   return Object.values(CardStatus).includes(value as CardStatus);
 };
 
+const isPlateStatus = (value: unknown): value is PlateStatus => {
+  return Object.values(PlateStatus).includes(value as PlateStatus);
+};
+
+const isRequestStatus = (value: unknown): value is RequestStatus => {
+  return Object.values(RequestStatus).includes(value as RequestStatus);
+};
+
 const DashboardTable: FC<IDashboardTable> = ({
   headers,
   data,
@@ -88,9 +101,17 @@ const DashboardTable: FC<IDashboardTable> = ({
           ))}
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {data &&
-          data?.slice(0, itemsPerPage).map((row, rowIndex) => (
+      {data.length === 0 ? (
+        <TableBody>
+          <TableRow className="flex items-center justify-center">
+            <TableCell>
+              <Loading screen="default" size={30} />
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      ) : (
+        <TableBody>
+          {data?.slice(0, itemsPerPage).map((row, rowIndex) => (
             <TableRow key={rowIndex}>
               {headers.map((header, colIndex) => {
                 const cellValue = row[header.key];
@@ -110,7 +131,9 @@ const DashboardTable: FC<IDashboardTable> = ({
                       isUserRole(cellValue) ||
                       isUserStatus(cellValue) ||
                       isApprovalStatus(cellValue) ||
-                      isCardStatus(cellValue) ? (
+                      isCardStatus(cellValue) ||
+                      isPlateStatus(cellValue) ||
+                      isRequestStatus(cellValue) ? (
                       <span
                         className={cn(
                           "capitalize px-4 py-1 rounded-full",
@@ -124,8 +147,9 @@ const DashboardTable: FC<IDashboardTable> = ({
                             cellValue === UserStatus.DEACTIVATED ||
                             cellValue === ApprovalStatus.NOTAPPROVED) &&
                             "bg-failed text-red-800",
-                          cellValue === CardStatus.PENDING &&
-                            "text-pending-500 bg-pending-100",
+                          (cellValue === PlateStatus.SOLD ||
+                            cellValue === CardStatus.PENDING) &&
+                            "text-pending-800 bg-pending-100",
                           isUserRole(cellValue) && "bg-role text-white"
                         )}
                       >
@@ -139,7 +163,8 @@ const DashboardTable: FC<IDashboardTable> = ({
               })}
             </TableRow>
           ))}
-      </TableBody>
+        </TableBody>
+      )}
     </Table>
   );
 };

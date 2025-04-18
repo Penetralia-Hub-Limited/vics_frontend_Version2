@@ -14,7 +14,7 @@ export type InvoiceData = {
   amount: number;
   invoice_number: string;
   payment_reference: string;
-  payment_status: string;
+  payment_status: string; // come back to this
   sent_to_tax: boolean;
   vio_approved: boolean;
   edit_copy: boolean;

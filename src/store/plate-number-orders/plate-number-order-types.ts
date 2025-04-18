@@ -1,15 +1,23 @@
 import { PaginationProp } from "@/common/types";
+import { InvoiceData } from "../invoice/invoice-types";
+import { VehicleData } from "../vehicle/vehicle-type";
+import { StatesData } from "../states/states-types";
+import { User } from "../user/user-type";
+import { CompanyData } from "../company/company-types";
+import { PlateNumberOrderType } from "@/common/enum";
 
 export interface PlateNumberOrderData {
   id: string;
   company_id: string;
   creator_id: string;
-  last_updated_id?: string | null;
-  deactivated_by_id?: string | null;
+  last_updated_id: string | null;
+  deactivated_by_id: string | null;
   state_id: string;
   invoice_id: string;
   vehicle_id: string;
-  type: string; // "Request";
+  approver_id: string;
+  recommender_id: string;
+  type: PlateNumberOrderType;
   status: string;
   assignment_status: string;
   fancy_plate: string;
@@ -22,12 +30,22 @@ export interface PlateNumberOrderData {
   plate_number_sub_type: string;
   workflow_id: string;
   reference_number: string;
+  insurance_status: string;
   steps_completed: number;
   total_steps: number;
-  date_deactivated?: string | null;
+  date_deactivated: string | null;
+  company: CompanyData;
+  state: StatesData;
+  creator: User;
+  approver: User | null; // Change if available
+  recommender: User | null; // Change if available
+  last_updated_by: User | null;
+  deactivated_by: User | null;
+  invoice: InvoiceData;
+  vehicle: VehicleData;
   created_at: string;
   updated_at: string;
-  deleted_at?: string | null;
+  deleted_at: string | null;
 }
 
 export interface PlateNumberOrderResponse {
@@ -39,9 +57,9 @@ export interface PlateNumberOrderResponse {
 
 export interface CreatePlateNumberOrderProps {
   invoice_id?: string | null;
-  state_id: string;
+  state_id?: string | null;
   vehicle_id?: string | null;
-  type?: string; //"Request" | "Sale";
+  type?: PlateNumberOrderType; //"Request" | "Sale";
   status?: string;
   assignment_status?: string;
   fancy_plate?: string;
@@ -55,5 +73,5 @@ export interface CreatePlateNumberOrderProps {
   workflow_id?: string | null;
   reference_number?: string | null;
   steps_completed?: number | null;
-  total_steps: number;
+  total_steps?: number;
 }

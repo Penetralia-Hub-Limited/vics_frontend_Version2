@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Button } from "../ui/button";
+import Loading from "@/app/(dashboard)/loading";
 
 interface IForm {
   title: string;
@@ -7,6 +8,7 @@ interface IForm {
   children: ReactNode;
   onSubmit: () => void;
   isLoading: boolean;
+  isSuccess: boolean;
 }
 
 const FormLayout: FC<IForm> = ({
@@ -15,6 +17,7 @@ const FormLayout: FC<IForm> = ({
   children,
   onSubmit,
   isLoading,
+  isSuccess,
 }) => {
   return (
     <div className="bg-white rounded-lg py-10 px-5 md:px-12 w-[80%] md:w-[50%] border-[15px] border-primary-500">
@@ -33,7 +36,13 @@ const FormLayout: FC<IForm> = ({
         {children}
 
         <Button variant="default" type="submit">
-          {isLoading ? "loading..." : "Submit"}
+          {isLoading ? (
+            <Loading size={20} color={"#fff"} screen={"default"} />
+          ) : isSuccess ? (
+            "Redirecting..."
+          ) : (
+            "Submit"
+          )}
         </Button>
       </form>
     </div>

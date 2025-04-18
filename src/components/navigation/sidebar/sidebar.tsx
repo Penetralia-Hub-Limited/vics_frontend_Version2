@@ -35,7 +35,10 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
       {/* Sidebar Content */}
       <SidebarContent>
         {sidebarData.map(({ navigation, groupName }, index) => (
-          <SidebarGroup key={index} className="pb-2 border-b border-neutral-300">
+          <SidebarGroup
+            key={index}
+            className="pb-2 border-b border-neutral-300"
+          >
             <SidebarGroupLabel>{groupName}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu className="flex flex-col gap-1">
@@ -55,7 +58,9 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                             <Collapsible key={sub.id}>
                               <CollapsibleTrigger className="group flex items-center justify-between w-full h-12 p-2 rounded-md hover:text-white hover:bg-primary-500 transition-all duration-150 cursor-pointer">
                                 <div className="flex items-center gap-2">
-                                  {sub.Icon && <sub.Icon className="fill-neutral-800" />}
+                                  {sub.Icon && (
+                                    <sub.Icon className="fill-neutral-800" />
+                                  )}
                                   <span>{sub.title}</span>
                                 </div>
                                 <ArrowDropDownIcon className="text-neutral-800 ml-auto transition-transform data-[state=open]:rotate-180" />
@@ -82,7 +87,9 @@ const AppSidebar: FC<ISideBar> = ({ sidebarData }) => {
                                   href={sub.url}
                                   className="h-10 flex items-center gap-2 p-2 text-sm rounded-md hover:bg-primary-500 hover:text-white"
                                 >
-                                  {sub.Icon && <sub.Icon className="fill-neutral-800" />}
+                                  {sub.Icon && (
+                                    <sub.Icon className="fill-neutral-800" />
+                                  )}
                                   {sub.title}
                                 </a>
                               </SidebarMenuButton>

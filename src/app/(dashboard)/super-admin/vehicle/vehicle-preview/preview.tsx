@@ -93,8 +93,8 @@ export default function VehiclePreview({
       />
 
       <div className={"flex flex-col md:flex-row gap-4"}>
-        <InformationCard title={"Buyers Information"} data={vehicleData} />
-        <InformationCard title={"Vehicle's Information"} data={vehicleData} />
+        <InformationCard title={"Buyer Information"} data={vehicleData} />
+        <InformationCard title={"Vehicle Information"} data={vehicleData} />
       </div>
 
       <div

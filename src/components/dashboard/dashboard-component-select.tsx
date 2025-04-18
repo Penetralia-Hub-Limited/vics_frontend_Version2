@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, SetStateAction, Dispatch } from "react";
+import React, { FC, SetStateAction, Dispatch } from "react";
 import {
   Select,
   SelectContent,
@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Loading from "@/app/(dashboard)/loading";
 
 interface IDashboardCompSelect {
   placeholder: string;
@@ -37,15 +38,19 @@ const DashboardCompSelect: FC<IDashboardCompSelect> = ({
           <SelectValue className={"capitalize"} placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {items.map((item, index) => (
-            <SelectItem className={"capitalize"} key={index} value={item}>
-              {item}
-            </SelectItem>
-          ))}
+          {items.length === 0 ? (
+            <Loading screen={"default"} size={20} />
+          ) : (
+            items.map((item, index) => (
+              <SelectItem className={"capitalize"} key={index} value={item}>
+                {item}
+              </SelectItem>
+            ))
+          )}
         </SelectContent>
       </Select>
     </div>
   );
 };
 
-export default DashboardCompSelect;
+export default React.memo(DashboardCompSelect);

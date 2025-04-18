@@ -1,39 +1,29 @@
 "use client";
 
-import { FC, ReactNode, useRef, useEffect } from "react";
+import { FC, ReactNode } from "react";
 import ModalComp from "./pop-over";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { AlertDialogAction } from "@/components/ui/alert-dialog";
 
-interface ISuccessModal {
+interface IResponseModal {
   title: string;
   content: ReactNode;
   btnText: string;
   footerBtnText: string;
   trigger: () => void;
+  status?: "failed" | "success";
   autoClickAfterMs?: number;
 }
 
-const SuccessModal: FC<ISuccessModal> = ({
+const ResponseModal: FC<IResponseModal> = ({
   title,
   content,
   btnText,
   trigger,
   footerBtnText,
+  status,
   autoClickAfterMs,
 }) => {
-  const triggerRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (autoClickAfterMs) {
-      const timer = setTimeout(() => {
-        triggerRef.current?.click(); // ⬅️ Simulate click
-      }, autoClickAfterMs);
-
-      return () => clearTimeout(timer);
-    }
-  }, [autoClickAfterMs]);
-
   return (
     <ModalComp autoClickAfterMs={autoClickAfterMs} btnText={btnText}>
       <div className={"flex flex-col gap-4 items-center justify-center"}>
@@ -41,7 +31,9 @@ const SuccessModal: FC<ISuccessModal> = ({
           aria-hidden="true"
           style={{ width: 200, height: 100 }}
           src={
-            "https://lottie.host/fe46d010-b474-49a8-aa26-ce393f8b3a88/nh99Y4MbDq.lottie"
+            status === "failed"
+              ? "https://lottie.host/5c209c9c-259d-4371-9ace-f3b3b490613b/YM6WHVU3rT.lottie"
+              : "https://lottie.host/fe46d010-b474-49a8-aa26-ce393f8b3a88/nh99Y4MbDq.lottie"
           }
           loop
           autoplay
@@ -54,4 +46,4 @@ const SuccessModal: FC<ISuccessModal> = ({
   );
 };
 
-export default SuccessModal;
+export default ResponseModal;

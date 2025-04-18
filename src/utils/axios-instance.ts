@@ -52,7 +52,7 @@ axiosInstance.interceptors.response.use(
 
     if (error.response?.status === 401) {
       toast(`Unauthorized: ${errorMessage}`);
-      console.error(`Unauthorized: ${errorMessage}`);
+      console.error(`Unauthorized: ${errorMessage}. Logging User Out`);
       store.dispatch(logout());
       persistor.flush(); // to flush persisted state
     } else if (error.response?.status === 403) {

@@ -2,17 +2,21 @@ import { FC, Dispatch, SetStateAction } from "react";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { PlateNumberType, PlateNumberSubType } from "@/common/enum";
 import InputWithLabel from "@/components/auth/input-comp";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export const CreatePlateRequestInitialValues = {
-  plateNumberType: undefined,
-  plateNumberSubType: undefined,
-  noofplates: 0,
+  state: "",
+  plate_number_type: undefined,
+  plate_number_sub_type: undefined,
+  total_number_requested: 0,
 };
 
 export type CreatePlateRequestProps = {
-  plateNumberType: PlateNumberType | undefined;
-  plateNumberSubType: PlateNumberSubType | undefined;
-  noofplates: number;
+  state: string;
+  plate_number_type: PlateNumberType | undefined;
+  plate_number_sub_type: PlateNumberSubType | undefined;
+  total_number_requested: number;
 };
 
 interface ICreateNewStock {
@@ -24,22 +28,38 @@ export const CreateNewPlatRequest: FC<ICreateNewStock> = ({
   input,
   setInput,
 }) => {
+  const states = useSelector((state: RootState) => state.states);
+  const filteredState = states.states.map((state) => state.name);
+
   return (
     <div className="flex flex-col gap-5 p-4">
       <DashboardCompSelect
-        title={"Plate Number Type"}
-        placeholder={"-- Select Type --"}
-        items={[...Object.values(PlateNumberType)]}
-        selected={input.plateNumberType}
+        title={"Select State"}
+        placeholder={"-- Select State --"}
+        items={filteredState}
+        selected={input.state}
         onSelect={(selected) =>
           setInput((prev) => ({
             ...prev,
-            plateNumberType: selected as PlateNumberType,
+            state: selected as PlateNumberType,
           }))
         }
       />
 
-      {input.plateNumberType && (
+      <DashboardCompSelect
+        title={"Plate Number Type"}
+        placeholder={"-- Select Type --"}
+        items={[...Object.values(PlateNumberType)]}
+        selected={input.plate_number_type}
+        onSelect={(selected) =>
+          setInput((prev) => ({
+            ...prev,
+            plate_number_type: selected as PlateNumberType,
+          }))
+        }
+      />
+
+      {input.plate_number_type && (
         <div className={"flex flex-col w-full gap-6"}>
           <p className="font-semibold mx-auto">
             Enter plate Number Type Information
@@ -50,11 +70,11 @@ export const CreateNewPlatRequest: FC<ICreateNewStock> = ({
               title={"Select Plate Number Sub. Type"}
               placeholder={"-- Select Type --"}
               items={[...Object.values(PlateNumberSubType)]}
-              selected={input.plateNumberSubType}
+              selected={input.plate_number_sub_type}
               onSelect={(selected) =>
                 setInput((prev) => ({
                   ...prev,
-                  plateNumberSubType: selected as PlateNumberSubType,
+                  plate_number_sub_type: selected as PlateNumberSubType,
                 }))
               }
             />
@@ -68,13 +88,14 @@ export const CreateNewPlatRequest: FC<ICreateNewStock> = ({
                 type: "number",
                 htmlfor: "noofplates",
               }}
-              value={input.noofplates}
-              onChange={(e) =>
+              value={input.total_number_requested}
+              onChange={(e) => {
+                e.preventDefault();
                 setInput((prev) => ({
                   ...prev,
-                  noofplates: parseInt(e.target.value) || 0,
-                }))
-              }
+                  total_number_requested: parseInt(e.target.value) || 0,
+                }));
+              }}
             />
           </div>
         </div>

@@ -11,52 +11,18 @@ import { DashboardSVG, PenSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { PaymentStatus } from "@/common/enum";
+import { useSelector } from "react-redux";
+import { selectSalesAssessment } from "@/store/plateNumber/plate-number-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "platenumber", title: "Plate Number" },
-  { key: "platetype", title: "Plates Type" },
+  { key: "sid", title: "S/N" },
+  { key: "number", title: "Plate Number" },
+  { key: "type", title: "Plates Type" },
   { key: "amount", title: "Amount" },
-  { key: "createdby", title: "Created By" },
+  { key: "created_by", title: "Created By" },
   { key: "buyer", title: "Buyer" },
-  { key: "paymentstatus", title: "Payment Status" },
-  { key: "date", title: "Transaction Date" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    platenumber: "JK34FSK",
-    platetype: "Private (Direct)",
-    amount: "Akanbi S.",
-    platerecommended: 401,
-    createdby: "Akanbi E",
-    buyer: "Dave E ",
-    paymentstatus: PaymentStatus.PAID,
-    date: new Date(),
-  },
-  {
-    id: 2,
-    platenumber: "JK34FSK",
-    platetype: "Private (Direct)",
-    amount: "Akanbi S.",
-    platerecommended: 401,
-    createdby: "Akanbi E",
-    buyer: "Dave E ",
-    paymentstatus: PaymentStatus.NOTPAID,
-    date: new Date(),
-  },
-  {
-    id: 3,
-    platenumber: "JK34FSK",
-    platetype: "Private (Direct)",
-    amount: "Akanbi S.",
-    platerecommended: 401,
-    createdby: "Akanbi E",
-    buyer: "Dave E ",
-    paymentstatus: PaymentStatus.NOTPAID,
-    date: new Date(),
-  },
+  { key: "number_status", title: "Payment Status" },
+  { key: "created_at", title: "Transaction Date" },
 ];
 
 export default function Page() {
@@ -73,14 +39,13 @@ export default function Page() {
     paymentStatus: "",
     invoiceNumber: "",
   });
+  const salesAssessmentData = useSelector(selectSalesAssessment);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(salesAssessmentData.length / itemsPerPage);
+  const paginatedData = salesAssessmentData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  console.log(inputValues);
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -121,7 +86,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Payment Status"}
             placeholder={"-- Select Status --"}
-            items={["private", "commercial"]}
+            items={[...Object.values(PaymentStatus)]}
             selected={inputValues.paymentStatus}
             onSelect={(selected) =>
               setInputValues((prev) => ({

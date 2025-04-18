@@ -11,105 +11,67 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import Modal from "@/components/general/modal";
+import { useSelector, useDispatch } from "react-redux";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import { InsuranceStatus, RequestStatus, PlateNumberType } from "@/common/enum";
-
+import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
 import {
   CreatePlateRequestInitialValues,
   CreatePlateRequestProps,
 } from "@/components/dashboard/verification-forms/Create-Plate-Request";
 import { CreateNewPlatRequest } from "@/components/dashboard/verification-forms/Create-Plate-Request";
-import { useSelector } from "react-redux";
+import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
 import { RootState } from "@/store/store";
+import { selectStateIDFromStateName } from "@/store/states/state-selector";
+import { generateTrackingId } from "@/common/helpers";
+import ResponseModal from "@/components/general/response-modal";
+import { toast } from "sonner";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
   { key: "tracking_id", title: "Tracking ID" },
   { key: "plate_number_type", title: "Plate Number Type" },
   { key: "total_number_requested", title: "No. of Plate Requested" },
-  { key: "platerecommended", title: "No. of Plate Recommended" },
-  { key: "numberassigned", title: "No. Assigned" },
-  { key: "updated_at", title: "Date" },
-  { key: "recommendingofficer", title: "Recommending Officer" },
-  { key: "finalapprovingofficer", title: "Final Approving Officer" },
+  { key: "recommended_number", title: "No. of Plate Recommended" },
+  { key: "number_assigned", title: "No. Assigned" },
+  { key: "created_at", title: "Date" },
+  { key: "recommender", title: "Recommending Officer" },
+  { key: "approver", title: "Final Approving Officer" },
   { key: "status", title: "Request Status" },
-  { key: "insuranceStatus", title: "Insurance Status" },
+  { key: "insurance_status", title: "Insurance Status" },
 ];
 
-const tableData = [
-  {
-    id: 1,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    finalapprovingofficer: "Ikedi Chuks",
-    requeststatus: RequestStatus.PENDING,
-    insuranceStatus: InsuranceStatus.APPROVED,
-  },
-  {
-    id: 2,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    finalapprovingofficer: "Ikedi Chuks",
-    requeststatus: RequestStatus.PENDING,
-    insuranceStatus: InsuranceStatus.APPROVED,
-  },
-  {
-    id: 3,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    finalapprovingofficer: "Ikedi Chuks",
-    requeststatus: RequestStatus.PENDING,
-    insuranceStatus: InsuranceStatus.APPROVED,
-  },
-];
+const inputInitialValues = {
+  trackingid: "",
+  insuranceStatus: "",
+  plateNumberType: "",
+  requestStatus: "",
+};
 
 export default function Page() {
+  const dispatch = useDispatch();
+  const plateOrderService = new PlateNumberOrderService(dispatch);
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
-  const [inputValues, setInputValues] = useState({
-    trackingid: "",
-    insuranceStatus: "",
-    plateNumberType: "",
-    requestStatus: "",
-  });
+  const [inputValues, setInputValues] = useState(inputInitialValues);
   const [modalInput, setModalInput] = useState<CreatePlateRequestProps>(
     CreatePlateRequestInitialValues
   );
-
-  const { plateNumberOrder } = useSelector(
+  const state_id = useSelector((state) =>
+    selectStateIDFromStateName(state, modalInput?.state)
+  );
+  const [isPlateCreated, setIsPlateCreated] = useState<boolean>(false);
+  const { isLoading, success } = useSelector(
     (state: RootState) => state.platenumberorder
   );
+  const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
 
-  console.log("PLATE NUMBER ORDER ", plateNumberOrder);
-
-  const updatedPlateNumberOrder = plateNumberOrder.map((item, index) => {
-    return {
-      sid: index + 1,
-      ...item,
-    };
-  });
-
-  const totalPages = Math.ceil(plateNumberOrder.length / itemsPerPage);
-  const paginatedData = updatedPlateNumberOrder.slice(
+  const totalPages = Math.ceil(plateNumbertableData.length / itemsPerPage);
+  const paginatedData = plateNumbertableData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -123,6 +85,46 @@ export default function Page() {
           router.push(`/super-admin/plate-number-request/view-request`),
       },
     ];
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const res = await plateOrderService.createPlateNumberOrder({
+        tracking_id: generateTrackingId(),
+        state_id: state_id,
+        ...modalInput,
+      });
+
+      if (res.status) {
+        setIsPlateCreated(true);
+        router.push(`/super-admin/plate-number-request/view-request`);
+      }
+    } catch (error) {
+      console.error("Failed:", error);
+      setIsPlateCreated(false);
+      toast(error as unknown as string);
+    } finally {
+      setIsPlateCreated(false);
+    }
+  };
+
+  const CreateNewRequest = () => {
+    return (
+      <ResponseModal
+        title={success ? "Request Created Successfully" : "Request Failed"}
+        content={
+          <p>
+            {success
+              ? "You have successfully created a new request."
+              : "Failed to create new plate."}
+          </p>
+        }
+        status={success ? "success" : "failed"}
+        btnText={isLoading ? "Loading..." : "Submit"}
+        trigger={handleSubmit}
+        footerBtnText={"Done"}
+      />
+    );
   };
 
   return (
@@ -149,16 +151,7 @@ export default function Page() {
             <CreateNewPlatRequest input={modalInput} setInput={setModalInput} />
           }
           btnText={"Create New Request"}
-          footerBtn={
-            <Button
-              onClick={() =>
-                router.push(`/super-admin/plate-number-request/view-request`)
-              }
-              type="submit"
-            >
-              submit
-            </Button>
-          }
+          footerBtn={CreateNewRequest()}
         />
       </div>
 
@@ -237,7 +230,7 @@ export default function Page() {
         <div className="border-t-1 border-primary-300 rounded-lg overflow-hidden">
           <DataTableWButton
             headers={tableColumns}
-            data={paginatedData ?? tableData}
+            data={paginatedData}
             rowActions={getRowActions}
           />
         </div>

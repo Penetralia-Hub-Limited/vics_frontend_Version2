@@ -1,4 +1,8 @@
 import { PaginationProp } from "@/common/types";
+import { User } from "../user/user-type";
+import { StatesData } from "../states/states-types";
+import { CompanyData } from "../company/company-types";
+import { InvoiceData } from "../invoice/invoice-types";
 
 export interface PlateNumberData {
   id: string;
@@ -19,6 +23,11 @@ export interface PlateNumberData {
   date_deactivated: string | null;
   created_at: string | null;
   updated_at: string | null;
+  creator: User;
+  state: StatesData;
+  company: CompanyData;
+  invoice: InvoiceData;
+  owner: User;
 }
 
 export interface PlateNumberResponse {

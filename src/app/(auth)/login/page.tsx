@@ -43,9 +43,10 @@ export default function Page() {
   return (
     <div className="flex flex-col w-full items-center justify-center">
       <FormLayout
+        isSuccess={isLoggedIn}
         isLoading={isLoading}
-        title="Login"
-        description="Enter your email address to login"
+        title="Account Login"
+        description="Login with your email address and password"
         onSubmit={handleSubmit}
       >
         <InputWithLabel

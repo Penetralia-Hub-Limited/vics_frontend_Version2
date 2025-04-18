@@ -8,6 +8,9 @@ export interface CompanyData {
   email: string;
   phone: string;
   address: string;
+  color: string | null;
+  logo: string | null;
+  logo_svg: string | null;
   created_at: string;
   updated_at: string;
 }

@@ -1,4 +1,6 @@
-import { FC, InputHTMLAttributes } from "react";
+"use client";
+
+import React, { FC, InputHTMLAttributes } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IFieldItems } from "@/common/types";
@@ -24,4 +26,4 @@ const InputWithLabel: FC<InputWithLabelProps> = ({ items, ...rest }) => {
   );
 };
 
-export default InputWithLabel;
+export default React.memo(InputWithLabel);

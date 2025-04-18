@@ -11,45 +11,18 @@ import DashboardCompSelect from "@/components/dashboard/dashboard-component-sele
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import { PlateNumberType, PlateStatus } from "@/common/enum";
+import { useSelector } from "react-redux";
+import { selectSoldPlateNumber } from "@/store/plateNumber/plate-number-selector";
+import { RootState } from "@/store/store";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "platenumber", title: "Plate Number" },
-  { key: "platetype", title: "Type" },
-  { key: "date", title: "Date" },
+  { key: "sid", title: "S/N" },
+  { key: "number", title: "Plate Number" },
+  { key: "type", title: "Type" },
+  { key: "created_at", title: "Date" },
   { key: "status", title: "Status" },
   { key: "assignedto", title: "Assigned To" },
   { key: "soldto", title: "Sold To" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    platenumber: "GDT8W7367367",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    status: PlateStatus.SOLD,
-    assignedto: "Akanbi S.",
-    soldto: "Dave E ",
-  },
-  {
-    id: 2,
-    platenumber: "GDT8W7367367",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    status: PlateStatus.SOLD,
-    assignedto: "Akanbi S.",
-    soldto: "Dave E ",
-  },
-  {
-    id: 3,
-    platenumber: "GDT8W7367367",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    status: PlateStatus.SOLD,
-    assignedto: "Akanbi S.",
-    soldto: "Dave E ",
-  },
 ];
 
 export default function Page() {
@@ -68,9 +41,14 @@ export default function Page() {
     plateNumberType: undefined,
     status: "",
   });
+  const soldPlateNumbers = useSelector(selectSoldPlateNumber);
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  console.log("SOLD PLATES ", soldPlateNumbers);
+
+  const totalPages = Math.ceil(soldPlateNumbers.length / itemsPerPage);
+  const paginatedData = soldPlateNumbers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -119,7 +97,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["lagos", "abuja"]}
+            items={filteredLGA}
             selected={inputValues.lga}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -147,7 +125,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Status"}
             placeholder={"-- Select Status --"}
-            items={["status1", "status2"]}
+            items={[...Object.values(PlateStatus)]}
             selected={inputValues.status}
             onSelect={(selected) =>
               setInputValues((prev) => ({

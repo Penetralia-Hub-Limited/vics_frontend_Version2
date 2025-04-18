@@ -8,6 +8,12 @@ import { DashboardSVG, ConfigurationSVG } from "@/common/svgs";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import InputWithLabel from "@/components/auth/input-comp";
 import CardContainer from "@/components/general/card-container";
+import Modal from "@/components/general/modal";
+import {
+  CreateVehiceMakeAndModel,
+  CreatePlateRequestInitialValues,
+  CreateVehiceMakeAndModelProps,
+} from "@/components/dashboard/verification-forms/create-vehicle-make";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -52,6 +58,9 @@ export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vehicleMake, setVehicleMake] = useState<string>("");
+  const [modalInput, setModalInput] = useState<CreateVehiceMakeAndModelProps>(
+    CreatePlateRequestInitialValues
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVehicleMake(e.target.value);
@@ -112,7 +121,17 @@ export default function Page() {
           ]}
         />
 
-        <Button>Add New Workflow</Button>
+        <Modal
+          title={"Create A New Vehicle Make and Model"}
+          content={
+            <CreateVehiceMakeAndModel
+              input={modalInput}
+              setInput={setModalInput}
+            />
+          }
+          btnText={"Add new Vehicle Make"}
+          footerBtn={<Button type="submit">Validate Plate Number</Button>}
+        />
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>

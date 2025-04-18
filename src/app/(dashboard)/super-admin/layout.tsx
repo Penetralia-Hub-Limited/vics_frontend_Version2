@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense, useEffect, useMemo } from "react";
 import { StoreProvider } from "@/app/store-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
@@ -12,6 +12,9 @@ import { IsAuth } from "@/components/general/is-auth";
 import { useDispatch } from "react-redux";
 import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
 import { InvoiceService } from "@/services/InvoiceService";
+import { StateService } from "@/services/StatesServices";
+import { PlateNumberService } from "@/services/PlateNumberService";
+import { LgaService } from "@/services/LgaService";
 
 export default function SuperAdminDashboardLayout({
   children,
@@ -23,23 +26,44 @@ export default function SuperAdminDashboardLayout({
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   // trigger services
-  const plateNumberOrderService = new PlateNumberOrderService(dispatch);
-  const invoiceService = new InvoiceService(dispatch);
+  const plateNumberOrderService = useMemo(
+    () => new PlateNumberOrderService(dispatch),
+    [dispatch]
+  );
+  const plateNumberService = useMemo(
+    () => new PlateNumberService(dispatch),
+    [dispatch]
+  );
+  const lgaService = useMemo(() => new LgaService(dispatch), [dispatch]);
+  const invoiceService = useMemo(
+    () => new InvoiceService(dispatch),
+    [dispatch]
+  );
+  const stateService = useMemo(() => new StateService(dispatch), [dispatch]);
 
-  // trigger get plate number call
+  // API triggers
   useEffect(() => {
     (async () => {
       await plateNumberOrderService.getAllPlateNumberOrders();
+      await plateNumberService.getAllPlateNumbers();
       await invoiceService.getAllInvoices();
+      await stateService.getAllStates();
+      await lgaService.getAllLgas();
     })();
-  }, []);
+  }, [
+    invoiceService,
+    plateNumberOrderService,
+    plateNumberService,
+    stateService,
+    lgaService,
+  ]);
 
   return (
     <IsAuth>
       <StoreProvider>
         <SidebarProvider>
           <AppSidebar sidebarData={superAdminSidebar} />
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={<Loading screen={"main"} />}>
             <main className={"flex-1 flex-col w-fit overflow-hidden"}>
               <div
                 className={

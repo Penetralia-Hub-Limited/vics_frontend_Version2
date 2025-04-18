@@ -37,9 +37,7 @@ const ModalComp: FC<IModalComp> = ({
 
   useEffect(() => {
     if (autoClickAfterMs) {
-      const timer = setTimeout(() => {
-        triggerRef.current?.click(); // ⬅️ Simulate click
-      }, autoClickAfterMs);
+      const timer = setTimeout(() => {}, autoClickAfterMs);
 
       return () => clearTimeout(timer);
     }

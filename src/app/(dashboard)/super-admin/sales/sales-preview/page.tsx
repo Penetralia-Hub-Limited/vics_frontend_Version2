@@ -6,7 +6,7 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { InformationCard } from "@/components/general/information-card";
 import { AmountDisplay } from "@/components/general/display-amount";
-import SuccessModal from "@/components/general/success-response";
+import ResponseModal from "@/components/general/response-modal";
 import { Button } from "@/components/ui/button";
 
 const salesData = [
@@ -85,8 +85,8 @@ export default function Page() {
       />
 
       <div className={"flex flex-col md:flex-row gap-4"}>
-        <InformationCard title={"Buyers Information"} data={salesData} />
-        <InformationCard title={"Vehicle's Information"} data={salesData} />
+        <InformationCard title={"Buyer Information"} data={salesData} />
+        <InformationCard title={"Vehicle Information"} data={salesData} />
       </div>
 
       <div
@@ -104,7 +104,7 @@ export default function Page() {
 
       <div className="flex flex-row gap-4 ml-auto">
         <Button variant={"outline"}>Back</Button>
-        <SuccessModal
+        <ResponseModal
           title={"Success"}
           content={<p>Invoice Issued Successfully</p>}
           btnText={"Proceed"}

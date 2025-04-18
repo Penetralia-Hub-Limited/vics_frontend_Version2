@@ -3,6 +3,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@plugin 'tailwind-scrollbar';
+
 @theme {
   --color-primary-900: oklch(24.42% 0.0566 157.21); /* #012815 */
   --color-primary-800: oklch(28.63% 0.0677 156.63); /* #01341C */
@@ -39,4 +41,5 @@
 
   --color-pending-100: oklch(0.95 0.0218 250.22); /* #e3effc */
   --color-pending-500: oklch(0.2 0.0478 250.96); /* #04172b */
+  --color-pending-800: oklch(0.11 0.0177 236.44); /* #010509 */
 }

@@ -14,7 +14,7 @@ import Modal from "@/components/general/modal";
 import { IDTaxPayerMeans } from "@/common/enum";
 import { VehicleModalElements } from "@/components/dashboard/vehicle/vehicle-modal-element";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
-import SuccessModal from "@/components/general/success-response";
+import ResponseModal from "@/components/general/response-modal";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -112,7 +112,7 @@ export default function Page() {
 
   const validateModal = () => {
     return (
-      <SuccessModal
+      <ResponseModal
         title={`${identificationMeans} Verified Successfully`}
         content={
           <div className={"flex flex-col gap-4 py-3"}>

@@ -1,4 +1,5 @@
 import { PaginationProp } from "@/common/types";
+import { VehicleStatus, VehicleCategory, EngineCapacity } from "@/common/enum";
 
 export type VehicleData = {
   id: string;
@@ -9,7 +10,7 @@ export type VehicleData = {
   state_id: string;
   plate_number_id: string;
   owner_id: string;
-  status: "Active" | "Inactive" | string; // You can define a stricter union if you know all possible statuses
+  status: VehicleStatus; // You can define a stricter union if you know all possible statuses
   capacity: string;
   chasis_number: string;
   color: string;
@@ -23,8 +24,14 @@ export type VehicleData = {
   year: string;
   make: string;
   model: string;
-  type: string;
-  sub_type: string;
+  type: string; // Come back to this
+  sub_type: string; // Come back to this
+  category: VehicleCategory | null;
+  weight: number | null;
+  load_weight: number | null;
+  engine_capacity: EngineCapacity | null;
+  model_year: string | null;
+  no_of_persons: number | null;
   date_deactivated: string | null;
   created_at: string;
   updated_at: string;

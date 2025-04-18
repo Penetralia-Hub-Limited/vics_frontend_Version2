@@ -1,4 +1,4 @@
-import { FC, Dispatch, SetStateAction } from "react";
+import React, { FC, Dispatch, SetStateAction } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import {
@@ -42,4 +42,4 @@ const DatePicker: FC<IDatePicker> = ({ title, date, setDate }) => {
   );
 };
 
-export default DatePicker;
+export default React.memo(DatePicker);

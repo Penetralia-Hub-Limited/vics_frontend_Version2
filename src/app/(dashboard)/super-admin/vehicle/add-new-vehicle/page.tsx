@@ -11,7 +11,7 @@ import { AddVehicleStep2 } from "@/components/dashboard/vehicle/new-vehicle/step
 import { AddVehicleStep3 } from "@/components/dashboard/vehicle/new-vehicle/step3";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
-import SuccessModal from "@/components/general/success-response";
+import ResponseModal from "@/components/general/response-modal";
 import {
   initialValuesStep1,
   inputVehiclePropsStep1,
@@ -128,7 +128,7 @@ export default function Page() {
               </Button>
 
               {currentStep === totalSteps ? (
-                <SuccessModal
+                <ResponseModal
                   title={"Success"}
                   content={<p>New Vehicle was Registered Successfully</p>}
                   btnText={"Proceed"}
