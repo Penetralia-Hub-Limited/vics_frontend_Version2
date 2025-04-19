@@ -17,6 +17,7 @@ import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import ResponseModal from "@/components/general/response-modal";
 import { useSelector } from "react-redux";
 import { selectVehicles } from "@/store/vehicle/vehicle-selector";
+import { VehicleData } from "@/store/vehicle/vehicle-type";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -34,8 +35,16 @@ export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [inputValues, setInputValues] = useState<{
+    platenumber: string;
+    startDate: Date | undefined;
+    endDate: Date | undefined;
+  }>({
+    platenumber: "",
+    startDate: undefined,
+    endDate: undefined,
+  });
+
   const [identificationMeans, setIdentificationMeans] =
     useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
   const [identificationInput, setIdentificationInput] = useState<{
@@ -47,8 +56,41 @@ export default function Page() {
   });
   const vehiclesData = useSelector(selectVehicles);
 
-  const totalPages = Math.ceil(vehiclesData.length / itemsPerPage);
-  const paginatedData = vehiclesData.slice(
+  const filterVehiclesData = (
+    data: Array<VehicleData>,
+    query: {
+      plate_number?: string;
+      start_date?: Date | null;
+      end_date?: Date | null;
+    }
+  ): Array<VehicleData> => {
+    return data.filter((item) => {
+      const createdAt = new Date(item.created_at);
+
+      const matchesPlate =
+        !query.plate_number ||
+        item.plate_number?.number
+          ?.toLowerCase()
+          .includes(query.plate_number.toLowerCase());
+
+      const matchesStartDate =
+        !query.start_date || createdAt >= new Date(query.start_date);
+
+      const matchesEndDate =
+        !query.end_date || createdAt <= new Date(query.end_date);
+
+      return matchesPlate && matchesStartDate && matchesEndDate;
+    });
+  };
+
+  const filteredData = filterVehiclesData(vehiclesData, {
+    plate_number: inputValues.platenumber,
+    start_date: inputValues.startDate ?? null,
+    end_date: inputValues.endDate ?? null,
+  });
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -159,14 +201,35 @@ export default function Page() {
               type: "text",
               htmlfor: "platenumber",
             }}
+            value={inputValues.platenumber}
+            onChange={(e) =>
+              setInputValues((prev) => ({
+                ...prev,
+                platenumber: e.target.value ?? "",
+              }))
+            }
           />
 
           <DatePicker
-            date={startDate}
-            setDate={setStartDate}
             title={"Start Date"}
+            date={inputValues.startDate}
+            setDate={(date) =>
+              setInputValues((prev) => ({
+                ...prev,
+                startDate: date as Date | undefined,
+              }))
+            }
           />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+          <DatePicker
+            title={"End Date"}
+            date={inputValues.endDate}
+            setDate={(date) =>
+              setInputValues((prev) => ({
+                ...prev,
+                endDate: date as Date | undefined,
+              }))
+            }
+          />
 
           <Button>Search</Button>
         </div>
