@@ -1,4 +1,7 @@
 import { PaginationProp } from "@/common/types";
+import { User } from "../user/user-type";
+import { CompanyData } from "../company/company-types";
+import { StatesData } from "../states/states-types";
 
 export type ServiceTypeData = {
   id: string;
@@ -19,6 +22,9 @@ export type ServiceTypeData = {
   date_deactivated: string | null;
   created_at: string;
   updated_at: string;
+  creator: User;
+  company: CompanyData;
+  state: StatesData;
 };
 
 export interface ServiceTypeResponse {

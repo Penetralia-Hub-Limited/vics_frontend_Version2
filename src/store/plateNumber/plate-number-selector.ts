@@ -2,6 +2,7 @@
 import { createSelector } from "reselect";
 import { RootState } from "../store";
 import { RequestStatus } from "@/common/enum";
+import { formattedAmount } from "@/common/helpers";
 
 const selectPlateNumberReducer = (state: RootState) =>
   state.platenumber.plateNumber;
@@ -21,7 +22,7 @@ export const selectSoldPlateNumber = createSelector(
       : []
 );
 
-export const selectSalesAssessment = createSelector(
+export const selectPlateNumber = createSelector(
   [selectPlateNumberReducer],
   (plateNumber) =>
     Array.isArray(plateNumber)
@@ -30,7 +31,7 @@ export const selectSalesAssessment = createSelector(
             sid: index + 1,
             ...plate,
             buyer: `${plate?.owner?.firstname ?? "-"} ${plate?.owner?.lastname ?? "-"}`,
-            amount: plate?.invoice?.amount ?? 0,
+            amount: formattedAmount(plate?.invoice?.amount ?? 0),
             created_by: `${plate?.creator?.firstname ?? "-"} ${plate?.creator?.lastname ?? "-"}`,
           };
         })

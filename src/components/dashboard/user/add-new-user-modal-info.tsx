@@ -3,6 +3,17 @@ import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "../dashboard-component-select";
 import { Role, SuperAdminPermissions } from "@/common/enum";
 
+export const AddUserModalInitialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  address: "",
+  zone: "",
+  taxOffice: "",
+  roles: undefined,
+};
+
 export interface AddUserModalProp {
   firstName: string;
   lastName: string;

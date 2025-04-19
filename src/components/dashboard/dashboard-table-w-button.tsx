@@ -37,6 +37,7 @@ export interface TableData {
   [key: string]:
     | null
     | undefined
+    | boolean
     | string
     | number
     | Date
@@ -117,8 +118,8 @@ export function DataTableWButton({
       </TableHeader>
       {data.length === 0 ? (
         <TableBody>
-          <TableRow className="flex items-center justify-center">
-            <TableCell>
+          <TableRow>
+            <TableCell className="flex items-center justify-center">
               <Loading screen="default" size={30} />
             </TableCell>
           </TableRow>
@@ -134,12 +135,9 @@ export function DataTableWButton({
                     {/* Date Formatting */}
                     {cellValue instanceof Date ? (
                       <div className="flex flex-col gap-1">
-                        <p>
-                          {format(cellValue.toDateString(), "LLL. d yyyy") ??
-                            "--"}
-                        </p>
+                        <p>{format(cellValue, "LLL. d yyyy") ?? "--"}</p>
                         <p className="font-light">
-                          {format(cellValue.toDateString(), "hh:mm:ss a") ?? ""}
+                          {format(cellValue, "hh:mm:ss a") ?? ""}
                         </p>
                       </div>
                     ) : isPaymentStatus(cellValue) ||

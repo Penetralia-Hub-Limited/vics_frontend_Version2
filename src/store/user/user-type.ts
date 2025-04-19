@@ -25,7 +25,7 @@ export interface User {
   state_verification_no: string | null;
   date_of_birth: string | null;
   is_email_verified: boolean;
-  email_verified_at: string | null;
+  email_verified_at: boolean;
   date_deactivated: string | null;
   created_at: string;
   updated_at: string;

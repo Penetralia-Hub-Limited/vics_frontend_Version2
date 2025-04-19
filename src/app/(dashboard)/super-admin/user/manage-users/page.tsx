@@ -8,80 +8,29 @@ import CardContainer from "@/components/general/card-container";
 import InputWithLabel from "@/components/auth/input-comp";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
-import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import {
+  DataTableWButton,
+  TableData,
+} from "@/components/dashboard/dashboard-table-w-button";
 import { Role, UserStatus } from "@/common/enum";
 import Pagination from "@/components/general/pagination";
 import Modal from "@/components/general/modal";
 import {
   AddUserModalProp,
   AddNewUserInfo,
+  AddUserModalInitialState,
 } from "@/components/dashboard/user/add-new-user-modal-info";
+import { useSelector } from "react-redux";
+import { selectUsers } from "@/store/user/user-selector";
 
 const manageUserHeader = [
-  { key: "id", title: "S/N" },
+  { key: "sid", title: "S/N" },
   { key: "name", title: "Name" },
-  { key: "phonenumber", title: "Phone Number" },
+  { key: "phone", title: "Phone Number" },
   { key: "email", title: "Email Address" },
   { key: "role", title: "Role" },
   { key: "status", title: "Status" },
-  { key: "date", title: "Date Created" },
-];
-
-const manageUserData = [
-  {
-    id: 1,
-    name: "Lola K",
-    phonenumber: "Private (Direct)",
-    email: "user@example@example.com",
-    role: Role.STOREADMIN,
-    status: UserStatus.ACTIVE,
-    date: new Date(),
-  },
-  {
-    id: 2,
-    name: "Ikedi K",
-    phonenumber: "Private (Direct)",
-    email: "user@example@example.com",
-    role: Role.STOREADMIN,
-    status: UserStatus.ACTIVE,
-    date: new Date(),
-  },
-  {
-    id: 3,
-    name: "John Rasheed",
-    phonenumber: "Private (Direct)",
-    email: "user@example@example.com",
-    role: Role.STOREADMIN,
-    status: UserStatus.ACTIVE,
-    date: new Date(),
-  },
-  {
-    id: 4,
-    name: "Habiba Ishaya",
-    phonenumber: "Private (Direct)",
-    email: "user@example@example.com",
-    role: Role.STOREADMIN,
-    status: UserStatus.ACTIVE,
-    date: new Date(),
-  },
-  {
-    id: 5,
-    name: "Usman Danfoldio",
-    phonenumber: "Private (Direct)",
-    email: "user@example@example.com",
-    role: Role.SMR,
-    status: UserStatus.DEACTIVATED,
-    date: new Date(),
-  },
-  {
-    id: 6,
-    name: "Daniel Print",
-    phonenumber: "Private (Direct)",
-    email: "user@example@example.com",
-    role: Role.STOREADMIN,
-    status: UserStatus.DEACTIVATED,
-    date: new Date(),
-  },
+  { key: "created_at", title: "Date Created" },
 ];
 
 export default function Page() {
@@ -100,33 +49,18 @@ export default function Page() {
     status: "",
     role: "",
   });
-  const [modalInput, setModalInput] = useState<AddUserModalProp>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    address: "",
-    zone: "",
-    taxOffice: "",
-    roles: undefined,
-  });
+  const [modalInput, setModalInput] = useState<AddUserModalProp>(
+    AddUserModalInitialState
+  );
+  const userData = useSelector(selectUsers);
 
-  console.log(modalInput);
+  console.log(userData);
 
-  const totalPages = Math.ceil(manageUserData.length / itemsPerPage);
-  const paginatedData = manageUserData.slice(
+  const totalPages = Math.ceil(userData.length / itemsPerPage);
+  const paginatedData = userData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  type TableData = {
-    id: number;
-    platenumber: string;
-    platetype: string;
-    mla: string;
-    platenostatus: string;
-    date: Date;
-  };
 
   interface RowAction {
     title: string;

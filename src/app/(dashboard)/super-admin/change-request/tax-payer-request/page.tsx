@@ -10,14 +10,16 @@ import { DashboardSVG, PenSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { ApprovalStatus } from "@/common/enum";
 import DashboardTable from "@/components/dashboard/dashboard-table";
+import { useSelector } from "react-redux";
+import { selectTaxPayers } from "@/store/user/user-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "name", title: "Name" },
+  { key: "sid", title: "S/N" },
+  { key: "fullname", title: "Name" },
   { key: "email", title: "Email Address" },
-  { key: "phonenumber", title: "Phone Number" },
-  { key: "approvalstatus", title: "Approval Status" },
-  { key: "date", title: "Date Created" },
+  { key: "phone", title: "Phone Number" },
+  { key: "approval_status", title: "Approval Status" },
+  { key: "date_created", title: "Date Created" },
 ];
 
 const tableData = [
@@ -61,9 +63,10 @@ export default function Page() {
     email: "",
     phoneNumber: "",
   });
+  const tasPayers = useSelector(selectTaxPayers);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(tasPayers.length / itemsPerPage);
+  const paginatedData = tasPayers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -74,8 +77,6 @@ export default function Page() {
       [e.target.id]: e.target.value,
     }));
   };
-
-  console.log(inputValues);
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>

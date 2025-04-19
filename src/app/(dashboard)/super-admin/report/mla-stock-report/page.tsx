@@ -9,105 +9,15 @@ import DashboardTable from "@/components/dashboard/dashboard-table";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DashboardSVG, ReportSVG } from "@/common/svgs";
 import { PlateNumberType } from "@/common/enum";
+import { useSelector } from "react-redux";
+import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
 
 const stockReportHeaders = [
-  { title: "S/N", key: "id" },
-  { title: "MLA", key: "mla" },
-  { title: "Station", key: "station" },
-  { title: "Assigned Plates", key: "assignedplates" },
-  { title: "Sold Plates", key: "soldplates" },
-  { title: "Stock Level", key: "stocklevel" },
-];
-
-const stockReportHeadersData = [
-  {
-    id: 1,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 2,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 3,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 4,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 5,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 6,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 7,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 8,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 9,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 10,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
-  {
-    id: 11,
-    mla: "INV001",
-    station: "South West",
-    assignedplates: "Private (Direct)",
-    soldplates: 76,
-    stocklevel: 106,
-  },
+  { title: "S/N", key: "sid" },
+  { title: "MLA", key: "created_by" },
+  { title: "Assigned Plates", key: "plate_number_type" },
+  { title: "Sold Plates", key: "number_assigned" },
+  { title: "Stock Level", key: "total_number_requested" },
 ];
 
 export default function Page() {
@@ -122,9 +32,10 @@ export default function Page() {
     mla: "",
     plateNumberType: undefined,
   });
-
-  const totalPages = Math.ceil(stockReportHeadersData.length / itemsPerPage);
-  const paginatedData = stockReportHeadersData.slice(
+  const salesAssessmentData = useSelector(selectPlateNumberRequestTableData);
+  const totalMLA = salesAssessmentData.length;
+  const totalPages = Math.ceil(salesAssessmentData.length / itemsPerPage);
+  const paginatedData = salesAssessmentData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -197,7 +108,7 @@ export default function Page() {
         <div className={"p-3"}>
           <p className={"text-sm"}>
             Total Number of MLAs:{" "}
-            <span className={"font-semibold"}>{totalPages}</span>
+            <span className={"font-semibold"}>{totalMLA}</span>
           </p>
         </div>
         <div>

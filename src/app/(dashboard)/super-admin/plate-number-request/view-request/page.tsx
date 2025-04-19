@@ -45,8 +45,6 @@ export default function Page() {
   const { lgas } = useSelector((state: RootState) => state?.lga);
   const filteredLGA = lgas.map((lga) => lga.name);
 
-  console.log("SOLD PLATES ", soldPlateNumbers);
-
   const totalPages = Math.ceil(soldPlateNumbers.length / itemsPerPage);
   const paginatedData = soldPlateNumbers.slice(
     (currentPage - 1) * itemsPerPage,

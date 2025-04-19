@@ -17,10 +17,13 @@ export enum PlateNumberStatus {
 
 export enum Role {
   SUPERADMIN = "Super Admin",
-  MLA = "Motor Licensing Authority", // motor licensing authority
+  MLA = "MLA", // motor licensing authority
   Chairman = "Chairman",
-  SMR = "State Motor Registry", // state motor registry
+  SMR = "SMR", // state motor registry
   STOREADMIN = "Store Manager Admin",
+  GENERALUSER = "General User",
+  ADMIN = "Admin",
+  TAXPAYER = "Tax Payer",
 }
 
 export enum UserStatus {

@@ -10,6 +10,8 @@ import CardContainer from "@/components/general/card-container";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -76,6 +78,8 @@ export default function Page() {
     actorsname: "",
     lga: "",
   });
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -128,7 +132,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["a", "b"]}
+            items={filteredLGA}
             selected={inputValues.lga}
             onSelect={(selected) =>
               setInputValues((prev) => ({

@@ -14,44 +14,13 @@ import {
   CreatePlateRequestInitialValues,
   CreateVehiceMakeAndModelProps,
 } from "@/components/dashboard/verification-forms/create-vehicle-make";
+import { useSelector } from "react-redux";
+import { selectVehicles } from "@/store/vehicle/vehicle-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
+  { key: "sid", title: "S/N" },
   { key: "make", title: "Vehicle Make" },
   { key: "model", title: "Vehicle Model" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    make: "Mercedez-Benz",
-    model: "Mercedex-E400",
-  },
-  {
-    id: 2,
-    make: "Toyota",
-    model: "Avensis",
-  },
-  {
-    id: 3,
-    make: "Mercedez-Benz",
-    model: "Mercedex-E400",
-  },
-  {
-    id: 4,
-    make: "Toyota",
-    model: "Avensis",
-  },
-  {
-    id: 5,
-    make: "Mercedez-Benz",
-    model: "Mercedex-E400",
-  },
-  {
-    id: 6,
-    make: "Toyota",
-    model: "Avensis",
-  },
 ];
 
 export default function Page() {
@@ -61,13 +30,14 @@ export default function Page() {
   const [modalInput, setModalInput] = useState<CreateVehiceMakeAndModelProps>(
     CreatePlateRequestInitialValues
   );
+  const vehiclesData = useSelector(selectVehicles);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVehicleMake(e.target.value);
   };
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(vehiclesData.length / itemsPerPage);
+  const paginatedData = vehiclesData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );

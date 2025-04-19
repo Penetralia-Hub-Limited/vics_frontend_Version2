@@ -20,6 +20,8 @@ import {
   RowAction,
   TableData,
 } from "@/components/dashboard/dashboard-table-w-button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const tableHeaders = [
   { key: "id", title: "S/N" },
@@ -100,6 +102,8 @@ export default function Page() {
     lga: "",
     plateNumberType: undefined,
   });
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -143,7 +147,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["lagos", "abuja"]}
+            items={filteredLGA}
             selected={inputValues.lga}
             onSelect={(selected) =>
               setInputValues((prev) => ({

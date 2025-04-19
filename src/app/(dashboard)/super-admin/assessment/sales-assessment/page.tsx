@@ -12,7 +12,7 @@ import InputWithLabel from "@/components/auth/input-comp";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { PaymentStatus } from "@/common/enum";
 import { useSelector } from "react-redux";
-import { selectSalesAssessment } from "@/store/plateNumber/plate-number-selector";
+import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -39,7 +39,7 @@ export default function Page() {
     paymentStatus: "",
     invoiceNumber: "",
   });
-  const salesAssessmentData = useSelector(selectSalesAssessment);
+  const salesAssessmentData = useSelector(selectPlateNumber);
 
   const totalPages = Math.ceil(salesAssessmentData.length / itemsPerPage);
   const paginatedData = salesAssessmentData.slice(

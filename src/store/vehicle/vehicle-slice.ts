@@ -3,14 +3,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { VehicleData } from "./vehicle-type";
 
 interface VehicleState {
-  states: VehicleData[];
+  vehicles: VehicleData[];
   selectedStates: VehicleData | null;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: VehicleState = {
-  states: [],
+  vehicles: [],
   selectedStates: null,
   isLoading: false,
   error: null,
@@ -26,17 +26,17 @@ const lgaSlice = createSlice({
     },
     vehiclesSuccess(state, action: PayloadAction<any[]>) {
       state.isLoading = false;
-      state.states = action.payload;
+      state.vehicles = action.payload;
     },
     vehiclesFail(state, action: PayloadAction<string | null>) {
       state.isLoading = false;
       state.error = action.payload;
     },
     setSelectedVehicles(state, action: PayloadAction<any>) {
-      state.states = action.payload;
+      state.vehicles = action.payload;
     },
     clearVehicles(state) {
-      state.states = [];
+      state.vehicles = [];
     },
   },
 });

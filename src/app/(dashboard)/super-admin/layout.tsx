@@ -15,6 +15,9 @@ import { InvoiceService } from "@/services/InvoiceService";
 import { StateService } from "@/services/StatesServices";
 import { PlateNumberService } from "@/services/PlateNumberService";
 import { LgaService } from "@/services/LgaService";
+import { UserService } from "@/services/UserService";
+import { ServiceTypeService } from "@/services/ServiceTypesService";
+import { VehicleService } from "@/services/VehicleService";
 
 export default function SuperAdminDashboardLayout({
   children,
@@ -30,6 +33,7 @@ export default function SuperAdminDashboardLayout({
     () => new PlateNumberOrderService(dispatch),
     [dispatch]
   );
+  const userService = useMemo(() => new UserService(dispatch), [dispatch]);
   const plateNumberService = useMemo(
     () => new PlateNumberService(dispatch),
     [dispatch]
@@ -40,21 +44,34 @@ export default function SuperAdminDashboardLayout({
     [dispatch]
   );
   const stateService = useMemo(() => new StateService(dispatch), [dispatch]);
+  const vehicleService = useMemo(
+    () => new VehicleService(dispatch),
+    [dispatch]
+  );
+  const serviceTypeService = useMemo(
+    () => new ServiceTypeService(dispatch),
+    [dispatch]
+  );
 
   // API triggers
   useEffect(() => {
     (async () => {
       await plateNumberOrderService.getAllPlateNumberOrders();
       await plateNumberService.getAllPlateNumbers();
+      await serviceTypeService.getAllServiceTypes();
       await invoiceService.getAllInvoices();
+      await vehicleService.getAllVehicles();
       await stateService.getAllStates();
+      await userService.getAllUsers();
       await lgaService.getAllLgas();
     })();
   }, [
     invoiceService,
     plateNumberOrderService,
     plateNumberService,
+    vehicleService,
     stateService,
+    userService,
     lgaService,
   ]);
 

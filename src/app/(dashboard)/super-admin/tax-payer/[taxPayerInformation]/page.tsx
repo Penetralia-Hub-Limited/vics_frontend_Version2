@@ -1,3 +1,5 @@
+"use client";
+
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, TaxPayerSVG } from "@/common/svgs";
@@ -19,7 +21,11 @@ const taxPayerInfo = {
     "https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
 };
 
-export default function Page() {
+export default function Page({ params }: { params: { uid: string } }) {
+  const { uid } = params;
+
+  console.log(uid);
+
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
       <DashboardPath
@@ -36,6 +42,8 @@ export default function Page() {
           },
         ]}
       />
+
+      <p>USER ID {uid}</p>
 
       <CardContainer className={"flex flex-col gap-5"}>
         <TaxPayerInformationCard taxPayerInfo={taxPayerInfo} />

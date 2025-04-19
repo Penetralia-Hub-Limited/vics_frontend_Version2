@@ -12,117 +12,16 @@ import { DashboardSVG, ReportSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { formattedAmount } from "@/common/helpers";
 import { PlateNumberType } from "@/common/enum";
+import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
+import { useSelector } from "react-redux";
 
 const plateNoReportHeader = [
-  { title: "S/N", key: "id" },
-  { title: "MLA", key: "mla" },
-  { title: "Plate Number", key: "platenumber" },
-  { title: "Plate Type", key: "platetype" },
-  { title: "Station", key: "station" },
-  { title: "Transaction Date", key: "date" },
+  { title: "S/N", key: "sid" },
+  { title: "MLA", key: "created_by" },
+  { title: "Plate Number", key: "number" },
+  { title: "Plate Type", key: "type" },
+  { title: "Transaction Date", key: "created_at" },
   { title: "Amount", key: "amount" },
-];
-
-const plateNoReportData = [
-  {
-    id: 1,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 2,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 3,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 4,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 5,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 6,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 7,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 8,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 9,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 10,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 11,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
 ];
 
 export default function Page() {
@@ -137,14 +36,15 @@ export default function Page() {
     plateNumberType: undefined,
     plateNumber: "",
   });
+  const salesAssessmentData = useSelector(selectPlateNumber);
 
-  const totalAmount = plateNoReportData.reduce(
-    (sum, item) => sum + item.amount,
+  const totalAmount = salesAssessmentData.reduce(
+    (sum, item) => sum + parseInt(item.amount),
     0
   );
 
-  const totalPages = Math.ceil(plateNoReportData.length / itemsPerPage);
-  const paginatedData = plateNoReportData.slice(
+  const totalPages = Math.ceil(salesAssessmentData.length / itemsPerPage);
+  const paginatedData = salesAssessmentData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -217,7 +117,9 @@ export default function Page() {
         <div className={"flex flex-row justify-between p-3"}>
           <p className={"text-sm"}>
             Total Plate Number Sales:{" "}
-            <span className={"font-semibold"}>{plateNoReportData.length}</span>
+            <span className={"font-semibold"}>
+              {salesAssessmentData.length}
+            </span>
           </p>
           <p className={"text-sm"}>
             Total Amount Sold:{" "}

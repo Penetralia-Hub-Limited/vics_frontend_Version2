@@ -32,6 +32,7 @@ interface TableData {
     | undefined
     | string
     | number
+    | boolean
     | Date
     | PaymentStatus
     | PlateNumberStatus
@@ -103,8 +104,8 @@ const DashboardTable: FC<IDashboardTable> = ({
       </TableHeader>
       {data.length === 0 ? (
         <TableBody>
-          <TableRow className="flex items-center justify-center">
-            <TableCell>
+          <TableRow>
+            <TableCell className="flex items-center justify-center">
               <Loading screen="default" size={30} />
             </TableCell>
           </TableRow>

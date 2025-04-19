@@ -9,45 +9,17 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ConfigurationSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import { useSelector } from "react-redux";
+import { selectServices } from "@/store/service-type/service-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "servicename", title: "Service Name" },
-  { key: "category", title: "Category" },
-  { key: "createdBy", title: "Created By" },
-  { key: "date", title: "Date Created" },
-  { key: "durationmonths", title: "Duration (in Months)" },
-  { key: "amount", title: "Amount" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    servicename: "JK",
-    category: "Private (Direct)",
-    createdBy: "Akanbi S.",
-    date: new Date(),
-    durationmonths: 401,
-    amount: 401,
-  },
-  {
-    id: 2,
-    servicename: "JK",
-    category: "Private (Direct)",
-    createdBy: "Akanbi S.",
-    date: new Date(),
-    durationmonths: 401,
-    amount: 401,
-  },
-  {
-    id: 3,
-    servicename: null,
-    category: "Private (Direct)",
-    createdBy: "Akanbi S.",
-    date: new Date(),
-    durationmonths: 401,
-    amount: 401,
-  },
+  { key: "sid", title: "S/N" },
+  { key: "name", title: "Service Name" },
+  { key: "vehicle_category", title: "Category" },
+  { key: "created_by", title: "Created By" },
+  { key: "created_at", title: "Date Created" },
+  { key: "duration_in_month", title: "Duration (in Months)" },
+  { key: "service_price", title: "Amount" },
 ];
 
 export default function Page() {
@@ -56,9 +28,10 @@ export default function Page() {
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
   const [plateNumber, setPlateNumber] = useState<string>("");
+  const serviceData = useSelector(selectServices);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(serviceData.length / itemsPerPage);
+  const paginatedData = serviceData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );

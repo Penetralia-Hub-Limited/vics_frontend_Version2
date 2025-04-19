@@ -1,5 +1,10 @@
 import { PaginationProp } from "@/common/types";
 import { VehicleStatus, VehicleCategory, EngineCapacity } from "@/common/enum";
+import { PlateNumberData } from "../plateNumber/plate-number-types";
+import { StatesData } from "../states/states-types";
+import { User } from "../user/user-type";
+import { CompanyData } from "../company/company-types";
+import { InvoiceData } from "../invoice/invoice-types";
 
 export type VehicleData = {
   id: string;
@@ -35,6 +40,12 @@ export type VehicleData = {
   date_deactivated: string | null;
   created_at: string;
   updated_at: string;
+  plate_number: PlateNumberData;
+  state: StatesData;
+  creator: User;
+  company: CompanyData;
+  owner: User;
+  invoice: InvoiceData;
 };
 
 export interface VehicleResponse {

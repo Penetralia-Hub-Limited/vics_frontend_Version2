@@ -10,61 +10,21 @@ import { DashboardSVG, PenSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { ApprovalStatus } from "@/common/enum";
 import DashboardTable from "@/components/dashboard/dashboard-table";
+import { useSelector } from "react-redux";
+import { selectVehicles } from "@/store/vehicle/vehicle-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "name", title: "Name" },
+  { key: "sid", title: "S/N" },
+  { key: "owner_name", title: "Name" },
   { key: "platenumber", title: "Plate Number" },
   { key: "category", title: "Category" },
-  { key: "chasisnumber", title: "Chasis Number" },
-  { key: "enginenumber", title: "Engine Number" },
-  { key: "platetype", title: "Plate Type" },
-  { key: "vehiclemake", title: "Vehicle Make" },
+  { key: "chasis_number", title: "Chasis Number" },
+  { key: "engine_number", title: "Engine Number" },
+  { key: "type", title: "Plate Type" },
+  { key: "make", title: "Vehicle Make" },
   { key: "model", title: "Model" },
   { key: "year", title: "Year" },
-  { key: "approvalstatus", title: "Approval Status" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    name: "JK",
-    platenumber: "Private (Direct)",
-    category: "Akanbi S.",
-    chasisnumber: 34535343,
-    enginenumber: 43234201,
-    platetype: "Private (Direct)",
-    vehiclemake: "Toyota CE",
-    model: "2018FE",
-    year: 2025,
-    approvalstatus: ApprovalStatus.APPROVED,
-  },
-  {
-    id: 2,
-    name: "JK",
-    platenumber: "Private (Direct)",
-    category: "Akanbi S.",
-    chasisnumber: 34535343,
-    enginenumber: 43234201,
-    platetype: "Private (Direct)",
-    vehiclemake: "Toyota CE",
-    model: "2018FE",
-    year: 2025,
-    approvalstatus: ApprovalStatus.APPROVED,
-  },
-  {
-    id: 3,
-    name: "JK",
-    platenumber: "Private (Direct)",
-    category: "Akanbi S.",
-    chasisnumber: 34535343,
-    enginenumber: 43234201,
-    platetype: "Private (Direct)",
-    vehiclemake: "Toyota CE",
-    model: "2018FE",
-    year: 2025,
-    approvalstatus: ApprovalStatus.NOTAPPROVED,
-  },
+  { key: "vio_approval", title: "Approval Status" },
 ];
 
 export default function Page() {
@@ -73,9 +33,10 @@ export default function Page() {
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
   const [plateNumber, setPlateNumber] = useState<string>("");
+  const vehicleData = useSelector(selectVehicles);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(vehicleData.length / itemsPerPage);
+  const paginatedData = vehicleData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );

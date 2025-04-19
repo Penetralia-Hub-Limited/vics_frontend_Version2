@@ -11,7 +11,7 @@ import {
 import { CreateStateTypeProps } from "@/store/service-type/service-type-types";
 
 export class ServiceTypeService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/invoices";
+  static url = "https://benion-vics-api.onrender.com/api/v1/service_types";
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

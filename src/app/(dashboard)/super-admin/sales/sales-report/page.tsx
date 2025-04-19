@@ -18,7 +18,7 @@ import { VerifyPhoneNumber } from "@/components/dashboard/verification-forms/ver
 import { selectValidatePhoneNumber } from "@/store/plateNumber/plate-number-selector";
 import { useSelector } from "react-redux";
 import { ResponseModalX } from "@/components/general/response-modalx";
-import { selectSalesAssessment } from "@/store/plateNumber/plate-number-selector";
+import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
 
 interface TableRow {
   id: number;
@@ -60,7 +60,7 @@ export default function Page() {
     invoiceNumber: "",
   });
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const salesAssessmentData = useSelector(selectSalesAssessment);
+  const salesAssessmentData = useSelector(selectPlateNumber);
 
   const totalPages = Math.ceil(salesAssessmentData.length / itemsPerPage);
   const paginatedData = salesAssessmentData.slice(
@@ -85,8 +85,6 @@ export default function Page() {
   const doesPhoneExist = useSelector((plateNumber) =>
     selectValidatePhoneNumber(plateNumber, verifyPhoneNumber)
   );
-
-  console.log("PHONE VALIDATE ", doesPhoneExist);
 
   const handleSubmit = () => {
     if (!doesPhoneExist) return;

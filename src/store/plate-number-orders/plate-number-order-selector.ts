@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 import { RootState } from "../store";
 import { PlateNumberOrderType } from "@/common/enum";
+import { format } from "date-fns";
 
 const selectPlateNumberOrderReducer = (state: RootState) =>
   state.platenumberorder.plateNumberOrder;
@@ -61,7 +62,8 @@ export const selectPlateNumberRequestTableData = createSelector(
           return {
             sid: index + 1,
             ...order,
-            created_at: new Date(order?.created_at ?? null).toDateString(),
+            created_by: `${order?.creator?.firstname ?? "-"} ${order?.creator?.lastname ?? "-"}`,
+            created_at: `${format(order?.created_at ?? null, "LLL. d yyyy")} | ${format(order?.created_at ?? null, "hh:mm:ss a")}`,
             recommender: `${order.recommender?.firstname ?? "-"} ${order.recommender?.lastname ?? "-"}`,
             approver: `${order.approver?.firstname ?? "-"} ${order.approver?.lastname ?? "-"}`,
           };

@@ -10,6 +10,8 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ManagementSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -64,7 +66,8 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
-
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
   const [value, setValue] = useState<{
     lgaValue: string;
     plateNumberType: string;
@@ -137,7 +140,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["lagos", "abuja"]}
+            items={filteredLGA}
             onSelect={(selected) =>
               setValue((prev) => ({
                 ...prev,

@@ -9,43 +9,17 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, TaxPayerSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import { useSelector } from "react-redux";
+import { selectTaxPayers } from "@/store/user/user-selector";
 
 const tableColumns = [
-  { key: "id" as const, title: "S/N" },
+  { key: "sid" as const, title: "S/N" },
   { key: "firstname" as const, title: "First Name" },
   { key: "lastname" as const, title: "last Name" },
-  { key: "phonenumber" as const, title: "Phone Number" },
+  { key: "phone" as const, title: "Phone Number" },
   { key: "email" as const, title: "Email" },
-  { key: "date" as const, title: "Date" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    firstname: "Ikedichuks",
-    lastname: "Bernard",
-    phonenumber: "0902222222",
-    email: "example@example.com",
-    date: new Date(),
-  },
-  {
-    id: 2,
-    firstname: "Ikedichuks",
-    lastname: "Bernard",
-    phonenumber: "0902222222",
-    email: "example@example.com",
-    date: new Date(),
-  },
-  {
-    id: 3,
-    firstname: "Ikedichuks",
-    lastname: "Bernard",
-    phonenumber: "0902222222",
-    email: "example@example.com",
-    date: new Date(),
-  },
+  { key: "date_created" as const, title: "Date" },
 ];
 
 export default function Page() {
@@ -54,9 +28,10 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const taxPayers = useSelector(selectTaxPayers);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(taxPayers.length / itemsPerPage);
+  const paginatedData = taxPayers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -80,8 +55,7 @@ export default function Page() {
     return [
       {
         title: "Preview",
-        action: () =>
-          router.push("/super-admin/tax-payer/tax-payer-information"),
+        action: () => router.push(`/super-admin/tax-payer/${tableRow.id}`),
       },
       {
         title: "Edit",

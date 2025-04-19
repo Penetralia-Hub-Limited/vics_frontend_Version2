@@ -10,65 +10,18 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import { DashboardSVG, ReportSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
-import { PlateNumberStatus, PlateNumberType } from "@/common/enum";
+import { PlateNumberType } from "@/common/enum";
+import { useSelector } from "react-redux";
+import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
+import { RootState } from "@/store/store";
 
 const assignedReportHeader = [
-  { key: "id" as const, title: "S/N" },
-  { key: "platenumber" as const, title: "Plate Number" },
-  { key: "platetype" as const, title: "Plate Type" },
-  { key: "mla" as const, title: "MLA" },
-  { key: "platenostatus" as const, title: "Plate Number Status" },
-  { key: "date" as const, title: "Date Assigned" },
-];
-const assignedReportData = [
-  {
-    id: 1,
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    mla: "INV001",
-    platenostatus: PlateNumberStatus.ASSIGNED,
-    date: new Date(),
-  },
-  {
-    id: 2,
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    mla: "INV001",
-    platenostatus: PlateNumberStatus.ASSIGNED,
-    date: new Date(),
-  },
-  {
-    id: 3,
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    mla: "INV001",
-    platenostatus: PlateNumberStatus.ASSIGNED,
-    date: new Date(),
-  },
-  {
-    id: 4,
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    mla: "INV001",
-    platenostatus: PlateNumberStatus.ASSIGNED,
-    date: new Date(),
-  },
-  {
-    id: 5,
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    mla: "INV001",
-    platenostatus: PlateNumberStatus.UNASSIGNED,
-    date: new Date(),
-  },
-  {
-    id: 6,
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    mla: "INV001",
-    platenostatus: PlateNumberStatus.UNASSIGNED,
-    date: new Date(),
-  },
+  { key: "sid", title: "S/N" },
+  { key: "number", title: "Plate Number" },
+  { key: "type", title: "Plate Type" },
+  { key: "created_by", title: "MLA" },
+  { key: "status", title: "Plate Number Status" },
+  { key: "date", title: "Date Assigned" },
 ];
 
 export default function Page() {
@@ -85,9 +38,12 @@ export default function Page() {
     plateNumber: "",
     lga: "",
   });
+  const assignedPlateNumber = useSelector(selectPlateNumber);
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
 
-  const totalPages = Math.ceil(assignedReportData.length / itemsPerPage);
-  const paginatedData = assignedReportData.slice(
+  const totalPages = Math.ceil(assignedPlateNumber.length / itemsPerPage);
+  const paginatedData = assignedPlateNumber.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -143,7 +99,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["Private", "Commercial"]}
+            items={filteredLGA}
             selected={inputValues.lga}
             onSelect={(selected) =>
               setInputValues((prev) => ({

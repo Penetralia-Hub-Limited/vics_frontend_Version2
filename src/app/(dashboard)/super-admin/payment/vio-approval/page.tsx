@@ -11,73 +11,24 @@ import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { ApprovalStatus } from "@/common/enum";
 import DashboardTable from "@/components/dashboard/dashboard-table";
+import { useSelector } from "react-redux";
+import { selectVehicles } from "@/store/vehicle/vehicle-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "name", title: "Name" },
+  { key: "sid", title: "S/N" },
+  { key: "owner_name", title: "Name" },
   { key: "platenumber", title: "Plate Number" },
-  { key: "phonenumber", title: "Phone Number" },
-  { key: "approvalstatus", title: "Approval Status" },
-  { key: "chasisnumber", title: "Chasis Number" },
-  { key: "enginenumber", title: "Engine Number" },
-  { key: "vehiclemake", title: "Vehicle Make" },
+  { key: "phone", title: "Phone Number" },
+  { key: "vio_approval", title: "Approval Status" },
+  { key: "chasis_number", title: "Chasis Number" },
+  { key: "engine_number", title: "Engine Number" },
+  { key: "make", title: "Vehicle Make" },
   { key: "model", title: "Model" },
   { key: "amount", title: "Amount" },
   { key: "category", title: "Category" },
-  { key: "paymentreference", title: "Payment Reference" },
-  { key: "mla", title: "MLA" },
-  { key: "date", title: "Date Created" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    name: "Ikedichuks",
-    platenumber: "FNREE-342334",
-    phonenumber: "0902222222",
-    approvalstatus: ApprovalStatus.NOTAPPROVED,
-    chasisnumber: "JKLSNNJKJ2342DFFDEW",
-    enginenumber: "JKLSNNJKJ2342",
-    vehiclemake: "Mercedez Benz",
-    model: "Mercedez E-20",
-    amount: 34346632,
-    category: null,
-    paymentreference: 234233145343,
-    mla: "Akanbbi E.",
-    date: new Date(),
-  },
-  {
-    id: 2,
-    name: "Ikedichuks",
-    platenumber: "FNREE-342334",
-    phonenumber: "0902222222",
-    approvalstatus: ApprovalStatus.NOTAPPROVED,
-    chasisnumber: "JKLSNNJKJ2342DFFDEW",
-    enginenumber: "JKLSNNJKJ2342",
-    vehiclemake: "Mercedez Benz",
-    model: "Mercedez E-20",
-    amount: 34346632,
-    category: null,
-    paymentreference: 234233145343,
-    mla: "Akanbbi E.",
-    date: new Date(),
-  },
-  {
-    id: 3,
-    name: "Ikedichuks",
-    platenumber: "FNREE-342334",
-    phonenumber: "0902222222",
-    approvalstatus: ApprovalStatus.APPROVED,
-    chasisnumber: "JKLSNNJKJ2342DFFDEW",
-    enginenumber: "JKLSNNJKJ2342",
-    vehiclemake: "Mercedez Benz",
-    model: "Mercedez E-20",
-    amount: 34346632,
-    category: null,
-    paymentreference: 234233145343,
-    mla: "Akanbbi E.",
-    date: new Date(),
-  },
+  { key: "payment_ref", title: "Payment Reference" },
+  { key: "created_by", title: "MLA" },
+  { key: "created_at", title: "Date Created" },
 ];
 
 export default function Page() {
@@ -96,37 +47,30 @@ export default function Page() {
     phoneNumber: "",
     plateNumber: "",
   });
+  const vehiclesData = useSelector(selectVehicles);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(vehiclesData.length / itemsPerPage);
+  const paginatedData = vehiclesData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
-      <div
-        className={
-          "flex flex-col gap-5 md:flex-row justify-between items-center"
-        }
-      >
-        <DashboardPath
-          pathdata={[
-            {
-              label: "Dashboard",
-              Icon: DashboardSVG,
-              link: "/super-admin/dashboard",
-            },
-            {
-              label: "VIO Approval",
-              Icon: PaymentSVG,
-              link: "/super-admin/payment/vio-approval",
-            },
-          ]}
-        />
-
-        <Button>Search</Button>
-      </div>
+      <DashboardPath
+        pathdata={[
+          {
+            label: "Dashboard",
+            Icon: DashboardSVG,
+            link: "/super-admin/dashboard",
+          },
+          {
+            label: "VIO Approval",
+            Icon: PaymentSVG,
+            link: "/super-admin/payment/vio-approval",
+          },
+        ]}
+      />
 
       <CardContainer className={"flex flex-col gap-5"}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">

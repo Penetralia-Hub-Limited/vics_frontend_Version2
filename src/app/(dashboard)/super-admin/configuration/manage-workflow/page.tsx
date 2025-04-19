@@ -5,89 +5,28 @@ import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ConfigurationSVG } from "@/common/svgs";
-
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import { useSelector } from "react-redux";
+import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "steps", title: "Steps" },
+  { key: "sid", title: "S/N" },
+  { key: "steps_completed", title: "Steps" },
   { key: "type", title: "Type" },
-  { key: "approvingofficer", title: "Approving Officer" },
+  { key: "approver", title: "Approving Officer" },
   { key: "superapprover", title: "Super Approver" },
   { key: "finalstage", title: "Final Stage" },
-  { key: "createdBy", title: "Created By" },
-  { key: "date", title: "Date Created" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 2,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 3,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 4,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 5,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 6,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
+  { key: "created_by", title: "Created By" },
+  { key: "created_at", title: "Date Created" },
 ];
 
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const workflowData = useSelector(selectPlateNumberRequestTableData);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(workflowData.length / itemsPerPage);
+  const paginatedData = workflowData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );

@@ -16,7 +16,7 @@ const tableColumns = [
   { key: "id", title: "S/N" },
   { key: "platenumber", title: "Plate Number" },
   { key: "platetype", title: "Plate Type" },
-  { key: "account", title: "Account" },
+  { key: "account", title: "Amount" },
   { key: "buyer", title: "Buyer" },
   { key: "date", title: "Date Sold" },
   { key: "paymentstatus", title: "Payment Status" },

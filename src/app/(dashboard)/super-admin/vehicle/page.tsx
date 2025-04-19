@@ -15,53 +15,19 @@ import { IDTaxPayerMeans } from "@/common/enum";
 import { VehicleModalElements } from "@/components/dashboard/vehicle/vehicle-modal-element";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import ResponseModal from "@/components/general/response-modal";
+import { useSelector } from "react-redux";
+import { selectVehicles } from "@/store/vehicle/vehicle-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "platenumber", title: "Number of Plates" },
+  { key: "sid", title: "S/N" },
+  { key: "platenumber", title: "Plate Number" },
   { key: "type", title: "Plate Type" },
   { key: "category", title: "Category" },
-  { key: "chasisNo", title: "Chasis Number" },
-  { key: "engineNo", title: "Engine Number" },
-  { key: "vehiclemake", title: "Vehicle Make" },
+  { key: "chasis_number", title: "Chasis Number" },
+  { key: "engine_number", title: "Engine Number" },
+  { key: "make", title: "Vehicle Make" },
   { key: "model", title: "Model" },
   { key: "year", title: "Year" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    platenumber: "ASKJA3",
-    type: "Private (Direct)",
-    category: "Vehicle Between 2.0 - 3.0",
-    chasisNo: "JKJJJLWE232423",
-    engineNo: "JK",
-    vehiclemake: "JK343323",
-    model: "JK343323",
-    year: "2025",
-  },
-  {
-    id: 2,
-    platenumber: "ASKJA3",
-    type: "Private (Direct)",
-    category: "Vehicle Between 2.0 - 3.0",
-    chasisNo: "JKJJJLWE232423",
-    engineNo: "JK",
-    vehiclemake: "JK343323",
-    model: "JK343323",
-    year: "2025",
-  },
-  {
-    id: 3,
-    platenumber: "ASKJA3",
-    type: "Private (Direct)",
-    category: "Vehicle Between 2.0 - 3.0",
-    chasisNo: "JKJJJLWE232423",
-    engineNo: "JK67235273",
-    vehiclemake: "JK343323",
-    model: "JK343323",
-    year: "2025",
-  },
 ];
 
 export default function Page() {
@@ -79,9 +45,10 @@ export default function Page() {
     nin: "",
     phoneNumber: "",
   });
+  const vehiclesData = useSelector(selectVehicles);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(vehiclesData.length / itemsPerPage);
+  const paginatedData = vehiclesData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );

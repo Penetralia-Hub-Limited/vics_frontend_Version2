@@ -18,6 +18,8 @@ import {
   CreateNewStockProps,
   CreateNewStockPropsInitialValues,
 } from "@/components/dashboard/verification-forms/create-new-stock";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export default function Page() {
   const itemsPerPage = 10;
@@ -36,6 +38,8 @@ export default function Page() {
     lga: "",
     plateNumberType: undefined,
   });
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
 
   const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
   const paginatedData = tableInvoices.slice(
@@ -80,7 +84,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["lagos", "abuja"]}
+            items={filteredLGA}
             selected={inputValues.lga}
             onSelect={(selected) =>
               setInputValues((prev) => ({
