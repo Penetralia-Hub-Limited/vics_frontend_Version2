@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -15,91 +16,55 @@ import {
   RecommendPlateNoRequestProp,
   RecommendPlateNoRequestInitialValues,
 } from "@/components/dashboard/verification-forms/recommend-and-update";
-import { ApprovalStatus, RequestStatus } from "@/common/enum";
+import { RequestStatus, InsuranceStatus, PlateNumberType } from "@/common/enum";
 import { getRowActions } from "@/common/helpers";
 import { ModalX } from "@/components/general/modalX";
+import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "trackingid", title: "Tracking ID" },
-  { key: "platenumbertype", title: "Plate Number Type" },
-  { key: "platerequested", title: "No. of Plate Requested" },
-  { key: "platerecommended", title: "No. of Plate Recommended" },
-  { key: "numberassigned", title: "No. Assigned" },
-  { key: "date", title: "Date" },
-  { key: "recommendingofficer", title: "Recommending Officer" },
-  { key: "finalApprovingOfficer", title: "Final Approving Officer" },
-  { key: "requeststatus", title: "Request Status" },
-  { key: "insuranceStatus", title: "Insurance Status" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    finalApprovingOfficer: "Dave E ",
-    requeststatus: RequestStatus.PENDING,
-    insuranceStatus: ApprovalStatus.NOTAPPROVED,
-  },
-  {
-    id: 2,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    finalApprovingOfficer: "Dave E ",
-    requeststatus: RequestStatus.PENDING,
-    insuranceStatus: ApprovalStatus.NOTAPPROVED,
-  },
-  {
-    id: 3,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    finalApprovingOfficer: "Dave E ",
-    requeststatus: RequestStatus.PENDING,
-    insuranceStatus: ApprovalStatus.APPROVED,
-  },
+  { key: "sid", title: "S/N" },
+  { key: "mla", title: "MLA" },
+  // { key: "mla_station", title: "MLA Station" },
+  { key: "tracking_id", title: "Tracking ID" },
+  { key: "plate_number_type", title: "Plate Number Type" },
+  { key: "total_number_requested", title: "No. of Plate Requested" },
+  { key: "recommended_number", title: "No. of Plate Recommended" },
+  { key: "number_assigned", title: "No. Assigned" },
+  { key: "created_at", title: "Date" },
+  { key: "recommender", title: "Recommending Officer" },
+  { key: "approver", title: "Final Approving Officer" },
+  { key: "status", title: "Request Status" },
+  { key: "insurance_status", title: "Insurance Status" },
 ];
 
 export default function Page() {
   const itemsPerPage = 10;
+  const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<{
     trackingid: string;
-    insuranceStatus: string;
-    plateNumberType: string;
-    requestStatus: string;
+    insuranceStatus: InsuranceStatus | undefined;
+    plateNumberType: PlateNumberType | undefined;
+    requestStatus: RequestStatus | undefined;
+    mla: string;
+    zoneoffice: string;
   }>({
     trackingid: "",
-    insuranceStatus: "",
-    plateNumberType: "",
-    requestStatus: "",
+    plateNumberType: undefined,
+    insuranceStatus: undefined,
+    requestStatus: undefined,
+    mla: "",
+    zoneoffice: "",
   });
   const [modalInput, setModalIinput] = useState<RecommendPlateNoRequestProp>(
     RecommendPlateNoRequestInitialValues
   );
 
-  console.log(modalInput);
-
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(plateNumbertableData.length / itemsPerPage);
+  const paginatedData = plateNumbertableData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -156,14 +121,42 @@ export default function Page() {
           />
 
           <DashboardCompSelect
+            title={"Zone Office"}
+            placeholder={"-- Select Type --"}
+            items={["ZONE1", "Zone2"]}
+            selected={inputValues.zoneoffice}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                zoneoffice: selected ? String(selected) : "",
+              }))
+            }
+          />
+
+          <DashboardCompSelect
+            title={"MLA"}
+            placeholder={"-- Select MLA --"}
+            items={["MLA1", "MLA2"]}
+            selected={inputValues.mla}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                mla: selected ? String(selected) : "",
+              }))
+            }
+          />
+        </div>
+
+        <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 items-end"}>
+          <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
-            items={["private", "commercial"]}
+            items={[...Object.values(PlateNumberType)]}
             selected={inputValues.plateNumberType}
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                plateNumberType: selected ? String(selected) : "",
+                plateNumberType: (selected as PlateNumberType) ?? undefined,
               }))
             }
           />
@@ -171,31 +164,35 @@ export default function Page() {
           <DashboardCompSelect
             title={"Insurance Status"}
             placeholder={"-- Select status --"}
-            items={["lagos", "abuja"]}
+            items={[...Object.values(InsuranceStatus)]}
             selected={inputValues.insuranceStatus}
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                insuranceStatus: selected ? String(selected) : "",
+                insuranceStatus: selected as InsuranceStatus | undefined,
+              }))
+            }
+          />
+
+          <DashboardCompSelect
+            title={"Request Status"}
+            placeholder={"-- Select status --"}
+            items={[...Object.values(RequestStatus)]}
+            selected={inputValues.requestStatus}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                requestStatus: selected as RequestStatus | undefined,
               }))
             }
           />
         </div>
 
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
-          <DashboardCompSelect
-            title={"Request Status"}
-            placeholder={"-- Select status --"}
-            items={["lagos", "abuja"]}
-            selected={inputValues.requestStatus}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                requestStatus: selected ? String(selected) : "",
-              }))
-            }
-          />
-
+        <div
+          className={
+            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 items-end"
+          }
+        >
           <DatePicker
             date={startDate}
             setDate={setStartDate}

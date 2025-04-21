@@ -8,78 +8,49 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ReportSVG } from "@/common/svgs";
-import InputWithLabel from "@/components/auth/input-comp";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { formattedAmount } from "@/common/helpers";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import {
+  selectServiceTypeName,
+  selectServices,
+} from "@/store/service-type/service-selector";
+import { useSelector } from "react-redux";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "transactionref", title: "Transaction Ref" },
+  { key: "sid", title: "S/N" },
+  { key: "revenue_code", title: "Transaction Ref" },
   { key: "mla", title: "MLA" },
-  { key: "station", title: "Station" },
-  { key: "buyer", title: "Buyer" },
-  { key: "servicetype", title: "Service Type" },
-  { key: "regtype", title: "Registration Type" },
-  { key: "transactiondate", title: "Transaction Date" },
-  { key: "amount", title: "Amount" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    transactionref: 234768692380,
-    mla: "Akanbi E",
-    station: "MORO",
-    buyer: "Akanbi E",
-    servicetype: "Driver's Test",
-    regtype: "Private (Direct)",
-    transactiondate: new Date(),
-    amount: 345356,
-  },
-  {
-    id: 2,
-    transactionref: 234768692380,
-    mla: "Akanbi E",
-    station: "MORO",
-    buyer: "Akanbi E",
-    servicetype: "Driver's Test",
-    regtype: "Private (Direct)",
-    transactiondate: new Date(),
-    amount: 345356,
-  },
-  {
-    id: 3,
-    transactionref: 234768692380,
-    mla: "Akanbi E",
-    station: "MORO",
-    buyer: "Akanbi E",
-    servicetype: "Driver's Test",
-    regtype: "Private (Direct)",
-    transactiondate: new Date(),
-    amount: 345356,
-  },
+  // { key: "station", title: "Station" },
+  { key: "created_by", title: "Buyer" },
+  { key: "name", title: "Service Type" },
+  { key: "reg_type", title: "Registration Type" },
+  { key: "date_created", title: "Transaction Date" },
+  { key: "service_price", title: "Amount" },
 ];
 
 export default function Page() {
   const itemsPerPage = 10;
+  const serviceTypesNames = useSelector(selectServiceTypeName);
+  const serviceTypes = useSelector(selectServices);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
   const [inputValues, setInputValues] = useState<{
-    plateNumber: string;
-    paymentStatus: string;
-    invoiceNumber: string;
+    serviceType: string;
+    zoneoffice: string;
+    regType: string;
+    mla: string;
   }>({
-    plateNumber: "",
-    paymentStatus: "",
-    invoiceNumber: "",
+    serviceType: "",
+    zoneoffice: "",
+    regType: "",
+    mla: "",
   });
 
-  const totalAmount = tableData.reduce((sum, item) => sum + item.amount, 0);
-
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  // const totalAmount = serviceTypes.reduce((sum, item) => sum + item.amount, 0);
+  const totalPages = Math.ceil(serviceTypes.length / itemsPerPage);
+  const paginatedData = serviceTypes.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -103,59 +74,60 @@ export default function Page() {
 
       <CardContainer className={"flex flex-col gap-5"}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <InputWithLabel
-            items={{
-              id: "plateNumber",
-              label: "Plate Number",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "plateNumber",
-            }}
-            value={inputValues.plateNumber}
-            onChange={(e) =>
+          <DashboardCompSelect
+            title={"Service Type"}
+            placeholder={"-- Select Service --"}
+            items={serviceTypesNames}
+            selected={inputValues.serviceType}
+            onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                plateNumber: e.target.value,
+                serviceType: selected as string,
               }))
             }
           />
 
           <DashboardCompSelect
-            title={"Payment Status"}
-            placeholder={"-- Select Status --"}
-            items={["private", "commercial"]}
-            selected={inputValues.paymentStatus}
+            title={"Registration Type"}
+            placeholder={"-- Select Type --"}
+            items={["Reg1", "Reg2"]}
+            selected={inputValues.regType}
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                paymentStatus: selected ? String(selected) : "",
+                regType: (selected as string) ?? "",
               }))
             }
           />
 
-          <InputWithLabel
-            items={{
-              id: "invoiceNumber",
-              label: "Invoice Number",
-              placeholder: "Invoice Number",
-              type: "text",
-              htmlfor: "invoiceNumber",
-            }}
-            value={inputValues.invoiceNumber}
-            onChange={(e) =>
+          <DashboardCompSelect
+            title={"Zone Office"}
+            placeholder={"-- Select Type --"}
+            items={["ZONE1", "Zone2"]}
+            selected={inputValues.zoneoffice}
+            onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                invoiceNumber: e.target.value,
+                zoneoffice: selected ? String(selected) : "",
               }))
             }
           />
         </div>
 
-        <div
-          className={
-            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
-          }
-        >
+        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
+          <DashboardCompSelect
+            title={"MLA"}
+            placeholder={"-- Select MLA --"}
+            items={["MLA1", "mla2"]}
+            selected={inputValues.mla}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                mla: (selected as string) ?? "",
+              }))
+            }
+          />
+
           <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
           <DatePicker date={toDate} setDate={setToDate} title={"To"} />
 
@@ -169,14 +141,12 @@ export default function Page() {
       <div className="flex flex-col gap-3 border border-primary-300 rounded-lg">
         <div className={"flex flex-row justify-between p-3"}>
           <p className={"text-sm"}>
-            Total Plate Number Sales:{" "}
-            <span className={"font-semibold"}>{tableData.length}</span>
+            Total Service Sales:{" "}
+            <span className={"font-semibold"}>{serviceTypes.length}</span>
           </p>
           <p className={"text-sm"}>
             Total Amount Sold:{" "}
-            <span className={"font-semibold"}>
-              {formattedAmount(totalAmount)}
-            </span>
+            <span className={"font-semibold"}>{formattedAmount(0)}</span>
           </p>
         </div>
         <div>

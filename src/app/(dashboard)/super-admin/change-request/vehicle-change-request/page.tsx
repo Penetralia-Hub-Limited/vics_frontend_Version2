@@ -8,7 +8,6 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, PenSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { ApprovalStatus } from "@/common/enum";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { useSelector } from "react-redux";
 import { selectVehicles } from "@/store/vehicle/vehicle-selector";

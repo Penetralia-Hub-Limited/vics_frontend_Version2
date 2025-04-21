@@ -1,42 +1,73 @@
-import { FC, ReactNode, ReactElement } from "react";
+"use client";
+
+import { FC, ReactNode } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import Dialog from "@mui/material/Dialog";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { cn } from "@/lib/utils";
 
 interface IResponseModalX {
-  title: string;
   open: boolean;
   onClose: () => void;
   content: ReactNode;
+  title: string;
   status: "success" | "failed";
-  footerBtn?: ReactElement;
+  footerBtnText?: string;
+  footerTrigger: () => void;
 }
 
 export const ResponseModalX: FC<IResponseModalX> = ({
-  title,
   open,
   onClose,
+  title,
   content,
   status,
-  footerBtn,
+  footerBtnText,
+  footerTrigger,
 }) => {
   return (
-    <Dialog fullWidth={true} maxWidth={"sm"} onClose={onClose} open={open}>
-      <div className={"flex flex-col gap-4 items-center justify-center py-4"}>
-        <DotLottieReact
-          aria-hidden="true"
-          style={{ width: 200, height: 100 }}
-          src={
-            status === "failed"
-              ? "https://lottie.host/5c209c9c-259d-4371-9ace-f3b3b490613b/YM6WHVU3rT.lottie"
-              : "https://lottie.host/fe46d010-b474-49a8-aa26-ce393f8b3a88/nh99Y4MbDq.lottie"
-          }
-          loop
-          autoplay
-        />
-        <p className={"text-lg text-center font-bold"}>{title}</p>
-        <div>{content}</div>
-        {footerBtn}
-      </div>
-    </Dialog>
+    <>
+      <AlertDialog open={open} onOpenChange={onClose}>
+        <AlertDialogContent className="py-6">
+          <AlertDialogHeader
+            className={"flex flex-col items-center justify-center"}
+          >
+            <DotLottieReact
+              inert
+              className={cn(open ? "" : "hidden")}
+              style={{ width: 200, height: 100 }}
+              src={
+                status === "failed"
+                  ? "https://lottie.host/5c209c9c-259d-4371-9ace-f3b3b490613b/YM6WHVU3rT.lottie"
+                  : "https://lottie.host/fe46d010-b474-49a8-aa26-ce393f8b3a88/nh99Y4MbDq.lottie"
+              }
+              loop
+              autoplay
+            />
+            <AlertDialogTitle>{title}</AlertDialogTitle>
+            <AlertDialogDescription></AlertDialogDescription>
+            <div>{content}</div>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            {/* <AlertDialogCancel onClick={handleClose}>Cancel</AlertDialogCancel> */}
+            <AlertDialogAction
+              onClick={() => {
+                footerTrigger();
+                onClose();
+              }}
+            >
+              {footerBtnText}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };

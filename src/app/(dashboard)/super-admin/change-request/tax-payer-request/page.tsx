@@ -8,7 +8,6 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, PenSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { ApprovalStatus } from "@/common/enum";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { useSelector } from "react-redux";
 import { selectTaxPayers } from "@/store/user/user-selector";
@@ -20,33 +19,6 @@ const tableColumns = [
   { key: "phone", title: "Phone Number" },
   { key: "approval_status", title: "Approval Status" },
   { key: "date_created", title: "Date Created" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    name: "JK",
-    email: "Private (Direct)",
-    phonenumber: "Akanbi S.",
-    approvalstatus: ApprovalStatus.APPROVED,
-    date: new Date(),
-  },
-  {
-    id: 2,
-    name: "JK",
-    email: "Private (Direct)",
-    phonenumber: "Akanbi S.",
-    approvalstatus: ApprovalStatus.NOTAPPROVED,
-    date: new Date(),
-  },
-  {
-    id: 3,
-    name: "JK",
-    email: "Private (Direct)",
-    phonenumber: "Akanbi S.",
-    approvalstatus: ApprovalStatus.APPROVED,
-    date: new Date(),
-  },
 ];
 
 export default function Page() {

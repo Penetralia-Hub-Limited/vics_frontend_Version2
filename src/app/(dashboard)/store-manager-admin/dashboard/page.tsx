@@ -5,15 +5,25 @@ import { format } from "date-fns";
 import { DateRange } from "@/common/enum";
 import SummaryCard from "@/components/dashboard/dashboard-summary-card";
 import { DashboardNotificationsComp } from "@/components/dashboard/notification/dashboard-notifications";
-
-const summaryItems1 = [
-  { title: "Plate Requests", amount: 318 },
-  { title: "Stock Level", amount: 1743, isCurrency: true },
-];
+import {
+  selectNewPlateSales,
+  selectPlateRequested,
+  selectPlateStockLevel,
+  selectPlateNumberAmount,
+  selectPlateNumberTotalSales,
+} from "@/store/plate-number-orders/plate-number-order-selector";
+import { useSelector } from "react-redux";
+import { AuthState } from "@/store/auth/auth-user-types";
 
 export default function Page() {
   const currentDate = new Date();
   const formattedDate = format(currentDate, "LLL. d yyyy ; h:maaa");
+  const { data } = useSelector((state: { auth: AuthState }) => state.auth);
+  const plateNumberRequested = useSelector(selectPlateRequested);
+  const plateNumberAmount = useSelector(selectPlateNumberAmount);
+  const plateNumberStockLevel = useSelector(selectPlateStockLevel);
+  const plateNumberTotalSales = useSelector(selectPlateNumberTotalSales);
+  const plateNumberNewPlateSales = useSelector(selectNewPlateSales);
 
   const [selectedRanges1, setSelectedRanges1] = useState<
     Record<string, DateRange>
@@ -33,6 +43,21 @@ export default function Page() {
       }));
     };
 
+  const summaryItems1 = [
+    { title: "Plate Requests", amount: plateNumberRequested },
+    { title: "Stock Level", amount: plateNumberStockLevel },
+  ];
+
+  const summaryItems2 = [
+    { title: "New Plate Sales", amount: plateNumberNewPlateSales },
+    {
+      title: "Plate Number Amount",
+      amount: plateNumberAmount,
+      isCurrency: true,
+    },
+    { title: "Total Sales", amount: plateNumberTotalSales, isCurrency: true },
+  ];
+
   return (
     <main>
       <div
@@ -40,7 +65,9 @@ export default function Page() {
           "pb-8 flex md:flex-row xl:flex-row flex-col md:justify-between items-center gap-8 md:gap-12"
         }
       >
-        <p className={"text-lg md:text-3xl font-bold"}>Welcome, Username</p>
+        <p className={"text-lg md:text-3xl font-bold"}>
+          Welcome, {data?.user?.firstname ?? "User"}
+        </p>
         <p className={"text-sm text-neutral-700"}>{formattedDate}</p>
       </div>
 
@@ -51,12 +78,11 @@ export default function Page() {
               "flex flex-col md:flex-row gap-2 justify-between items-center w-full"
             }
           >
-            {summaryItems1.map(({ title, amount, isCurrency }) => (
+            {summaryItems1.map(({ title, amount }, index) => (
               <SummaryCard
-                key={title}
+                key={index}
                 title={title}
                 amount={amount}
-                isCurrency={isCurrency}
                 selectedRange={selectedRanges1[title] || DateRange.TODAY}
                 setSelectedRange={updateDateRange1(title)}
               />
@@ -64,13 +90,13 @@ export default function Page() {
           </div>
 
           <div className={"flex flex-col flex-wrap gap-4"}>
-            {[{}, {}, {}].map((_, index) => {
+            {summaryItems2.map(({ title, amount, isCurrency }, index) => {
               return (
                 <SummaryCard
                   key={index}
-                  title={"Plate Request"}
-                  amount={30000}
-                  isCurrency={false}
+                  title={title}
+                  amount={amount}
+                  isCurrency={isCurrency}
                   selectedRange={DateRange.TODAY}
                   setSelectedRange={() => {}}
                 />

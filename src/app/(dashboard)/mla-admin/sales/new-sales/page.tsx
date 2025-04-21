@@ -85,12 +85,12 @@ export default function Page() {
           {
             label: "Sales Dashboard",
             Icon: SalesSVG,
-            link: "/super-admin/sales/dashboard",
+            link: "/mla-admin/sales/sales-dashboard",
           },
           {
             label: "Sell New Plate",
             Icon: SalesSVG,
-            link: "/store-manager-admin/sales/new-plate-sales",
+            link: "/mla-admin/sales/new-sales",
           },
         ]}
       />

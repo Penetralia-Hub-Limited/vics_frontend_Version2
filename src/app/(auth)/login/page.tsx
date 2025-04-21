@@ -21,11 +21,20 @@ export default function Page() {
     (state: { auth: AuthState }) => state.auth
   );
 
-  // navigate to super admin if logged in
+  // navigate to different dashboards
   useEffect(() => {
     if (isLoggedIn && data?.user) {
       if (data.user.role === Role.SUPERADMIN) {
         router.push("/super-admin/dashboard");
+      }
+      if (data.user.role === Role.SMR) {
+        router.push("/smr-admin/dashboard");
+      }
+      if (data.user.role === Role.STOREADMIN) {
+        router.push("/store-manager-admin/dashboard");
+      }
+      if (data.user.role === Role.MLA) {
+        router.push("/mla-admin/dashboard");
       }
     }
   }, [isLoggedIn, data, router]);

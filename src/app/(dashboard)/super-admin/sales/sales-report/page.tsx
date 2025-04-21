@@ -210,42 +210,34 @@ export default function Page() {
         </div>
       </div>
 
-      {openModal && (
-        <ResponseModalX
-          title={"Phone Number Verified Successfully"}
-          open={true}
-          status={"success"}
-          footerBtn={
-            <Button
-              onClick={() => router.push("/super-admin/sales/new-plate-sales")}
-              type={"submit"}
-            >
-              Continue
-            </Button>
-          }
-          onClose={() => setOpenModal(false)}
-          content={
-            <div className={"flex flex-col gap-4 py-6"}>
-              <div className={"grid grid-cols-[1fr_2fr]"}>
-                <p>Name:</p>
-                <p className={"font-semibold justify-self-end"}>Akan E</p>
-              </div>
-              <div className={"grid grid-cols-[1fr_2fr]"}>
-                <p>Phone Number:</p>
-                <p className={"font-semibold justify-self-end"}>
-                  {/* {identificationInput.phoneNumber} */}
-                </p>
-              </div>
-              <div className={"grid grid-cols-[1fr_2fr]"}>
-                <p>Address:</p>
-                <p className={"font-semibold justify-self-end"}>
-                  Omru Oran Ojo, Ibadan 2343423
-                </p>
-              </div>
+      <ResponseModalX
+        title={"Phone Number Verified Successfully"}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={
+          <>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p>Name:</p>
+              <p className={"font-semibold justify-self-end"}>Akan E</p>
             </div>
-          }
-        />
-      )}
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p>Phone Number:</p>
+              <p className={"font-semibold justify-self-end"}>
+                {/* {identificationInput.phoneNumber} */}
+              </p>
+            </div>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p>Address:</p>
+              <p className={"font-semibold justify-self-end"}>
+                Omru Oran Ojo, Ibadan 2343423
+              </p>
+            </div>
+          </>
+        }
+        status={"success"}
+        footerBtnText={"Continue"}
+        footerTrigger={() => router.push("/super-admin/sales/new-plate-sales")}
+      />
     </main>
   );
 }

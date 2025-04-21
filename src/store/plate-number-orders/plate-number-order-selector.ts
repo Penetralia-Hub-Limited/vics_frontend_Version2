@@ -35,7 +35,7 @@ export const selectPlateNumberAmount = createSelector(
       .reduce((acc, invoice) => acc + invoice.amount, 0)
 );
 
-// Getting the plate number total Sales
+// Getting the plate number total Sales amount
 export const selectPlateNumberTotalSales = createSelector(
   [selectPlateNumberOrderReducer],
   (plateNumberOrder) =>
@@ -44,7 +44,7 @@ export const selectPlateNumberTotalSales = createSelector(
       .reduce((acc, order) => acc + order.amount, 0)
 );
 
-// Getting the new plate sales
+// Getting the new plate sales amount
 export const selectNewPlateSales = createSelector(
   [selectPlateNumberOrderReducer],
   (plateNumberOrder) =>
@@ -69,4 +69,19 @@ export const selectPlateNumberRequestTableData = createSelector(
           };
         })
       : []
+);
+
+// Getting plate number order of type Sale
+export const selectSalesPlateNumber = createSelector(
+  [selectPlateNumberOrderReducer],
+  (plateNumberOrder) =>
+    plateNumberOrder
+      .filter((order) => order.type === PlateNumberOrderType.SALE)
+      .map((order, index) => {
+        return {
+          sid: index + 1,
+          date_created: `${format(order?.created_at ?? null, "LLL. d yyyy")} | ${format(order?.created_at ?? null, "hh:mm:ss a")}`,
+          ...order,
+        };
+      })
 );

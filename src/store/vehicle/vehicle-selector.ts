@@ -27,3 +27,18 @@ export const selectVehicles = createSelector(
         })
       : []
 );
+
+export const selectValidUser = createSelector(
+  [
+    selectVehicleReducer,
+    (_: any, data: { phoneNumber: string; nin: string }) => data,
+  ],
+  (vehicle, data) => {
+    const foundData = vehicle.vehicles.find(
+      (vehicle) =>
+        vehicle?.owner?.phone === data.phoneNumber ||
+        vehicle.owner?.nin === data.nin
+    );
+    return foundData;
+  }
+);

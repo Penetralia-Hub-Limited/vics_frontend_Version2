@@ -4,33 +4,25 @@ import { useState } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
-import { tableInvoices } from "@/common/constant";
 import CardContainer from "@/components/general/card-container";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import { DashboardSVG, ManagementSVG } from "@/common/svgs";
-import { PlateNumberType } from "@/common/enum";
-import Modal from "@/components/general/modal";
-import {
-  CreateNewStock,
-  CreateNewStockProps,
-  CreateNewStockPropsInitialValues,
-} from "@/components/dashboard/verification-forms/create-new-stock";
+import { DashboardSVG, VICSSVG } from "@/common/svgs";
+import { PlateNumberType, PlateStatus } from "@/common/enum";
 import { useSelector } from "react-redux";
+import { selectSoldPlateNumber } from "@/store/plateNumber/plate-number-selector";
 import { RootState } from "@/store/store";
 
-const tableHeaders = [
-  { title: "S/N", key: "id" },
-  { title: "LGA", key: "lga" },
-  { title: "Range", key: "lga" },
-  { title: "End Code", key: "lga" },
-  { title: "Type", key: "type" },
-  { title: "Created By", key: "createdby" },
-  { title: "Date", key: "Date" },
-  { title: "Initial Quantity", key: "initialQty" },
-  { title: "Current Quantity", key: "currentQty" },
+const tableColumns = [
+  { key: "sid", title: "S/N" },
+  { key: "number", title: "Plate Number" },
+  { key: "type", title: "Type" },
+  { key: "created_at", title: "Date" },
+  { key: "status", title: "Status" },
+  { key: "assignedto", title: "Assigned To" },
+  { key: "soldto", title: "Sold To" },
 ];
 
 export default function Page() {
@@ -38,61 +30,68 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
-  const [modalInput, setModalInput] = useState<CreateNewStockProps>(
-    CreateNewStockPropsInitialValues
-  );
   const [inputValues, setInputValues] = useState<{
-    plateNumberEndCode: string;
+    plateNumber: string;
     lga: string;
     plateNumberType: PlateNumberType | undefined;
+    status: string | undefined;
   }>({
-    plateNumberEndCode: "",
+    plateNumber: "",
     lga: "",
     plateNumberType: undefined,
+    status: "",
   });
+  const soldPlateNumbers = useSelector(selectSoldPlateNumber);
   const { lgas } = useSelector((state: RootState) => state?.lga);
   const filteredLGA = lgas.map((lga) => lga.name);
 
-  const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
-  const paginatedData = tableInvoices.slice(
+  const totalPages = Math.ceil(soldPlateNumbers.length / itemsPerPage);
+  const paginatedData = soldPlateNumbers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12"}>
-      <div
-        className={
-          "flex flex-col gap-5 md:flex-row justify-between items-center"
-        }
-      >
-        <DashboardPath
-          pathdata={[
-            {
-              label: "Dashboard",
-              Icon: DashboardSVG,
-              link: "/store-manager-admin/dashboard",
-            },
-            {
-              label: "Manage Stock",
-              Icon: ManagementSVG,
-              link: "/store-manager-admin/stock-management",
-            },
-          ]}
-        />
-
-        <Modal
-          title={"Create New Plate Number Request"}
-          content={
-            <CreateNewStock input={modalInput} setInput={setModalInput} />
-          }
-          btnText={"Create New Request"}
-          footerBtn={<Button type="submit">Submit</Button>}
-        />
-      </div>
+      <DashboardPath
+        pathdata={[
+          {
+            label: "Dashboard",
+            Icon: DashboardSVG,
+            link: "/super-admin/dashboard",
+          },
+          {
+            label: "Plate Number Request",
+            Icon: VICSSVG,
+            link: "/super-admin/plate-number-request",
+          },
+          {
+            label: "View Request",
+            Icon: VICSSVG,
+            link: "/super-admin/plate-number-request/view-request",
+          },
+        ]}
+      />
 
       <CardContainer className={"flex flex-col gap-5"}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <InputWithLabel
+            items={{
+              id: "plateNumber",
+              label: "Plate Number",
+              placeholder: "Plate Number",
+              type: "text",
+              htmlfor: "plateNumber",
+            }}
+            value={inputValues.plateNumber}
+            onChange={(e) =>
+              setInputValues((prev) => ({
+                ...prev,
+                plateNumber: e.target.value,
+              }))
+            }
+          />
+
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
@@ -118,30 +117,22 @@ export default function Page() {
               }))
             }
           />
+        </div>
 
-          <InputWithLabel
-            items={{
-              id: "plateNumber",
-              label: "Plate Number End Code",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "plateNumber",
-            }}
-            value={inputValues.plateNumberEndCode}
-            onChange={(e) =>
+        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
+          <DashboardCompSelect
+            title={"Status"}
+            placeholder={"-- Select Status --"}
+            items={[...Object.values(PlateStatus)]}
+            selected={inputValues.status}
+            onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                plateNumberEndCode: e.target.value,
+                status: selected as string | undefined,
               }))
             }
           />
-        </div>
 
-        <div
-          className={
-            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
-          }
-        >
           <DatePicker
             date={startDate}
             setDate={setStartDate}
@@ -149,7 +140,7 @@ export default function Page() {
           />
           <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
 
-          <Button>Search Store</Button>
+          <Button>Search</Button>
         </div>
       </CardContainer>
 
@@ -159,7 +150,7 @@ export default function Page() {
         <div
           className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
-          <DashboardTable headers={tableHeaders} data={paginatedData} />
+          <DashboardTable headers={tableColumns} data={paginatedData} />
         </div>
         <div className={"p-5 ml-auto"}>
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />

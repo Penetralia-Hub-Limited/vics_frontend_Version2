@@ -51,7 +51,7 @@ export const CreateNewStock: FC<ICreateNewStock> = ({ input, setInput }) => {
         }
       />
 
-      <div>
+      <div className={"flex item-center justify-center"}>
         <p className="font-semibold">Enter plate Number Type Information</p>
       </div>
 

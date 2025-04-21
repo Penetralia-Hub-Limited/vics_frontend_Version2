@@ -19,14 +19,13 @@ import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/p
 import {
   CreatePlateRequestInitialValues,
   CreatePlateRequestProps,
+  CreateNewPlatRequest,
 } from "@/components/dashboard/verification-forms/Create-Plate-Request";
-import { CreateNewPlatRequest } from "@/components/dashboard/verification-forms/Create-Plate-Request";
 import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
-import { RootState } from "@/store/store";
 import { selectStateIDFromStateName } from "@/store/states/state-selector";
 import { generateTrackingId } from "@/common/helpers";
-import ResponseModal from "@/components/general/response-modal";
 import { toast } from "sonner";
+import { ResponseModalX } from "@/components/general/response-modalx";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -57,16 +56,13 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState(inputInitialValues);
   const [modalInput, setModalInput] = useState<CreatePlateRequestProps>(
     CreatePlateRequestInitialValues
   );
   const state_id = useSelector((state) =>
     selectStateIDFromStateName(state, modalInput?.state)
-  );
-  const [isPlateCreated, setIsPlateCreated] = useState<boolean>(false);
-  const { isLoading, success } = useSelector(
-    (state: RootState) => state.platenumberorder
   );
   const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
 
@@ -96,35 +92,13 @@ export default function Page() {
       });
 
       if (res.status) {
-        setIsPlateCreated(true);
-        router.push(`/super-admin/plate-number-request/view-request`);
+        console.log("Creating plate ", res);
+        setOpenModal(true);
       }
     } catch (error) {
       console.error("Failed:", error);
-      setIsPlateCreated(false);
       toast(error as unknown as string);
-    } finally {
-      setIsPlateCreated(false);
     }
-  };
-
-  const CreateNewRequest = () => {
-    return (
-      <ResponseModal
-        title={success ? "Request Created Successfully" : "Request Failed"}
-        content={
-          <p>
-            {success
-              ? "You have successfully created a new request."
-              : "Failed to create new plate."}
-          </p>
-        }
-        status={success ? "success" : "failed"}
-        btnText={isLoading ? "Loading..." : "Submit"}
-        trigger={handleSubmit}
-        footerBtnText={"Done"}
-      />
-    );
   };
 
   return (
@@ -145,13 +119,29 @@ export default function Page() {
           ]}
         />
 
+        <ResponseModalX
+          title={"Request Created Successfully"}
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          content={<>You have successfully created a new request</>}
+          status={"success"}
+          footerBtnText={"Done"}
+          footerTrigger={() =>
+            router.push("/mla-admin/plate-number-request/view-request")
+          }
+        />
+
         <Modal
           title={"Create New Plate Number Request"}
           content={
             <CreateNewPlatRequest input={modalInput} setInput={setModalInput} />
           }
           btnText={"Create New Request"}
-          footerBtn={CreateNewRequest()}
+          footerBtn={
+            <Button onClick={handleSubmit} type="submit">
+              Submit
+            </Button>
+          }
         />
       </div>
 

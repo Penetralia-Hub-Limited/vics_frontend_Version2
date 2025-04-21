@@ -15,6 +15,10 @@ import Modal from "@/components/general/modal";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import { VerifyPhoneNumber } from "@/components/dashboard/verification-forms/verify-phone-number";
+import { selectValidatePhoneNumber } from "@/store/plateNumber/plate-number-selector";
+import { useSelector } from "react-redux";
+import { ResponseModalX } from "@/components/general/response-modalx";
+import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
 
 interface TableRow {
   id: number;
@@ -29,46 +33,13 @@ interface TableRow {
 }
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "platenumber", title: "Plate Number" },
-  { key: "platetype", title: "Plates Type" },
+  { key: "sid", title: "S/N" },
+  { key: "number", title: "Plate Number" },
+  { key: "type", title: "Plates Type" },
   { key: "amount", title: "Amount" },
   { key: "buyer", title: "Buyer" },
-  { key: "date", title: "Date Sold" },
-  { key: "paymentstatus", title: "Payment Status" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    platenumber: "JK34FSK",
-    platetype: "Private (Direct)",
-    amount: "Akanbi S.",
-    platerecommended: 401,
-    buyer: "Dave E ",
-    paymentstatus: PaymentStatus.PAID,
-    date: new Date(),
-  },
-  {
-    id: 2,
-    platenumber: "JK34FSK",
-    platetype: "Private (Direct)",
-    amount: "Akanbi S.",
-    platerecommended: 401,
-    buyer: "Dave E ",
-    paymentstatus: PaymentStatus.NOTPAID,
-    date: new Date(),
-  },
-  {
-    id: 3,
-    platenumber: "JK34FSK",
-    platetype: "Private (Direct)",
-    amount: "Akanbi S.",
-    platerecommended: 401,
-    buyer: "Dave E ",
-    paymentstatus: PaymentStatus.NOTPAID,
-    date: new Date(),
-  },
+  { key: "created_at", title: "Date Sold" },
+  { key: "number_status", title: "Payment Status" },
 ];
 
 export default function Page() {
@@ -77,6 +48,7 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<{
     plateNumber: string;
     paymentStatus: string;
@@ -86,10 +58,11 @@ export default function Page() {
     paymentStatus: "",
     invoiceNumber: "",
   });
-  const [validatePhoneNumber, setValidatePhoneNumber] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const salesData = useSelector(selectPlateNumber);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(salesData.length / itemsPerPage);
+  const paginatedData = salesData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -108,7 +81,15 @@ export default function Page() {
     ];
   };
 
-  console.log(inputValues);
+  const doesPhoneExist = useSelector((plateNumber) =>
+    selectValidatePhoneNumber(plateNumber, phoneNumber)
+  );
+
+  const handleSubmit = () => {
+    if (doesPhoneExist !== null) {
+      setOpenModal(true);
+    }
+  };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -122,12 +103,12 @@ export default function Page() {
             {
               label: "Dashboard",
               Icon: DashboardSVG,
-              link: "/super-admin/dashboard",
+              link: "/mla-admin/dasboard",
             },
             {
               label: "Sales Dashboard",
               Icon: SalesSVG,
-              link: "/super-admin/sales/sales-report",
+              link: "/mla-admin/sales/dashboard",
             },
           ]}
         />
@@ -137,16 +118,13 @@ export default function Page() {
           content={
             <VerifyPhoneNumber
               label="Validate Vehicle Owner Phone Number"
-              phoneNumber={validatePhoneNumber}
-              setPhoneNumber={setValidatePhoneNumber}
+              phoneNumber={phoneNumber}
+              setPhoneNumber={setPhoneNumber}
             />
           }
           btnText={"New Sales"}
           footerBtn={
-            <Button
-              onClick={() => router.push("/mla-admin/sales/new-sales")}
-              type="submit"
-            >
+            <Button onClick={handleSubmit} type="submit">
               Submit
             </Button>
           }
@@ -231,6 +209,38 @@ export default function Page() {
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
+
+      <ResponseModalX
+        title={"Phone Number Verified Successfully"}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={
+          <div className="flex flex-col gap-4 py-5">
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p className={"text-sm"}>Name:</p>
+              <p className={"text-sm font-semibold justify-self-end"}>
+                {doesPhoneExist?.owner?.firstname}{" "}
+                {doesPhoneExist?.owner?.lastname}
+              </p>
+            </div>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p className={"text-sm"}>Phone Number: </p>
+              <p className={"text-sm font-semibold justify-self-end"}>
+                {doesPhoneExist?.owner?.phone}
+              </p>
+            </div>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p className={"text-sm"}>Address:</p>
+              <p className={"text-sm font-semibold justify-self-end ml-auto"}>
+                {doesPhoneExist?.owner?.address}
+              </p>
+            </div>
+          </div>
+        }
+        status={"success"}
+        footerBtnText={"Continue"}
+        footerTrigger={() => router.push("/mla-admin/sales/new-sales")}
+      />
     </main>
   );
 }

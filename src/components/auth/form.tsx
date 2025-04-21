@@ -35,7 +35,7 @@ const FormLayout: FC<IForm> = ({
       >
         {children}
 
-        <Button variant="default" type="submit">
+        <Button disabled={isLoading} variant="default" type="submit">
           {isLoading ? (
             <Loading size={20} color={"#fff"} screen={"default"} />
           ) : isSuccess ? (

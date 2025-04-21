@@ -42,7 +42,7 @@ const Modal: FC<IModal> = ({
         <Button variant={btnVariant}>{btnText}</Button>
       </DialogTrigger>
       <DialogContent
-        className={"lg:max-w-screen-sm max-h-screen p-0 m-0 overflow-y-auto"}
+        className={"lg:max-w-screen-sm max-h-screen p-0 m-0 overflow-visible"}
       >
         <DialogHeader className={"bg-neutral-300 p-4 h-15"}>
           <DialogTitle>{title}</DialogTitle>

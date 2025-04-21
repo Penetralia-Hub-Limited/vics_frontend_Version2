@@ -10,103 +10,54 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import {
-  PlateNumberType,
-  InsuranceStatus,
-  ApprovalStatus,
-} from "@/common/enum";
+import { useSelector } from "react-redux";
+import { PlateNumberType, InsuranceStatus } from "@/common/enum";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import {
   RowAction,
   TableData,
 } from "@/components/dashboard/dashboard-table-w-button";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
 
 const tableHeaders = [
-  { key: "id", title: "S/N" },
+  { key: "sid", title: "S/N" },
   { key: "mla", title: "MLA" },
-  { key: "mlaStations", title: "MLA Stations" },
-  { key: "trackingid", title: "Tracking ID" },
-  { key: "platenumbertype", title: "Plate Number Type" },
-  { key: "noPlateRequested", title: "No. of Plate Requested" },
-  { key: "noPlateRecommended", title: "No. of Plate Recommended" },
-  { key: "noAssigned", title: "No. Assigned" },
-  { key: "date", title: "Date Sold" },
-  { key: "recommendingOfficer", title: "Recommending Officer" },
-  { key: "finalApprovingOfficer", title: "Final Approving Officer" },
-  { key: "requestStatus", title: "Request Status" },
-  { key: "insuranceStatus", title: "Insurance Status" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    mla: "Akanbi S.",
-    mlaStations: "FEDDSS",
-    trackingid: "HSDGJG3434",
-    platenumbertype: "Private (Direct)",
-    noPlateRequested: 40,
-    noPlateRecommended: 30,
-    noAssigned: 30,
-    date: new Date(),
-    recommendingOfficer: "David E",
-    finalApprovingOfficer: "David E",
-    requestStatus: ApprovalStatus.APPROVED,
-    insuranceStatus: InsuranceStatus.NOTAPPROVED,
-  },
-  {
-    id: 2,
-    mla: "Akanbi S.",
-    mlaStations: "FEDDSS",
-    trackingid: "HSDGJG3434",
-    platenumbertype: "Private (Direct)",
-    noPlateRequested: 40,
-    noPlateRecommended: 30,
-    noAssigned: 30,
-    date: new Date(),
-    recommendingOfficer: "David E",
-    finalApprovingOfficer: "David E",
-    requestStatus: ApprovalStatus.APPROVED,
-    insuranceStatus: InsuranceStatus.NOTAPPROVED,
-  },
-  {
-    id: 3,
-    mla: "Akanbi S.",
-    mlaStations: "FEDDSS",
-    trackingid: "HSDGJG3434",
-    platenumbertype: "Private (Direct)",
-    noPlateRequested: 40,
-    noPlateRecommended: 30,
-    noAssigned: 30,
-    date: new Date(),
-    recommendingOfficer: "David E",
-    finalApprovingOfficer: "David E",
-    requestStatus: ApprovalStatus.NOTAPPROVED,
-    insuranceStatus: InsuranceStatus.NOTAPPROVED,
-  },
+  // { key: "mlaStations", title: "MLA Stations" },
+  { key: "tracking_id", title: "Tracking ID" },
+  { key: "plate_number_type", title: "Plate Number Type" },
+  { key: "total_number_requested", title: "No. of Plate Requested" },
+  { key: "recommended_number", title: "No. of Plate Recommended" },
+  { key: "number_assigned", title: "No. Assigned" },
+  { key: "created_at", title: "Date Sold" },
+  { key: "recommender", title: "Recommending Officer" },
+  { key: "approver", title: "Final Approving Officer" },
+  { key: "status", title: "Request Status" },
+  { key: "insurance_status", title: "Insurance Status" },
 ];
 
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
+  const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [inputValues, setInputValues] = useState<{
-    plateNumberEndCode: string;
-    lga: string;
+    trackingId: string;
+    zoneoffice: string;
+    mla: string;
     plateNumberType: PlateNumberType | undefined;
+    insuranceStatus: InsuranceStatus | undefined;
   }>({
-    plateNumberEndCode: "",
-    lga: "",
+    trackingId: "",
+    zoneoffice: "",
+    mla: "",
     plateNumberType: undefined,
+    insuranceStatus: undefined,
   });
-  const { lgas } = useSelector((state: RootState) => state?.lga);
-  const filteredLGA = lgas.map((lga) => lga.name);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(plateNumbertableData.length / itemsPerPage);
+  const paginatedData = plateNumbertableData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -144,19 +95,51 @@ export default function Page() {
 
       <CardContainer className={"flex flex-col gap-5"}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <DashboardCompSelect
-            title={"LGA"}
-            placeholder={"-- Select LGA --"}
-            items={filteredLGA}
-            selected={inputValues.lga}
-            onSelect={(selected) =>
+          <InputWithLabel
+            items={{
+              id: "trackingId",
+              label: "Tracking ID",
+              placeholder: "Enter Tracking ID",
+              type: "text",
+              htmlfor: "trackingId",
+            }}
+            value={inputValues.trackingId}
+            onChange={(e) =>
               setInputValues((prev) => ({
                 ...prev,
-                lga: selected ? String(selected) : "",
+                trackingId: e.target.value,
               }))
             }
           />
 
+          <DashboardCompSelect
+            title={"Zone Office"}
+            placeholder={"-- Select Type --"}
+            items={["ZONE1", "Zone2"]}
+            selected={inputValues.zoneoffice}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                zoneoffice: selected ? String(selected) : "",
+              }))
+            }
+          />
+
+          <DashboardCompSelect
+            title={"MLA"}
+            placeholder={"-- Select MLA --"}
+            items={["MLA1", "MLA2"]}
+            selected={inputValues.mla}
+            onSelect={(selected) =>
+              setInputValues((prev) => ({
+                ...prev,
+                mla: selected ? String(selected) : "",
+              }))
+            }
+          />
+        </div>
+
+        <div className={"grid grid-cols-1 md:grid-cols-2 gap-4 items-end"}>
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
@@ -165,24 +148,20 @@ export default function Page() {
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                plateNumberType: selected as PlateNumberType | undefined,
+                plateNumberType: (selected as PlateNumberType) ?? undefined,
               }))
             }
           />
 
-          <InputWithLabel
-            items={{
-              id: "plateNumber",
-              label: "Plate Number End Code",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "plateNumber",
-            }}
-            value={inputValues.plateNumberEndCode}
-            onChange={(e) =>
+          <DashboardCompSelect
+            title={"Insurance Status"}
+            placeholder={"-- Select status --"}
+            items={[...Object.values(InsuranceStatus)]}
+            selected={inputValues.insuranceStatus}
+            onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                plateNumberEndCode: e.target.value,
+                insuranceStatus: selected as InsuranceStatus | undefined,
               }))
             }
           />
@@ -190,7 +169,7 @@ export default function Page() {
 
         <div
           className={
-            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
+            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 items-end"
           }
         >
           <DatePicker

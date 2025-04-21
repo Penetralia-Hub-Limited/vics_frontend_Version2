@@ -20,6 +20,8 @@ const useGetPathName = (identifier: string) => {
   const normalizeSegment = (segment: string) => segment.split("-").join(""); // Remove dashes
   const lastSegment = normalizeSegment(lastSegmentRaw);
 
+  console.log(lastSegment);
+
   // Define different mappings for each identifier
   const pathMappings: Record<string, Record<string, string>> = {
     storeAdmin: {
@@ -36,8 +38,13 @@ const useGetPathName = (identifier: string) => {
       platenumberrequest: "Plate Number Request",
       invoice: "MLA Invoice",
       invoicerenewal: "MLA Invoice Renewal",
-      sales: "Sales Dashboard",
+      reports: "Report Dashboard",
+      taxpayerdashboard: "Tax Payer Dashboard",
+      renewaldashboard: "Renewal Dashboard",
+      sales: "MLA Sales Dashboard",
       salespreview: "MLA Sales Dashboard",
+      salesdashboard: "MLA Sales Dashboard",
+      drafts: "MLA Sales Dashboard",
     },
     smr: {
       dashboard: "SMR Dashboard",

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
-import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VehicleSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
@@ -14,62 +13,28 @@ import Modal from "@/components/general/modal";
 import { IDTaxPayerMeans } from "@/common/enum";
 import { VehicleModalElements } from "@/components/dashboard/vehicle/vehicle-modal-element";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
-import ResponseModal from "@/components/general/response-modal";
+import { useSelector } from "react-redux";
+import { selectVehicles } from "@/store/vehicle/vehicle-selector";
+import { selectValidUser } from "@/store/vehicle/vehicle-selector";
+import { ResponseModalX } from "@/components/general/response-modalx";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
+  { key: "sid", title: "S/N" },
   { key: "platenumber", title: "Number of Plates" },
   { key: "type", title: "Plate Type" },
   { key: "category", title: "Category" },
-  { key: "chasisNo", title: "Chasis Number" },
-  { key: "engineNo", title: "Engine Number" },
-  { key: "vehiclemake", title: "Vehicle Make" },
+  { key: "chasis_number", title: "Chasis Number" },
+  { key: "engine_number", title: "Engine Number" },
+  { key: "make", title: "Vehicle Make" },
   { key: "model", title: "Model" },
   { key: "year", title: "Year" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    platenumber: "ASKJA3",
-    type: "Private (Direct)",
-    category: "Vehicle Between 2.0 - 3.0",
-    chasisNo: "JKJJJLWE232423",
-    engineNo: "JK",
-    vehiclemake: "JK343323",
-    model: "JK343323",
-    year: "2025",
-  },
-  {
-    id: 2,
-    platenumber: "ASKJA3",
-    type: "Private (Direct)",
-    category: "Vehicle Between 2.0 - 3.0",
-    chasisNo: "JKJJJLWE232423",
-    engineNo: "JK",
-    vehiclemake: "JK343323",
-    model: "JK343323",
-    year: "2025",
-  },
-  {
-    id: 3,
-    platenumber: "ASKJA3",
-    type: "Private (Direct)",
-    category: "Vehicle Between 2.0 - 3.0",
-    chasisNo: "JKJJJLWE232423",
-    engineNo: "JK67235273",
-    vehiclemake: "JK343323",
-    model: "JK343323",
-    year: "2025",
-  },
 ];
 
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [identificationMeans, setIdentificationMeans] =
     useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
   const [identificationInput, setIdentificationInput] = useState<{
@@ -79,9 +44,32 @@ export default function Page() {
     nin: "",
     phoneNumber: "",
   });
+  const [input, setInput] = useState<{
+    platenumber: string;
+    chasisno: string;
+    engineno: string;
+  }>({
+    platenumber: "",
+    chasisno: "",
+    engineno: "",
+  });
+  const vehiclesData = useSelector(selectVehicles);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const doesUserExist = useSelector((vehicle) =>
+    selectValidUser(vehicle, {
+      phoneNumber: identificationInput.phoneNumber,
+      nin: identificationInput.nin,
+    })
+  );
+
+  const handleSubmit = () => {
+    if (doesUserExist !== null) {
+      setOpenModal(true);
+    }
+  };
+
+  const totalPages = Math.ceil(vehiclesData.length / itemsPerPage);
+  const paginatedData = vehiclesData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -110,43 +98,8 @@ export default function Page() {
     ];
   };
 
-  const validateModal = () => {
-    return (
-      <ResponseModal
-        title={`${identificationMeans} Verified Successfully`}
-        content={
-          <div className={"flex flex-col gap-4 py-3"}>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Name:</p>
-              <p className={"font-semibold justify-self-end"}>Akan E</p>
-            </div>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Phone Number:</p>
-              <p className={"font-semibold justify-self-end"}>
-                {identificationInput.phoneNumber}
-              </p>
-            </div>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Address:</p>
-              <p className={"font-semibold justify-self-end"}>
-                Omru Oran Ojo, Ibadan 2343423
-              </p>
-            </div>
-          </div>
-        }
-        footerBtnText={"Continue"}
-        btnText={"Validate Tax Payer"}
-        trigger={() => {
-          {
-            router.push("/super-admin/vehicle/add-new-vehicle");
-          }
-        }}
-      />
-    );
-  };
-
   return (
-    <main className={"flex flex-col gap-8 md:gap-12"}>
+    <main className={"flex flex-col gap-8 md:gap-12 min-h-screen"}>
       <div
         className={
           "flex flex-col gap-5 md:flex-row justify-between items-center"
@@ -178,7 +131,11 @@ export default function Page() {
             />
           }
           btnText={"Add New Vehicle"}
-          footerBtn={validateModal()}
+          footerBtn={
+            <Button onClick={handleSubmit} type="submit">
+              Validate Tax Payer
+            </Button>
+          }
         />
       </div>
 
@@ -192,14 +149,48 @@ export default function Page() {
               type: "text",
               htmlfor: "platenumber",
             }}
+            value={input.platenumber}
+            onChange={(e) =>
+              setInput((prev) => ({
+                ...prev,
+                platenumber: e.target.value,
+              }))
+            }
           />
 
-          <DatePicker
-            date={startDate}
-            setDate={setStartDate}
-            title={"Start Date"}
+          <InputWithLabel
+            items={{
+              id: "chasisno",
+              label: "Chasis Number",
+              placeholder: "Chasis Number",
+              type: "text",
+              htmlfor: "chasisno",
+            }}
+            value={input.chasisno}
+            onChange={(e) =>
+              setInput((prev) => ({
+                ...prev,
+                chasisno: e.target.value,
+              }))
+            }
           />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+
+          <InputWithLabel
+            items={{
+              id: "engineno",
+              label: "Engine Number",
+              placeholder: "Engine Number",
+              type: "text",
+              htmlfor: "engineno",
+            }}
+            value={input.engineno}
+            onChange={(e) =>
+              setInput((prev) => ({
+                ...prev,
+                engineno: e.target.value,
+              }))
+            }
+          />
 
           <Button>Search</Button>
         </div>
@@ -219,6 +210,38 @@ export default function Page() {
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
+
+      <ResponseModalX
+        title={"User Verified Successfully"}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={
+          <div className="flex flex-col gap-4 py-5">
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p className={"text-sm"}>Name:</p>
+              <p className={"text-sm font-semibold justify-self-end"}>
+                {doesUserExist?.owner?.firstname}{" "}
+                {doesUserExist?.owner?.lastname}
+              </p>
+            </div>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p className={"text-sm"}>Phone Number: </p>
+              <p className={"text-sm font-semibold justify-self-end"}>
+                {doesUserExist?.owner?.phone}
+              </p>
+            </div>
+            <div className={"grid grid-cols-[1fr_2fr]"}>
+              <p className={"text-sm"}>Address:</p>
+              <p className={"text-sm font-semibold justify-self-end ml-auto"}>
+                {doesUserExist?.owner?.address}
+              </p>
+            </div>
+          </div>
+        }
+        status={"success"}
+        footerBtnText={"Continue"}
+        footerTrigger={() => router.push("/mla-admin/vehicles/new-vehicle")}
+      />
     </main>
   );
 }

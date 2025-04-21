@@ -3,6 +3,8 @@ import { createSelector } from "reselect";
 import { RootState } from "../store";
 import { RequestStatus } from "@/common/enum";
 import { formattedAmount } from "@/common/helpers";
+import { format } from "date-fns";
+import { PlateNumberData } from "./plate-number-types";
 
 const selectPlateNumberReducer = (state: RootState) =>
   state.platenumber.plateNumber;
@@ -16,6 +18,7 @@ export const selectSoldPlateNumber = createSelector(
           .map((plate, index) => {
             return {
               sid: index + 1,
+              date_created: `${format(plate?.created_at ? new Date(plate.created_at) : "-", "LLL. d yyyy")} | ${format(plate?.created_at ? new Date(plate.created_at) : "-", "hh:mm:ss a")}`,
               ...plate,
             };
           })
@@ -45,8 +48,21 @@ export const selectValidatePhoneNumber = createSelector(
   ],
   (plateNumber, phone_number) => {
     const foundPhoneNumber = plateNumber.find(
-      (plate) => plate?.owner?.phone === phone_number
+      (plate: PlateNumberData) => plate?.owner?.phone === phone_number
     );
     return foundPhoneNumber;
+  }
+);
+
+export const selectValidPlateNumber = createSelector(
+  [
+    selectPlateNumberReducer,
+    (_: any, platenumber: string | null) => platenumber,
+  ],
+  (plateNumber, platenumber) => {
+    const foundPlateNumber = plateNumber.some(
+      (plate: PlateNumberData) => plate?.number === platenumber
+    );
+    return foundPlateNumber;
   }
 );

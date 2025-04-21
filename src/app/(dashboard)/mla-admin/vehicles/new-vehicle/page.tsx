@@ -5,23 +5,21 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import { DashboardSVG, RenewalsSVG } from "@/common/svgs";
-import { RenewPlateNumberStep1 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step1";
-import { RenewPlateNumberStep2 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step2";
-import { RenewPlateNumberStep3 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step3";
-import { RenewPlateNumberStep4 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step4";
+import { DashboardSVG, VehicleSVG } from "@/common/svgs";
+import { AddVehicleStep1 } from "@/components/dashboard/vehicle/new-vehicle/step1";
+import { AddVehicleStep2 } from "@/components/dashboard/vehicle/new-vehicle/step2";
+import { AddVehicleStep3 } from "@/components/dashboard/vehicle/new-vehicle/step3";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
 import ResponseModal from "@/components/general/response-modal";
 import {
   initialValuesStep1,
-  inputRenewPlateNumberPropsStep1,
+  inputVehiclePropsStep1,
   initialValuesStep2,
-  inputRenewPlateNumberPropsStep2,
+  IAddVehicleStep2Props,
   initialValuesStep3,
-  inputRenewPlateNumberPropsStep3,
-  inputRenewPlateNumberPropsStep4,
-} from "@/components/dashboard/mla-admin/renewals/renew-plate-number/renew-plate-constant";
+  inputVehiclePropsStep3,
+} from "@/components/dashboard/vehicle/vehicle-constant";
 
 const stepdetails = [
   {
@@ -36,10 +34,6 @@ const stepdetails = [
     title: "Plate Number Details",
     description: "Kindly fill out the plate number information",
   },
-  {
-    title: "Applicable Services",
-    description: "Select applicable services for plate number renewal",
-  },
 ];
 
 export default function Page() {
@@ -47,18 +41,15 @@ export default function Page() {
   const totalSteps = stepdetails.length;
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [step1InputValues, setStep1InputValues] =
-    useState<inputRenewPlateNumberPropsStep1>(initialValuesStep1);
+    useState<inputVehiclePropsStep1>(initialValuesStep1);
 
   const [step2InputValues, setStep2InputValues] =
-    useState<inputRenewPlateNumberPropsStep2>(initialValuesStep2);
+    useState<IAddVehicleStep2Props>(initialValuesStep2);
 
   const [step3InputValues, setStep3InputValues] =
-    useState<inputRenewPlateNumberPropsStep3>(initialValuesStep3);
+    useState<inputVehiclePropsStep3>(initialValuesStep3);
 
-  const [step4InputValues, setStep4InputValues] =
-    useState<inputRenewPlateNumberPropsStep4>({
-      selectedServices: {},
-    });
+  console.log(step1InputValues, step2InputValues, step3InputValues);
 
   const handleNextStep = () => {
     setCurrentStep((prev) => (prev < totalSteps ? prev + 1 : prev));
@@ -75,17 +66,17 @@ export default function Page() {
           {
             label: "Dashboard",
             Icon: DashboardSVG,
-            link: "/mla-admin/dashboard",
+            link: "/super-admin/dashboard",
           },
           {
-            label: "Renewal Dashboard",
-            Icon: RenewalsSVG,
-            link: "/mla-admin/renewal/renewal-dashboard",
+            label: "Vehicle Dashboard",
+            Icon: VehicleSVG,
+            link: "/super-admin/vehicle",
           },
           {
-            label: "Renew Plate Number",
-            Icon: RenewalsSVG,
-            link: "/mla-admin/renewal/renew-plate-number",
+            label: "Add New Vehicle",
+            Icon: VehicleSVG,
+            link: "/store-manager-admin/vehicle/add-new-vehicle",
           },
         ]}
       />
@@ -93,7 +84,7 @@ export default function Page() {
       <div className="grid grid-cols-[2fr_1fr] gap-2 w-full">
         <CardContainer className="flex flex-col gap-10 items-center justify-center">
           <div className="flex flex-col gap-2 items-center justify-center">
-            <p className="text-lg font-semibold">Renew Plate Number</p>
+            <p className="text-lg font-semibold">Registering New Vehicle</p>
             <p className="text-sm font-light">
               {stepdetails[currentStep - 1]?.description}
             </p>
@@ -102,27 +93,21 @@ export default function Page() {
           {/* Steps */}
           <div className="w-full">
             {currentStep === 1 && (
-              <RenewPlateNumberStep1
+              <AddVehicleStep1
                 inputValues={step1InputValues}
                 setInputValues={setStep1InputValues}
               />
             )}
             {currentStep === 2 && (
-              <RenewPlateNumberStep2
+              <AddVehicleStep2
                 inputValues={step2InputValues}
                 setInputValues={setStep2InputValues}
               />
             )}
             {currentStep === 3 && (
-              <RenewPlateNumberStep3
+              <AddVehicleStep3
                 inputValues={step3InputValues}
                 setInputValues={setStep3InputValues}
-              />
-            )}
-            {currentStep === 4 && (
-              <RenewPlateNumberStep4
-                inputValues={step4InputValues}
-                setInputValues={setStep4InputValues}
               />
             )}
           </div>
@@ -145,9 +130,9 @@ export default function Page() {
               {currentStep === totalSteps ? (
                 <ResponseModal
                   title={"Success"}
-                  content={<p>Invoice Issued Successfully</p>}
+                  content={<p>New Vehicle was Registered Successfully</p>}
                   btnText={"Proceed"}
-                  trigger={() => router.push("/mla-admin/renewal/dashboard")}
+                  trigger={() => router.push("/super-admin/vehicle")}
                   footerBtnText={"Done"}
                 />
               ) : (
