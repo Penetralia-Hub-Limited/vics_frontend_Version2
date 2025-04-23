@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, SalesSVG } from "@/common/svgs";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
-
+import { selectFoundVehicleDatafromUserID } from "@/store/vehicle/vehicle-selector";
+import { toast } from "sonner";
+import { PlateNumberService } from "@/services/PlateNumberService";
 import {
   inputSalesPropsStep1,
   initialSalesValuesStep1,
@@ -46,24 +49,53 @@ const stepdetails = [
 
 export default function Page() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const params = useParams<{ newplatesalesID: string }>();
   const totalSteps = stepdetails.length;
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const plateService = new PlateNumberService(dispatch);
+
+  const vehicleInfo = useSelector((state) =>
+    selectFoundVehicleDatafromUserID(state, params.newplatesalesID)
+  )[0];
 
   // Input values start
   const [step1InputValues, setStep1InputValues] =
     useState<inputSalesPropsStep1>(initialSalesValuesStep1);
-
   const [step2InputValues, setStep2InputValues] =
     useState<inputSalesPropsStep2>(initialSalesValuesStep2);
-
   const [step3InputValues, setStep3InputValues] =
     useState<inputSalesPropsStep3>(initialSalesValuesStep3);
-
   const [step4InputValues, setStep4InputValues] =
     useState<inputSalesPropsStep4>(initialSalesValuesStep4);
   // Input values end
 
-  console.log(step1InputValues, step2InputValues, step3InputValues);
+  useEffect(() => {
+    if (!vehicleInfo) return;
+    setStep1InputValues((prev) => ({
+      ...prev,
+      fullName: `${vehicleInfo?.owner?.firstname} ${vehicleInfo?.owner?.lastname}`,
+      email: vehicleInfo?.owner.email,
+      phoneNumber: vehicleInfo?.owner.phone,
+      address: vehicleInfo?.owner?.address,
+    }));
+
+    setStep2InputValues({
+      ...vehicleInfo,
+      category: vehicleInfo.category?.toString() ?? "",
+      netweight: vehicleInfo.weight?.toString() ?? "",
+      vehicleenginecapacity: vehicleInfo.engine_capacity?.toString() ?? "",
+    });
+
+    setStep3InputValues({
+      plateNumber: vehicleInfo?.plate_number?.number,
+      plateNumberType: vehicleInfo?.plate_number?.type,
+    });
+
+    setStep4InputValues({
+      insurance: vehicleInfo?.insurance_number,
+    });
+  }, [vehicleInfo]);
 
   const handleNextStep = () => {
     setCurrentStep((prev) => (prev < totalSteps ? prev + 1 : prev));
@@ -71,6 +103,34 @@ export default function Page() {
 
   const handlePreviousStep = () => {
     setCurrentStep((prev) => (prev > 1 ? prev - 1 : prev));
+  };
+
+  const createNewPlateSalesRequest = async () => {
+    try {
+      const payload = {
+        state_id: vehicleInfo?.owner?.state_id,
+        agent_id: null,
+        owner_id: vehicleInfo?.owner_id,
+        number: step3InputValues.plateNumber,
+        number_status: "Paid",
+        assigned_status: null,
+        type: step3InputValues.plateNumberType,
+        status: "Sold",
+        request_id: null,
+        stock_id: null,
+        sub_type: null,
+        assigned_date: null,
+      };
+
+      const response = await plateService.createPlateNumber(payload);
+
+      if (response.status) {
+        router.push(`/super-admin/sales/salespreview/${vehicleInfo?.owner_id}`);
+      }
+    } catch (error) {
+      console.error("Failed:", error);
+      toast("Error creating new Plate Sales");
+    }
   };
 
   return (
@@ -85,12 +145,12 @@ export default function Page() {
           {
             label: "Sales Dashboard",
             Icon: SalesSVG,
-            link: "/mla-admin/sales/sales-dashboard",
+            link: "/super-admin/sales/sales-report",
           },
           {
             label: "Sell New Plate",
             Icon: SalesSVG,
-            link: "/mla-admin/sales/new-sales",
+            link: "/store-manager-admin/sales/new-plate-sales",
           },
         ]}
       />
@@ -150,7 +210,7 @@ export default function Page() {
               {currentStep === totalSteps ? (
                 <Button
                   className="flex flex-row items-center gap-1"
-                  onClick={() => router.push("/mla-admin/sales/sales-preview")}
+                  onClick={createNewPlateSalesRequest}
                 >
                   <p>Preview</p>
                   <ChevronRight />

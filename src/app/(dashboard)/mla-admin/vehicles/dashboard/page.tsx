@@ -35,6 +35,7 @@ export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isUserVerified, setIsUserVerified] = useState<boolean>(false);
   const [identificationMeans, setIdentificationMeans] =
     useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
   const [identificationInput, setIdentificationInput] = useState<{
@@ -63,8 +64,14 @@ export default function Page() {
   );
 
   const handleSubmit = () => {
-    if (doesUserExist !== null) {
+    setTimeout(() => {
       setOpenModal(true);
+    }, 2000);
+
+    if (doesUserExist !== undefined) {
+      setIsUserVerified(true);
+    } else {
+      setIsUserVerified(false);
     }
   };
 
@@ -92,7 +99,7 @@ export default function Page() {
       {
         title: "View Details",
         action: () => {
-          router.push(`/super-admin/vehicle/vehicle-preview/${tableRow.id}`);
+          router.push(`/mla-admin/vehicles/${tableRow.id}`);
         },
       },
     ];
@@ -110,12 +117,12 @@ export default function Page() {
             {
               label: "Dashboard",
               Icon: DashboardSVG,
-              link: "/store-manager-admin/dashboard",
+              link: "/super-admin/dashboard",
             },
             {
               label: "Vehicle Dashboard",
               Icon: VehicleSVG,
-              link: "/store-manager-admin/stock-management",
+              link: "/super-admin/vehicles/dashboard",
             },
           ]}
         />
@@ -212,35 +219,47 @@ export default function Page() {
       </div>
 
       <ResponseModalX
-        title={"User Verified Successfully"}
+        title={
+          isUserVerified ? "User Verified Successfully" : "User does not exist"
+        }
         open={openModal}
         onClose={() => setOpenModal(false)}
         content={
-          <div className="flex flex-col gap-4 py-5">
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p className={"text-sm"}>Name:</p>
-              <p className={"text-sm font-semibold justify-self-end"}>
-                {doesUserExist?.owner?.firstname}{" "}
-                {doesUserExist?.owner?.lastname}
-              </p>
-            </div>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p className={"text-sm"}>Phone Number: </p>
-              <p className={"text-sm font-semibold justify-self-end"}>
-                {doesUserExist?.owner?.phone}
-              </p>
-            </div>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p className={"text-sm"}>Address:</p>
-              <p className={"text-sm font-semibold justify-self-end ml-auto"}>
-                {doesUserExist?.owner?.address}
-              </p>
-            </div>
-          </div>
+          <>
+            {isUserVerified ? (
+              <div className="flex flex-col gap-4 py-5">
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Name:</p>
+                  <p className={"text-sm font-semibold justify-self-end"}>
+                    {doesUserExist?.owner?.firstname}{" "}
+                    {doesUserExist?.owner?.lastname}
+                  </p>
+                </div>
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Phone Number: </p>
+                  <p className={"text-sm font-semibold justify-self-end"}>
+                    {doesUserExist?.owner?.phone}
+                  </p>
+                </div>
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Address:</p>
+                  <p
+                    className={"text-sm font-semibold justify-self-end ml-auto"}
+                  >
+                    {doesUserExist?.owner?.address}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>Please check your details, and try again</>
+            )}
+          </>
         }
-        status={"success"}
+        status={isUserVerified ? "success" : "failed"}
         footerBtnText={"Continue"}
-        footerTrigger={() => router.push("/mla-admin/vehicles/new-vehicle")}
+        footerTrigger={() =>
+          isUserVerified && router.push("/mla-admin/vehicles/new-vehicle")
+        }
       />
     </main>
   );

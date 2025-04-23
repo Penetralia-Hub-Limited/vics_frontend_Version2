@@ -6,6 +6,7 @@ import { format } from "date-fns";
 
 const selectUserReducer = (state: RootState) => state.user.users;
 
+// Get users information
 export const selectUsers = createSelector([selectUserReducer], (user) =>
   Array.isArray(user)
     ? user.map((user, index) => {
@@ -18,6 +19,7 @@ export const selectUsers = createSelector([selectUserReducer], (user) =>
     : []
 );
 
+// Get Users of Role Tax Payer
 export const selectTaxPayers = createSelector([selectUserReducer], (user) =>
   Array.isArray(user)
     ? user
@@ -31,4 +33,29 @@ export const selectTaxPayers = createSelector([selectUserReducer], (user) =>
           };
         })
     : []
+);
+
+// Get User by ID
+export const selectTaxPayersByID = createSelector(
+  [selectUserReducer, (_: any, taxpayerid: string) => taxpayerid],
+  (user, taxpayerid) =>
+    user
+      .filter((user) => user.id === taxpayerid)
+      .map((user) => {
+        return {
+          fullname: `${user?.firstname ?? "-"} ${user?.lastname ?? "-"}`,
+          ...user,
+        };
+      })
+);
+
+// Get Individual User By Selecting the Name
+export const selectUserFromName = createSelector(
+  [selectUserReducer, (_: any, userName: string | null) => userName],
+  (user, userName) => {
+    const foundState = user.find((user) => {
+      return `${user.firstname} ${user.lastname}` === userName;
+    });
+    return foundState || null;
+  }
 );

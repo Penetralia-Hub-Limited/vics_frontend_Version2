@@ -73,7 +73,7 @@ export default function Page() {
   );
 
   const getRowActions = (row: unknown): RowAction[] => {
-    // const tableRow = row as TableRow;
+    console.log(row);
     return [
       {
         title: "View",

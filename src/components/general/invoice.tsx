@@ -9,74 +9,29 @@ import { PaymentItem } from "./payment-summary-table";
 import { PaymentStatus } from "@/common/enum";
 import { TermsAndConditions } from "./terms";
 import LogoComponent from "./logo";
-import { PlateNumberType } from "@/common/enum";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import html2canvas from "html2canvas-pro";
 import { jsPDF } from "jspdf";
 import BGLogo from "../../assets/logo/KW_logo.png";
+import QRCodeWithLogo from "./qr-code";
+import logo from "../../assets/logo/kwara_logo.webp";
+
+interface cardInfo {
+  label: string;
+  value: string;
+}
 
 interface InvoiceProps {
+  buyerInfo: cardInfo[];
+  vehicleInfo: cardInfo[];
   icon: string;
   state: string;
   data: {
-    invoiceID: number;
+    invoiceID: string;
   };
+  invoice_link: string;
 }
-
-const cardData = [
-  {
-    label: "Full Name",
-    value: "Bernard David Ikechukwu",
-  },
-  {
-    label: "Email",
-    value: "Bernard@DavidIkechukwu.com",
-  },
-  {
-    label: "Phone Number",
-    value: "23232323333",
-  },
-  {
-    label: "Address",
-    value: "121 Pastoral lane Briks",
-  },
-];
-
-const vehicleData = [
-  {
-    label: "Chasis Number",
-    value: 33435342324,
-  },
-  {
-    label: "Engine Number",
-    value: "JKLWJKJ348723",
-  },
-  {
-    label: "Vehicle Make",
-    value: "Mercedez-Benz",
-  },
-  {
-    label: "Vehicle Model",
-    value: "Mercedez E-300",
-  },
-  {
-    label: "Vehicle Category",
-    value: "Vehicle Between 3.0 - 4.0",
-  },
-  {
-    label: "Plate Type",
-    value: PlateNumberType.PRIVATE,
-  },
-  {
-    label: "Plate Number",
-    value: "MORORK232",
-  },
-  {
-    label: "Color",
-    value: "Black",
-  },
-];
 
 const paymentRows: PaymentItem[] = [
   {
@@ -133,8 +88,13 @@ const termsData = [
   },
 ];
 
-export const Invoice: FC<InvoiceProps> = ({ icon, state, data }) => {
-  const { invoiceID } = data;
+export const Invoice: FC<InvoiceProps> = ({
+  icon,
+  state,
+  invoice_link,
+  buyerInfo,
+  vehicleInfo,
+}) => {
   const printRef = useRef(null);
 
   const handleDownloadPDF = async () => {
@@ -180,21 +140,14 @@ export const Invoice: FC<InvoiceProps> = ({ icon, state, data }) => {
 
             <div className={"py-4 flex flex-row items-center justify-between"}>
               <p className="text-xl font-bold">Invoice</p>
-              <p className="text-xl uppercase font-bold">
-                #INV{invoiceID ?? 2343}
-              </p>
+              <p className="text-xl uppercase font-bold">#INV{2343}</p>
             </div>
 
-            <CardContainer>
-              <InformationCardX title={"Buyer Information"} data={cardData} />
-            </CardContainer>
-
-            <CardContainer>
-              <InformationCardX
-                title={"Vehicle Information"}
-                data={vehicleData}
-              />
-            </CardContainer>
+            <InformationCardX title={"Buyer Information"} data={buyerInfo} />
+            <InformationCardX
+              title={"Vehicle Information"}
+              data={vehicleInfo}
+            />
 
             <div
               className={
@@ -213,20 +166,30 @@ export const Invoice: FC<InvoiceProps> = ({ icon, state, data }) => {
               </div>
             </div>
 
-            <div className={"grid md:grid-cols-[2fr_1fr]"}>
+            <div className={"grid md:grid-cols-[2fr_1fr] items-center pt-8"}>
               <TermsAndConditions termsData={termsData} />
-              <p>BAR CODE</p>
+              <QRCodeWithLogo value={invoice_link} logoUrl={logo.src} />
             </div>
           </div>
         </CardContainer>
       </div>
-      <Button
-        onClick={handleDownloadPDF}
-        className={cn("w-fit mx-auto")}
-        variant={"outline"}
-      >
-        Print Invoice
-      </Button>
+
+      <div className={"flex flex-row gap-4 mx-auto w-fit"}>
+        <Button
+          onClick={handleDownloadPDF}
+          className={cn("w-fit mx-auto")}
+          variant={"outline"}
+        >
+          Download Invoice
+        </Button>
+        <Button
+          onClick={handleDownloadPDF}
+          className={cn("w-fit mx-auto")}
+          variant={"default"}
+        >
+          Send to Email
+        </Button>
+      </div>
     </div>
   );
 };

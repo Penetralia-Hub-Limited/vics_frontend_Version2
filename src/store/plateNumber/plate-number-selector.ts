@@ -34,13 +34,14 @@ export const selectPlateNumber = createSelector(
             sid: index + 1,
             ...plate,
             buyer: `${plate?.owner?.firstname ?? "-"} ${plate?.owner?.lastname ?? "-"}`,
-            amount: formattedAmount(plate?.invoice?.amount ?? 0),
+            amount: formattedAmount(plate?.invoice?.amount ?? index * 6 + 3),
             created_by: `${plate?.creator?.firstname ?? "-"} ${plate?.creator?.lastname ?? "-"}`,
           };
         })
       : []
 );
 
+// Validate User Phone Number in Plate Number API
 export const selectValidatePhoneNumber = createSelector(
   [
     selectPlateNumberReducer,
@@ -54,6 +55,7 @@ export const selectValidatePhoneNumber = createSelector(
   }
 );
 
+// Validate Plate Number
 export const selectValidPlateNumber = createSelector(
   [
     selectPlateNumberReducer,
@@ -65,4 +67,11 @@ export const selectValidPlateNumber = createSelector(
     );
     return foundPlateNumber;
   }
+);
+
+// Get User by ID in Plate Number API
+export const selectUsersFromPlateNumber = createSelector(
+  [selectPlateNumberReducer, (_, userID: string) => userID],
+  (plateNumber, userID) =>
+    plateNumber.filter((plate: PlateNumberData) => plate?.owner_id === userID)
 );

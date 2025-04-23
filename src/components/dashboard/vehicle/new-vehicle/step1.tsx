@@ -3,6 +3,9 @@ import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "../../dashboard-component-select";
 import DatePicker from "../../dashboard-datepicker";
 import { inputVehiclePropsStep1 } from "../vehicle-constant";
+import { RootState } from "@/store/store";
+import { User } from "@/store/user/user-type";
+import { useSelector } from "react-redux";
 
 interface IAddVehicleStep1 {
   inputValues: inputVehiclePropsStep1;
@@ -13,8 +16,26 @@ export const AddVehicleStep1: FC<IAddVehicleStep1> = ({
   inputValues,
   setInputValues,
 }) => {
+  const users = useSelector((userState: RootState) => userState.user);
+  const filteredUser = users.users.map(
+    (user: User) => `${user.firstname} ${user.lastname}`
+  );
+
   return (
     <div className={"flex flex-col gap-6 w-full"}>
+      <DashboardCompSelect
+        title={"Select User"}
+        placeholder={"-- Select user --"}
+        items={filteredUser}
+        selected={inputValues.userid || ""}
+        onSelect={(selected) => {
+          setInputValues((prev) => ({
+            ...prev,
+            userid: (selected as string) ?? "",
+          }));
+        }}
+      />
+
       <InputWithLabel
         items={{
           id: "fullname",
@@ -23,7 +44,7 @@ export const AddVehicleStep1: FC<IAddVehicleStep1> = ({
           type: "text",
           htmlfor: "fullname",
         }}
-        value={inputValues.fullName}
+        value={inputValues.fullName || ""}
         onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
@@ -41,7 +62,7 @@ export const AddVehicleStep1: FC<IAddVehicleStep1> = ({
             type: "email",
             htmlfor: "email",
           }}
-          value={inputValues.email}
+          value={inputValues.email || ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
@@ -58,7 +79,7 @@ export const AddVehicleStep1: FC<IAddVehicleStep1> = ({
             type: "text",
             htmlfor: "phonenumber",
           }}
-          value={inputValues.phoneNumber}
+          value={inputValues.phoneNumber || ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
@@ -76,7 +97,7 @@ export const AddVehicleStep1: FC<IAddVehicleStep1> = ({
           type: "text",
           htmlfor: "address",
         }}
-        value={inputValues.address}
+        value={inputValues.address || ""}
         onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
@@ -89,8 +110,8 @@ export const AddVehicleStep1: FC<IAddVehicleStep1> = ({
         <DashboardCompSelect
           title={"Nationality"}
           placeholder={"-- Select Nationality --"}
-          items={["Nigeria", "Camerron"]}
-          selected={inputValues.nationality}
+          items={["Nigerian"]}
+          selected={inputValues.nationality || ""}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,

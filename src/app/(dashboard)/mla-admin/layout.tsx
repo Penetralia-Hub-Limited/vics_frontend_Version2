@@ -15,6 +15,7 @@ import { PlateNumberService } from "@/services/PlateNumberService";
 import { ServiceTypeService } from "@/services/ServiceTypesService";
 import { LgaService } from "@/services/LgaService";
 import { StateService } from "@/services/StatesServices";
+import { InvoiceService } from "@/services/InvoiceService";
 import { VehicleService } from "@/services/VehicleService";
 import { UserService } from "@/services/UserService";
 
@@ -36,6 +37,10 @@ export default function MLADashboardLayout({
     () => new PlateNumberService(dispatch),
     [dispatch]
   );
+  const invoiceService = useMemo(
+    () => new InvoiceService(dispatch),
+    [dispatch]
+  );
   const serviceTypeService = useMemo(
     () => new ServiceTypeService(dispatch),
     [dispatch]
@@ -54,6 +59,7 @@ export default function MLADashboardLayout({
       await plateNumberService.getAllPlateNumbers();
       await serviceTypeService.getAllServiceTypes();
       await vehicleService.getAllVehicles();
+      await invoiceService.getAllInvoices();
       await stateService.getAllStates();
       await userService.getAllUsers();
       await lgaService.getAllLgas();
@@ -63,6 +69,7 @@ export default function MLADashboardLayout({
     plateNumberService,
     serviceTypeService,
     vehicleService,
+    invoiceService,
     stateService,
     userService,
     lgaService,

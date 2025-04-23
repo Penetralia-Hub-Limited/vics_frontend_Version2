@@ -120,7 +120,9 @@ export default function Page() {
           </p>
           <p className={"text-sm"}>
             Total Amount Sold:{" "}
-            <span className={"font-semibold"}>{formattedAmount(0)}</span>
+            <span className={"font-semibold"}>
+              {formattedAmount(totalAmount)}
+            </span>
           </p>
         </div>
         <div>

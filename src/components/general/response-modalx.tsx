@@ -40,7 +40,7 @@ export const ResponseModalX: FC<IResponseModalX> = ({
             className={"flex flex-col items-center justify-center"}
           >
             <DotLottieReact
-              inert
+              inert={open ? true : undefined}
               className={cn(open ? "" : "hidden")}
               style={{ width: 200, height: 100 }}
               src={

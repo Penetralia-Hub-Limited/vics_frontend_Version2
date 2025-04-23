@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, SalesSVG } from "@/common/svgs";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
+import { PlateNumberService } from "@/services/PlateNumberService";
+import { toast } from "sonner";
 
 import {
   inputSalesPropsStep1,
@@ -19,6 +22,7 @@ import {
   inputSalesPropsStep4,
   initialSalesValuesStep4,
 } from "@/components/dashboard/sales/sales-constants";
+import { selectFoundVehicleDatafromUserID } from "@/store/vehicle/vehicle-selector";
 
 import { NewPlateSalesStep1 } from "@/components/dashboard/sales/new-plate-sells/step1";
 import { NewPlateSalesStep2 } from "@/components/dashboard/sales/new-plate-sells/step2";
@@ -46,24 +50,53 @@ const stepdetails = [
 
 export default function Page() {
   const router = useRouter();
+  const params = useParams<{ newsalesuserID: string }>();
+  const dispatch = useDispatch();
   const totalSteps = stepdetails.length;
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const plateService = new PlateNumberService(dispatch);
+
+  const vehicleInfo = useSelector((state) =>
+    selectFoundVehicleDatafromUserID(state, params.newsalesuserID)
+  )[0];
 
   // Input values start
   const [step1InputValues, setStep1InputValues] =
     useState<inputSalesPropsStep1>(initialSalesValuesStep1);
-
   const [step2InputValues, setStep2InputValues] =
     useState<inputSalesPropsStep2>(initialSalesValuesStep2);
-
   const [step3InputValues, setStep3InputValues] =
     useState<inputSalesPropsStep3>(initialSalesValuesStep3);
-
   const [step4InputValues, setStep4InputValues] =
     useState<inputSalesPropsStep4>(initialSalesValuesStep4);
   // Input values end
 
-  console.log(step1InputValues, step2InputValues, step3InputValues);
+  useEffect(() => {
+    if (!vehicleInfo) return;
+    setStep1InputValues((prev) => ({
+      ...prev,
+      fullName: `${vehicleInfo?.owner?.firstname} ${vehicleInfo?.owner?.lastname}`,
+      email: vehicleInfo?.owner.email,
+      phoneNumber: vehicleInfo?.owner.phone,
+      address: vehicleInfo?.owner?.address,
+    }));
+
+    setStep2InputValues({
+      ...vehicleInfo,
+      category: vehicleInfo.category?.toString() ?? "",
+      netweight: vehicleInfo.weight?.toString() ?? "",
+      vehicleenginecapacity: vehicleInfo.engine_capacity?.toString() ?? "",
+    });
+
+    setStep3InputValues({
+      plateNumber: vehicleInfo?.plate_number?.number,
+      plateNumberType: vehicleInfo?.plate_number?.type,
+    });
+
+    setStep4InputValues({
+      insurance: vehicleInfo?.insurance_number,
+    });
+  }, [vehicleInfo]);
 
   const handleNextStep = () => {
     setCurrentStep((prev) => (prev < totalSteps ? prev + 1 : prev));
@@ -72,6 +105,45 @@ export default function Page() {
   const handlePreviousStep = () => {
     setCurrentStep((prev) => (prev > 1 ? prev - 1 : prev));
   };
+
+  const createNewPlateSalesRequest = async () => {
+    try {
+      const payload = {
+        state_id: vehicleInfo?.owner?.state_id,
+        agent_id: null,
+        owner_id: vehicleInfo?.owner_id,
+        number: step3InputValues.plateNumber,
+        number_status: "Paid",
+        assigned_status: null,
+        type: step3InputValues.plateNumberType,
+        status: "Sold",
+        request_id: null,
+        stock_id: null,
+        sub_type: null,
+        assigned_date: null,
+      };
+
+      const response = await plateService.createPlateNumber(
+        JSON.stringify(payload)
+      );
+
+      if (response.status) {
+        router.push(`/mla-admin/sales/salespreview/${vehicleInfo?.owner_id}`);
+      }
+    } catch (error) {
+      console.error("Failed:", error);
+      toast("Error creating new Plate Sales");
+    }
+  };
+
+  // const updatePlateSalesRequest = async () => {
+  //   try {
+  //     const response = await plateService.updatePlateNumber("", {});
+  //   } catch (error) {
+  //     console.error("Failed:", error);
+  //     toast(error as unknown as string);
+  //   }
+  // };
 
   return (
     <main className="flex flex-col gap-8 md:gap-12">
@@ -85,21 +157,21 @@ export default function Page() {
           {
             label: "Sales Dashboard",
             Icon: SalesSVG,
-            link: "/super-admin/sales/dashboard",
+            link: "/mla-admin/sales/sales-dashboard",
           },
           {
             label: "Sell New Plate",
             Icon: SalesSVG,
-            link: "/store-manager-admin/sales/new-plate-sales",
+            link: "/mla-admin/sales/new-sales",
           },
         ]}
       />
 
-      <div className="grid grid-cols-[2fr_1fr] gap-2 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-2 w-full">
         <CardContainer className="flex flex-col gap-10 items-center justify-center">
           <div className="flex flex-col gap-2 items-center justify-center">
             <p className="text-lg font-semibold">New Plate Sale</p>
-            <p className="text-sm font-light">
+            <p className="text-sm font-light text-center">
               {stepdetails[currentStep - 1]?.description}
             </p>
           </div>
@@ -133,10 +205,12 @@ export default function Page() {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex flex-row items-center justify-between w-full">
-            <Button variant="outline">Save as Draft</Button>
+          <div className="flex flex-col gap-5 md:flex-row items-center justify-between w-full">
+            <Button onClick={() => {}} variant="outline">
+              Save as Draft
+            </Button>
 
-            <div className="flex flex-row gap-2 items-center ml-auto">
+            <div className="flex flex-row gap-2 items-center md:ml-auto">
               <Button
                 variant="outline"
                 className="flex flex-row items-center gap-1"
@@ -150,9 +224,7 @@ export default function Page() {
               {currentStep === totalSteps ? (
                 <Button
                   className="flex flex-row items-center gap-1"
-                  onClick={() =>
-                    router.push("/super-admin/sales/sales-preview")
-                  }
+                  onClick={createNewPlateSalesRequest}
                 >
                   <p>Preview</p>
                   <ChevronRight />

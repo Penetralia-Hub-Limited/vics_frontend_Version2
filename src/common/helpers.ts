@@ -63,3 +63,24 @@ export const generateTrackingId = (): string => {
   const randomPart = Math.floor(1000 + Math.random() * 9000); // 6-digit number
   return `TRK-${randomPart}`;
 };
+
+/**
+ * Generate Years from 1996 to 2025
+ * @param startYear
+ * @returns
+ */
+export const generateYears = (startYear: number = 1996): string[] => {
+  const currentYear = new Date().getFullYear();
+  const years: string[] = [];
+
+  for (let year = startYear; year <= currentYear; year++) {
+    years.push(year.toString());
+  }
+
+  return years;
+};
+
+// Hard Refresh
+export const hardRefresh = () => {
+  window.location.reload();
+};

@@ -27,7 +27,7 @@ export const TaxPayerInformationCard: FC<TaxPayerCardProps> = ({
         </div>
         <div className="flex-grow p-6">
           <h2 className="text-xl font-semibold mb-6 pb-4">
-            Tax Payer&apos;s Information
+            Tax Payer Information
           </h2>
           <div className="space-y-4">
             <InfoField label="Full Name" value={fullName} />

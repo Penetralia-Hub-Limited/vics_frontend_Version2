@@ -8,6 +8,7 @@ import {
   plateNumberOrderFail,
   setSelectedPlateNumberOrder,
   addPlateNumberOrder,
+  updatePlateNumberOrderInState,
 } from "@/store/plate-number-orders/plate-number-order-slice";
 import { CreatePlateNumberOrderProps } from "@/store/plate-number-orders/plate-number-order-types";
 
@@ -77,7 +78,7 @@ export class PlateNumberOrderService {
         payload,
         PlateNumberOrderService.getAuthHeader()
       );
-      this.dispatch(plateNumberOrderSuccess(res.data.data));
+      this.dispatch(updatePlateNumberOrderInState(res.data.data));
       return res.data;
     } catch (error: any) {
       this.dispatch(

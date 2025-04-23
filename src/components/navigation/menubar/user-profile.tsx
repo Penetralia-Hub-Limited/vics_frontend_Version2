@@ -6,7 +6,7 @@ import { ArrowDropDown } from "@mui/icons-material";
 import AvatarProfile from "@/components/general/avatar-profile";
 import AuthService from "@/services/AuthService";
 import { AppDispatch } from "@/store/store";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { AuthState } from "@/store/auth/auth-user-types";
 
 interface IUserProfile {
@@ -25,7 +25,6 @@ const UserProfile: FC<IUserProfile> = ({
   const dispatch = useDispatch<AppDispatch>();
   const authService = new AuthService(dispatch);
   const [openDropDown, setOpenDropDown] = useState<boolean>(false);
-
   const router = useRouter();
 
   const { isLoggedIn, data, isLoading } = useSelector(
@@ -33,15 +32,16 @@ const UserProfile: FC<IUserProfile> = ({
   );
 
   useEffect(() => {
-    if (!(isLoggedIn && data)) router.push("/");
+    if (!(isLoggedIn && data)) router.push("/login");
   }, [isLoggedIn, data, router]);
 
   const handleDropDown = () => {
     setOpenDropDown(!openDropDown);
   };
 
-  function handleLogOut() {
-    authService.logout();
+  async function handleLogOut() {
+    await authService.logout();
+    redirect("/login");
   }
 
   return (

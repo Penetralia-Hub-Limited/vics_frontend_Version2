@@ -15,7 +15,7 @@ import Modal from "@/components/general/modal";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import { VerifyPhoneNumber } from "@/components/dashboard/verification-forms/verify-phone-number";
-import { selectValidatePhoneNumber } from "@/store/plateNumber/plate-number-selector";
+import { selectValidUser } from "@/store/vehicle/vehicle-selector";
 import { useSelector } from "react-redux";
 import { ResponseModalX } from "@/components/general/response-modalx";
 import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
@@ -49,7 +49,8 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
-  const [verifyPhoneNumber, setVerifyPhoneNumber] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [isNumberVerified, setIsNumberVerified] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<{
     plateNumber: string;
     paymentStatus: string;
@@ -81,15 +82,24 @@ export default function Page() {
       },
     ];
   };
-
-  const doesPhoneExist = useSelector((plateNumber) =>
-    selectValidatePhoneNumber(plateNumber, verifyPhoneNumber)
+  const doesUserExist = useSelector((vehicle) =>
+    selectValidUser(vehicle, {
+      phoneNumber: phoneNumber,
+    })
   );
 
-  const handleSubmit = () => {
-    if (!doesPhoneExist) return;
+  console.log(doesUserExist ? true : false);
 
-    setOpenModal(true);
+  const handleSubmit = () => {
+    setTimeout(() => {
+      setOpenModal(true);
+    }, 2000);
+
+    if (doesUserExist !== undefined) {
+      setIsNumberVerified(true);
+    } else {
+      setIsNumberVerified(false);
+    }
   };
 
   return (
@@ -118,8 +128,8 @@ export default function Page() {
           title={"New Plate Sales"}
           content={
             <VerifyPhoneNumber
-              phoneNumber={verifyPhoneNumber}
-              setPhoneNumber={setVerifyPhoneNumber}
+              phoneNumber={phoneNumber}
+              setPhoneNumber={setPhoneNumber}
             />
           }
           btnText={"New Sales"}
@@ -211,32 +221,53 @@ export default function Page() {
       </div>
 
       <ResponseModalX
-        title={"Phone Number Verified Successfully"}
+        title={
+          isNumberVerified
+            ? "Phone Number Verified Successfully"
+            : "Failed to Verify Phone Number"
+        }
         open={openModal}
         onClose={() => setOpenModal(false)}
         content={
           <>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Name:</p>
-              <p className={"font-semibold justify-self-end"}>Akan E</p>
-            </div>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Phone Number:</p>
-              <p className={"font-semibold justify-self-end"}>
-                {/* {identificationInput.phoneNumber} */}
-              </p>
-            </div>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Address:</p>
-              <p className={"font-semibold justify-self-end"}>
-                Omru Oran Ojo, Ibadan 2343423
-              </p>
-            </div>
+            {isNumberVerified ? (
+              <div className="flex flex-col gap-4 py-5">
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Name:</p>
+                  <p className={"text-sm font-semibold justify-self-end"}>
+                    {doesUserExist?.owner?.firstname}{" "}
+                    {doesUserExist?.owner?.lastname}
+                  </p>
+                </div>
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Phone Number: </p>
+                  <p className={"text-sm font-semibold justify-self-end"}>
+                    {doesUserExist?.owner?.phone}
+                  </p>
+                </div>
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Address:</p>
+                  <p
+                    className={"text-sm font-semibold justify-self-end ml-auto"}
+                  >
+                    {doesUserExist?.owner?.address}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>Please enter the correct number, and try again</>
+            )}
           </>
         }
-        status={"success"}
+        status={isNumberVerified ? "success" : "failed"}
         footerBtnText={"Continue"}
-        footerTrigger={() => router.push("/super-admin/sales/new-plate-sales")}
+        footerTrigger={() => {
+          if (isNumberVerified && doesUserExist?.owner_id) {
+            router.push(
+              `/super-admin/sales/newsales/${doesUserExist.owner_id}`
+            );
+          }
+        }}
       />
     </main>
   );

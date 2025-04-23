@@ -42,7 +42,11 @@ export default function Page() {
       amount: plateNumberAmount,
       isCurrency: true,
     },
-    { title: "Total Sales", amount: plateNumberTotalSales, isCurrency: true },
+    {
+      title: "Total Sales",
+      amount: plateNumberTotalSales,
+      isCurrency: true,
+    },
   ];
 
   const [selectedRanges1, setSelectedRanges1] = useState<

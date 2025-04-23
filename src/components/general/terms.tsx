@@ -6,7 +6,7 @@ interface ITermsAndConditions {
 
 export const TermsAndConditions: FC<ITermsAndConditions> = ({ termsData }) => {
   return (
-    <div className={"flex flex-col gap-3 p-4 py-6"}>
+    <div className={"flex flex-col gap-3 p-4"}>
       <p className="text-sm font-semibold">Terms and Condition</p>
 
       <div className={"flex flex-col gap-2 list-decimal"}>

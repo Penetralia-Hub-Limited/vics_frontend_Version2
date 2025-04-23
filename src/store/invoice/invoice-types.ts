@@ -1,4 +1,7 @@
 import { PaginationProp } from "@/common/types";
+import { User } from "../user/user-type";
+import { StatesData } from "../states/states-types";
+import { CompanyData } from "../company/company-types";
 
 export type InvoiceData = {
   id: string;
@@ -22,6 +25,11 @@ export type InvoiceData = {
   date_deactivated: string | null;
   created_at: string;
   updated_at: string;
+  payer: User;
+  state: StatesData;
+  creator: User;
+  company: CompanyData;
+  approver: User;
 };
 
 export interface InvoiceResponse {

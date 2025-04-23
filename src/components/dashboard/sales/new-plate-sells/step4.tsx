@@ -1,5 +1,7 @@
+"use client";
+
 import { FC, Dispatch, SetStateAction } from "react";
-import DashboardCompSelect from "../../dashboard-component-select";
+import InputWithLabel from "@/components/auth/input-comp";
 import { inputSalesPropsStep4 } from "../sales-constants";
 
 interface INewPlateSalesStep4 {
@@ -13,15 +15,19 @@ export const NewPlateSalesStep4: FC<INewPlateSalesStep4> = ({
 }) => {
   return (
     <div className={"w-full"}>
-      <DashboardCompSelect
-        title={"Include Insurance"}
-        placeholder={"-- Choose --"}
-        items={["Insurance1", "Insurance2", "Insurance3"]}
-        selected={inputValues.insurance}
-        onSelect={(selected) =>
+      <InputWithLabel
+        items={{
+          id: "insurance",
+          label: "Include Insurance",
+          placeholder: "Enter Insurance ID",
+          type: "text",
+          htmlfor: "insurance",
+        }}
+        value={inputValues.insurance || ""}
+        onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
-            insurance: (selected as string) ?? "",
+            insurance: e.target.value,
           }))
         }
       />

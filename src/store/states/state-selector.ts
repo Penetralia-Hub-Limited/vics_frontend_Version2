@@ -8,6 +8,6 @@ export const selectStateIDFromStateName = createSelector(
   [selectStatesReducer, (_: any, stateName: string | null) => stateName],
   (states, stateName) => {
     const foundState = states.states.find((state) => state.name === stateName);
-    return foundState?.id || null;
+    return foundState?.id || "";
   }
 );

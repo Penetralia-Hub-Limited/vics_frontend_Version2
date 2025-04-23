@@ -76,6 +76,7 @@ export const {
   clearPlateNumberOrder,
   addPlateNumberOrder,
   deletePlateNumberOrderFromState,
+  updatePlateNumberOrderInState,
 } = plateNumberOrderSlice.actions;
 
 export default plateNumberOrderSlice.reducer;

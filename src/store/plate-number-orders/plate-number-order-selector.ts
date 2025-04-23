@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSelector } from "reselect";
 import { RootState } from "../store";
 import { PlateNumberOrderType } from "@/common/enum";
@@ -31,8 +32,14 @@ export const selectPlateNumberAmount = createSelector(
   (plateNumberOrder) =>
     plateNumberOrder
       .filter((order) => order.type === PlateNumberOrderType.REQUEST)
-      .map((order) => order.invoice)
-      .reduce((acc, invoice) => acc + invoice.amount, 0)
+      .map((order) => order?.invoice)
+      .reduce((acc, invoice) => {
+        const validAmount =
+          typeof invoice?.amount === "number" && !isNaN(invoice.amount)
+            ? invoice.amount
+            : 0;
+        return acc + validAmount;
+      }, 0)
 );
 
 // Getting the plate number total Sales amount
@@ -41,7 +48,13 @@ export const selectPlateNumberTotalSales = createSelector(
   (plateNumberOrder) =>
     plateNumberOrder
       .map((order) => order.invoice)
-      .reduce((acc, order) => acc + order.amount, 0)
+      .reduce((acc, order) => {
+        const validAmount =
+          typeof order?.amount === "number" && !isNaN(order.amount)
+            ? order.amount
+            : 0;
+        return acc + validAmount;
+      }, 0)
 );
 
 // Getting the new plate sales amount
@@ -50,7 +63,14 @@ export const selectNewPlateSales = createSelector(
   (plateNumberOrder) =>
     plateNumberOrder
       .filter((order) => order.type === PlateNumberOrderType.SALE)
-      .reduce((acc, order) => acc + order.total_number_requested, 0)
+      .reduce((acc, order) => {
+        const validAmount =
+          typeof order?.total_number_requested === "number" &&
+          !isNaN(order?.total_number_requested)
+            ? order.total_number_requested
+            : 0;
+        return acc + validAmount;
+      }, 0)
 );
 
 // Get the json table data for platenumber
@@ -84,4 +104,15 @@ export const selectSalesPlateNumber = createSelector(
           ...order,
         };
       })
+);
+
+// Get Payer ID from Plate Number Order Based on Invoice Payer ID
+export const selectVehicleCreatorIDFromPlateNumberOrders = createSelector(
+  [selectPlateNumberOrderReducer, (_: any, payerID: string | null) => payerID],
+  (plateNumberOrders, payerID) => {
+    const matchedOrder = plateNumberOrders.find(
+      (order) => order?.vehicle?.creator_id === payerID
+    );
+    return matchedOrder?.invoice?.payer_id ?? null;
+  }
 );

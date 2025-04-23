@@ -7,6 +7,7 @@ import {
   vehiclesSuccess,
   vehiclesFail,
   setSelectedVehicles,
+  addNewVehicle,
 } from "@/store/vehicle/vehicle-slice";
 import { CreateVehiclePayload } from "@/store/vehicle/vehicle-type";
 
@@ -103,7 +104,8 @@ export class VehicleService {
     this.dispatch(vehiclesStart());
     try {
       const res = await axiosInstance.post(VehicleService.url, payload);
-      this.dispatch(vehiclesSuccess(res.data.data));
+      this.dispatch(addNewVehicle(res.data.data));
+      return res.data;
     } catch (error: any) {
       this.dispatch(
         vehiclesFail(

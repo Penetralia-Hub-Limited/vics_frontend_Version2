@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "@/utils/axios-instance";
-import { PlateNumberProps } from "@/store/plateNumber/plate-number-types";
+import { CreatePlateNumberProps } from "@/store/plateNumber/plate-number-types";
 import { getCookie } from "cookies-next";
 import { AppDispatch } from "@/store/store";
 import {
@@ -8,6 +8,8 @@ import {
   plateNumberSuccess,
   plateNumberFail,
   setSelectedPlateNumber,
+  addPlateNumber,
+  updatePlateNumberInState,
 } from "@/store/plateNumber/plate-number-slice";
 
 export class PlateNumberService {
@@ -75,7 +77,7 @@ export class PlateNumberService {
         payload,
         PlateNumberService.getAuthHeader()
       );
-      this.dispatch(plateNumberSuccess(res.data.data));
+      this.dispatch(updatePlateNumberInState(res.data.data));
       return res.data;
     } catch (error: any) {
       this.dispatch(
@@ -108,14 +110,14 @@ export class PlateNumberService {
   }
 
   // Create a plate number
-  async createPlateNumber(payload: PlateNumberProps) {
+  async createPlateNumber(payload: CreatePlateNumberProps) {
     this.dispatch(plateNumberStart());
     try {
       const res = await axiosInstance.post(
         `${PlateNumberService.url}`,
         payload
       );
-      this.dispatch(plateNumberSuccess(res.data.data));
+      this.dispatch(addPlateNumber(res.data.data));
       return res.data;
     } catch (error: any) {
       this.dispatch(

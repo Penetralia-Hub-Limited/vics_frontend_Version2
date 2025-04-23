@@ -532,14 +532,7 @@ export const mlaSideBarItems = [
         id: 4,
         title: "Reports",
         Icon: ReportSVG,
-        url: "/mla-admin/reports",
-        dropdown: [
-          {
-            id: 1,
-            title: "Reports Sub",
-            Icon: ReportSVG,
-          },
-        ],
+        url: "/mla-admin/report",
       },
       {
         id: 5,

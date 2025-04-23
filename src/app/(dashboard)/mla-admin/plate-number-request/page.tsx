@@ -78,6 +78,7 @@ export default function Page() {
   );
 
   const getRowActions = (row: unknown): RowAction[] => {
+    console.log(row);
     return [
       {
         title: "View",

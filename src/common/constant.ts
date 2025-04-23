@@ -447,12 +447,12 @@ export const mlatableInvoices = [
 
 export const vehicleColumns = [
   { key: "id", title: "S/N" },
-  { key: "chasisno", title: "Chasis Number" },
-  { key: "engineno", title: "Engine Number" },
-  { key: "vehiclemake", title: "Vehicle Make" },
-  { key: "vehiclemodel", title: "Vehicle Model" },
+  { key: "chasis_number", title: "Chasis Number" },
+  { key: "engine_number", title: "Engine Number" },
+  { key: "make", title: "Vehicle Make" },
+  { key: "model", title: "Vehicle Model" },
   { key: "category", title: "Category" },
-  { key: "plateno", title: "Plate Number" },
+  { key: "plate_number", title: "Plate Number" },
 ];
 
 export const vehicleData = [

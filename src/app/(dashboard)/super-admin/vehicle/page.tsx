@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
-import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VehicleSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
@@ -14,14 +13,14 @@ import Modal from "@/components/general/modal";
 import { IDTaxPayerMeans } from "@/common/enum";
 import { VehicleModalElements } from "@/components/dashboard/vehicle/vehicle-modal-element";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
-import ResponseModal from "@/components/general/response-modal";
 import { useSelector } from "react-redux";
 import { selectVehicles } from "@/store/vehicle/vehicle-selector";
-import { VehicleData } from "@/store/vehicle/vehicle-type";
+import { selectValidUser } from "@/store/vehicle/vehicle-selector";
+import { ResponseModalX } from "@/components/general/response-modalx";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
-  { key: "platenumber", title: "Plate Number" },
+  { key: "platenumber", title: "Number of Plates" },
   { key: "type", title: "Plate Type" },
   { key: "category", title: "Category" },
   { key: "chasis_number", title: "Chasis Number" },
@@ -35,16 +34,8 @@ export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [inputValues, setInputValues] = useState<{
-    platenumber: string;
-    startDate: Date | undefined;
-    endDate: Date | undefined;
-  }>({
-    platenumber: "",
-    startDate: undefined,
-    endDate: undefined,
-  });
-
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isUserVerified, setIsUserVerified] = useState<boolean>(false);
   const [identificationMeans, setIdentificationMeans] =
     useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
   const [identificationInput, setIdentificationInput] = useState<{
@@ -54,43 +45,38 @@ export default function Page() {
     nin: "",
     phoneNumber: "",
   });
+  const [input, setInput] = useState<{
+    platenumber: string;
+    chasisno: string;
+    engineno: string;
+  }>({
+    platenumber: "",
+    chasisno: "",
+    engineno: "",
+  });
   const vehiclesData = useSelector(selectVehicles);
 
-  const filterVehiclesData = (
-    data: Array<VehicleData>,
-    query: {
-      plate_number?: string;
-      start_date?: Date | null;
-      end_date?: Date | null;
+  const doesUserExist = useSelector((vehicle) =>
+    selectValidUser(vehicle, {
+      phoneNumber: identificationInput.phoneNumber,
+      nin: identificationInput.nin,
+    })
+  );
+
+  const handleSubmit = () => {
+    setTimeout(() => {
+      setOpenModal(true);
+    }, 2000);
+
+    if (doesUserExist !== undefined) {
+      setIsUserVerified(true);
+    } else {
+      setIsUserVerified(false);
     }
-  ): Array<VehicleData> => {
-    return data.filter((item) => {
-      const createdAt = new Date(item.created_at);
-
-      const matchesPlate =
-        !query.plate_number ||
-        item.plate_number?.number
-          ?.toLowerCase()
-          .includes(query.plate_number.toLowerCase());
-
-      const matchesStartDate =
-        !query.start_date || createdAt >= new Date(query.start_date);
-
-      const matchesEndDate =
-        !query.end_date || createdAt <= new Date(query.end_date);
-
-      return matchesPlate && matchesStartDate && matchesEndDate;
-    });
   };
 
-  const filteredData = filterVehiclesData(vehiclesData, {
-    plate_number: inputValues.platenumber,
-    start_date: inputValues.startDate ?? null,
-    end_date: inputValues.endDate ?? null,
-  });
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const paginatedData = filteredData.slice(
+  const totalPages = Math.ceil(vehiclesData.length / itemsPerPage);
+  const paginatedData = vehiclesData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -113,49 +99,14 @@ export default function Page() {
       {
         title: "View Details",
         action: () => {
-          router.push(`/super-admin/vehicle/vehicle-preview/${tableRow.id}`);
+          router.push(`/super-admin/vehicle/${tableRow.id}`);
         },
       },
     ];
   };
 
-  const validateModal = () => {
-    return (
-      <ResponseModal
-        title={`${identificationMeans} Verified Successfully`}
-        content={
-          <div className={"flex flex-col gap-4 py-3"}>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Name:</p>
-              <p className={"font-semibold justify-self-end"}>Akan E</p>
-            </div>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Phone Number:</p>
-              <p className={"font-semibold justify-self-end"}>
-                {identificationInput.phoneNumber}
-              </p>
-            </div>
-            <div className={"grid grid-cols-[1fr_2fr]"}>
-              <p>Address:</p>
-              <p className={"font-semibold justify-self-end"}>
-                Omru Oran Ojo, Ibadan 2343423
-              </p>
-            </div>
-          </div>
-        }
-        footerBtnText={"Continue"}
-        btnText={"Validate Tax Payer"}
-        trigger={() => {
-          {
-            router.push("/super-admin/vehicle/add-new-vehicle");
-          }
-        }}
-      />
-    );
-  };
-
   return (
-    <main className={"flex flex-col gap-8 md:gap-12"}>
+    <main className={"flex flex-col gap-8 md:gap-12 min-h-screen"}>
       <div
         className={
           "flex flex-col gap-5 md:flex-row justify-between items-center"
@@ -166,12 +117,12 @@ export default function Page() {
             {
               label: "Dashboard",
               Icon: DashboardSVG,
-              link: "/store-manager-admin/dashboard",
+              link: "/super-admin/dashboard",
             },
             {
               label: "Vehicle Dashboard",
               Icon: VehicleSVG,
-              link: "/store-manager-admin/stock-management",
+              link: "/super-admin/vehicle",
             },
           ]}
         />
@@ -187,7 +138,11 @@ export default function Page() {
             />
           }
           btnText={"Add New Vehicle"}
-          footerBtn={validateModal()}
+          footerBtn={
+            <Button onClick={handleSubmit} type="submit">
+              Validate Tax Payer
+            </Button>
+          }
         />
       </div>
 
@@ -201,32 +156,45 @@ export default function Page() {
               type: "text",
               htmlfor: "platenumber",
             }}
-            value={inputValues.platenumber}
+            value={input.platenumber}
             onChange={(e) =>
-              setInputValues((prev) => ({
+              setInput((prev) => ({
                 ...prev,
-                platenumber: e.target.value ?? "",
+                platenumber: e.target.value,
               }))
             }
           />
 
-          <DatePicker
-            title={"Start Date"}
-            date={inputValues.startDate}
-            setDate={(date) =>
-              setInputValues((prev) => ({
+          <InputWithLabel
+            items={{
+              id: "chasisno",
+              label: "Chasis Number",
+              placeholder: "Chasis Number",
+              type: "text",
+              htmlfor: "chasisno",
+            }}
+            value={input.chasisno}
+            onChange={(e) =>
+              setInput((prev) => ({
                 ...prev,
-                startDate: date as Date | undefined,
+                chasisno: e.target.value,
               }))
             }
           />
-          <DatePicker
-            title={"End Date"}
-            date={inputValues.endDate}
-            setDate={(date) =>
-              setInputValues((prev) => ({
+
+          <InputWithLabel
+            items={{
+              id: "engineno",
+              label: "Engine Number",
+              placeholder: "Engine Number",
+              type: "text",
+              htmlfor: "engineno",
+            }}
+            value={input.engineno}
+            onChange={(e) =>
+              setInput((prev) => ({
                 ...prev,
-                endDate: date as Date | undefined,
+                engineno: e.target.value,
               }))
             }
           />
@@ -236,7 +204,9 @@ export default function Page() {
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
+        className={
+          "flex flex-col gap-3 border-1 border-primary-300 rounded-lg overflow-hidden"
+        }
       >
         <div className={"border-t-1 border-primary-300 rounded-lg"}>
           <DataTableWButton
@@ -249,6 +219,50 @@ export default function Page() {
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
+
+      <ResponseModalX
+        title={
+          isUserVerified ? "User Verified Successfully" : "User does not exist"
+        }
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={
+          <>
+            {isUserVerified ? (
+              <div className="flex flex-col gap-4 py-5">
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Name:</p>
+                  <p className={"text-sm font-semibold justify-self-end"}>
+                    {doesUserExist?.owner?.firstname}{" "}
+                    {doesUserExist?.owner?.lastname}
+                  </p>
+                </div>
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Phone Number: </p>
+                  <p className={"text-sm font-semibold justify-self-end"}>
+                    {doesUserExist?.owner?.phone}
+                  </p>
+                </div>
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Address:</p>
+                  <p
+                    className={"text-sm font-semibold justify-self-end ml-auto"}
+                  >
+                    {doesUserExist?.owner?.address}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>Please check your details, and try again</>
+            )}
+          </>
+        }
+        status={isUserVerified ? "success" : "failed"}
+        footerBtnText={"Continue"}
+        footerTrigger={() =>
+          isUserVerified && router.push("/super-admin/vehicle/add-new-vehicle")
+        }
+      />
     </main>
   );
 }

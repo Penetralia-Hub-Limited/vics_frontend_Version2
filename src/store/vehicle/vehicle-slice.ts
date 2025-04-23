@@ -6,6 +6,7 @@ interface VehicleState {
   vehicles: VehicleData[];
   selectedStates: VehicleData | null;
   isLoading: boolean;
+  success: boolean;
   error: string | null;
 }
 
@@ -14,6 +15,7 @@ const initialState: VehicleState = {
   selectedStates: null,
   isLoading: false,
   error: null,
+  success: false,
 };
 
 const lgaSlice = createSlice({
@@ -26,14 +28,29 @@ const lgaSlice = createSlice({
     },
     vehiclesSuccess(state, action: PayloadAction<any[]>) {
       state.isLoading = false;
+      state.success = true;
       state.vehicles = action.payload;
     },
     vehiclesFail(state, action: PayloadAction<string | null>) {
       state.isLoading = false;
+      state.success = false;
       state.error = action.payload;
     },
     setSelectedVehicles(state, action: PayloadAction<any>) {
       state.vehicles = action.payload;
+    },
+    addNewVehicle(state, action: PayloadAction<any>) {
+      state.isLoading = false;
+      state.success = true;
+      state.vehicles = [...state.vehicles, action.payload];
+    },
+    updateVehicleInState(state, action: PayloadAction<any>) {
+      const index = state.vehicles.findIndex(
+        (vehicle) => vehicle.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.vehicles[index] = action.payload;
+      }
     },
     clearVehicles(state) {
       state.vehicles = [];
@@ -47,6 +64,8 @@ export const {
   vehiclesFail,
   setSelectedVehicles,
   clearVehicles,
+  addNewVehicle,
+  updateVehicleInState,
 } = lgaSlice.actions;
 
 export default lgaSlice.reducer;
