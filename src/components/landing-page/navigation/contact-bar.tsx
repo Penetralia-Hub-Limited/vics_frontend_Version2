@@ -18,7 +18,7 @@ const LandingContactBar: FC<IContactBar> = ({ contacts, emails }) => {
     >
       <div
         className={
-          "flex flex-wrap justify-end items-center gap-4 md:gap-8 items-center w-full max-md:max-w-full"
+          "flex flex-wrap justify-end items-center gap-4 md:gap-8 w-full max-md:max-w-full"
         }
       >
         <div className={"flex gap-2 items-center"}>

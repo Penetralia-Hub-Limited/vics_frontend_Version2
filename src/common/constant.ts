@@ -7,11 +7,7 @@ export const landingPageNavigation: IlandingPageNavigation[] = [
     label: "home",
     link: "/",
   },
-  {
-    id: 2,
-    label: "verification",
-    link: "/verification",
-  },
+  //{ id: 2,label: "verification",link: "/verification",},
 ];
 
 export const hotline: IHotline[] = [
