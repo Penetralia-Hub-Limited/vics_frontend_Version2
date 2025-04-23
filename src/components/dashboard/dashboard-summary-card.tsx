@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { FC, Dispatch, SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { BarChartIcon } from "@/common/svgs";
@@ -11,15 +14,18 @@ interface ISummaryCard {
   selectedRange: DateRange;
   setSelectedRange: Dispatch<SetStateAction<DateRange>>;
   isCurrency?: boolean;
+  route?: string;
 }
 
 const SummaryCard: FC<ISummaryCard> = ({
   title,
+  route,
   amount,
   isCurrency,
   selectedRange,
   setSelectedRange,
 }) => {
+  const router = useRouter();
   return (
     <div className="w-full flex flex-col gap-4 border border-primary-300 rounded-lg p-5">
       <div className="flex flex-row justify-between items-center">
@@ -42,9 +48,15 @@ const SummaryCard: FC<ISummaryCard> = ({
           </p>
         </div>
 
-        <div>
-          <Button className="text-white">View</Button>
-        </div>
+        {route ? (
+          <div>
+            <Button onClick={() => router.push(route)} className="text-white">
+              View
+            </Button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

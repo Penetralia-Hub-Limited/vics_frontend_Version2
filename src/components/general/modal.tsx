@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 
 interface IModal {
@@ -49,7 +50,9 @@ const Modal: FC<IModal> = ({
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div>{content}</div>
-        <DialogFooter className={"p-4"}>{footerBtn}</DialogFooter>
+        <DialogFooter className={"p-4"}>
+          {footerBtn && <DialogClose asChild>{footerBtn}</DialogClose>}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

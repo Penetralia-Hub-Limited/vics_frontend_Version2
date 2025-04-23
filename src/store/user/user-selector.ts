@@ -59,3 +59,47 @@ export const selectUserFromName = createSelector(
     return foundState || null;
   }
 );
+
+// Get Individual User By Selecting the Name and filtering Super Admins
+export const selectSuperAdminFromName = createSelector(
+  [selectUserReducer, (_: any, userName: string | null) => userName],
+  (users, userName) => {
+    if (!userName) return null;
+
+    const superAdmins = users.filter((user) => user.role === "Super Admin");
+    const foundUser = superAdmins.find(
+      (user) => `${user.firstname} ${user.lastname}` === userName
+    );
+
+    return foundUser || null;
+  }
+);
+
+// Get Individual User By Selecting the Name and filtering Admins
+export const selectAdminFromName = createSelector(
+  [selectUserReducer, (_: any, userName: string | null) => userName],
+  (users, userName) => {
+    if (!userName) return null;
+
+    const admins = users.filter((user) => user.role === "Super Admin");
+    const foundUser = admins.find(
+      (user) => `${user.firstname} ${user.lastname}` === userName
+    );
+
+    return foundUser || null;
+  }
+);
+
+// Validate User (NIN, Phone Number) with Vehicle
+export const selectValidTaxPayer = createSelector(
+  [
+    selectUserReducer,
+    (_: any, data: { phoneNumber: string; nin?: string }) => data,
+  ],
+  (users, data) => {
+    const foundData = users.find(
+      (user) => user?.phone === data.phoneNumber || user?.nin === data.nin
+    );
+    return foundData;
+  }
+);

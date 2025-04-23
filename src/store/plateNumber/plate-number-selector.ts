@@ -34,6 +34,7 @@ export const selectPlateNumber = createSelector(
             sid: index + 1,
             ...plate,
             buyer: `${plate?.owner?.firstname ?? "-"} ${plate?.owner?.lastname ?? "-"}`,
+            int_amount: plate?.invoice?.amount ?? index * 6 + 3,
             amount: formattedAmount(plate?.invoice?.amount ?? index * 6 + 3),
             created_by: `${plate?.creator?.firstname ?? "-"} ${plate?.creator?.lastname ?? "-"}`,
           };

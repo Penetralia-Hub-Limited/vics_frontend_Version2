@@ -63,7 +63,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Zone Office"}
             placeholder={"-- Select Office --"}
-            items={["Private", "Commercial"]}
+            items={["Office1", "Office2"]}
             selected={inputValues.zoneOffice}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -76,7 +76,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"MLA"}
             placeholder={"-- Select MLA --"}
-            items={["Private", "Commercial"]}
+            items={["MLA1", "MLA2"]}
             selected={inputValues.mla}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -89,7 +89,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
-            items={["Private", "Commercial"]}
+            items={[...Object.values(PlateNumberType)]}
             selected={inputValues.plateNumberType}
             onSelect={(selected) =>
               setInputValues((prev) => ({

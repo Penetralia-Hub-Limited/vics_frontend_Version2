@@ -42,9 +42,11 @@ export default function Page() {
 
   // finding the total amount
   const totalAmount = mlaReportData.reduce(
-    (sum, item) => sum + parseInt(item?.amount ?? 0),
+    (acc, sum) => acc + sum.int_amount,
     0
   );
+
+  console.log(totalAmount);
 
   const totalPages = Math.ceil(mlaReportData.length / itemsPerPage);
   const paginatedData = mlaReportData.slice(
@@ -121,7 +123,7 @@ export default function Page() {
           <p className={"text-sm"}>
             Total Amount Sold:{" "}
             <span className={"font-semibold"}>
-              {formattedAmount(totalAmount)}
+              {formattedAmount(isNaN(totalAmount) ? 0 : totalAmount)}
             </span>
           </p>
         </div>

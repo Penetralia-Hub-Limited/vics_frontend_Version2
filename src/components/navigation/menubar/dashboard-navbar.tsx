@@ -24,11 +24,9 @@ const DashboardNavBar: FC<IDashboardNavBar> = ({
   return (
     <div className="flex items-center justify-between gap-4 w-full px-4 py-3 bg-white ">
       <div className="w-full flex items-center gap-6">
-        <p className="font-bold text-lg uppercase hidden md:block">
-          {pageTitle}
-        </p>
+        <p className="font-bold text-lg uppercase">{pageTitle}</p>
 
-        <div className="relative w-fit md:w-full max-w-md">
+        {/* <div className="relative w-fit md:w-full max-w-md">
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
             size={20}
@@ -42,7 +40,7 @@ const DashboardNavBar: FC<IDashboardNavBar> = ({
               setSearchQuery(e.target.value)
             }
           />
-        </div>
+        </div> */}
       </div>
 
       <UserProfile

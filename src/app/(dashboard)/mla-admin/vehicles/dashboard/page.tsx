@@ -11,7 +11,11 @@ import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import Modal from "@/components/general/modal";
 import { IDTaxPayerMeans } from "@/common/enum";
-import { VehicleModalElements } from "@/components/dashboard/vehicle/vehicle-modal-element";
+import {
+  UserIdentificationModal,
+  IUserIDInitialValues,
+  UserIDProps,
+} from "@/components/dashboard/verification-forms/user-identification";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import { useSelector } from "react-redux";
 import { selectVehicles } from "@/store/vehicle/vehicle-selector";
@@ -38,13 +42,8 @@ export default function Page() {
   const [isUserVerified, setIsUserVerified] = useState<boolean>(false);
   const [identificationMeans, setIdentificationMeans] =
     useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
-  const [identificationInput, setIdentificationInput] = useState<{
-    nin: string;
-    phoneNumber: string;
-  }>({
-    nin: "",
-    phoneNumber: "",
-  });
+  const [identificationInput, setIdentificationInput] =
+    useState<UserIDProps>(IUserIDInitialValues);
   const [input, setInput] = useState<{
     platenumber: string;
     chasisno: string;
@@ -130,7 +129,7 @@ export default function Page() {
         <Modal
           title={"Add New Vehicle"}
           content={
-            <VehicleModalElements
+            <UserIdentificationModal
               selected={identificationMeans}
               onSelect={setIdentificationMeans}
               input={identificationInput}

@@ -12,6 +12,7 @@ import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { PlateNumberType } from "@/common/enum";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -153,7 +154,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
-            items={["private", "commercial"]}
+            items={[...Object.values(PlateNumberType)]}
             onSelect={(selected) =>
               setValue((prev) => ({
                 ...prev,

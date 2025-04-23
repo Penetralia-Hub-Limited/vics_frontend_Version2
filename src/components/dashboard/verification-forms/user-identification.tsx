@@ -3,22 +3,24 @@ import { IDTaxPayerMeans } from "@/common/enum";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "../dashboard-component-select";
 
-interface IVehicleModalElements {
-  selected: IDTaxPayerMeans;
-  onSelect: Dispatch<SetStateAction<IDTaxPayerMeans>>;
-  input: {
-    nin: string;
-    phoneNumber: string;
-  };
-  setInput: Dispatch<
-    SetStateAction<{
-      nin: string;
-      phoneNumber: string;
-    }>
-  >;
+export const IUserIDInitialValues = {
+  nin: "",
+  phoneNumber: "",
+};
+
+export interface UserIDProps {
+  nin: string;
+  phoneNumber: string;
 }
 
-export const VehicleModalElements: FC<IVehicleModalElements> = ({
+interface IUserIdentification {
+  selected: IDTaxPayerMeans;
+  onSelect: Dispatch<SetStateAction<IDTaxPayerMeans>>;
+  input: UserIDProps;
+  setInput: Dispatch<SetStateAction<UserIDProps>>;
+}
+
+export const UserIdentificationModal: FC<IUserIdentification> = ({
   selected,
   onSelect,
   input,

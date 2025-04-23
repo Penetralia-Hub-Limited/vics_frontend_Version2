@@ -41,7 +41,7 @@ export const CreateNewPlatRequest: FC<ICreateNewStock> = ({
         onSelect={(selected) =>
           setInput((prev) => ({
             ...prev,
-            state: selected as PlateNumberType,
+            state: String(selected),
           }))
         }
       />

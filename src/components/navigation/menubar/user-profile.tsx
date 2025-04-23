@@ -6,8 +6,9 @@ import { ArrowDropDown } from "@mui/icons-material";
 import AvatarProfile from "@/components/general/avatar-profile";
 import AuthService from "@/services/AuthService";
 import { AppDispatch } from "@/store/store";
-import { useRouter, redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { AuthState } from "@/store/auth/auth-user-types";
+import { toast } from "sonner";
 
 interface IUserProfile {
   fullName: string;
@@ -40,8 +41,13 @@ const UserProfile: FC<IUserProfile> = ({
   };
 
   async function handleLogOut() {
-    await authService.logout();
-    redirect("/login");
+    router.replace("/login");
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error(error as unknown as string);
+      toast("Error logging out.");
+    }
   }
 
   return (

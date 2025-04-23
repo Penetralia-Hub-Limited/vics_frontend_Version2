@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import DashboardPath from "@/components/dashboard/dashboard-path";
@@ -14,8 +15,15 @@ import {
   CreatePlateRequestInitialValues,
   CreateVehiceMakeAndModelProps,
 } from "@/components/dashboard/verification-forms/create-vehicle-make";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectVehicles } from "@/store/vehicle/vehicle-selector";
+import { VehicleService } from "@/services/VehicleService";
+import {
+  RowAction,
+  TableData,
+} from "@/components/dashboard/dashboard-table-w-button";
+import { selectStateIDFromStateName } from "@/store/states/state-selector";
+import { toast } from "sonner";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -25,12 +33,18 @@ const tableColumns = [
 
 export default function Page() {
   const itemsPerPage = 10;
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vehicleMake, setVehicleMake] = useState<string>("");
   const [modalInput, setModalInput] = useState<CreateVehiceMakeAndModelProps>(
     CreatePlateRequestInitialValues
   );
   const vehiclesData = useSelector(selectVehicles);
+  const vehicleService = new VehicleService(dispatch);
+  const state_id = useSelector((state) =>
+    selectStateIDFromStateName(state, modalInput?.state)
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVehicleMake(e.target.value);
@@ -42,25 +56,33 @@ export default function Page() {
     currentPage * itemsPerPage
   );
 
-  interface TableRow {
-    id: number;
-    endCode: string;
-    type: string;
-    createdBy: string;
-    date: Date;
-    initialQuantity: number;
-    currentQuantity: number;
-    assigned: number;
-    sold: number;
-  }
+  const handleCreateMakeModel = async () => {
+    try {
+      const payload = {
+        state_id: state_id,
+        status: "active",
+        capacity: "5",
+        chasis_number: "ABC123456",
+        make: modalInput.make,
+        model: modalInput.model,
+        year: "2023",
+        color: "Green",
+        policy_sector: "Green Emission Policy",
+      };
 
-  interface RowAction {
-    title: string;
-    action: () => void;
-  }
+      const response = await vehicleService.createVehicle(payload);
+
+      if (response.status) {
+        setModalInput(CreatePlateRequestInitialValues);
+      }
+    } catch (error) {
+      console.log(error as unknown as string);
+      toast("Error Creating new Vehicle Make and Model");
+    }
+  };
 
   const getRowActions = (row: unknown): RowAction[] => {
-    const tableRow = row as TableRow;
+    const tableRow = row as TableData;
     return [
       {
         title: "View",
@@ -100,7 +122,11 @@ export default function Page() {
             />
           }
           btnText={"Add new Vehicle Make"}
-          footerBtn={<Button type="submit">Validate Plate Number</Button>}
+          footerBtn={
+            <Button onClick={handleCreateMakeModel} type="submit">
+              Submit
+            </Button>
+          }
         />
       </div>
 

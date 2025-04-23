@@ -24,7 +24,7 @@ const pathMappings: Record<string, Record<string, string>> = {
     platenumberrequest: "Plate Number Request",
     invoice: "MLA Invoice",
     invoicerenewal: "MLA Invoice Renewal",
-    reports: "Report Dashboard",
+    report: "MLA Report Dashboard",
     taxpayerdashboard: "Tax Payer Dashboard",
     renewaldashboard: "Renewal Dashboard",
     sales: "MLA Sales Dashboard",

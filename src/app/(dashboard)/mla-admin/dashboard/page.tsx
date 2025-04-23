@@ -54,7 +54,11 @@ export default function Page() {
     };
 
   const summaryItems1 = [
-    { title: "Plate Requests", amount: plateNumberRequested },
+    {
+      title: "Plate Requests",
+      amount: plateNumberRequested,
+      route: "/mla-admin/plate-number-request",
+    },
     { title: "Stock Level", amount: plateNumberStockLevel },
   ];
 
@@ -91,11 +95,12 @@ export default function Page() {
       <div className="grid grid-cols-1 md:grid-cols-[2fr_auto] gap-2 items-start">
         <div className="flex flex-col md:gap-3 gap-6 w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
-            {summaryItems1.map(({ title, amount }, index) => (
+            {summaryItems1.map(({ title, amount, route }, index) => (
               <SummaryCard
                 key={index}
                 title={title}
                 amount={amount}
+                route={route}
                 selectedRange={selectedRanges1[title] || DateRange.TODAY}
                 setSelectedRange={updateDateRange1(title)}
               />

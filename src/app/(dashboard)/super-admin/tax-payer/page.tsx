@@ -12,6 +12,19 @@ import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { useSelector } from "react-redux";
 import { selectTaxPayers } from "@/store/user/user-selector";
+import {
+  UserIdentificationModal,
+  IUserIDInitialValues,
+  UserIDProps,
+} from "@/components/dashboard/verification-forms/user-identification";
+import Modal from "@/components/general/modal";
+import { IDTaxPayerMeans } from "@/common/enum";
+import {
+  RowAction,
+  TableData,
+} from "@/components/dashboard/dashboard-table-w-button";
+import { ResponseModalX } from "@/components/general/response-modalx";
+import { selectValidTaxPayer } from "@/store/user/user-selector";
 
 const tableColumns = [
   { key: "sid" as const, title: "S/N" },
@@ -28,6 +41,13 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isUserVerified, setIsUserVerified] = useState<boolean>(false);
+  const [identificationMeans, setIdentificationMeans] =
+    useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
+  const [identificationInput, setIdentificationInput] =
+    useState<UserIDProps>(IUserIDInitialValues);
+
   const taxPayers = useSelector(selectTaxPayers);
 
   const totalPages = Math.ceil(taxPayers.length / itemsPerPage);
@@ -36,22 +56,27 @@ export default function Page() {
     currentPage * itemsPerPage
   );
 
-  interface TableRow {
-    id: number;
-    firstname: string;
-    lastname: string;
-    phonenumber: string;
-    email: string;
-    date: Date;
-  }
+  const doesUserExist = useSelector((vehicle) =>
+    selectValidTaxPayer(vehicle, {
+      phoneNumber: identificationInput.phoneNumber,
+      nin: identificationInput.nin,
+    })
+  );
 
-  interface RowAction {
-    title: string;
-    action: () => void;
-  }
+  const handleSubmit = () => {
+    setTimeout(() => {
+      setOpenModal(true);
+    }, 2000);
+
+    if (doesUserExist !== undefined) {
+      setIsUserVerified(true);
+    } else {
+      setIsUserVerified(false);
+    }
+  };
 
   const getRowActions = (row: unknown): RowAction[] => {
-    const tableRow = row as TableRow;
+    const tableRow = row as TableData;
     return [
       {
         title: "Preview",
@@ -86,7 +111,23 @@ export default function Page() {
           ]}
         />
 
-        <Button>Create New Tax Payer</Button>
+        <Modal
+          title={"Add New Vehicle"}
+          content={
+            <UserIdentificationModal
+              selected={identificationMeans}
+              onSelect={setIdentificationMeans}
+              input={identificationInput}
+              setInput={setIdentificationInput}
+            />
+          }
+          btnText={"Create New Tax Payer"}
+          footerBtn={
+            <Button onClick={handleSubmit} type="submit">
+              Validate Tax Payer
+            </Button>
+          }
+        />
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
@@ -158,6 +199,47 @@ export default function Page() {
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
+
+      <ResponseModalX
+        title={
+          isUserVerified ? "User Verified Successfully" : "User does not exist"
+        }
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={
+          <>
+            {isUserVerified ? (
+              <div className="flex flex-col gap-4 py-5">
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Name:</p>
+                  <p className={"text-sm font-semibold justify-self-end"}>
+                    {doesUserExist?.firstname} {doesUserExist?.lastname}
+                  </p>
+                </div>
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Phone Number: </p>
+                  <p className={"text-sm font-semibold justify-self-end"}>
+                    {doesUserExist?.phone}
+                  </p>
+                </div>
+                <div className={"grid grid-cols-[1fr_2fr]"}>
+                  <p className={"text-sm"}>Address:</p>
+                  <p
+                    className={"text-sm font-semibold justify-self-end ml-auto"}
+                  >
+                    {doesUserExist?.address}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <>Please check your details, and try again</>
+            )}
+          </>
+        }
+        status={isUserVerified ? "success" : "failed"}
+        footerBtnText={"Continue"}
+        footerTrigger={() => {}}
+      />
     </main>
   );
 }

@@ -31,8 +31,16 @@ export default function Page() {
   );
 
   const summaryItems1 = [
-    { title: "Plate Requests", amount: plateNumberRequested },
-    { title: "Stock Level", amount: plateNumberStockLevel },
+    {
+      title: "Plate Requests",
+      amount: plateNumberRequested,
+      route: "/super-admin/plate-number-request",
+    },
+    {
+      title: "Stock Level",
+      amount: plateNumberStockLevel,
+      route: "/super-admin/stock-management",
+    },
   ];
 
   const summaryItems2 = [
@@ -87,10 +95,11 @@ export default function Page() {
               "flex flex-col xl:flex-row gap-2 justify-between items-center w-full"
             }
           >
-            {summaryItems1.map(({ title, amount }, index) => (
+            {summaryItems1.map(({ title, amount, route }, index) => (
               <SummaryCard
                 key={index}
                 title={title}
+                route={route}
                 amount={amount}
                 selectedRange={selectedRanges1[title] || DateRange.TODAY}
                 setSelectedRange={updateDateRange1(title)}

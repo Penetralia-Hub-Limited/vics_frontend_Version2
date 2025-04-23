@@ -287,7 +287,7 @@ export const superAdminSidebar = [
             title: "Vehicle Make & Model",
             url: "/super-admin/configuration/vehicle-make-model",
           },
-          { id: 4, title: "Invoice to Tax", url: "" },
+          // { id: 4, title: "Invoice to Tax", url: "" },
         ],
       },
       {
@@ -326,12 +326,12 @@ export const superAdminSidebar = [
             Icon: VICSSVG,
             url: "/super-admin/tax-payer",
           },
-          {
-            id: 2,
-            title: "Assessment",
-            Icon: VICSSVG,
-            url: "/super-admin/tax-payer/assessment",
-          },
+          // {
+          //   id: 2,
+          //   title: "Assessment",
+          //   Icon: VICSSVG,
+          //   url: "/super-admin/tax-payer/assessment",
+          // },
         ],
       },
       {
@@ -385,11 +385,11 @@ export const superAdminSidebar = [
             title: "Vehicle Change Request",
             url: "/super-admin/change-request/vehicle-change-request",
           },
-          {
-            id: 3,
-            title: "Check Payment Status",
-            url: "/super-admin/change-request/check-payment-status",
-          },
+          // {
+          //   id: 3,
+          //   title: "Check Payment Status",
+          //   url: "/super-admin/change-request/check-payment-status",
+          // },
         ],
       },
     ],

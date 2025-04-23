@@ -57,26 +57,26 @@ export interface VehicleResponse {
 
 export interface CreateVehiclePayload {
   state_id: string;
-  // owner_id?: string | null;
-  // plate_number_id?: string | null;
-  // invoice_id?: string | null;
-
+  make: string;
+  model: string;
+  year: string;
   status: string;
   capacity: string;
   chasis_number: string;
   color: string;
+  policy_sector: string;
+  // owner_id?: string | null;
+  // plate_number_id?: string | null;
+  // invoice_id?: string | null;
+
   engine_number?: string;
   insurance_number?: string | null;
   load?: string | null;
   passengers?: number; // defaults to 0 if not provided
-  make: string;
-  model: string;
-  year: string;
   type?: string | null;
   sub_type?: string | null;
   reg_type?: string | null;
   permit?: string | null;
-  policy_sector?: string | null;
   category?: string | null;
   weight?: string | null;
   load_weight?: string | null;

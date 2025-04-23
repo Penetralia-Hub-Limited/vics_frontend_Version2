@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import DashboardPath from "@/components/dashboard/dashboard-path";
@@ -8,6 +8,12 @@ import { DashboardSVG, ConfigurationSVG } from "@/common/svgs";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { useSelector } from "react-redux";
 import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
+import {
+  CreateNewWorkFlow,
+  CreateNewWorkFlowInitialValues,
+  CreateNewWorkFlowProp,
+} from "@/components/dashboard/verification-forms/create-new-workflow";
+import Modal from "@/components/general/modal";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -24,6 +30,9 @@ export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const workflowData = useSelector(selectPlateNumberRequestTableData);
+  const [modalInput, setModalInput] = useState<CreateNewWorkFlowProp>(
+    CreateNewWorkFlowInitialValues
+  );
 
   const totalPages = Math.ceil(workflowData.length / itemsPerPage);
   const paginatedData = workflowData.slice(
@@ -80,7 +89,14 @@ export default function Page() {
           ]}
         />
 
-        <Button>Add New Workflow</Button>
+        <Modal
+          title={"Add New Workflow"}
+          content={
+            <CreateNewWorkFlow input={modalInput} setInput={setModalInput} />
+          }
+          btnText={"Add New Workflow"}
+          footerBtn={<Button type="submit">Submit</Button>}
+        />
       </div>
 
       <div
