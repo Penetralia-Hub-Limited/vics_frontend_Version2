@@ -57,118 +57,63 @@ export const vehiceManagement: Array<ISideBarProps> = [
         title: "Vehicles",
         Icon: VehicleSVG,
         url: "/mla-admin/vehicles",
-        dropdown: [
-          {
-            id: 1,
-            title: "Vehicles Sub",
-            Icon: VehicleSVG,
-          },
-        ],
+        //dropdown: [{id: 1,title: "Vehicles Sub",Icon: VehicleSVG,url: "/mla-admin/vehicles-sub",},],
       },
       {
         id: 2,
         title: "Tax Payer",
         Icon: TaxPayerSVG,
         url: "/mla-admin/tax-payer",
-        dropdown: [
-          {
-            id: 1,
-            title: "Tax Payer Sub",
-            Icon: TaxPayerSVG,
-          },
-        ],
+        //dropdown: [{ id: 1, title: "Tax Payer Sub", Icon: TaxPayerSVG, },],
       },
       {
         id: 3,
         title: "Renewals",
         Icon: RenewalsSVG,
         url: "/mla-admin/renewals",
-        dropdown: [
-          {
-            id: 1,
-            title: "Renewal Sub",
-            Icon: PenSVG,
-          },
-        ],
+        //dropdown: [{ id: 1,title: "Renewal Sub",  Icon: PenSVG, }, ],
       },
       {
         id: 4,
         title: "Reports",
         Icon: ReportSVG,
         url: "/mla-admin/reports",
-        dropdown: [
-          {
-            id: 1,
-            title: "Reports Sub",
-            Icon: ReportSVG,
-          },
-        ],
+        //dropdown: [{   id: 1, title: "Reports Sub", Icon: ReportSVG, },],
       },
       {
         id: 5,
         title: "Change Request",
         Icon: PenSVG,
         url: "/mla-admin/change-request",
-        dropdown: [
-          {
-            id: 1,
-            title: "Change Request Sub",
-            Icon: PenSVG,
-          },
-        ],
+        //dropdown: [   id: 1, title: "Change Request Sub", Icon: PenSVG, }, ],
       },
       {
         id: 6,
         title: "Insurance",
         Icon: InsuranceSVG,
         url: "/mla-admin/insurance",
-        dropdown: [
-          {
-            id: 1,
-            title: "Insurance Sub",
-            Icon: InsuranceSVG,
-          },
-        ],
+        //dropdown: [ { id: 1, title: "Insurance Sub", Icon: InsuranceSVG, }, ],
       },
       {
         id: 7,
         title: "Proof of Ownership",
         Icon: OwnershipSVG,
         url: "/mla-admin/proof-of-ownership",
-        dropdown: [
-          {
-            id: 1,
-            title: "Proof of Ownership Sub",
-            Icon: OwnershipSVG,
-          },
-        ],
+        //dropdown: {  id: 1, title: "Proof of Ownership Sub", Icon: OwnershipSVG,}, ],
       },
       {
         id: 8,
         title: "Collections",
         Icon: CollectionsSVG,
         url: "/mla-admin/collections",
-        dropdown: [
-          {
-            id: 1,
-            title: "Collections Sub",
-            Icon: CollectionsSVG,
-          },
-        ],
+        //dropdown: [{ id: 1,title: "Collections Sub",Icon: CollectionsSVG,},],
       },
       {
         id: 9,
         title: "Change of Ownership",
         Icon: PenSVG,
         url: "/mla-admin/change-of-ownership",
-        dropdown: [
-          {
-            id: 1,
-            title: "Change of Ownership Sub",
-            Icon: PenSVG,
-            url: "",
-          },
-        ],
+        //dropdown: [ { id: 1, title: "Change of Ownership Sub", Icon: PenSVG, url: "",}, ],
       },
     ],
   },
@@ -287,7 +232,7 @@ export const superAdminSidebar = [
             title: "Vehicle Make & Model",
             url: "/super-admin/configuration/vehicle-make-model",
           },
-          { id: 4, title: "Invoice to Tax", url: "" },
+          //{ id: 4, title: "Invoice to Tax", url: "" },
         ],
       },
       {
@@ -326,12 +271,7 @@ export const superAdminSidebar = [
             Icon: VICSSVG,
             url: "/super-admin/tax-payer",
           },
-          {
-            id: 2,
-            title: "Assessment",
-            Icon: VICSSVG,
-            url: "/super-admin/tax-payer/assessment",
-          },
+          //{id: 2, title: "Assessment", Icon: VICSSVG, url: "/super-admin/tax-payer/assessment",},
         ],
       },
       {
@@ -385,11 +325,7 @@ export const superAdminSidebar = [
             title: "Vehicle Change Request",
             url: "/super-admin/change-request/vehicle-change-request",
           },
-          {
-            id: 3,
-            title: "Check Payment Status",
-            url: "/super-admin/change-request/check-payment-status",
-          },
+          //{id: 3, title: "Check Payment Status", url: "/super-admin/change-request/check-payment-status"},
         ],
       },
     ],
@@ -413,18 +349,8 @@ export const SMRAdminSidebar = [
         Icon: VICSSVG,
         url: "/smr-admin/plate-number-request",
       },
-      {
-        id: 3,
-        title: "Assessment",
-        Icon: AssessmentSVG,
-        url: "/smr-admin/assessment",
-      },
-      {
-        id: 4,
-        title: "Reports",
-        Icon: ReportSVG,
-        url: "/smr-admin/report",
-      },
+      //{ id: 3, title: "Assessment", Icon: AssessmentSVG, url: "/smr-admin/assessment", },
+      //{id: 4,title: "Reports",Icon: ReportSVG,url: "/smr-admin/report",},
     ],
   },
   {
@@ -437,12 +363,7 @@ export const SMRAdminSidebar = [
         Icon: ReportSVG,
         url: "/smr-admin/sales/service-sales-report",
       },
-      {
-        id: 2,
-        title: "Change of Ownership",
-        Icon: PenSVG,
-        url: "/smr-admin/change-of-ownership",
-      },
+      //{id: 2,title: "Change of Ownership",Icon: PenSVG,url: "/smr-admin/change-of-ownership",},
     ],
   },
 ];
@@ -478,12 +399,17 @@ export const mlaSideBarItems = [
           {
             id: 1,
             title: "Sales Dashboard",
-            url: "/mla-admin/sales/dashboard",
+            url: "/mla-admin/sales/Sales-Dashboard",
           },
           {
             id: 2,
+            title: "New Plate Sales",
+            url: "/mla-admin/sales/New-Plate-Sales",
+          },
+          {
+            id: 3,
             title: "Drafts",
-            url: "/mla-admin/sales/drafts",
+            url: "/mla-admin/sales/Drafts",
           },
         ],
       },
@@ -500,17 +426,11 @@ export const mlaSideBarItems = [
     groupName: "Vehicle",
     navigation: [
       {
-        id: 1,
+        id: 1,  
         title: "Vehicles",
         Icon: VehicleSVG,
-        url: "mla-admin/vehicles",
-        dropdown: [
-          {
-            id: 1,
-            title: "Vehicles Sub",
-            Icon: VehicleSVG,
-          },
-        ],
+        url: "/mla-admin/vehicles",
+        //dropdown: [{ id: 1,title: "Vehicles Sub",Icon: VehicleSVG,},],
       },
       {
         id: 2,
@@ -523,15 +443,12 @@ export const mlaSideBarItems = [
             title: "Tax Payer Dashboard",
             url: "/mla-admin/tax-payer/dashboard",
           },
+          //{id: 2, title: "Assessment", url: "/mla-admin/tax-payer/assessment",},
+          //{id: 3, title: "Invoice to Tax", url: "/mla-admin/tax-payer/invoice-to-tax", },
           {
-            id: 2,
-            title: "Assessment",
-            url: "/mla-admin/tax-payer/assessment",
-          },
-          {
-            id: 3,
-            title: "Invoice to Tax",
-            url: "/mla-admin/tax-payer/invoice-to-tax",
+            id: 4,
+            title: "Tax Payer Infomation",
+            url: "/mla-admin/tax-payer/tax-payer-information",
           },
         ],
       },
@@ -552,65 +469,35 @@ export const mlaSideBarItems = [
         title: "Reports",
         Icon: ReportSVG,
         url: "/mla-admin/reports",
-        dropdown: [
-          {
-            id: 1,
-            title: "Reports Sub",
-            Icon: ReportSVG,
-          },
-        ],
+        //dropdown: [{ id: 1, title: "Reports Sub",Icon: ReportSVG,},],
       },
       {
         id: 5,
         title: "Change Request",
         Icon: PenSVG,
         url: "/mla-admin/change-request",
-        dropdown: [
-          {
-            id: 1,
-            title: "Change Request Sub",
-            Icon: PenSVG,
-          },
-        ],
+        //dropdown: [{ id: 1, title: "Change Request Sub", Icon: PenSVG,},],
       },
       {
         id: 6,
         title: "Insurance",
         Icon: InsuranceSVG,
         url: "/mla-admin/insurance",
-        dropdown: [
-          {
-            id: 1,
-            title: "Insurance Sub",
-            Icon: InsuranceSVG,
-          },
-        ],
+        //dropdown: [{  id: 1,  title: "Insurance Sub",  Icon: InsuranceSVG, }, ],
       },
       {
         id: 7,
         title: "Proof of Ownership",
         Icon: OwnershipSVG,
         url: "/mla-admin/proof-of-ownership",
-        dropdown: [
-          {
-            id: 1,
-            title: "Proof of Ownership Sub",
-            Icon: OwnershipSVG,
-          },
-        ],
+        //dropdown: [{  id: 1,  title: "Proof of Ownership Sub",  Icon: OwnershipSVG,  }, ],
       },
       {
         id: 8,
         title: "Collections",
         Icon: CollectionsSVG,
         url: "/mla-admin/collections",
-        dropdown: [
-          {
-            id: 1,
-            title: "Collections Sub",
-            Icon: CollectionsSVG,
-          },
-        ],
+        //dropdown: [{  id: 1,  title: "Collections Sub",  Icon: CollectionsSVG, }, ],
       },
       {
         id: 9,
@@ -639,18 +526,8 @@ export const storeManagerSidebarItems = [
         Icon: VICSSVG,
         url: "/store-manager-admin/plate-number-request",
       },
-      {
-        id: 3,
-        title: "Assessment",
-        Icon: AssessmentSVG,
-        url: "/store-manager-admin/assessment",
-      },
-      {
-        id: 4,
-        title: "Reports",
-        Icon: ReportSVG,
-        url: "/store-manager-admin/report",
-      },
+      //{id: 3,title: "Assessment",Icon: AssessmentSVG,url: "/store-manager-admin/assessment",},
+      //{id: 4,title: "Reports",Icon: ReportSVG,url: "/store-manager-admin/report",},
     ],
   },
   {
@@ -665,22 +542,7 @@ export const storeManagerSidebarItems = [
       },
     ],
   },
-  {
-    id: 3,
-    groupName: "Vehicle Management",
-    navigation: [
-      {
-        id: 1,
-        title: "Reports",
-        Icon: ReportSVG,
-        url: "/store-manager-admin/reports",
-      },
-      {
-        id: 2,
-        title: "Change of Ownership",
-        Icon: PenSVG,
-        url: "/store-manager-admin/change-of-ownership",
-      },
-    ],
-  },
+  //{id: 3,groupName: "Vehicle Management",navigation: [
+      //{id: 1,title: "Reports",Icon: ReportSVG,url: "/store-manager-admin/reports", },
+      //{id: 2,title: "Change of Ownership",Icon: PenSVG,url: "/store-manager-admin/change-of-ownership",},],},
 ];
