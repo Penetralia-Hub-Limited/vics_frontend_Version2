@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Image from "next/image";
-import HeroImg from "@/assets/landing-page/home_hero.jpg";
+import HeroImg from "../../../../public/assets/landing-page/home_hero.jpg";
 import NeedHelp from "../components/need-help";
 
 interface IHeroSection {

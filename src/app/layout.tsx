@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { Toaster } from "@/components/ui/sonner";
 import { StoreProvider } from "./store-provider";
+import { WebVitals } from "@/components/general/web-vitals";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <WebVitals />
         <StoreProvider>
           <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
         </StoreProvider>

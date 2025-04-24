@@ -29,6 +29,7 @@ const Footer: FC<IFooter> = ({ state, hotline, support, icon }) => {
       >
         <div className={"flex flex-row items-center gap-3"}>
           <Image
+            loading="lazy"
             src={icon}
             alt={"icon"}
             className={"w-12 h-12 md:w-18 md:h-18 lg:w-20 lg:h-20"}

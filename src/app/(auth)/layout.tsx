@@ -1,9 +1,9 @@
 "use client";
 
 import { StoreProvider } from "../store-provider";
-import WhiteLogo from "@/assets/logo/icon_white.svg";
 import { hotline, supportMail } from "@/common/constant";
-import BG from "../../assets/landing-page/login_hero.jpg";
+import WhiteLogo from "../../../public/assets/logo/icon_white.svg";
+import BG from "../../../public/assets/landing-page/login_hero.jpg";
 import Footer from "@/components/landing-page/navigation/footer";
 import LPNavBar from "@/components/landing-page/navigation/nav-bar";
 import LandingContactBar from "@/components/landing-page/navigation/contact-bar";

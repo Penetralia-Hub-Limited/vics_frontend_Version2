@@ -1,5 +1,5 @@
 import { FC } from "react";
-import ArrowIcon from "@/assets/icons/arrow_icon.svg";
+import ArrowIcon from "../../../../public/assets/icons/arrow_icon.svg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -22,7 +22,12 @@ const GetStartedButton: FC<IGetStartedButton> = ({ link }) => {
       >
         Get started here
       </p>
-      <Image src={ArrowIcon} alt={"arrow icon"} className={"w-5 h-5"} />
+      <Image
+        loading="lazy"
+        src={ArrowIcon}
+        alt={"arrow icon"}
+        className={"w-5 h-5"}
+      />
     </Link>
   );
 };
