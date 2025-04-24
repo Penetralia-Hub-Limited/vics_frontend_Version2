@@ -43,3 +43,8 @@
   --color-pending-500: oklch(0.2 0.0478 250.96); /* #04172b */
   --color-pending-800: oklch(0.11 0.0177 236.44); /* #010509 */
 }
+
+.scrollbar-width {
+  scrollbar-width: thin;
+  scrollbar-color: #025f33 transparent;
+}

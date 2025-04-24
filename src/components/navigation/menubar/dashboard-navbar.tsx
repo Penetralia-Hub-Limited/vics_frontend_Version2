@@ -1,7 +1,5 @@
-import { FC, Dispatch, SetStateAction, ChangeEvent } from "react";
+import { FC, Dispatch, SetStateAction } from "react";
 import UserProfile from "./user-profile";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { useSelector } from "react-redux";
 import { AuthState } from "@/store/auth/auth-user-types";
 
@@ -13,8 +11,8 @@ interface IDashboardNavBar {
 
 const DashboardNavBar: FC<IDashboardNavBar> = ({
   pageTitle,
-  searchQuery,
-  setSearchQuery,
+  // searchQuery,
+  // setSearchQuery,
 }) => {
   const { data } = useSelector((state: { auth: AuthState }) => state.auth);
 
