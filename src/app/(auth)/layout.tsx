@@ -14,7 +14,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main>
+    <main className="w-full">
       <StoreProvider>
         <nav>
           <LandingContactBar contacts={hotline} emails={supportMail} />
