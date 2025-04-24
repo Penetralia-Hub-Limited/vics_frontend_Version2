@@ -3,15 +3,16 @@ import { createSelector } from "reselect";
 import { RootState } from "../store";
 import { formattedAmount } from "@/common/helpers";
 import { ApprovalStatus } from "@/common/enum";
+import { VehicleData } from "@/store/vehicle/vehicle-type"; 
 
 const selectVehicleReducer = (state: RootState) => state.vehicles;
 
 // Get Vehicles
 export const selectVehicles = createSelector(
   [selectVehicleReducer],
-  (vehicle) =>
-    Array.isArray(vehicle.vehicles)
-      ? vehicle.vehicles.map((vehicle, index) => {
+  (vehicleState) =>
+    Array.isArray(vehicleState.vehicles)
+      ? vehicleState.vehicles.map((vehicle: VehicleData, index: number) => {
           return {
             sid: index + 1,
             platenumber: vehicle?.plate_number?.number ?? "--",
@@ -35,11 +36,11 @@ export const selectValidUser = createSelector(
     selectVehicleReducer,
     (_: any, data: { phoneNumber: string; nin?: string }) => data,
   ],
-  (vehicle, data) => {
-    const foundData = vehicle.vehicles.find(
-      (vehicle) =>
+  (vehicleState, data) => {
+    const foundData = vehicleState.vehicles.find(
+      (vehicle: VehicleData) =>
         vehicle?.owner?.phone === data.phoneNumber ||
-        vehicle.owner?.nin === data.nin
+        vehicle?.owner?.nin === data.nin
     );
     return foundData;
   }
@@ -48,10 +49,10 @@ export const selectValidUser = createSelector(
 // Select Vehicles data that match the Vehicle ID
 export const selectVehicleDatafromID = createSelector(
   [selectVehicleReducer, (_: any, vehicleid: string | null) => vehicleid],
-  (vehicle, vehicleid) =>
-    vehicle.vehicles
-      .filter((vehicle) => vehicle.id === vehicleid)
-      .map((vehicle, index) => {
+  (vehicleState, vehicleid) =>
+    vehicleState.vehicles
+      .filter((vehicle: VehicleData) => vehicle.id === vehicleid)
+      .map((vehicle: VehicleData, index: number) => {
         return {
           sid: index + 1,
           payment_ref: vehicle?.invoice?.payment_reference ?? "--",
@@ -66,10 +67,10 @@ export const selectVehicleDatafromID = createSelector(
 // Select Vehicles data that match the Owner ID
 export const selectFoundVehicleDatafromUserID = createSelector(
   [selectVehicleReducer, (_: any, userID: string | null) => userID],
-  (vehicle, userID) =>
-    vehicle.vehicles
-      .filter((vehicle) => vehicle.owner_id === userID)
-      .map((vehicle, index) => {
+  (vehicleState, userID) =>
+    vehicleState.vehicles
+      .filter((vehicle: VehicleData) => vehicle?.owner_id === userID)
+      .map((vehicle: VehicleData, index: number) => {
         return {
           sid: index + 1,
           payment_ref: vehicle?.invoice?.payment_reference ?? "--",
@@ -84,17 +85,17 @@ export const selectFoundVehicleDatafromUserID = createSelector(
 // Get Users with Vehicles Matched By ID
 export const selectVehicleMatchedByUser = createSelector(
   [selectVehicleReducer, (_: any, userid: string) => userid],
-  (vehicle, userid) =>
-    vehicle.vehicles.find((vehicle) => vehicle.owner.id === userid)
+  (vehicleState, userid) =>
+    vehicleState.vehicles.find((vehicle: VehicleData) => vehicle?.owner?.id === userid)
 );
 
 // Get Individual Vehicle User By Selecting the Name
 export const selectVehicleOwnerIDFromName = createSelector(
   [selectVehicleReducer, (_: any, userName: string | null) => userName],
-  (vehicle, userName) => {
-    const foundState = vehicle.vehicles.find((vehicle) => {
+  (vehicleState, userName) => {
+    const foundState = vehicleState.vehicles.find((vehicle: VehicleData) => {
       return (
-        `${vehicle.owner?.firstname} ${vehicle?.owner?.lastname}` === userName
+        `${vehicle?.owner?.firstname ?? ""} ${vehicle?.owner?.lastname ?? ""}` === userName
       );
     });
     return foundState?.id || null;

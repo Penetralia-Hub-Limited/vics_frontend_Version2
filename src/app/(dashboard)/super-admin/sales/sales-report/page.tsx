@@ -19,6 +19,7 @@ import { selectValidUser } from "@/store/vehicle/vehicle-selector";
 import { useSelector } from "react-redux";
 import { ResponseModalX } from "@/components/general/response-modalx";
 import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
+import { toast } from "sonner";
 
 interface TableRow {
   id: number;
@@ -74,11 +75,14 @@ export default function Page() {
     return [
       {
         title: "View Details",
-        action: () => router.push("/super-admin/sales/sales-preview"),
+        action: () => router.push(`/super-admin/sales/salespreview/${tableRow.id}`),
       },
       {
         title: "Print Receipt",
-        action: () => console.log("Viewing details for:", tableRow),
+        action: () => {
+          console.log("Viewing details for:", tableRow);
+          toast.success("Viewing receipt details");
+        },
       },
     ];
   };
