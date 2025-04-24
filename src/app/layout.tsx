@@ -2,15 +2,12 @@ import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { Toaster } from "@/components/ui/sonner";
 import { StoreProvider } from "./store-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { WebVitals } from "@/components/general/web-vitals";
+import { Toaster } from "@/components/ui/sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -26,19 +23,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html suppressHydrationWarning lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <WebVitals />
         <StoreProvider>
-          <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+          <SidebarProvider>
+            <WebVitals />
+            <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+            <Toaster />
+          </SidebarProvider>
         </StoreProvider>
-        <Toaster />
       </body>
     </html>
   );

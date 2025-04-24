@@ -78,28 +78,24 @@ export default function SuperAdminDashboardLayout({
 
   return (
     <IsAuth>
-      <StoreProvider>
-        <SidebarProvider>
-          <AppSidebar sidebarData={superAdminSidebar} />
-          <Suspense fallback={<Loading screen={"main"} />}>
-            <main className={"flex-1 flex-col w-fit overflow-hidden"}>
-              <div
-                className={
-                  "pl-4 md:pl-0 flex flex items-center h-20 border-b border-neutral-500 sticky top-0 z-40 bg-white"
-                }
-              >
-                <SidebarTrigger className={"block md:hidden"} />
-                <DashboardNavBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  pageTitle={getPathName()}
-                />
-              </div>
-              <div className="px-4 py-8 bg-neutral-100/30">{children}</div>
-            </main>
-          </Suspense>
-        </SidebarProvider>
-      </StoreProvider>
+      <AppSidebar sidebarData={superAdminSidebar} />
+      <Suspense fallback={<Loading screen={"main"} />}>
+        <main className={"flex-1 flex-col w-fit overflow-hidden"}>
+          <div
+            className={
+              "pl-4 md:pl-0 flex flex items-center h-20 border-b border-neutral-500 sticky top-0 z-40 bg-white"
+            }
+          >
+            <SidebarTrigger className={"block md:hidden"} />
+            <DashboardNavBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              pageTitle={getPathName()}
+            />
+          </div>
+          <div className="px-4 py-8 bg-neutral-100/30">{children}</div>
+        </main>
+      </Suspense>
     </IsAuth>
   );
 }
