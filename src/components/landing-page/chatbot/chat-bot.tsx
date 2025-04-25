@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import Chatform from "../chatbot/chatform";
+import Chatform from "./chatform";
 import {
   useEffect,
   useState,
@@ -11,8 +11,8 @@ import {
   SetStateAction,
 } from "react";
 import { Bot, X, ChevronDown } from "lucide-react";
-import ChatMessage from "../chatbot/chat-message";
-import { GeminiGenerateContent } from "../chatbot/helper";
+import ChatMessage from "./chat-message";
+import { GeminiGenerateContent, getCustomResponse } from "./helper";
 import { Button } from "@/components/ui/button";
 
 interface IVICSChatBot {
@@ -29,12 +29,20 @@ export const VICSChatBot: FC<IVICSChatBot> = ({ status, setStatus }) => {
   const generateBotResponse = async (
     history: { role?: "user" | "model"; content: string }[]
   ) => {
+    const latestInput = history[history.length - 1]?.content;
+    const customReply = getCustomResponse(latestInput);
+
     const updateHistory = (text: string) => {
       setChatHistory((prev) => [
         ...prev.filter((msg) => msg.content !== "Thinking..."),
         { content: text },
       ]);
     };
+
+    if (customReply) {
+      updateHistory(customReply);
+      return;
+    }
 
     const historyData = history.map(({ role, content }) => ({
       role: role || "user",
@@ -47,16 +55,10 @@ export const VICSChatBot: FC<IVICSChatBot> = ({ status, setStatus }) => {
 
     try {
       const response = await GeminiGenerateContent(data.contents);
-      if (response) {
-        updateHistory(response);
-      } else {
-        console.error("Response is undefined");
-      }
+      updateHistory(response ?? "Could not quite get that");
     } catch (error) {
       updateHistory("Could not quite get that");
-      throw new Error(
-        `${error as unknown as string}, Error generating response`
-      );
+      console.error("Gemini error:", error);
     }
   };
 

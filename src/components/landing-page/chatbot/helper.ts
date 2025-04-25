@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { customResponses } from "./company-info";
 
 // Add paragraphs to long text
 export function addParagraphs(text: string): string {
@@ -19,3 +20,17 @@ export async function GeminiGenerateContent(
   });
   return response.text;
 }
+
+// Get custom responses
+export const getCustomResponse = (input: string): string | null => {
+  const normalized = input.toLowerCase().trim();
+
+  for (const response of customResponses) {
+    const isMatch = response.keywords.some((keyword) =>
+      normalized.includes(keyword)
+    );
+    if (isMatch) return response.answer;
+  }
+
+  return null;
+};

@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import Image from "next/image";
 import HeroImg from "../../../../public/assets/landing-page/home_hero.jpg";
 import NeedHelp from "../components/need-help";
-import { VICSChatBot } from "../components/chat-bot";
+import { VICSChatBot } from "../chatbot/chat-bot";
 
 interface IHeroSection {
   state: string;
