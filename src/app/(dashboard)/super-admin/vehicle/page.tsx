@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
@@ -21,6 +21,19 @@ import { useSelector } from "react-redux";
 import { selectVehicles } from "@/store/vehicle/vehicle-selector";
 import { selectValidUser } from "@/store/vehicle/vehicle-selector";
 import { ResponseModalX } from "@/components/general/response-modalx";
+import _ from "lodash";
+
+interface InputProps {
+  platenumber: string;
+  chasisno: string;
+  engineno: string;
+}
+
+const inputInitialValues = {
+  platenumber: "",
+  chasisno: "",
+  engineno: "",
+};
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -44,16 +57,9 @@ export default function Page() {
     useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
   const [identificationInput, setIdentificationInput] =
     useState<UserIDProps>(IUserIDInitialValues);
-  const [input, setInput] = useState<{
-    platenumber: string;
-    chasisno: string;
-    engineno: string;
-  }>({
-    platenumber: "",
-    chasisno: "",
-    engineno: "",
-  });
+  const [input, setInput] = useState<InputProps>(inputInitialValues);
   const vehiclesData = useSelector(selectVehicles);
+  const [filteredVehicleInfo, setFilteredVehicleInfo] = useState(vehiclesData);
 
   const doesUserExist = useSelector((vehicle) =>
     selectValidUser(vehicle, {
@@ -62,7 +68,51 @@ export default function Page() {
     })
   );
 
-  const handleSubmit = () => {
+  const handleSearchClick = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Filter vehicles based on the current input when the search button is clicked
+    const filtered =
+      _.isEmpty(_.trim(input.platenumber)) &&
+      _.isEmpty(_.trim(input.chasisno)) &&
+      _.isEmpty(_.trim(input.engineno))
+        ? vehiclesData // if no input, show all
+        : _.filter(vehiclesData, (vehicle) => {
+            const matchesPlate = input.platenumber
+              ? _.toLower(vehicle?.plate_number?.number || "").includes(
+                  _.toLower(input.platenumber)
+                )
+              : false;
+
+            const matchesChassis = input.chasisno
+              ? _.toLower(vehicle.chasis_number || "") ===
+                _.toLower(input.chasisno)
+              : false;
+
+            const matchesEngine = input.engineno
+              ? _.toLower(vehicle.engine_number || "").includes(
+                  _.toLower(input.engineno)
+                )
+              : false;
+
+            return matchesPlate || matchesChassis || matchesEngine;
+          });
+
+    setFilteredVehicleInfo(filtered);
+    setCurrentPage(1); // Reset to the first page after search
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(input.platenumber)) &&
+      _.isEmpty(_.trim(input.chasisno)) &&
+      _.isEmpty(_.trim(input.engineno))
+    ) {
+      setFilteredVehicleInfo(vehiclesData);
+    }
+  }, [vehiclesData, input]);
+
+  const handleSubmitModal = () => {
     setTimeout(() => {
       setOpenModal(true);
     }, 2000);
@@ -74,8 +124,8 @@ export default function Page() {
     }
   };
 
-  const totalPages = Math.ceil(vehiclesData.length / itemsPerPage);
-  const paginatedData = vehiclesData.slice(
+  const totalPages = Math.ceil(filteredVehicleInfo.length / itemsPerPage);
+  const paginatedData = filteredVehicleInfo.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -138,7 +188,7 @@ export default function Page() {
           }
           btnText={"Add New Vehicle"}
           footerBtn={
-            <Button onClick={handleSubmit} type="submit">
+            <Button onClick={handleSubmitModal} type="submit">
               Validate Tax Payer
             </Button>
           }
@@ -146,7 +196,10 @@ export default function Page() {
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <form
+          onSubmit={handleSearchClick}
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end"
+        >
           <InputWithLabel
             items={{
               id: "platenumber",
@@ -198,8 +251,8 @@ export default function Page() {
             }
           />
 
-          <Button>Search</Button>
-        </div>
+          <Button type="submit">Search</Button>
+        </form>
       </CardContainer>
 
       <div

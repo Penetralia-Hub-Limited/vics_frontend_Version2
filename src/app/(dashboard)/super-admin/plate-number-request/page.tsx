@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
@@ -65,9 +66,69 @@ export default function Page() {
     selectStateIDFromStateName(state, modalInput?.state)
   );
   const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
+  const [plateNumberData, setPlateNumberData] = useState(plateNumbertableData);
+  const { trackingid, insuranceStatus, plateNumberType, requestStatus } =
+    inputValues;
 
-  const totalPages = Math.ceil(plateNumbertableData.length / itemsPerPage);
-  const paginatedData = plateNumbertableData.slice(
+  // console.log(plateNumbertableData);
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const filteredData =
+      _.isEmpty(_.trim(trackingid)) &&
+      _.isEmpty(_.trim(insuranceStatus)) &&
+      _.isEmpty(_.trim(plateNumberType)) &&
+      _.isEmpty(_.trim(requestStatus))
+        ? plateNumbertableData
+        : _.filter(plateNumbertableData, (plateData) => {
+            const matchesTrackingID = trackingid
+              ? _.toLower(plateData?.tracking_id || "").includes(
+                  _.toLower(trackingid)
+                )
+              : false;
+
+            const matchesInsuranceStatus = insuranceStatus
+              ? _.toLower(plateData?.insurance_status || "").includes(
+                  _.toLower(insuranceStatus)
+                )
+              : false;
+
+            const matchesPlateNumberType = plateNumberType
+              ? _.toLower(plateData?.plate_number_type || "").includes(
+                  _.toLower(plateNumberType)
+                )
+              : false;
+
+            const matchesrequestStatus = requestStatus
+              ? _.toLower(plateData?.status || "").includes(
+                  _.toLower(requestStatus)
+                )
+              : false;
+
+            return (
+              matchesTrackingID ||
+              matchesInsuranceStatus ||
+              matchesPlateNumberType ||
+              matchesrequestStatus
+            );
+          });
+    setPlateNumberData(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(trackingid)) &&
+      _.isEmpty(_.trim(insuranceStatus)) &&
+      _.isEmpty(_.trim(plateNumberType)) &&
+      _.isEmpty(_.trim(requestStatus))
+    ) {
+      setPlateNumberData(plateNumbertableData);
+    }
+  }, [plateNumbertableData, inputValues]);
+
+  const totalPages = Math.ceil(plateNumberData.length / itemsPerPage);
+  const paginatedData = plateNumberData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -91,7 +152,6 @@ export default function Page() {
       });
 
       if (res.status) {
-        console.log("Creating plate ", res);
         setOpenModal(true);
       }
     } catch (error) {
@@ -145,74 +205,80 @@ export default function Page() {
       </div>
 
       <CardContainer className="flex flex-col gap-5">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <InputWithLabel
-            items={{
-              id: "trackingid",
-              label: "Tracking ID",
-              placeholder: "Tracking ID",
-              type: "text",
-              htmlfor: "trackingid",
-            }}
-            value={inputValues.trackingid}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                trackingid: e.target.value,
-              }))
-            }
-          />
+        <form action="" onSubmit={handleSearch}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <InputWithLabel
+              items={{
+                id: "trackingid",
+                label: "Tracking ID",
+                placeholder: "Tracking ID",
+                type: "text",
+                htmlfor: "trackingid",
+              }}
+              value={inputValues.trackingid}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  trackingid: e.target.value,
+                }))
+              }
+            />
 
-          <DashboardCompSelect
-            title={"Plate Number Type"}
-            placeholder={"-- Select Type --"}
-            items={[...Object.values(PlateNumberType)]}
-            selected={inputValues.plateNumberType}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                plateNumberType: selected ? String(selected) : "",
-              }))
-            }
-          />
+            <DashboardCompSelect
+              title={"Plate Number Type"}
+              placeholder={"-- Select Type --"}
+              items={[...Object.values(PlateNumberType)]}
+              selected={inputValues.plateNumberType}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  plateNumberType: selected ? String(selected) : "",
+                }))
+              }
+            />
 
-          <DashboardCompSelect
-            title={"Insurance Status"}
-            placeholder={"-- Select status --"}
-            items={[...Object.values(InsuranceStatus)]}
-            selected={inputValues.insuranceStatus}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                insuranceStatus: selected ? String(selected) : "",
-              }))
-            }
-          />
-        </div>
+            <DashboardCompSelect
+              title={"Insurance Status"}
+              placeholder={"-- Select status --"}
+              items={[...Object.values(InsuranceStatus)]}
+              selected={inputValues.insuranceStatus}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  insuranceStatus: selected ? String(selected) : "",
+                }))
+              }
+            />
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end">
-          <DashboardCompSelect
-            title={"Request Status"}
-            placeholder={"-- Select status --"}
-            items={[...Object.values(RequestStatus)]}
-            selected={inputValues.requestStatus}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                requestStatus: selected ? String(selected) : "",
-              }))
-            }
-          />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end">
+            <DashboardCompSelect
+              title={"Request Status"}
+              placeholder={"-- Select status --"}
+              items={[...Object.values(RequestStatus)]}
+              selected={inputValues.requestStatus}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  requestStatus: selected ? String(selected) : "",
+                }))
+              }
+            />
 
-          <DatePicker
-            date={startDate}
-            setDate={setStartDate}
-            title={"Start Date"}
-          />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+            <DatePicker
+              date={startDate}
+              setDate={setStartDate}
+              title={"Start Date"}
+            />
+            <DatePicker
+              date={endDate}
+              setDate={setEndDate}
+              title={"End Date"}
+            />
 
-          <Button>Search</Button>
-        </div>
+            <Button type="submit">Search</Button>
+          </div>
+        </form>
       </CardContainer>
 
       <div className="flex flex-col gap-3 border-1 border-primary-300 rounded-lg">
