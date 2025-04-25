@@ -88,6 +88,8 @@ export default function Page() {
     })
   );
 
+  console.log("doesUserExist ", doesUserExist);
+
   const handleSubmit = () => {
     setTimeout(() => {
       setOpenModal(true);

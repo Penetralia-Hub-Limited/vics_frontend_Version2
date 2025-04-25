@@ -13,9 +13,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import html2canvas from "html2canvas-pro";
 import { jsPDF } from "jspdf";
-import BGLogo from "../../assets/logo/KW_logo.png";
 import QRCodeWithLogo from "./qr-code";
-import logo from "../../assets/logo/kwara_logo.webp";
+import BGLogo from "../../../public/assets/logo/KW_logo.png";
+import logo from "../../../public/assets/logo/kwara_logo.webp";
+import Icon from "../../../public/assets/logo/icon_green.svg";
 
 interface cardInfo {
   label: string;
@@ -25,7 +26,6 @@ interface cardInfo {
 interface InvoiceProps {
   buyerInfo: cardInfo[];
   vehicleInfo: cardInfo[];
-  icon: string;
   state: string;
   data: {
     invoiceID: string;
@@ -89,7 +89,6 @@ const termsData = [
 ];
 
 export const Invoice: FC<InvoiceProps> = ({
-  icon,
   state,
   invoice_link,
   buyerInfo,
@@ -135,7 +134,7 @@ export const Invoice: FC<InvoiceProps> = ({
             }}
           >
             <div>
-              <LogoComponent logo={icon} state={state} />
+              <LogoComponent logo={Icon} state={state} />
             </div>
 
             <div className={"py-4 flex flex-row items-center justify-between"}>

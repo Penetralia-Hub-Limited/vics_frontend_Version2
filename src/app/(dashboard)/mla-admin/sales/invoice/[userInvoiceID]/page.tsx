@@ -1,7 +1,6 @@
 "use client";
 
 import { Invoice } from "@/components/general/invoice";
-import Logo from "@/assets/logo/icon_green.svg";
 import { useParams } from "next/navigation";
 import { selectFoundVehicleDatafromUserID } from "@/store/vehicle/vehicle-selector";
 import { useSelector } from "react-redux";
@@ -54,7 +53,6 @@ export default function Page() {
     <div className="flex flex-col gap-5">
       <Invoice
         invoice_link={`/mla-admin/invoice/${invoiceData.invoiceID}`}
-        icon={Logo}
         state={"KWARA state"}
         data={invoiceData}
         buyerInfo={userData}

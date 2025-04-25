@@ -82,8 +82,8 @@ export default function Page() {
     ];
   };
 
-  const doesUserExist = useSelector((vehicle) =>
-    selectValidUser(vehicle, {
+  const doesUserExist = useSelector((state) =>
+    selectValidUser(state, {
       phoneNumber: phoneNumber,
     })
   );
