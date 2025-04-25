@@ -99,7 +99,7 @@ export const VICSChatBot: FC<IVICSChatBot> = ({ status, setStatus }) => {
         {/* Chat box */}
         <div
           ref={chatBodyRef}
-          className="p-2 min-h-[25rem] max-h-[30rem] overflow-y-auto overflow-x-hidden flex flex-col gap-2 scrollbar-width"
+          className="p-2 min-h-[20rem] max-h-[25rem] overflow-y-auto overflow-x-hidden flex flex-col gap-2 scrollbar-width"
         >
           <div className={"flex flex-row gap-2 items-end"}>
             <div className="rounded-full bg-primary-500 p-1">

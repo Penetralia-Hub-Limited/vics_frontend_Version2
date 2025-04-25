@@ -7,7 +7,7 @@ export const customResponses: CustomResponse[] = [
   {
     keywords: ["what is vics", "about vics", "explain vics"],
     answer:
-      "VICS stands for Vehicle Information and Control System. It helps manage plate numbers, verifications, and more.",
+      "VICS stands for Vehicle Identification and Certification System. It helps manage plate numbers, verifications, and more.",
   },
   {
     keywords: ["renew plate", "plate renewal", "renew my number"],
