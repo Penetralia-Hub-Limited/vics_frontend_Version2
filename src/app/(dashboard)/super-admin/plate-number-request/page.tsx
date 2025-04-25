@@ -73,7 +73,6 @@ export default function Page() {
   );
 
   const getRowActions = (row: unknown): RowAction[] => {
-    console.log(row);
     return [
       {
         title: "View",
@@ -217,7 +216,7 @@ export default function Page() {
       </CardContainer>
 
       <div className="flex flex-col gap-3 border-1 border-primary-300 rounded-lg">
-        <div className="border-t-1 border-primary-300 rounded-lg overflow-hidden">
+        <div className="border-t-1 border-primary-300 rounded-lg overflow-hidden scrollbar-width">
           <DataTableWButton
             headers={tableColumns}
             data={paginatedData}

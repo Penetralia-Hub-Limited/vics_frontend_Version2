@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ConfigurationSVG } from "@/common/svgs";
-import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import DashboardTable from "@/components/dashboard/dashboard-table";
 import InputWithLabel from "@/components/auth/input-comp";
 import CardContainer from "@/components/general/card-container";
 import Modal from "@/components/general/modal";
@@ -18,12 +17,15 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { selectVehicles } from "@/store/vehicle/vehicle-selector";
 import { VehicleService } from "@/services/VehicleService";
-import {
-  RowAction,
-  TableData,
-} from "@/components/dashboard/dashboard-table-w-button";
 import { selectStateIDFromStateName } from "@/store/states/state-selector";
 import { toast } from "sonner";
+import _ from "lodash";
+// import { useRouter } from "next/navigation";
+// import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+// import {
+//   RowAction,
+//   TableData,
+// } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -33,7 +35,7 @@ const tableColumns = [
 
 export default function Page() {
   const itemsPerPage = 10;
-  const router = useRouter();
+  // const router = useRouter();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vehicleMake, setVehicleMake] = useState<string>("");
@@ -41,17 +43,31 @@ export default function Page() {
     CreatePlateRequestInitialValues
   );
   const vehiclesData = useSelector(selectVehicles);
+  const [filteredVehicleInfo, setFilteredVehicleInfo] = useState(vehiclesData);
   const vehicleService = new VehicleService(dispatch);
   const state_id = useSelector((state) =>
     selectStateIDFromStateName(state, modalInput?.state)
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVehicleMake(e.target.value);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setCurrentPage(1); // Reset pagination to the first page
+
+    // If search is empty, show all
+    if (_.isEmpty(_.trim(vehicleMake))) {
+      setFilteredVehicleInfo(vehiclesData);
+      return;
+    }
+
+    const filtered = _.filter(vehiclesData, (vehicle) =>
+      _.includes(_.toLower(vehicle.make), _.toLower(vehicleMake))
+    );
+
+    setFilteredVehicleInfo(filtered);
   };
 
-  const totalPages = Math.ceil(vehiclesData.length / itemsPerPage);
-  const paginatedData = vehiclesData.slice(
+  const totalPages = Math.ceil(filteredVehicleInfo.length / itemsPerPage);
+  const paginatedData = filteredVehicleInfo.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -81,15 +97,21 @@ export default function Page() {
     }
   };
 
-  const getRowActions = (row: unknown): RowAction[] => {
-    const tableRow = row as TableData;
-    return [
-      {
-        title: "View",
-        action: () => console.log("Viewing details for:", tableRow),
-      },
-    ];
-  };
+  useEffect(() => {
+    if (_.isEmpty(_.trim(vehicleMake))) {
+      setFilteredVehicleInfo(vehiclesData);
+    }
+  }, [vehiclesData]);
+
+  // const getRowActions = (row: unknown): RowAction[] => {
+  //   const tableRow = row as TableData;
+  //   return [
+  //     {
+  //       title: "View",
+  //       action: () => console.log("Viewing details for:", tableRow),
+  //     },
+  //   ];
+  // };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -131,7 +153,8 @@ export default function Page() {
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div
+        <form
+          onSubmit={handleSubmit}
           className={
             "grid grid-cols-1 md:grid-cols-[2.1fr_0.9fr] gap-4 mt-4 items-end"
           }
@@ -145,11 +168,11 @@ export default function Page() {
               htmlfor: "vehiclemake",
             }}
             value={vehicleMake}
-            onChange={handleChange}
+            onChange={(e) => setVehicleMake(e.target.value)}
           />
 
-          <Button>Search</Button>
-        </div>
+          <Button type="submit">Search</Button>
+        </form>
       </CardContainer>
 
       <div
@@ -158,10 +181,10 @@ export default function Page() {
         <div
           className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
-          <DataTableWButton
+          <DashboardTable
             headers={tableColumns}
             data={paginatedData}
-            rowActions={getRowActions}
+            // rowActions={getRowActions}
           />
         </div>
         <div className={"p-5 ml-auto"}>

@@ -34,9 +34,6 @@ export const CreateNewWorkFlow: FC<ICreateNewWorkFlow> = ({
   input,
   setInput,
 }) => {
-  const { lgas } = useSelector((state: RootState) => state?.lga);
-  const filteredLGA = lgas.map((lga) => lga.name);
-
   const { users } = useSelector((userState: RootState) => userState.user);
   const admin = users
     .filter((user) => user.role === "Admin")

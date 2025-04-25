@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, Suspense, useEffect, useMemo } from "react";
-import { StoreProvider } from "@/app/store-provider";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";

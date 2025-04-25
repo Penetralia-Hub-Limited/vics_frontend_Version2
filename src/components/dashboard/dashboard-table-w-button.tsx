@@ -26,7 +26,6 @@ import {
   PlateStatus,
 } from "@/common/enum";
 import CircularProgress from "@mui/material/CircularProgress";
-import Loading from "@/app/(dashboard)/loading";
 
 interface TableHeader {
   title: string;
@@ -103,6 +102,7 @@ export function DataTableWButton({
 }: DataTableProps) {
   return (
     <Table>
+      {/* Table Header */}
       <TableHeader>
         <TableRow>
           {headers.map((header) => (
@@ -113,20 +113,20 @@ export function DataTableWButton({
               {header.title}
             </TableHead>
           ))}
-          <TableHead className="text-center text-xs w-[100px]">{""}</TableHead>
+          <TableHead className="text-center text-xs w-[60px]">{""}</TableHead>
         </TableRow>
       </TableHeader>
-      {data.length === 0 ? (
-        <TableBody>
+
+      {/* Table Body */}
+      <TableBody>
+        {data.length === 0 ? (
           <TableRow>
-            <TableCell className="flex items-center justify-center">
-              <Loading screen="default" size={30} />
+            <TableCell colSpan={headers.length + 1} className="text-center">
+              No data available
             </TableCell>
           </TableRow>
-        </TableBody>
-      ) : (
-        <TableBody>
-          {data?.slice(0, itemsPerPage).map((row, rowIndex) => (
+        ) : (
+          data.slice(0, itemsPerPage).map((row, rowIndex) => (
             <TableRow key={rowIndex}>
               {headers.map((header, colIndex) => {
                 const cellValue = row[header.key];
@@ -174,41 +174,40 @@ export function DataTableWButton({
                   </TableCell>
                 );
               })}
-              <TableCell className="text-center">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className="border border-primary-300 p-2 rounded-md"
-                      variant="ghost"
-                      size="icon"
-                    >
-                      {isLoading && rowIndex + 1 === row.id ? (
-                        <CircularProgress />
-                      ) : (
-                        <MoreHorizontal className="h-5 w-5" />
-                      )}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {rowActions &&
-                      rowActions(row).map((action, idx) => (
+              {rowActions && (
+                <TableCell className="text-center">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="border border-primary-300 p-2 rounded-md"
+                        variant="ghost"
+                        size="icon"
+                      >
+                        {isLoading && data[rowIndex]?.id === row.id ? (
+                          <CircularProgress size={20} />
+                        ) : (
+                          <MoreHorizontal className="h-5 w-5" />
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {rowActions(row).map((action, idx) => (
                         <DropdownMenuItem
                           key={idx}
                           onClick={action.action}
-                          className={
-                            "flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50"
-                          }
+                          className="flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50"
                         >
                           {action.title}
                         </DropdownMenuItem>
                       ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              )}
             </TableRow>
-          ))}
-        </TableBody>
-      )}
+          ))
+        )}
+      </TableBody>
     </Table>
   );
 }

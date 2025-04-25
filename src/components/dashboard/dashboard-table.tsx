@@ -92,27 +92,26 @@ const DashboardTable: FC<IDashboardTable> = ({
     <Table>
       <TableHeader>
         <TableRow>
-          {headers.map((header, index) => (
+          {headers.map((header) => (
             <TableHead
-              key={index}
               className="text-center font-semibold text-xs w-[100px]"
+              key={String(header.key)}
             >
               {header.title}
             </TableHead>
           ))}
+          <TableHead className="text-center text-xs w-[60px]">{""}</TableHead>
         </TableRow>
       </TableHeader>
-      {data.length === 0 ? (
-        <TableBody>
+      <TableBody>
+        {data.length === 0 ? (
           <TableRow>
-            <TableCell className="flex items-center justify-center">
-              <Loading screen="default" size={30} />
+            <TableCell colSpan={headers.length} className="text-center">
+              No data available
             </TableCell>
           </TableRow>
-        </TableBody>
-      ) : (
-        <TableBody>
-          {data?.slice(0, itemsPerPage).map((row, rowIndex) => (
+        ) : (
+          data?.slice(0, itemsPerPage)?.map((row, rowIndex) => (
             <TableRow key={rowIndex}>
               {headers.map((header, colIndex) => {
                 const cellValue = row[header.key];
@@ -122,7 +121,7 @@ const DashboardTable: FC<IDashboardTable> = ({
                     {/* Date Formatting */}
                     {cellValue instanceof Date ? (
                       <div className="flex flex-col gap-1">
-                        <p>{format(cellValue.toDateString(), "LLL. d yyyy")}</p>
+                        <p>{format(cellValue.toDateString(), "LLL. d")}</p>
                         <p className="font-light">
                           {format(cellValue.toDateString(), "hh:mm:ss a")}
                         </p>
@@ -163,9 +162,9 @@ const DashboardTable: FC<IDashboardTable> = ({
                 );
               })}
             </TableRow>
-          ))}
-        </TableBody>
-      )}
+          ))
+        )}
+      </TableBody>
     </Table>
   );
 };
