@@ -7,6 +7,7 @@ interface UserState {
   selectedUser: any | null;
   isLoading: boolean;
   error: string | null;
+  success: boolean;
 }
 
 const initialState: UserState = {
@@ -14,6 +15,7 @@ const initialState: UserState = {
   selectedUser: null,
   isLoading: false,
   error: null,
+  success: false,
 };
 
 const userSlice = createSlice({
@@ -35,13 +37,33 @@ const userSlice = createSlice({
     setSelectedUser(state, action: PayloadAction<any>) {
       state.selectedUser = action.payload;
     },
+    addUser(state, action: PayloadAction<any>) {
+      state.isLoading = false;
+      state.success = true;
+      state.users = [...state.users, action.payload];
+    },
+    updateUserInState(state, action: PayloadAction<any>) {
+      const index = state.users.findIndex(
+        (order) => order.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.users[index] = action.payload;
+      }
+    },
     clearUsers(state) {
       state.users = [];
     },
   },
 });
 
-export const { userStart, userSuccess, userFail, setSelectedUser, clearUsers } =
-  userSlice.actions;
+export const {
+  userStart,
+  userSuccess,
+  userFail,
+  setSelectedUser,
+  addUser,
+  updateUserInState,
+  clearUsers,
+} = userSlice.actions;
 
 export default userSlice.reducer;

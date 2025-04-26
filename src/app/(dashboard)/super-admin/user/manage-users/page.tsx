@@ -11,17 +11,22 @@ import DashboardCompSelect from "@/components/dashboard/dashboard-component-sele
 import {
   DataTableWButton,
   TableData,
+  RowAction,
 } from "@/components/dashboard/dashboard-table-w-button";
-import { Role, UserStatus } from "@/common/enum";
+import { ApprovalStatus, Role, UserStatus } from "@/common/enum";
 import Pagination from "@/components/general/pagination";
 import Modal from "@/components/general/modal";
+import { ResponseModalX } from "@/components/general/response-modalx";
 import {
   AddUserModalProp,
   AddNewUserInfo,
   AddUserModalInitialState,
 } from "@/components/dashboard/user/add-new-user-modal-info";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectUsers } from "@/store/user/user-selector";
+import { UserService } from "@/services/UserService";
+import { toast } from "sonner";
+import { selectStateIDFromStateName } from "@/store/states/state-selector";
 
 const manageUserHeader = [
   { key: "sid", title: "S/N" },
@@ -35,6 +40,9 @@ const manageUserHeader = [
 
 export default function Page() {
   const itemsPerPage = 10;
+  const dispatch = useDispatch();
+  const userService = new UserService(dispatch);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
@@ -52,20 +60,49 @@ export default function Page() {
   const [modalInput, setModalInput] = useState<AddUserModalProp>(
     AddUserModalInitialState
   );
+  const state_id = useSelector((state) =>
+    selectStateIDFromStateName(state, modalInput?.state)
+  );
   const userData = useSelector(selectUsers);
-
-  console.log(userData);
-
   const totalPages = Math.ceil(userData.length / itemsPerPage);
   const paginatedData = userData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  interface RowAction {
-    title: string;
-    action: () => void;
-  }
+  const handleSubmit = async () => {
+    try {
+      const res = await userService.createUser({
+        state_id: state_id,
+        area_id: null,
+        creator_id: null,
+        lga_id: null,
+        office_id: null,
+        othername: "Other",
+        image: "image-src-url",
+        nin: "762356467874",
+        password: "Password@1234",
+        gender: "male",
+        status: UserStatus.ACTIVE,
+        approval_status: null,
+        registeration_type: "registration",
+        state_verification_no: "6t4hsdjf",
+        date_of_birth: "2025-03-21 09:59:32",
+        is_email_verified: false,
+        email_verified_at: "2025-03-21 09:59:32",
+        date_deactivated: "2025-03-21 09:59:32",
+        ...modalInput,
+      });
+
+      console.log("Creating user ", res);
+      if (res.status) {
+        setOpenModal(true);
+      }
+    } catch (error) {
+      console.error("Failed:", error);
+      toast(error as unknown as string);
+    }
+  };
 
   const getRowActions = (row: unknown): RowAction[] => {
     const tableRow = row as TableData;
@@ -104,12 +141,16 @@ export default function Page() {
         />
 
         <Modal
-          title={"Create A New Workflow Stage"}
+          title={"Create A New User"}
           content={
             <AddNewUserInfo input={modalInput} setInput={setModalInput} />
           }
           btnText={"Add New User"}
-          footerBtn={<Button type="submit">Submit</Button>}
+          footerBtn={
+            <Button onClick={handleSubmit} type="submit">
+              Submit
+            </Button>
+          }
         />
       </div>
 
@@ -201,6 +242,16 @@ export default function Page() {
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
+
+      <ResponseModalX
+        title={"User Created Successfully"}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={<>You have successfully created a new user</>}
+        status={"success"}
+        footerBtnText={"Done"}
+        footerTrigger={() => setOpenModal(false)}
+      />
     </main>
   );
 }

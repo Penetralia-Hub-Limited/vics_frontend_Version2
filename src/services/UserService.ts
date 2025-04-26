@@ -4,10 +4,13 @@ import { AppDispatch } from "@/store/store";
 import { getCookie } from "cookies-next";
 import { CreateUserProp } from "@/store/user/user-type";
 import {
+  addUser,
+  updateUserInState,
   userStart,
   userSuccess,
   userFail,
   setSelectedUser,
+  clearUsers,
 } from "@/store/user/user-slice";
 
 export class UserService {
@@ -31,7 +34,7 @@ export class UserService {
     this.dispatch(userStart());
     try {
       const res = await axiosInstance.get(
-        `${UserService.url}`,
+        UserService.url,
         UserService.getAuthHeader()
       );
       this.dispatch(userSuccess(res.data.data));
@@ -69,7 +72,7 @@ export class UserService {
         payload,
         UserService.getAuthHeader()
       );
-      this.dispatch(userSuccess(res.data.data));
+      this.dispatch(updateUserInState(res.data.data));
       return res.data;
     } catch (error: any) {
       this.dispatch(
@@ -82,12 +85,12 @@ export class UserService {
   async deleteUser(id: string) {
     this.dispatch(userStart());
     try {
-      const res = await axiosInstance.delete(
+      await axiosInstance.delete(
         `${UserService.url}/${id}`,
         UserService.getAuthHeader()
       );
-      this.dispatch(userSuccess([]));
-      return res.data;
+      this.dispatch(updateUserInState({ id, delete: true }));
+      return { status: "success", message: "User deleted" };
     } catch (error: any) {
       this.dispatch(
         userFail(error.response?.data?.message || "Failed to delete User")
@@ -100,10 +103,11 @@ export class UserService {
     this.dispatch(userStart());
     try {
       const res = await axiosInstance.post(
-        "https://benion-vics-api.onrender.com/api/v1/users",
-        payload
+        UserService.url,
+        payload,
+        UserService.getAuthHeader()
       );
-      this.dispatch(userSuccess(res.data.data));
+      this.dispatch(addUser(res.data.data));
       return res.data;
     } catch (error: any) {
       this.dispatch(

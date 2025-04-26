@@ -25,22 +25,29 @@ const tableColumns = [
   { key: "soldto", title: "Sold To" },
 ];
 
+interface InputValuesProp {
+  plateNumber: string;
+  lga: string;
+  plateNumberType: PlateNumberType | undefined;
+  status: string | undefined;
+  startDate?: Date | undefined;
+  endDate?: Date | undefined;
+}
+
+const inputInitialValues = {
+  plateNumber: "",
+  lga: "",
+  plateNumberType: undefined as PlateNumberType | undefined,
+  status: "",
+  startDate: undefined,
+  endDate: undefined,
+};
+
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
-  const [inputValues, setInputValues] = useState<{
-    plateNumber: string;
-    lga: string;
-    plateNumberType: PlateNumberType | undefined;
-    status: string | undefined;
-  }>({
-    plateNumber: "",
-    lga: "",
-    plateNumberType: undefined,
-    status: "",
-  });
+  const [inputValues, setInputValues] =
+    useState<InputValuesProp>(inputInitialValues);
   const soldPlateNumbers = useSelector(selectSoldPlateNumber);
   const { lgas } = useSelector((state: RootState) => state?.lga);
   const filteredLGA = lgas.map((lga) => lga.name);
@@ -73,76 +80,94 @@ export default function Page() {
         ]}
       />
 
-      <CardContainer className={"flex flex-col gap-5"}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <InputWithLabel
-            items={{
-              id: "plateNumber",
-              label: "Plate Number",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "plateNumber",
-            }}
-            value={inputValues.plateNumber}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                plateNumber: e.target.value,
-              }))
-            }
-          />
+      <form action="" onSubmit={(e) => e.preventDefault()}>
+        <CardContainer className={"flex flex-col gap-5"}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <InputWithLabel
+              items={{
+                id: "plateNumber",
+                label: "Plate Number",
+                placeholder: "Plate Number",
+                type: "text",
+                htmlfor: "plateNumber",
+              }}
+              value={inputValues.plateNumber}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  plateNumber: e.target.value,
+                }))
+              }
+            />
 
-          <DashboardCompSelect
-            title={"LGA"}
-            placeholder={"-- Select LGA --"}
-            items={filteredLGA}
-            selected={inputValues.lga}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                lga: selected ? String(selected) : "",
-              }))
-            }
-          />
+            <DashboardCompSelect
+              title={"LGA"}
+              placeholder={"-- Select LGA --"}
+              items={filteredLGA}
+              selected={inputValues.lga}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  lga: selected ? String(selected) : "",
+                }))
+              }
+            />
 
-          <DashboardCompSelect
-            title={"Plate Number Type"}
-            placeholder={"-- Select Type --"}
-            items={[...Object.values(PlateNumberType)]}
-            selected={inputValues.plateNumberType}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                plateNumberType: selected as PlateNumberType | undefined,
-              }))
-            }
-          />
-        </div>
+            <DashboardCompSelect
+              title={"Plate Number Type"}
+              placeholder={"-- Select Type --"}
+              items={[...Object.values(PlateNumberType)]}
+              selected={inputValues.plateNumberType}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  plateNumberType: selected as PlateNumberType | undefined,
+                }))
+              }
+            />
+          </div>
 
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
-          <DashboardCompSelect
-            title={"Status"}
-            placeholder={"-- Select Status --"}
-            items={[...Object.values(PlateStatus)]}
-            selected={inputValues.status}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                status: selected as string | undefined,
-              }))
-            }
-          />
+          <div
+            className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}
+          >
+            <DashboardCompSelect
+              title={"Status"}
+              placeholder={"-- Select Status --"}
+              items={[...Object.values(PlateStatus)]}
+              selected={inputValues.status}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  status: selected as string | undefined,
+                }))
+              }
+            />
 
-          <DatePicker
-            date={startDate}
-            setDate={setStartDate}
-            title={"Start Date"}
-          />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+            <DatePicker
+              title={"Start Date"}
+              date={inputValues.startDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  startDate: date as Date | undefined,
+                }))
+              }
+            />
+            <DatePicker
+              title={"End Date"}
+              date={inputValues.endDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  endDate: date as Date | undefined,
+                }))
+              }
+            />
 
-          <Button>Search</Button>
-        </div>
-      </CardContainer>
+            <Button type="submit">Search</Button>
+          </div>
+        </CardContainer>
+      </form>
 
       <div
         className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}

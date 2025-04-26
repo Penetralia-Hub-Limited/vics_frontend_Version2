@@ -1,28 +1,32 @@
+"use client";
+
 import { FC, Dispatch, SetStateAction } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "../dashboard-component-select";
 import { Role, SuperAdminPermissions } from "@/common/enum";
 
 export const AddUserModalInitialState = {
-  firstName: "",
-  lastName: "",
+  firstname: "",
+  lastname: "",
   email: "",
-  phoneNumber: "",
+  phone: "",
   address: "",
-  zone: "",
+  state: "",
   taxOffice: "",
-  roles: undefined,
+  role: null,
 };
 
 export interface AddUserModalProp {
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   address: string;
-  zone: string;
+  state: string;
   taxOffice: string;
-  roles: Role | undefined;
+  role: Role | null;
 }
 
 interface IAddNewUserInfo {
@@ -31,8 +35,15 @@ interface IAddNewUserInfo {
 }
 
 export const AddNewUserInfo: FC<IAddNewUserInfo> = ({ input, setInput }) => {
+  const states = useSelector((state: RootState) => state.states);
+  const filteredState = states.states.map((state) => state.name);
+
   return (
-    <div className={"p-4 flex flex-col gap-5"}>
+    <div
+      className={
+        "py-2 px-4 flex flex-col gap-3 scrollbar-width overflow-y-scroll max-h-[400px]"
+      }
+    >
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-3"}>
         <InputWithLabel
           items={{
@@ -42,11 +53,11 @@ export const AddNewUserInfo: FC<IAddNewUserInfo> = ({ input, setInput }) => {
             type: "text",
             htmlfor: "firstName",
           }}
-          value={input.firstName}
+          value={input.firstname}
           onChange={(e) =>
             setInput((prev) => ({
               ...prev,
-              firstName: e.target.value,
+              firstname: e.target.value,
             }))
           }
         />
@@ -58,11 +69,11 @@ export const AddNewUserInfo: FC<IAddNewUserInfo> = ({ input, setInput }) => {
             type: "text",
             htmlfor: "lastName",
           }}
-          value={input.lastName}
+          value={input.lastname}
           onChange={(e) =>
             setInput((prev) => ({
               ...prev,
-              lastName: e.target.value,
+              lastname: e.target.value,
             }))
           }
         />
@@ -87,17 +98,17 @@ export const AddNewUserInfo: FC<IAddNewUserInfo> = ({ input, setInput }) => {
         />
         <InputWithLabel
           items={{
-            id: "phoneNumber",
+            id: "phone",
             label: "Phone Number",
             placeholder: "Phone Number",
             type: "text",
-            htmlfor: "phoneNumber",
+            htmlfor: "phone",
           }}
-          value={input.phoneNumber}
+          value={input.phone}
           onChange={(e) =>
             setInput((prev) => ({
               ...prev,
-              phoneNumber: e.target.value,
+              phone: e.target.value,
             }))
           }
         />
@@ -124,14 +135,14 @@ export const AddNewUserInfo: FC<IAddNewUserInfo> = ({ input, setInput }) => {
 
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-3"}>
         <DashboardCompSelect
-          title={"Zone"}
-          placeholder={"-- Select Zone --"}
-          items={["Abuja", "Lagos"]}
-          selected={input.zone}
-          onSelect={(value) =>
+          title={"Select State"}
+          placeholder={"-- Select State --"}
+          items={filteredState}
+          selected={input.state}
+          onSelect={(selected) =>
             setInput((prev) => ({
               ...prev,
-              zone: value as string,
+              state: String(selected),
             }))
           }
         />
@@ -152,14 +163,14 @@ export const AddNewUserInfo: FC<IAddNewUserInfo> = ({ input, setInput }) => {
 
       <div>
         <DashboardCompSelect
-          title={"Roles"}
+          title={"Role"}
           placeholder={"-- Select Role --"}
           items={[...Object.values(Role)]}
-          selected={input.roles ?? undefined}
+          selected={input.role ?? undefined}
           onSelect={(value) =>
             setInput((prev) => ({
               ...prev,
-              roles: (value as Role) ?? undefined,
+              role: (value as Role) ?? undefined,
             }))
           }
         />

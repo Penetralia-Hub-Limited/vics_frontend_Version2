@@ -27,7 +27,7 @@ export const UserIdentificationModal: FC<IUserIdentification> = ({
   setInput,
 }) => {
   return (
-    <div className={"p-4 flex flex-col gap-8"}>
+    <div className={"p-4 flex flex-col gap-4"}>
       <DashboardCompSelect
         title={"Select Means of Identifying Tax Payer"}
         placeholder={"-- Select --"}

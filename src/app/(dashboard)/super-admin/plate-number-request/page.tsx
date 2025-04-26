@@ -27,6 +27,7 @@ import { selectStateIDFromStateName } from "@/store/states/state-selector";
 import { generateTrackingId } from "@/common/helpers";
 import { toast } from "sonner";
 import { ResponseModalX } from "@/components/general/response-modalx";
+import { isWithinInterval } from "date-fns";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -35,18 +36,29 @@ const tableColumns = [
   { key: "total_number_requested", title: "No. of Plate Requested" },
   { key: "recommended_number", title: "No. of Plate Recommended" },
   { key: "number_assigned", title: "No. Assigned" },
-  { key: "created_at", title: "Date" },
+  { key: "date_created", title: "Date" },
   { key: "recommender", title: "Recommending Officer" },
   { key: "approver", title: "Final Approving Officer" },
   { key: "status", title: "Request Status" },
   { key: "insurance_status", title: "Insurance Status" },
 ];
 
+type inputValuesProp = {
+  trackingid: string;
+  insuranceStatus: string;
+  plateNumberType: string;
+  requestStatus: string;
+  startDate?: Date | undefined;
+  endDate?: Date | undefined;
+};
+
 const inputInitialValues = {
   trackingid: "",
   insuranceStatus: "",
   plateNumberType: "",
   requestStatus: "",
+  startDate: undefined,
+  endDate: undefined,
 };
 
 export default function Page() {
@@ -55,10 +67,9 @@ export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [inputValues, setInputValues] = useState(inputInitialValues);
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
   const [modalInput, setModalInput] = useState<CreatePlateRequestProps>(
     CreatePlateRequestInitialValues
   );
@@ -67,52 +78,71 @@ export default function Page() {
   );
   const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
   const [plateNumberData, setPlateNumberData] = useState(plateNumbertableData);
-  const { trackingid, insuranceStatus, plateNumberType, requestStatus } =
-    inputValues;
-
-  // console.log(plateNumbertableData);
+  const {
+    trackingid,
+    insuranceStatus,
+    plateNumberType,
+    requestStatus,
+    startDate,
+    endDate,
+  } = inputValues;
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const filteredData =
+    if (
       _.isEmpty(_.trim(trackingid)) &&
       _.isEmpty(_.trim(insuranceStatus)) &&
       _.isEmpty(_.trim(plateNumberType)) &&
-      _.isEmpty(_.trim(requestStatus))
-        ? plateNumbertableData
-        : _.filter(plateNumbertableData, (plateData) => {
-            const matchesTrackingID = trackingid
-              ? _.toLower(plateData?.tracking_id || "").includes(
-                  _.toLower(trackingid)
-                )
-              : false;
+      _.isEmpty(_.trim(requestStatus)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setPlateNumberData(plateNumbertableData);
+      return;
+    }
 
-            const matchesInsuranceStatus = insuranceStatus
-              ? _.toLower(plateData?.insurance_status || "").includes(
-                  _.toLower(insuranceStatus)
-                )
-              : false;
+    const filteredData = _.filter(plateNumbertableData, (plateData) => {
+      let matches = false;
 
-            const matchesPlateNumberType = plateNumberType
-              ? _.toLower(plateData?.plate_number_type || "").includes(
-                  _.toLower(plateNumberType)
-                )
-              : false;
+      if (!_.isEmpty(_.trim(trackingid))) {
+        matches =
+          matches ||
+          _.toLower(plateData?.tracking_id || "") === _.toLower(trackingid);
+      }
 
-            const matchesrequestStatus = requestStatus
-              ? _.toLower(plateData?.status || "").includes(
-                  _.toLower(requestStatus)
-                )
-              : false;
+      if (!_.isEmpty(_.trim(insuranceStatus))) {
+        matches =
+          matches ||
+          _.toLower(plateData?.insurance_status || "") ===
+            _.toLower(insuranceStatus);
+      }
 
-            return (
-              matchesTrackingID ||
-              matchesInsuranceStatus ||
-              matchesPlateNumberType ||
-              matchesrequestStatus
-            );
+      if (!_.isEmpty(_.trim(plateNumberType))) {
+        matches =
+          matches ||
+          _.toLower(plateData?.plate_number_type || "") ===
+            _.toLower(plateNumberType);
+      }
+
+      if (!_.isEmpty(_.trim(requestStatus))) {
+        matches =
+          matches ||
+          _.toLower(plateData?.status || "") === _.toLower(requestStatus);
+      }
+
+      if (startDate && endDate) {
+        matches =
+          matches ||
+          isWithinInterval(new Date(plateData?.created_at), {
+            start: new Date(startDate),
+            end: new Date(endDate),
           });
+      }
+
+      return matches;
+    });
+
     setPlateNumberData(filteredData);
   };
 
@@ -121,7 +151,9 @@ export default function Page() {
       _.isEmpty(_.trim(trackingid)) &&
       _.isEmpty(_.trim(insuranceStatus)) &&
       _.isEmpty(_.trim(plateNumberType)) &&
-      _.isEmpty(_.trim(requestStatus))
+      _.isEmpty(_.trim(requestStatus)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
     ) {
       setPlateNumberData(plateNumbertableData);
     }
@@ -266,14 +298,25 @@ export default function Page() {
             />
 
             <DatePicker
-              date={startDate}
-              setDate={setStartDate}
               title={"Start Date"}
+              date={inputValues.startDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  startDate: date as Date | undefined,
+                }))
+              }
             />
+
             <DatePicker
-              date={endDate}
-              setDate={setEndDate}
               title={"End Date"}
+              date={inputValues.endDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  endDate: date as Date | undefined,
+                }))
+              }
             />
 
             <Button type="submit">Search</Button>

@@ -116,7 +116,8 @@ export class PlateNumberOrderService {
     try {
       const res = await axiosInstance.post(
         `${PlateNumberOrderService.url}`,
-        payload
+        payload,
+        PlateNumberOrderService.getAuthHeader()
       );
       this.dispatch(addPlateNumberOrder(res.data.data));
       return res.data;
