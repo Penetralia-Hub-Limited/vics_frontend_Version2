@@ -116,7 +116,7 @@ export const tableInvoices = [
   },
   {
     id: 2,
-    lga: "INV001",
+    lga: "INV003",
     range: "Paid",
     endcode: "$250.00",
     type: "Credit Card",

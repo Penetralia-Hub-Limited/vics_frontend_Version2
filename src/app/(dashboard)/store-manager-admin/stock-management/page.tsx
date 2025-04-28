@@ -24,8 +24,8 @@ import { RootState } from "@/store/store";
 const tableHeaders = [
   { title: "S/N", key: "id" },
   { title: "LGA", key: "lga" },
-  { title: "Range", key: "lga" },
-  { title: "End Code", key: "lga" },
+  { title: "Range", key: "range" },
+  { title: "End Code", key: "end_code" },
   { title: "Type", key: "type" },
   { title: "Created By", key: "createdby" },
   { title: "Date", key: "Date" },
