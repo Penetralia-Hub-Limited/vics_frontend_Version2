@@ -9,6 +9,8 @@ interface IForm {
   onSubmit: () => void;
   isLoading: boolean;
   isSuccess: boolean;
+  className?: string;
+  footer?: ReactNode;
 }
 
 const FormLayout: FC<IForm> = ({
@@ -18,6 +20,7 @@ const FormLayout: FC<IForm> = ({
   onSubmit,
   isLoading,
   isSuccess,
+  footer,
 }) => {
   return (
     <div className="bg-white rounded-lg py-10 px-5 md:px-12 w-[80%] md:w-[50%] border-[15px] border-primary-500">
@@ -31,7 +34,7 @@ const FormLayout: FC<IForm> = ({
           e.preventDefault();
           onSubmit();
         }}
-        className="flex flex-col gap-5 py-12 w-full"
+        className={"flex flex-col gap-5 py-5 w-full"}
       >
         {children}
 
@@ -45,6 +48,8 @@ const FormLayout: FC<IForm> = ({
           )}
         </Button>
       </form>
+
+      <div>{footer}</div>
     </div>
   );
 };

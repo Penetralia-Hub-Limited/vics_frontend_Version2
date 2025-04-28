@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
+import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -8,7 +10,10 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ConfigurationSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import {
+  DataTableWButton,
+  RowAction,
+} from "@/components/dashboard/dashboard-table-w-button";
 import { useSelector } from "react-redux";
 import { selectServices } from "@/store/service-type/service-selector";
 
@@ -22,16 +27,65 @@ const tableColumns = [
   { key: "service_price", title: "Amount" },
 ];
 
+type inputValuesProp = {
+  servicename: string;
+  from: Date | undefined;
+  to: Date | undefined;
+};
+
+const inputInitialValues = {
+  servicename: "",
+  from: undefined,
+  to: undefined,
+};
+
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [fromDate, setFromDate] = useState<Date | undefined>();
-  const [toDate, setToDate] = useState<Date | undefined>();
-  const [plateNumber, setPlateNumber] = useState<string>("");
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
   const serviceData = useSelector(selectServices);
+  const [services, setServices] = useState(serviceData);
 
-  const totalPages = Math.ceil(serviceData.length / itemsPerPage);
-  const paginatedData = serviceData.slice(
+  const { servicename, from, to } = inputValues;
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (_.isEmpty(servicename) && _.isEmpty(from) && _.isEmpty(to)) {
+      setServices(serviceData);
+      return;
+    }
+
+    const filteredData = _.filter(serviceData, (service) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(servicename))) {
+        matches =
+          matches || _.toLower(service?.name || "") === _.toLower(servicename);
+      }
+
+      if (from && to) {
+        matches =
+          matches ||
+          isWithinInterval(new Date(service?.created_at), {
+            start: new Date(from),
+            end: new Date(to),
+          });
+      }
+
+      return matches;
+    });
+    setServices(filteredData);
+  };
+
+  useEffect(() => {
+    if (_.isEmpty(servicename) && _.isEmpty(from) && _.isEmpty(to)) {
+      setServices(serviceData);
+    }
+  }, [serviceData, inputValues]);
+
+  const totalPages = Math.ceil(services.length / itemsPerPage);
+  const paginatedData = services.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -46,11 +100,6 @@ export default function Page() {
     currentQuantity: number;
     assigned: number;
     sold: number;
-  }
-
-  interface RowAction {
-    title: string;
-    action: () => void;
   }
 
   const getRowActions = (row: unknown): RowAction[] => {
@@ -89,24 +138,52 @@ export default function Page() {
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
-          <InputWithLabel
-            items={{
-              id: "platenumber",
-              label: "Plate Number",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "platenumber",
-            }}
-            value={plateNumber}
-            onChange={(e) => setPlateNumber(e.target.value)}
-          />
+        <form action="#" onSubmit={handleSearch}>
+          <div
+            className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}
+          >
+            <InputWithLabel
+              items={{
+                id: "servicename",
+                label: "Service Name",
+                placeholder: "Service Name",
+                type: "text",
+                htmlfor: "servicename",
+              }}
+              value={inputValues.servicename}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  servicename: e.target.value,
+                }))
+              }
+            />
 
-          <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
-          <DatePicker date={toDate} setDate={setToDate} title={"To"} />
+            <DatePicker
+              title={"From"}
+              date={inputValues.from}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  from: date as Date | undefined,
+                }))
+              }
+            />
 
-          <Button>Search</Button>
-        </div>
+            <DatePicker
+              title={"To"}
+              date={inputValues.to}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  to: date as Date | undefined,
+                }))
+              }
+            />
+
+            <Button type="submit">Search</Button>
+          </div>
+        </form>
       </CardContainer>
 
       <div

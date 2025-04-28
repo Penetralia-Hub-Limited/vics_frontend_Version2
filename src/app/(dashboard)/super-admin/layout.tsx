@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, Suspense, useEffect, useMemo } from "react";
-import { StoreProvider } from "@/app/store-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import { superAdminSidebar } from "@/common/side-bar";
 import useGetPathName from "@/hooks/usePathName";

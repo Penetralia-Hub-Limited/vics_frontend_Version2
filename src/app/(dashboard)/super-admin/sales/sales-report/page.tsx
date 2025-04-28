@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
+import { isWithinInterval } from "date-fns";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
@@ -43,28 +45,95 @@ const tableColumns = [
   { key: "created_at", title: "Transaction Date" },
 ];
 
+type inputValuesProp = {
+  plateNumber: string;
+  paymentStatus: string;
+  invoiceNumber: string;
+  from: Date | undefined;
+  to: Date | undefined;
+};
+
+const inputInitialValues = {
+  plateNumber: "",
+  paymentStatus: "",
+  invoiceNumber: "",
+  from: undefined,
+  to: undefined,
+};
+
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [fromDate, setFromDate] = useState<Date | undefined>();
-  const [toDate, setToDate] = useState<Date | undefined>();
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [isNumberVerified, setIsNumberVerified] = useState<boolean>(false);
-  const [inputValues, setInputValues] = useState<{
-    plateNumber: string;
-    paymentStatus: string;
-    invoiceNumber: string;
-  }>({
-    plateNumber: "",
-    paymentStatus: "",
-    invoiceNumber: "",
-  });
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const salesAssessmentData = useSelector(selectPlateNumber);
+  const salesReportData = useSelector(selectPlateNumber);
+  const [salesReport, setSalesReport] = useState(salesReportData);
 
-  const totalPages = Math.ceil(salesAssessmentData.length / itemsPerPage);
-  const paginatedData = salesAssessmentData.slice(
+  const { plateNumber, paymentStatus, invoiceNumber, from, to } = inputValues;
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      _.isEmpty(_.trim(plateNumber)) &&
+      _.isEmpty(_.trim(paymentStatus)) &&
+      _.isEmpty(_.trim(invoiceNumber)) &&
+      _.isEmpty(from) &&
+      _.isEmpty(to)
+    ) {
+      setSalesReport(salesReportData);
+      return;
+    }
+
+    const filteredData = _.filter(salesReportData, (salesData) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(plateNumber))) {
+        matches =
+          matches ||
+          _.toLower(salesData?.number || "") === _.toLower(plateNumber);
+      }
+
+      if (!_.isEmpty(_.trim(paymentStatus))) {
+        matches =
+          matches ||
+          _.toLower(salesData?.number_status || "") ===
+            _.toLower(paymentStatus);
+      }
+
+      if (from && to) {
+        matches =
+          matches ||
+          isWithinInterval(new Date(salesData?.created_at as string), {
+            start: new Date(from),
+            end: new Date(to),
+          });
+      }
+
+      return matches;
+    });
+
+    setSalesReport(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(plateNumber)) &&
+      _.isEmpty(_.trim(paymentStatus)) &&
+      _.isEmpty(_.trim(invoiceNumber)) &&
+      _.isEmpty(from) &&
+      _.isEmpty(to)
+    ) {
+      setSalesReport(salesReportData);
+    }
+  }, [salesReportData, inputValues]);
+
+  const totalPages = Math.ceil(salesReport.length / itemsPerPage);
+  const paginatedData = salesReport.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -87,8 +156,6 @@ export default function Page() {
       phoneNumber: phoneNumber,
     })
   );
-
-  console.log("doesUserExist ", doesUserExist);
 
   const handleSubmit = () => {
     setTimeout(() => {
@@ -142,65 +209,86 @@ export default function Page() {
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <InputWithLabel
-            items={{
-              id: "plateNumber",
-              label: "Plate Number",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "plateNumber",
-            }}
-            value={inputValues.plateNumber}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                plateNumber: e.target.value,
-              }))
+        <form action="" onSubmit={handleSearch}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <InputWithLabel
+              items={{
+                id: "plateNumber",
+                label: "Plate Number",
+                placeholder: "Plate Number",
+                type: "text",
+                htmlfor: "plateNumber",
+              }}
+              value={inputValues.plateNumber}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  plateNumber: e.target.value,
+                }))
+              }
+            />
+
+            <DashboardCompSelect
+              title={"Payment Status"}
+              placeholder={"-- Select Status --"}
+              items={[...Object.values(PaymentStatus)]}
+              selected={inputValues.paymentStatus}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  paymentStatus: selected ? String(selected) : "",
+                }))
+              }
+            />
+
+            <InputWithLabel
+              items={{
+                id: "invoiceNumber",
+                label: "Invoice Number",
+                placeholder: "Invoice Number",
+                type: "text",
+                htmlfor: "invoiceNumber",
+              }}
+              value={inputValues.invoiceNumber}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  invoiceNumber: e.target.value,
+                }))
+              }
+            />
+          </div>
+
+          <div
+            className={
+              "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
             }
-          />
+          >
+            <DatePicker
+              title={"From"}
+              date={inputValues.from}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  from: date as Date | undefined,
+                }))
+              }
+            />
 
-          <DashboardCompSelect
-            title={"Payment Status"}
-            placeholder={"-- Select Status --"}
-            items={[...Object.values(PaymentStatus)]}
-            selected={inputValues.paymentStatus}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                paymentStatus: selected ? String(selected) : "",
-              }))
-            }
-          />
+            <DatePicker
+              title={"To"}
+              date={inputValues.to}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  to: date as Date | undefined,
+                }))
+              }
+            />
 
-          <InputWithLabel
-            items={{
-              id: "invoiceNumber",
-              label: "Invoice Number",
-              placeholder: "Invoice Number",
-              type: "text",
-              htmlfor: "invoiceNumber",
-            }}
-            value={inputValues.invoiceNumber}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                invoiceNumber: e.target.value,
-              }))
-            }
-          />
-        </div>
-
-        <div
-          className={
-            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
-          }
-        >
-          <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
-          <DatePicker date={toDate} setDate={setToDate} title={"To"} />
-
-          <Button>Search</Button>
-        </div>
+            <Button type="submit">Search</Button>
+          </div>
+        </form>
       </CardContainer>
 
       <div

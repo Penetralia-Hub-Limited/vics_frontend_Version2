@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
+import { isWithinInterval } from "date-fns";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, UsersSVG } from "@/common/svgs";
 import { Button } from "@/components/ui/button";
@@ -13,7 +15,7 @@ import {
   TableData,
   RowAction,
 } from "@/components/dashboard/dashboard-table-w-button";
-import { ApprovalStatus, Role, UserStatus } from "@/common/enum";
+import { Role, UserStatus } from "@/common/enum";
 import Pagination from "@/components/general/pagination";
 import Modal from "@/components/general/modal";
 import { ResponseModalX } from "@/components/general/response-modalx";
@@ -38,25 +40,32 @@ const manageUserHeader = [
   { key: "created_at", title: "Date Created" },
 ];
 
+type inputValuesProp = {
+  name: string;
+  email: string;
+  status: string;
+  role: string;
+  from: Date | undefined;
+  to: Date | undefined;
+};
+
+const inputInitialValues = {
+  name: "",
+  email: "",
+  status: "",
+  role: "",
+  from: undefined,
+  to: undefined,
+};
+
 export default function Page() {
   const itemsPerPage = 10;
   const dispatch = useDispatch();
   const userService = new UserService(dispatch);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [fromDate, setFromDate] = useState<Date | undefined>();
-  const [toDate, setToDate] = useState<Date | undefined>();
-  const [inputValues, setInputValues] = useState<{
-    name: string;
-    email: string;
-    status: string;
-    role: string;
-  }>({
-    name: "",
-    email: "",
-    status: "",
-    role: "",
-  });
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
   const [modalInput, setModalInput] = useState<AddUserModalProp>(
     AddUserModalInitialState
   );
@@ -64,8 +73,71 @@ export default function Page() {
     selectStateIDFromStateName(state, modalInput?.state)
   );
   const userData = useSelector(selectUsers);
-  const totalPages = Math.ceil(userData.length / itemsPerPage);
-  const paginatedData = userData.slice(
+  const [users, setUsers] = useState(userData);
+
+  const { name, email, status, role, from, to } = inputValues;
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      _.isEmpty(_.trim(name)) &&
+      _.isEmpty(_.trim(email)) &&
+      _.isEmpty(_.trim(status)) &&
+      _.isEmpty(role) &&
+      _.isEmpty(from) &&
+      _.isEmpty(to)
+    ) {
+      setUsers(userData);
+      return;
+    }
+
+    const filteredData = _.filter(userData, (user) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(name))) {
+        matches = matches || _.toLower(user?.name || "") === _.toLower(name);
+      }
+      if (!_.isEmpty(_.trim(email))) {
+        matches = matches || _.toLower(user?.email || "") === _.toLower(email);
+      }
+      if (!_.isEmpty(_.trim(status))) {
+        matches =
+          matches || _.toLower(user?.status || "") === _.toLower(status);
+      }
+      if (!_.isEmpty(_.trim(role))) {
+        matches = matches || _.toLower(user?.role || "") === _.toLower(role);
+      }
+      if (from && to) {
+        matches =
+          matches ||
+          isWithinInterval(new Date(user?.created_at), {
+            start: new Date(from),
+            end: new Date(to),
+          });
+      }
+
+      return matches;
+    });
+
+    setUsers(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(name)) &&
+      _.isEmpty(_.trim(email)) &&
+      _.isEmpty(_.trim(status)) &&
+      _.isEmpty(role) &&
+      _.isEmpty(from) &&
+      _.isEmpty(to)
+    ) {
+      setUsers(userData);
+    }
+  }, [userData, inputValues]);
+
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const paginatedData = users.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -155,80 +227,96 @@ export default function Page() {
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <InputWithLabel
-            items={{
-              id: "name",
-              label: "Name",
-              placeholder: "Name",
-              type: "text",
-              htmlfor: "name",
-            }}
-            value={inputValues.name}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                name: e.target.value,
-              }))
-            }
-          />
-          <InputWithLabel
-            items={{
-              id: "email",
-              label: "Email Address",
-              placeholder: "Email Address",
-              type: "text",
-              htmlfor: "email",
-            }}
-            value={inputValues.email}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                email: e.target.value,
-              }))
-            }
-          />
+        <form action="#" onSubmit={handleSearch}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <InputWithLabel
+              items={{
+                id: "name",
+                label: "Name",
+                placeholder: "Name",
+                type: "text",
+                htmlfor: "name",
+              }}
+              value={inputValues.name}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                }))
+              }
+            />
+            <InputWithLabel
+              items={{
+                id: "email",
+                label: "Email Address",
+                placeholder: "Email Address",
+                type: "text",
+                htmlfor: "email",
+              }}
+              value={inputValues.email}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  email: e.target.value,
+                }))
+              }
+            />
 
-          <DashboardCompSelect
-            title={"Status"}
-            placeholder={"-- Select Status --"}
-            items={[UserStatus.ACTIVE, UserStatus.DEACTIVATED]}
-            selected={inputValues.status}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                status: selected ? String(selected) : "",
-              }))
-            }
-          />
-        </div>
+            <DashboardCompSelect
+              title={"Status"}
+              placeholder={"-- Select Status --"}
+              items={[...Object.values(UserStatus)]}
+              selected={inputValues.status}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  status: (selected as UserStatus) ?? "",
+                }))
+              }
+            />
+          </div>
 
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
-          <DashboardCompSelect
-            title={"Role"}
-            placeholder={"-- Select Role --"}
-            items={[
-              Role.Chairman,
-              Role.MLA,
-              Role.SMR,
-              Role.STOREADMIN,
-              Role.SUPERADMIN,
-            ]}
-            selected={inputValues.role}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                status: selected ? String(selected) : "",
-              }))
-            }
-          />
+          <div
+            className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}
+          >
+            <DashboardCompSelect
+              title={"Role"}
+              placeholder={"-- Select Role --"}
+              items={[...Object.values(Role)]}
+              selected={inputValues.role}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  role: (selected as Role) ?? "",
+                }))
+              }
+            />
 
-          <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
+            <DatePicker
+              title={"From"}
+              date={inputValues.from}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  from: date as Date | undefined,
+                }))
+              }
+            />
 
-          <DatePicker date={toDate} setDate={setToDate} title={"To"} />
+            <DatePicker
+              title={"To"}
+              date={inputValues.to}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  to: date as Date | undefined,
+                }))
+              }
+            />
 
-          <Button>Search</Button>
-        </div>
+            <Button type="submit">Search</Button>
+          </div>
+        </form>
       </CardContainer>
 
       <div className="flex flex-col gap-3 border border-primary-300 rounded-lg overflow-hidden">

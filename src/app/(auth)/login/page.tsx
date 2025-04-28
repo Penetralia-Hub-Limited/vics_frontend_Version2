@@ -57,6 +57,7 @@ export default function Page() {
         title="Account Login"
         description="Login with your email address and password"
         onSubmit={handleSubmit}
+        footer={<FooterElement />}
       >
         <InputWithLabel
           items={{
@@ -110,3 +111,20 @@ export default function Page() {
     </div>
   );
 }
+
+const FooterElement = () => {
+  return (
+    <div className="flex flex-row gap-2 items-center justify-center">
+      <p className="text-sm">Need help?</p>
+      <Link href={"/"}>
+        <p
+          className={
+            "font-bold text-sm text-primary-500 hover:text-primary-500/90"
+          }
+        >
+          Contact Support
+        </p>
+      </Link>
+    </div>
+  );
+};

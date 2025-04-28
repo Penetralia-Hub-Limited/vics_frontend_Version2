@@ -3,13 +3,8 @@
 import { FC, Dispatch, SetStateAction } from "react";
 import DashboardCompSelect from "../dashboard-component-select";
 import { PlateNumberType, PlateNumberSubType } from "@/common/enum";
-import {
-  selectAdminFromName,
-  selectSuperAdminFromName,
-} from "@/store/user/user-selector";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { User } from "@/store/user/user-type";
 
 export const CreateNewWorkFlowInitialValues = {
   approvingOffice: "",

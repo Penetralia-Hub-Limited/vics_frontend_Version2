@@ -23,7 +23,7 @@ export default function AuthLayout({
 
         <div
           className={
-            "py-18 h-full bg-cover bg-center flex w-full items-center justify-center grayscale-[0.5]"
+            "py-18 bg-cover bg-center flex w-full items-center justify-center grayscale-[0.5]"
           }
           style={{ backgroundImage: `url(${BG.src})` }}
         >

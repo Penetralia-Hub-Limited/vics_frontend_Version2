@@ -1,3 +1,14 @@
+export interface RegisterCredentials {
+  firstname: string;
+  lastname: string;
+  othername: string;
+  email: string;
+  password: string;
+  phone: string;
+  address: string;
+  state: string;
+}
+
 export interface LoginCredentials {
   email: string;
   password: string;

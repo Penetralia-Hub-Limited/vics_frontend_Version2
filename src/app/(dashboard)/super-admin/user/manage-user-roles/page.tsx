@@ -18,7 +18,7 @@ export default function Page() {
   console.log(roleName, permissions);
 
   return (
-    <main className={"flex flex-col gap-8 md:gap-12"}>
+    <main className={"flex flex-col gap-8 md:gap-12 h-screen"}>
       <div
         className={
           "flex flex-col gap-5 md:flex-row justify-between items-center"

@@ -10,7 +10,6 @@ import {
   userSuccess,
   userFail,
   setSelectedUser,
-  clearUsers,
 } from "@/store/user/user-slice";
 
 export class UserService {

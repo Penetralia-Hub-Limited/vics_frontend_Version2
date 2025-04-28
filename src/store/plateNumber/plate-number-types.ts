@@ -22,6 +22,7 @@ export interface PlateNumberData {
   sub_type: string;
   date_deactivated: string | null;
   created_at: string | null;
+  assigned_date: string | null;
   updated_at: string | null;
   creator: User;
   state: StatesData;
