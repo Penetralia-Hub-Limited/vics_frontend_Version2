@@ -43,28 +43,39 @@ export default function Page() {
     CreatePlateRequestInitialValues
   );
   const vehiclesData = useSelector(selectVehicles);
-  const [filteredVehicleInfo, setFilteredVehicleInfo] = useState(vehiclesData);
   const vehicleService = new VehicleService(dispatch);
+  const [filteredVehicleInfo, setFilteredVehicleInfo] = useState(vehiclesData);
   const state_id = useSelector((state) =>
     selectStateIDFromStateName(state, modalInput?.state)
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setCurrentPage(1); // Reset pagination to the first page
 
-    // If search is empty, show all
-    if (_.isEmpty(_.trim(vehicleMake))) {
+    if (_.isEmpty(vehicleMake)) {
       setFilteredVehicleInfo(vehiclesData);
       return;
     }
 
-    const filtered = _.filter(vehiclesData, (vehicle) =>
-      _.includes(_.toLower(vehicle.make), _.toLower(vehicleMake))
-    );
+    const filteredData = _.filter(vehiclesData, (vehicle) => {
+      let matches = false;
 
-    setFilteredVehicleInfo(filtered);
+      if (!_.isEmpty(_.trim(vehicleMake))) {
+        matches =
+          matches || _.toLower(vehicle?.make || "") === _.toLower(vehicleMake);
+      }
+
+      return matches;
+    });
+
+    setFilteredVehicleInfo(filteredData);
   };
+
+  useEffect(() => {
+    if (_.isEmpty(vehicleMake)) {
+      setFilteredVehicleInfo(vehiclesData);
+    }
+  }, [vehiclesData, vehicleMake]);
 
   const totalPages = Math.ceil(filteredVehicleInfo.length / itemsPerPage);
   const paginatedData = filteredVehicleInfo.slice(
@@ -102,16 +113,6 @@ export default function Page() {
       setFilteredVehicleInfo(vehiclesData);
     }
   }, [vehiclesData]);
-
-  // const getRowActions = (row: unknown): RowAction[] => {
-  //   const tableRow = row as TableData;
-  //   return [
-  //     {
-  //       title: "View",
-  //       action: () => console.log("Viewing details for:", tableRow),
-  //     },
-  //   ];
-  // };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
+import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -25,36 +27,54 @@ const tableColumns = [
   { key: "cardstatus", title: "Card Status" },
 ];
 
+type inputValuesProp = {
+  plateNumber: string;
+  zonalOffice: string;
+  cardType: string;
+  cardStatus: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+};
+
+const inputInitialValues = {
+  plateNumber: "",
+  zonalOffice: "",
+  cardType: "",
+  cardStatus: "",
+  startDate: undefined,
+  endDate: undefined,
+};
+
 const tableData = [
   {
     id: 1,
-    platenumber: "JK",
+    platenumber: "XYY-4422",
     cardowner: "Private (Direct)",
-    cardtype: "Akanbi S.",
+    cardtype: SelectCardType.COMPUTERIZED,
     zonaloffice: "Lagos",
-    createdby: "Mr Moe",
+    createdby: "Mr Julius",
     activationdate: new Date(),
     expirydate: new Date(),
     cardstatus: CardStatus.PENDING,
   },
   {
     id: 2,
-    platenumber: "JK",
+    platenumber: "ACX-4422",
     cardowner: "Private (Direct)",
-    cardtype: "Akanbi S.",
+    cardtype: SelectCardType.COMPUTERIZED,
     zonaloffice: "Lagos",
-    createdby: "Mr Moe",
+    createdby: "Mr Drake",
     activationdate: new Date(),
     expirydate: new Date(),
     cardstatus: CardStatus.PENDING,
   },
   {
     id: 3,
-    platenumber: "JK",
-    cardowner: "Private (Direct)",
-    cardtype: "Akanbi S.",
+    platenumber: "AXC-4243",
+    cardowner: "Private",
+    cardtype: SelectCardType.CARD,
     zonaloffice: "Lagos",
-    createdby: "Mr Moe",
+    createdby: "Mr Moses",
     activationdate: new Date(),
     expirydate: new Date(),
     cardstatus: CardStatus.PENDING,
@@ -64,22 +84,84 @@ const tableData = [
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
-  const [inputValues, setInputValues] = useState<{
-    plateNumber: string;
-    zonalOffice: string;
-    cardType: string;
-    cardStatus: string;
-  }>({
-    plateNumber: "",
-    zonalOffice: "",
-    cardType: "",
-    cardStatus: "",
-  });
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
+  const [printData, setPrintData] = useState(tableData);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const { plateNumber, zonalOffice, cardType, cardStatus, startDate, endDate } =
+    inputValues;
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      _.isEmpty(_.trim(plateNumber)) &&
+      _.isEmpty(_.trim(zonalOffice)) &&
+      _.isEmpty(_.trim(cardType)) &&
+      _.isEmpty(_.trim(cardStatus)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setPrintData(tableData);
+      return;
+    }
+
+    const filteredData = _.filter(tableData, (print) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(plateNumber))) {
+        matches =
+          matches ||
+          _.toLower(print?.platenumber || "") === _.toLower(plateNumber);
+      }
+
+      if (!_.isEmpty(_.trim(zonalOffice))) {
+        matches =
+          matches ||
+          _.toLower(print?.zonaloffice || "") === _.toLower(zonalOffice);
+      }
+
+      if (!_.isEmpty(_.trim(cardType))) {
+        matches =
+          matches || _.toLower(print?.cardtype || "") === _.toLower(cardType);
+      }
+
+      if (!_.isEmpty(_.trim(cardStatus))) {
+        matches =
+          matches ||
+          _.toLower(print?.cardstatus || "") === _.toLower(cardStatus);
+      }
+
+      if (startDate && endDate) {
+        matches =
+          matches ||
+          isWithinInterval(new Date(print?.activationdate), {
+            start: new Date(startDate),
+            end: new Date(endDate),
+          });
+      }
+
+      return matches;
+    });
+
+    setPrintData(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(plateNumber)) &&
+      _.isEmpty(_.trim(zonalOffice)) &&
+      _.isEmpty(_.trim(cardType)) &&
+      _.isEmpty(_.trim(cardStatus)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setPrintData(tableData);
+    }
+  }, [tableData, inputValues]);
+
+  const totalPages = Math.ceil(printData.length / itemsPerPage);
+  const paginatedData = printData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -124,75 +206,95 @@ export default function Page() {
       />
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 items-end"}>
-          <DashboardCompSelect
-            title={"Zonal Office"}
-            placeholder={"-- Select Office --"}
-            items={["abia", "lagos"]}
-            selected={inputValues.zonalOffice}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                zonalOffice: selected ? String(selected) : "",
-              }))
-            }
-          />
-          <DashboardCompSelect
-            title={"Card Status"}
-            placeholder={"-- Select Status --"}
-            items={[...Object.values(SelectCardStatus)]}
-            selected={inputValues.cardStatus}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                cardStatus: selected ? String(selected) : "",
-              }))
-            }
-          />
+        <form action="" onSubmit={handleSearch}>
+          <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 items-end"}>
+            <DashboardCompSelect
+              title={"Zonal Office"}
+              placeholder={"-- Select Office --"}
+              items={["abia", "lagos"]}
+              selected={inputValues.zonalOffice}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  zonalOffice: selected ? String(selected) : "",
+                }))
+              }
+            />
+            <DashboardCompSelect
+              title={"Card Status"}
+              placeholder={"-- Select Status --"}
+              items={[...Object.values(SelectCardStatus)]}
+              selected={inputValues.cardStatus}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  cardStatus: selected ? String(selected) : "",
+                }))
+              }
+            />
 
-          <DashboardCompSelect
-            title={"Card Type"}
-            placeholder={"-- Select Type --"}
-            items={[...Object.values(SelectCardType)]}
-            selected={inputValues.cardType}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                cardType: selected ? String(selected) : "",
-              }))
-            }
-          />
-        </div>
+            <DashboardCompSelect
+              title={"Card Type"}
+              placeholder={"-- Select Type --"}
+              items={[...Object.values(SelectCardType)]}
+              selected={inputValues.cardType}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  cardType: selected ? String(selected) : "",
+                }))
+              }
+            />
+          </div>
 
-        <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 mt-4"}>
-          <InputWithLabel
-            items={{
-              id: "plateNumber",
-              label: "Plate Number",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "plateNumber",
-            }}
-            value={inputValues.plateNumber}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                plateNumber: e.target.value,
-              }))
-            }
-          />
-          <DatePicker
-            date={startDate}
-            setDate={setStartDate}
-            title="Start Date"
-          />
-          <DatePicker date={endDate} setDate={setEndDate} title="End Date" />
-        </div>
+          <div
+            className={"grid grid-cols-1 md:grid-cols-4 gap-3 mt-4 items-end"}
+          >
+            <InputWithLabel
+              items={{
+                id: "plateNumber",
+                label: "Plate Number",
+                placeholder: "Plate Number",
+                type: "text",
+                htmlfor: "plateNumber",
+              }}
+              value={inputValues.plateNumber}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  plateNumber: e.target.value,
+                }))
+              }
+            />
+            <DatePicker
+              title={"Start Date"}
+              date={inputValues.startDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  startDate: date as Date | undefined,
+                }))
+              }
+            />
 
-        <div className="grid grid-cols-2 gap-4 mt-4 items-end">
-          <Button variant={"outline"}>Bulk Download</Button>
-          <Button variant={"default"}>Print Item</Button>
-        </div>
+            <DatePicker
+              title={"End Date"}
+              date={inputValues.endDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  endDate: date as Date | undefined,
+                }))
+              }
+            />
+            <Button type="submit">Search</Button>
+          </div>
+
+          {/* <div className="grid grid-cols-2 gap-4 mt-4 items-end">
+            <Button variant={"outline"}>Bulk Download</Button>
+            <Button variant={"default"}>Print Item</Button>
+          </div> */}
+        </form>
       </CardContainer>
 
       <div

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
+import { isWithinInterval } from "date-fns";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
@@ -35,23 +37,108 @@ const tableColumns = [
   { key: "date_created" as const, title: "Date" },
 ];
 
+type inputValuesProp = {
+  phone: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+};
+
+const inputInitialValues = {
+  phone: "",
+  firstname: "",
+  lastname: "",
+  email: "",
+  startDate: undefined,
+  endDate: undefined,
+};
+
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [isUserVerified, setIsUserVerified] = useState<boolean>(false);
   const [identificationMeans, setIdentificationMeans] =
     useState<IDTaxPayerMeans>(IDTaxPayerMeans.NIN);
   const [identificationInput, setIdentificationInput] =
     useState<UserIDProps>(IUserIDInitialValues);
-
   const taxPayers = useSelector(selectTaxPayers);
+  const [taxPayersData, setTaxPayersData] = useState(taxPayers);
 
-  const totalPages = Math.ceil(taxPayers.length / itemsPerPage);
-  const paginatedData = taxPayers.slice(
+  const { phone, firstname, lastname, email, startDate, endDate } = inputValues;
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      _.isEmpty(_.trim(phone)) &&
+      _.isEmpty(_.trim(firstname)) &&
+      _.isEmpty(_.trim(lastname)) &&
+      _.isEmpty(_.trim(email)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setTaxPayersData(taxPayers);
+      return;
+    }
+
+    const filteredData = _.filter(taxPayers, (taxPayer) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(phone))) {
+        matches =
+          matches || _.toLower(taxPayer?.phone || "") === _.toLower(phone);
+      }
+
+      if (!_.isEmpty(_.trim(firstname))) {
+        matches =
+          matches ||
+          _.toLower(taxPayer?.firstname || "") === _.toLower(firstname);
+      }
+      if (!_.isEmpty(_.trim(lastname))) {
+        matches =
+          matches ||
+          _.toLower(taxPayer?.lastname || "") === _.toLower(lastname);
+      }
+      if (!_.isEmpty(_.trim(email))) {
+        matches =
+          matches || _.toLower(taxPayer?.email || "") === _.toLower(email);
+      }
+
+      if (startDate && endDate) {
+        matches =
+          matches ||
+          isWithinInterval(new Date(taxPayer?.created_at as string), {
+            start: new Date(startDate),
+            end: new Date(endDate),
+          });
+      }
+
+      return matches;
+    });
+    setTaxPayersData(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(phone)) &&
+      _.isEmpty(_.trim(firstname)) &&
+      _.isEmpty(_.trim(lastname)) &&
+      _.isEmpty(_.trim(email)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setTaxPayersData(taxPayers);
+    }
+  }, [taxPayers, inputValues]);
+
+  const totalPages = Math.ceil(taxPayersData.length / itemsPerPage);
+  const paginatedData = taxPayersData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -131,56 +218,96 @@ export default function Page() {
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <InputWithLabel
-            items={{
-              id: "firstname",
-              label: "First Name",
-              placeholder: "First Name",
-              type: "text",
-              htmlfor: "firstname",
-            }}
-          />
-          <InputWithLabel
-            items={{
-              id: "lastname",
-              label: "Last Name",
-              placeholder: "Last Name",
-              type: "text",
-              htmlfor: "lastname",
-            }}
-          />
-          <InputWithLabel
-            items={{
-              id: "email",
-              label: "email",
-              placeholder: "example@gmail.com",
-              type: "email",
-              htmlfor: "email",
-            }}
-          />
-        </div>
+        <form action="" onSubmit={handleSearch}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <InputWithLabel
+              items={{
+                id: "firstname",
+                label: "First Name",
+                placeholder: "First Name",
+                type: "text",
+                htmlfor: "firstname",
+              }}
+            />
+            <InputWithLabel
+              items={{
+                id: "lastname",
+                label: "Last Name",
+                placeholder: "Last Name",
+                type: "text",
+                htmlfor: "lastname",
+              }}
+              value={inputValues.lastname}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  lastname: e.target.value,
+                }))
+              }
+            />
+            <InputWithLabel
+              items={{
+                id: "email",
+                label: "email",
+                placeholder: "example@gmail.com",
+                type: "email",
+                htmlfor: "email",
+              }}
+              value={inputValues.email}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  email: e.target.value,
+                }))
+              }
+            />
+          </div>
 
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
-          <InputWithLabel
-            items={{
-              id: "phonenumber",
-              label: "Phone Number",
-              placeholder: "phone number",
-              type: "text",
-              htmlfor: "phonenumber",
-            }}
-          />
+          <div
+            className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}
+          >
+            <InputWithLabel
+              items={{
+                id: "phone",
+                label: "Phone Number",
+                placeholder: "phone number",
+                type: "text",
+                htmlfor: "phone",
+              }}
+              value={inputValues.phone}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  phone: e.target.value,
+                }))
+              }
+            />
 
-          <DatePicker
-            date={startDate}
-            setDate={setStartDate}
-            title={"Start Date"}
-          />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+            <DatePicker
+              title={"Start Date"}
+              date={inputValues.startDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  startDate: date as Date | undefined,
+                }))
+              }
+            />
 
-          <Button>Search</Button>
-        </div>
+            <DatePicker
+              title={"End Date"}
+              date={inputValues.endDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  endDate: date as Date | undefined,
+                }))
+              }
+            />
+
+            <Button type="submit">Search</Button>
+          </div>
+        </form>
       </CardContainer>
 
       <div

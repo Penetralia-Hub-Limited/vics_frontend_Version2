@@ -34,14 +34,14 @@ const tableData = [
     actor: "System",
     action: "Log Out",
     description: "Super Admin Logout",
-    date: new Date("2024-10-01"),
+    // date: new Date("2024-10-01"),
   },
   {
     id: 3,
     actor: "System",
     action: "Login",
     description: "Admin Login",
-    date: new Date("2024-15-01"),
+    // date: new Date("2024-15-01"),
   },
 ];
 
