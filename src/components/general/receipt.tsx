@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import html2canvas from "html2canvas-pro";
 import { jsPDF } from "jspdf";
-import BGLogo from "../../assets/logo/KW_logo.png";
+import BGLogo from "../../../public/assets/logo/KW_logo.png";
 import { Notice } from "./notice";
 import { Signature } from "./signature";
 

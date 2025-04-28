@@ -23,6 +23,7 @@ export default function Page() {
         title={"Forgot Password"}
         description={"Enter your email address to retrieve your password"}
         onSubmit={handleSubmit}
+        isSuccess={false}
       >
         <InputWithLabel
           items={{

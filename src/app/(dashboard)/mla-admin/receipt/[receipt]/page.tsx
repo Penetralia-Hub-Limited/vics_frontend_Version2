@@ -1,4 +1,4 @@
-import Logo from "@/assets/logo/icon_green.svg";
+import Logo from "../../../../../../public/assets/logo/icon_green.svg";
 import { Receipt } from "@/components/general/receipt";
 
 export default async function Page({

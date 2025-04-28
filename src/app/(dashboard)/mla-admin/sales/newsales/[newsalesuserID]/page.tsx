@@ -123,9 +123,7 @@ export default function Page() {
         assigned_date: null,
       };
 
-      const response = await plateService.createPlateNumber(
-        JSON.stringify(payload)
-      );
+      const response = await plateService.createPlateNumber(payload);
 
       if (response.status) {
         router.push(`/mla-admin/sales/salespreview/${vehicleInfo?.owner_id}`);
