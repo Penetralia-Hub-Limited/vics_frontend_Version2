@@ -10,6 +10,8 @@ import CardContainer from "@/components/general/card-container";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -24,43 +26,22 @@ const tableData = [
     id: 1,
     actor: "System",
     action: "Login",
-    description: "VICS Admin Login",
+    description: "Admin Login",
     date: new Date(),
   },
   {
     id: 2,
     actor: "System",
-    action: "Login",
-    description: "VICS Admin Login",
-    date: new Date(),
+    action: "Log Out",
+    description: "Super Admin Logout",
+    // date: new Date("2024-10-01"),
   },
   {
     id: 3,
     actor: "System",
     action: "Login",
-    description: "VICS Admin Login",
-    date: new Date(),
-  },
-  {
-    id: 4,
-    actor: "System",
-    action: "Login",
-    description: "VICS Admin Login",
-    date: new Date(),
-  },
-  {
-    id: 5,
-    actor: "System",
-    action: "Login",
-    description: "VICS Admin Login",
-    date: new Date(),
-  },
-  {
-    id: 6,
-    actor: "System",
-    action: "Login",
-    description: "VICS Admin Login",
-    date: new Date(),
+    description: "Admin Login",
+    // date: new Date("2024-15-01"),
   },
 ];
 
@@ -76,6 +57,8 @@ export default function Page() {
     actorsname: "",
     lga: "",
   });
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -128,7 +111,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["a", "b"]}
+            items={filteredLGA}
             selected={inputValues.lga}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -153,10 +136,10 @@ export default function Page() {
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
           <DashboardTable headers={tableColumns} data={paginatedData} />
         </div>

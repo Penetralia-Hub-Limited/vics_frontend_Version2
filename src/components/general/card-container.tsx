@@ -14,7 +14,7 @@ const CardContainer: FC<ICardContainer> = ({
   return (
     <div
       className={cn(
-        "w-full border-1 border-neutral-300 rounded-lg p-5",
+        "w-full border-1 border-primary-300 rounded-lg p-5",
         className
       )}
       {...rest}

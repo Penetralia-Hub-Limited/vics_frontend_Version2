@@ -1,11 +1,12 @@
 import Image from "next/image";
 import GetStartedButton from "../components/get-started-button";
-import CarImage from "@/assets/landing-page/cars.svg";
 import RegistrationStep from "./registration-steps-item";
-import ProfileIcon from "@/assets/icons/profile_icon.svg";
-import RegisterIcon from "@/assets/icons/registration_icon.svg";
-import UpdateProfileIcon from "@/assets/icons/update_icon.svg";
-import CertificateIcon from "@/assets/icons/certificate_icon.svg";
+import ProfileIcon from "../../../../public/assets/icons/profile_icon.svg";
+
+import CarImage from "../../../../public/assets/landing-page/cars.svg";
+import RegisterIcon from "../../../../public/assets/icons/registration_icon.svg";
+import UpdateProfileIcon from "../../../../public/assets/icons/update_icon.svg";
+import CertificateIcon from "../../../../public/assets/icons/certificate_icon.svg";
 
 const LandingRegistration = () => {
   const steps = [
@@ -72,7 +73,7 @@ const LandingRegistration = () => {
           </div>
 
           <div className={"pl-12 lg:pl-15"}>
-            <GetStartedButton link="/signup" />
+            <GetStartedButton link="/register" />
           </div>
         </div>
       </div>
@@ -83,6 +84,7 @@ const LandingRegistration = () => {
         }
       >
         <Image
+          loading="lazy"
           src={CarImage}
           alt={"car icon"}
           className={

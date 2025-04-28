@@ -10,13 +10,14 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, RenewalsSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { PaymentStatus } from "@/common/enum";
-import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import DashboardTable from "@/components/dashboard/dashboard-table";
+import { ResponseModalX } from "@/components/general/response-modalx";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
   { key: "platenumber", title: "Plate Number" },
   { key: "platetype", title: "Plate Type" },
-  { key: "account", title: "Account" },
+  { key: "account", title: "Amount" },
   { key: "buyer", title: "Buyer" },
   { key: "date", title: "Date Sold" },
   { key: "paymentstatus", title: "Payment Status" },
@@ -103,41 +104,13 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  type TableData = {
-    id: number;
-    firstname: string;
-    lastname: string;
-    phonenumber: string;
-    email: string;
-    date: Date;
-  };
-
-  interface RowAction {
-    title: string;
-    action: () => void;
-  }
-
-  const getRowActions = (row: unknown): RowAction[] => {
-    const tableRow = row as TableData;
-    return [
-      {
-        title: "Preview",
-        action: () =>
-          router.push("/super-admin/tax-payer/tax-payer-information"),
-      },
-      {
-        title: "Edit",
-        action: () => console.log("Viewing details for:", tableRow),
-      },
-    ];
-  };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -154,6 +127,18 @@ export default function Page() {
             link: "/store-manager-admin/tax-payer",
           },
         ]}
+      />
+
+      <ResponseModalX
+        title={"Plate Number Verified Successfully"}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={<></>}
+        status={"success"}
+        footerBtnText={"Continue"}
+        footerTrigger={() =>
+          router.push("/mla-admin/renewal/renew-plate-number")
+        }
       />
 
       <CardContainer className={"flex flex-col gap-5"}>
@@ -180,16 +165,12 @@ export default function Page() {
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
-          <DataTableWButton
-            headers={tableColumns}
-            data={paginatedData}
-            rowActions={getRowActions}
-          />
+          <DashboardTable headers={tableColumns} data={paginatedData} />
         </div>
         <div className={"p-5 ml-auto"}>
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />

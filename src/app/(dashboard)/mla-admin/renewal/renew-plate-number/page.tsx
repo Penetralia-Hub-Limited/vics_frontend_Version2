@@ -12,7 +12,7 @@ import { RenewPlateNumberStep3 } from "@/components/dashboard/mla-admin/renewals
 import { RenewPlateNumberStep4 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/step4";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
-import SuccessModal from "@/components/general/success-response";
+import ResponseModal from "@/components/general/response-modal";
 import {
   initialValuesStep1,
   inputRenewPlateNumberPropsStep1,
@@ -75,17 +75,17 @@ export default function Page() {
           {
             label: "Dashboard",
             Icon: DashboardSVG,
-            link: "/super-admin/dashboard",
+            link: "/mla-admin/dashboard",
           },
           {
             label: "Renewal Dashboard",
             Icon: RenewalsSVG,
-            link: "/super-admin/vehicle",
+            link: "/mla-admin/renewal/renewal-dashboard",
           },
           {
             label: "Renew Plate Number",
             Icon: RenewalsSVG,
-            link: "/store-manager-admin/vehicle/add-new-vehicle",
+            link: "/mla-admin/renewal/renew-plate-number",
           },
         ]}
       />
@@ -143,7 +143,7 @@ export default function Page() {
               </Button>
 
               {currentStep === totalSteps ? (
-                <SuccessModal
+                <ResponseModal
                   title={"Success"}
                   content={<p>Invoice Issued Successfully</p>}
                   btnText={"Proceed"}

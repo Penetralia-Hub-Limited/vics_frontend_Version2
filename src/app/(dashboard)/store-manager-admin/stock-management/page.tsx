@@ -4,7 +4,7 @@ import { useState } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
-import { tableInvoices, tableHeaders } from "@/common/constant";
+import { tableInvoices } from "@/common/constant";
 import CardContainer from "@/components/general/card-container";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
@@ -18,6 +18,20 @@ import {
   CreateNewStockProps,
   CreateNewStockPropsInitialValues,
 } from "@/components/dashboard/verification-forms/create-new-stock";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+
+const tableHeaders = [
+  { title: "S/N", key: "id" },
+  { title: "LGA", key: "lga" },
+  { title: "Range", key: "lga" },
+  { title: "End Code", key: "lga" },
+  { title: "Type", key: "type" },
+  { title: "Created By", key: "createdby" },
+  { title: "Date", key: "Date" },
+  { title: "Initial Quantity", key: "initialQty" },
+  { title: "Current Quantity", key: "currentQty" },
+];
 
 export default function Page() {
   const itemsPerPage = 10;
@@ -36,6 +50,8 @@ export default function Page() {
     lga: "",
     plateNumberType: undefined,
   });
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
 
   const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
   const paginatedData = tableInvoices.slice(
@@ -80,7 +96,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["lagos", "abuja"]}
+            items={filteredLGA}
             selected={inputValues.lga}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -138,10 +154,10 @@ export default function Page() {
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
           <DashboardTable headers={tableHeaders} data={paginatedData} />
         </div>

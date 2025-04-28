@@ -30,7 +30,10 @@ export const ModalX: FC<IModalX> = ({
           onClick={onClose}
           className="border border-danger hover:border-danger/80 group rounded-full p-2 cursor-pointer transition-all ease-in-out duration-150"
         >
-          <XIcon className={"text-danger group-hover:text-danger/80"} />
+          <XIcon
+            size={15}
+            className={"text-danger group-hover:text-danger/80"}
+          />
         </div>
       </div>
 

@@ -1,129 +1,118 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ConfigurationSVG } from "@/common/svgs";
-import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import DashboardTable from "@/components/dashboard/dashboard-table";
 import InputWithLabel from "@/components/auth/input-comp";
 import CardContainer from "@/components/general/card-container";
+import Modal from "@/components/general/modal";
+import {
+  CreateVehiceMakeAndModel,
+  CreatePlateRequestInitialValues,
+  CreateVehiceMakeAndModelProps,
+} from "@/components/dashboard/verification-forms/create-vehicle-make";
+import { useSelector, useDispatch } from "react-redux";
+import { selectVehicles } from "@/store/vehicle/vehicle-selector";
+import { VehicleService } from "@/services/VehicleService";
+import { selectStateIDFromStateName } from "@/store/states/state-selector";
+import { toast } from "sonner";
+import _ from "lodash";
+// import { useRouter } from "next/navigation";
+// import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+// import {
+//   RowAction,
+//   TableData,
+// } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "steps", title: "Steps" },
-  { key: "type", title: "Type" },
-  { key: "approvingofficer", title: "Approving Officer" },
-  { key: "superapprover", title: "Super Approver" },
-  { key: "finalstage", title: "Final Stage" },
-  { key: "createdBy", title: "Created By" },
-  { key: "date", title: "Date Created" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 2,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 3,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 4,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 5,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
-  {
-    id: 6,
-    steps: null,
-    type: null,
-    approvingofficer: "Akanbi S.",
-    superapprover: "David E",
-    finalstage: null,
-    createdBy: "Akanbi S.",
-    date: new Date(),
-  },
+  { key: "sid", title: "S/N" },
+  { key: "make", title: "Vehicle Make" },
+  { key: "model", title: "Vehicle Model" },
 ];
 
 export default function Page() {
   const itemsPerPage = 10;
+  // const router = useRouter();
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vehicleMake, setVehicleMake] = useState<string>("");
+  const [modalInput, setModalInput] = useState<CreateVehiceMakeAndModelProps>(
+    CreatePlateRequestInitialValues
+  );
+  const vehiclesData = useSelector(selectVehicles);
+  const vehicleService = new VehicleService(dispatch);
+  const [filteredVehicleInfo, setFilteredVehicleInfo] = useState(vehiclesData);
+  const state_id = useSelector((state) =>
+    selectStateIDFromStateName(state, modalInput?.state)
+  );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVehicleMake(e.target.value);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (_.isEmpty(vehicleMake)) {
+      setFilteredVehicleInfo(vehiclesData);
+      return;
+    }
+
+    const filteredData = _.filter(vehiclesData, (vehicle) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(vehicleMake))) {
+        matches =
+          matches || _.toLower(vehicle?.make || "") === _.toLower(vehicleMake);
+      }
+
+      return matches;
+    });
+
+    setFilteredVehicleInfo(filteredData);
   };
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  useEffect(() => {
+    if (_.isEmpty(vehicleMake)) {
+      setFilteredVehicleInfo(vehiclesData);
+    }
+  }, [vehiclesData, vehicleMake]);
+
+  const totalPages = Math.ceil(filteredVehicleInfo.length / itemsPerPage);
+  const paginatedData = filteredVehicleInfo.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  interface TableRow {
-    id: number;
-    endCode: string;
-    type: string;
-    createdBy: string;
-    date: Date;
-    initialQuantity: number;
-    currentQuantity: number;
-    assigned: number;
-    sold: number;
-  }
+  const handleCreateMakeModel = async () => {
+    try {
+      const payload = {
+        state_id: state_id,
+        status: "active",
+        capacity: "5",
+        chasis_number: "ABC123456",
+        make: modalInput.make,
+        model: modalInput.model,
+        year: "2023",
+        color: "Green",
+        policy_sector: "Green Emission Policy",
+      };
 
-  interface RowAction {
-    title: string;
-    action: () => void;
-  }
+      const response = await vehicleService.createVehicle(payload);
 
-  const getRowActions = (row: unknown): RowAction[] => {
-    const tableRow = row as TableRow;
-    return [
-      {
-        title: "View",
-        action: () => console.log("Viewing details for:", tableRow),
-      },
-    ];
+      if (response.status) {
+        setModalInput(CreatePlateRequestInitialValues);
+      }
+    } catch (error) {
+      console.log(error as unknown as string);
+      toast("Error Creating new Vehicle Make and Model");
+    }
   };
+
+  useEffect(() => {
+    if (_.isEmpty(_.trim(vehicleMake))) {
+      setFilteredVehicleInfo(vehiclesData);
+    }
+  }, [vehiclesData]);
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -147,11 +136,26 @@ export default function Page() {
           ]}
         />
 
-        <Button>Add New Workflow</Button>
+        <Modal
+          title={"Create A New Vehicle Make and Model"}
+          content={
+            <CreateVehiceMakeAndModel
+              input={modalInput}
+              setInput={setModalInput}
+            />
+          }
+          btnText={"Add new Vehicle Make"}
+          footerBtn={
+            <Button onClick={handleCreateMakeModel} type="submit">
+              Submit
+            </Button>
+          }
+        />
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div
+        <form
+          onSubmit={handleSubmit}
           className={
             "grid grid-cols-1 md:grid-cols-[2.1fr_0.9fr] gap-4 mt-4 items-end"
           }
@@ -165,23 +169,23 @@ export default function Page() {
               htmlfor: "vehiclemake",
             }}
             value={vehicleMake}
-            onChange={handleChange}
+            onChange={(e) => setVehicleMake(e.target.value)}
           />
 
-          <Button>Search</Button>
-        </div>
+          <Button type="submit">Search</Button>
+        </form>
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
-          <DataTableWButton
+          <DashboardTable
             headers={tableColumns}
             data={paginatedData}
-            rowActions={getRowActions}
+            // rowActions={getRowActions}
           />
         </div>
         <div className={"p-5 ml-auto"}>

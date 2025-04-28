@@ -1,11 +1,22 @@
 import * as React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import { cn } from "@/lib/utils";
 
-export default function Loading() {
+interface ILoading {
+  screen: "main" | "default";
+  size?: string | number;
+  color?: string;
+}
+
+export default function Loading({ size, color = "#025F33", screen }: ILoading) {
   return (
-    <Box sx={{ display: "flex", height: "100%" }}>
-      <CircularProgress />
-    </Box>
+    <div
+      className={cn(
+        "flex items-center justify-center",
+        screen === "main" && "h-screen"
+      )}
+    >
+      <CircularProgress size={size} sx={{ color: color }} />
+    </div>
   );
 }

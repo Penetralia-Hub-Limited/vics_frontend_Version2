@@ -10,6 +10,9 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ManagementSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { PlateNumberType } from "@/common/enum";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -64,7 +67,8 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
-
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
   const [value, setValue] = useState<{
     lgaValue: string;
     plateNumberType: string;
@@ -137,7 +141,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"LGA"}
             placeholder={"-- Select LGA --"}
-            items={["lagos", "abuja"]}
+            items={filteredLGA}
             onSelect={(selected) =>
               setValue((prev) => ({
                 ...prev,
@@ -150,7 +154,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
-            items={["private", "commercial"]}
+            items={[...Object.values(PlateNumberType)]}
             onSelect={(selected) =>
               setValue((prev) => ({
                 ...prev,
@@ -184,8 +188,8 @@ export default function Page() {
         </div>
       </CardContainer>
 
-      <div className="flex flex-col gap-3 border border-neutral-300 rounded-lg">
-        <div className="border-t border-neutral-300 rounded-lg">
+      <div className="flex flex-col gap-3 border border-primary-300 rounded-lg">
+        <div className="border-t border-primary-300 rounded-lg">
           <DataTableWButton
             headers={tableColumns}
             data={paginatedData}

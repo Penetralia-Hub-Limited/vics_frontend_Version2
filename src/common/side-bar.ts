@@ -287,7 +287,7 @@ export const superAdminSidebar = [
             title: "Vehicle Make & Model",
             url: "/super-admin/configuration/vehicle-make-model",
           },
-          { id: 4, title: "Invoice to Tax", url: "" },
+          // { id: 4, title: "Invoice to Tax", url: "" },
         ],
       },
       {
@@ -326,12 +326,12 @@ export const superAdminSidebar = [
             Icon: VICSSVG,
             url: "/super-admin/tax-payer",
           },
-          {
-            id: 2,
-            title: "Assessment",
-            Icon: VICSSVG,
-            url: "/super-admin/tax-payer/assessment",
-          },
+          // {
+          //   id: 2,
+          //   title: "Assessment",
+          //   Icon: VICSSVG,
+          //   url: "/super-admin/tax-payer/assessment",
+          // },
         ],
       },
       {
@@ -385,11 +385,11 @@ export const superAdminSidebar = [
             title: "Vehicle Change Request",
             url: "/super-admin/change-request/vehicle-change-request",
           },
-          {
-            id: 3,
-            title: "Check Payment Status",
-            url: "/super-admin/change-request/check-payment-status",
-          },
+          // {
+          //   id: 3,
+          //   title: "Check Payment Status",
+          //   url: "/super-admin/change-request/check-payment-status",
+          // },
         ],
       },
     ],
@@ -462,13 +462,7 @@ export const mlaSideBarItems = [
         id: 2,
         title: "Plate Number Requests",
         Icon: VICSSVG,
-        dropdown: [
-          {
-            id: 1,
-            title: "Plate Requests",
-            url: "/mla-admin/plate-number-request",
-          },
-        ],
+        url: "/mla-admin/plate-number-request",
       },
       {
         id: 3,
@@ -478,7 +472,7 @@ export const mlaSideBarItems = [
           {
             id: 1,
             title: "Sales Dashboard",
-            url: "/mla-admin/sales/dashboard",
+            url: "/mla-admin/sales/sales-dashboard",
           },
           {
             id: 2,
@@ -503,14 +497,7 @@ export const mlaSideBarItems = [
         id: 1,
         title: "Vehicles",
         Icon: VehicleSVG,
-        url: "mla-admin/vehicles",
-        dropdown: [
-          {
-            id: 1,
-            title: "Vehicles Sub",
-            Icon: VehicleSVG,
-          },
-        ],
+        url: "/mla-admin/vehicles/dashboard",
       },
       {
         id: 2,
@@ -539,78 +526,37 @@ export const mlaSideBarItems = [
         id: 3,
         title: "Renewals",
         Icon: RenewalsSVG,
-        dropdown: [
-          {
-            id: 1,
-            title: "Renewal Dashboard",
-            url: "/mla-admin/renewal/dashboard",
-          },
-        ],
+        url: "/mla-admin/renewal/renewal-dashboard",
       },
       {
         id: 4,
         title: "Reports",
         Icon: ReportSVG,
-        url: "/mla-admin/reports",
-        dropdown: [
-          {
-            id: 1,
-            title: "Reports Sub",
-            Icon: ReportSVG,
-          },
-        ],
+        url: "/mla-admin/report",
       },
       {
         id: 5,
         title: "Change Request",
         Icon: PenSVG,
         url: "/mla-admin/change-request",
-        dropdown: [
-          {
-            id: 1,
-            title: "Change Request Sub",
-            Icon: PenSVG,
-          },
-        ],
       },
       {
         id: 6,
         title: "Insurance",
         Icon: InsuranceSVG,
         url: "/mla-admin/insurance",
-        dropdown: [
-          {
-            id: 1,
-            title: "Insurance Sub",
-            Icon: InsuranceSVG,
-          },
-        ],
       },
       {
         id: 7,
         title: "Proof of Ownership",
         Icon: OwnershipSVG,
         url: "/mla-admin/proof-of-ownership",
-        dropdown: [
-          {
-            id: 1,
-            title: "Proof of Ownership Sub",
-            Icon: OwnershipSVG,
-          },
-        ],
       },
       {
         id: 8,
         title: "Collections",
         Icon: CollectionsSVG,
         url: "/mla-admin/collections",
-        dropdown: [
-          {
-            id: 1,
-            title: "Collections Sub",
-            Icon: CollectionsSVG,
-          },
-        ],
       },
       {
         id: 9,

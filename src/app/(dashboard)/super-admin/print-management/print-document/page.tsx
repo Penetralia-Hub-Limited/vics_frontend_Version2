@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
+import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -22,6 +24,22 @@ const tableColumns = [
   { key: "paymentstatus", title: "Payent Status" },
 ];
 
+type inputValuesProp = {
+  name: string;
+  mla: string;
+  invoiceNumber: string;
+  from: Date | undefined;
+  to: Date | undefined;
+};
+
+const inputInitialValues = {
+  name: "",
+  mla: "",
+  invoiceNumber: "",
+  from: undefined,
+  to: undefined,
+};
+
 const tableData = [
   {
     id: 1,
@@ -39,7 +57,7 @@ const tableData = [
     invoicenumber: "234232CDS2323",
     amount: 401,
     createdby: "Akanbi S.",
-    datecreated: new Date(),
+    // datecreated: new Date(),
     datepaid: new Date(),
     paymentstatus: PaymentStatus.PAID,
   },
@@ -58,20 +76,79 @@ const tableData = [
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [fromDate, setFromDate] = useState<Date | undefined>();
-  const [toDate, setToDate] = useState<Date | undefined>();
-  const [inputValues, setInputValues] = useState<{
-    name: string;
-    mla: string;
-    invoiceNumber: string;
-  }>({
-    name: "",
-    mla: "",
-    invoiceNumber: "",
-  });
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
+  const [documentData, setDocumentData] = useState(tableData);
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const { name, mla, invoiceNumber, from, to } = inputValues;
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      _.isEmpty(_.trim(name)) &&
+      _.isEmpty(_.trim(mla)) &&
+      _.isEmpty(_.trim(invoiceNumber)) &&
+      _.isEmpty(from) &&
+      _.isEmpty(to)
+    ) {
+      setDocumentData(tableData);
+      return;
+    }
+
+    const filteredData = _.filter(tableData, (document) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(name))) {
+        matches =
+          matches || _.toLower(document?.payername || "") === _.toLower(name);
+      }
+
+      if (!_.isEmpty(_.trim(mla))) {
+        matches =
+          matches || _.toLower(document?.createdby || "") === _.toLower(mla);
+      }
+
+      if (!_.isEmpty(_.trim(invoiceNumber))) {
+        matches =
+          matches ||
+          _.toLower(document?.invoicenumber || "") === _.toLower(invoiceNumber);
+      }
+
+      if (from && to) {
+        matches =
+          matches ||
+          isWithinInterval(
+            document?.datecreated instanceof Date
+              ? document.datecreated
+              : new Date(),
+            {
+              start: new Date(from),
+              end: new Date(to),
+            }
+          );
+      }
+
+      return matches;
+    });
+
+    setDocumentData(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(name)) &&
+      _.isEmpty(_.trim(mla)) &&
+      _.isEmpty(_.trim(invoiceNumber)) &&
+      _.isEmpty(from) &&
+      _.isEmpty(to)
+    ) {
+      setDocumentData(tableData);
+    }
+  }, [name, mla, invoiceNumber, from, to]);
+
+  const totalPages = Math.ceil(documentData.length / itemsPerPage);
+  const paginatedData = documentData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -94,74 +171,95 @@ export default function Page() {
       />
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <InputWithLabel
-            items={{
-              id: "name",
-              label: "Name",
-              placeholder: "Name",
-              type: "text",
-              htmlfor: "name",
-            }}
-            value={inputValues.name}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                name: e.target.value,
-              }))
-            }
-          />
-          <InputWithLabel
-            items={{
-              id: "mla",
-              label: "MLA",
-              placeholder: "MLA",
-              type: "text",
-              htmlfor: "mla",
-            }}
-            value={inputValues.mla}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                mla: e.target.value,
-              }))
-            }
-          />
-          <InputWithLabel
-            items={{
-              id: "invoiceNumber",
-              label: "Invoice Number",
-              placeholder: "Invoice Number",
-              type: "text",
-              htmlfor: "invoiceNumber",
-            }}
-            value={inputValues.invoiceNumber}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                invoiceNumber: e.target.value,
-              }))
-            }
-          />
-        </div>
+        <form action="" onSubmit={handleSearch}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <InputWithLabel
+              items={{
+                id: "name",
+                label: "Name",
+                placeholder: "Name",
+                type: "text",
+                htmlfor: "name",
+              }}
+              value={inputValues.name}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                }))
+              }
+            />
+            <InputWithLabel
+              items={{
+                id: "mla",
+                label: "MLA",
+                placeholder: "MLA",
+                type: "text",
+                htmlfor: "mla",
+              }}
+              value={inputValues.mla}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  mla: e.target.value,
+                }))
+              }
+            />
+            <InputWithLabel
+              items={{
+                id: "invoiceNumber",
+                label: "Invoice Number",
+                placeholder: "Invoice Number",
+                type: "text",
+                htmlfor: "invoiceNumber",
+              }}
+              value={inputValues.invoiceNumber}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  invoiceNumber: e.target.value,
+                }))
+              }
+            />
+          </div>
 
-        <div
-          className={
-            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
-          }
-        >
-          <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
-          <DatePicker date={toDate} setDate={setToDate} title={"To"} />
+          <div
+            className={
+              "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
+            }
+          >
+            <DatePicker
+              title={"From"}
+              date={inputValues.from}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  from: date as Date | undefined,
+                }))
+              }
+            />
 
-          <Button>Download Report</Button>
-        </div>
+            <DatePicker
+              title={"To"}
+              date={inputValues.to}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  to: date as Date | undefined,
+                }))
+              }
+            />
+
+            <Button type="submit">Search</Button>
+          </div>
+        </form>
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
           <DashboardTable headers={tableColumns} data={paginatedData} />
         </div>

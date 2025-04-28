@@ -1,8 +1,8 @@
 import { FC } from "react";
 import Image from "next/image";
-import CallIcon from "@/assets/icons/call_icon.svg";
 import { ISupportMail, IHotline } from "@/common/types";
-import MessageIcon from "@/assets/icons/message_icon.svg";
+import CallIcon from "../../../../public/assets/icons/call_icon.svg";
+import MessageIcon from "../../../../public/assets/icons/message_icon.svg";
 
 interface IContactBar {
   contacts: IHotline[];

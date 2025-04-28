@@ -9,74 +9,29 @@ import { PaymentItem } from "./payment-summary-table";
 import { PaymentStatus } from "@/common/enum";
 import { TermsAndConditions } from "./terms";
 import LogoComponent from "./logo";
-import { PlateNumberType } from "@/common/enum";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import html2canvas from "html2canvas-pro";
 import { jsPDF } from "jspdf";
-import BGLogo from "../../assets/logo/KW_logo.png";
+import QRCodeWithLogo from "./qr-code";
+import BGLogo from "../../../public/assets/logo/KW_logo.png";
+import logo from "../../../public/assets/logo/kwara_logo.webp";
+import Icon from "../../../public/assets/logo/icon_green.svg";
 
-interface InvoiceProps {
-  icon: string;
-  state: string;
-  data: {
-    invoiceID: number;
-  };
+interface cardInfo {
+  label: string;
+  value: string;
 }
 
-const cardData = [
-  {
-    label: "Full Name",
-    value: "Bernard David Ikechukwu",
-  },
-  {
-    label: "Email",
-    value: "Bernard@DavidIkechukwu.com",
-  },
-  {
-    label: "Phone Number",
-    value: "23232323333",
-  },
-  {
-    label: "Address",
-    value: "121 Pastoral lane Briks",
-  },
-];
-
-const vehicleData = [
-  {
-    label: "Chasis Number",
-    value: 33435342324,
-  },
-  {
-    label: "Engine Number",
-    value: "JKLWJKJ348723",
-  },
-  {
-    label: "Vehicle Make",
-    value: "Mercedez-Benz",
-  },
-  {
-    label: "Vehicle Model",
-    value: "Mercedez E-300",
-  },
-  {
-    label: "Vehicle Category",
-    value: "Vehicle Between 3.0 - 4.0",
-  },
-  {
-    label: "Plate Type",
-    value: PlateNumberType.PRIVATE,
-  },
-  {
-    label: "Plate Number",
-    value: "MORORK232",
-  },
-  {
-    label: "Color",
-    value: "Black",
-  },
-];
+interface InvoiceProps {
+  buyerInfo: cardInfo[];
+  vehicleInfo: cardInfo[];
+  state: string;
+  data: {
+    invoiceID: string;
+  };
+  invoice_link: string;
+}
 
 const paymentRows: PaymentItem[] = [
   {
@@ -125,7 +80,7 @@ const termsData = [
     terms: "Payment must be made using the invoice number.",
   },
   {
-    terms: "This invoice is valida for 30 days of the invoice date.",
+    terms: "This invoice is valid for 30 days of the invoice date.",
   },
   {
     terms:
@@ -133,8 +88,12 @@ const termsData = [
   },
 ];
 
-export const Invoice: FC<InvoiceProps> = ({ icon, state, data }) => {
-  const { invoiceID } = data;
+export const Invoice: FC<InvoiceProps> = ({
+  state,
+  invoice_link,
+  buyerInfo,
+  vehicleInfo,
+}) => {
   const printRef = useRef(null);
 
   const handleDownloadPDF = async () => {
@@ -175,26 +134,19 @@ export const Invoice: FC<InvoiceProps> = ({ icon, state, data }) => {
             }}
           >
             <div>
-              <LogoComponent logo={icon} state={state} />
+              <LogoComponent logo={Icon} state={state} />
             </div>
 
             <div className={"py-4 flex flex-row items-center justify-between"}>
               <p className="text-xl font-bold">Invoice</p>
-              <p className="text-xl uppercase font-bold">
-                #INV{invoiceID ?? 2343}
-              </p>
+              <p className="text-xl uppercase font-bold">#INV{2343}</p>
             </div>
 
-            <CardContainer>
-              <InformationCardX title={"Buyer's Information"} data={cardData} />
-            </CardContainer>
-
-            <CardContainer>
-              <InformationCardX
-                title={"Vehicle's Information"}
-                data={vehicleData}
-              />
-            </CardContainer>
+            <InformationCardX title={"Buyer Information"} data={buyerInfo} />
+            <InformationCardX
+              title={"Vehicle Information"}
+              data={vehicleInfo}
+            />
 
             <div
               className={
@@ -213,20 +165,30 @@ export const Invoice: FC<InvoiceProps> = ({ icon, state, data }) => {
               </div>
             </div>
 
-            <div className={"grid md:grid-cols-[2fr_1fr]"}>
+            <div className={"grid md:grid-cols-[2fr_1fr] items-center pt-8"}>
               <TermsAndConditions termsData={termsData} />
-              <p>BAR CODE</p>
+              <QRCodeWithLogo value={invoice_link} logoUrl={logo.src} />
             </div>
           </div>
         </CardContainer>
       </div>
-      <Button
-        onClick={handleDownloadPDF}
-        className={cn("w-fit mx-auto")}
-        variant={"outline"}
-      >
-        Print Invoice
-      </Button>
+
+      <div className={"flex flex-row gap-4 mx-auto w-fit"}>
+        <Button
+          onClick={handleDownloadPDF}
+          className={cn("w-fit mx-auto")}
+          variant={"outline"}
+        >
+          Download Invoice
+        </Button>
+        <Button
+          onClick={handleDownloadPDF}
+          className={cn("w-fit mx-auto")}
+          variant={"default"}
+        >
+          Send to Email
+        </Button>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,11 @@
+"use client";
+
 import { FC, Dispatch, SetStateAction } from "react";
 import DashboardCompSelect from "../dashboard-component-select";
 import { PlateNumberType, PlateNumberSubType } from "@/common/enum";
 import InputWithLabel from "@/components/auth/input-comp";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export const CreateNewStockPropsInitialValues = {
   plateNumberType: undefined,
@@ -29,6 +33,9 @@ interface ICreateNewStock {
 }
 
 export const CreateNewStock: FC<ICreateNewStock> = ({ input, setInput }) => {
+  const { lgas } = useSelector((state: RootState) => state?.lga);
+  const filteredLGA = lgas.map((lga) => lga.name);
+
   return (
     <div className="flex flex-col gap-5 p-4">
       <DashboardCompSelect
@@ -44,8 +51,8 @@ export const CreateNewStock: FC<ICreateNewStock> = ({ input, setInput }) => {
         }
       />
 
-      <div>
-        <p>Enter plate Number Type Information</p>
+      <div className={"flex item-center justify-center"}>
+        <p className="font-semibold">Enter plate Number Type Information</p>
       </div>
 
       {input.plateNumberType && (
@@ -66,7 +73,7 @@ export const CreateNewStock: FC<ICreateNewStock> = ({ input, setInput }) => {
           <DashboardCompSelect
             title={"Local Government Area"}
             placeholder={"-- Select LGA --"}
-            items={["Etinan", "Oron"]}
+            items={filteredLGA}
             selected={input.lga}
             onSelect={(selected) =>
               setInput((prev) => ({

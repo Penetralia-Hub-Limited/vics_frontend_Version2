@@ -5,6 +5,8 @@ export type inputSalesPropsStep1 = {
   address: string;
   nationality: string;
   date: Date | undefined;
+  userID: string;
+  state: string;
 };
 
 export const initialSalesValuesStep1 = {
@@ -13,37 +15,39 @@ export const initialSalesValuesStep1 = {
   phoneNumber: "",
   address: "",
   nationality: "",
-  date: undefined as Date | undefined,
+  userID: "",
+  date: undefined,
+  state: "",
 };
 
 export const initialSalesValuesStep2 = {
-  chasisnumber: "",
-  enginenumber: "",
-  vehicleMake: "",
-  vehicleModel: "",
-  modelYear: "",
-  vehicleCategory: "",
-  policySector: "",
-  vehicleColor: "",
-  novehiclecapacity: 0,
+  chasis_number: "",
+  engine_number: "",
+  make: "",
+  model: "",
+  year: "",
+  category: "",
+  policy_sector: "",
+  color: "",
+  capacity: "",
   netweight: "",
   vehicleenginecapacity: "",
-  vehicleLoad: "",
+  load: "",
 };
 
 export type inputSalesPropsStep2 = {
-  chasisnumber: string;
-  enginenumber: string;
-  vehicleMake: string;
-  vehicleModel: string;
-  modelYear: string;
-  vehicleCategory: string;
-  policySector: string;
-  vehicleColor: string;
-  novehiclecapacity: number;
+  chasis_number: string;
+  engine_number: string;
+  make: string;
+  model: string;
+  year: string;
+  category: string;
+  policy_sector: string;
+  color: string;
+  capacity: string;
   netweight: string;
   vehicleenginecapacity: string;
-  vehicleLoad: string;
+  load: string;
 };
 
 export type inputSalesPropsStep3 = {

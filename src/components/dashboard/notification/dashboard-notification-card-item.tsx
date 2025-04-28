@@ -20,7 +20,7 @@ const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
   const formattedDate = format(idate.toDateString(), "h:mm:ss aaa");
 
   return (
-    <div className="mb-4 grid grid-cols-[25px_auto] items-start pb-4 last:mb-0 last:pb-0 border-b-1 border-neutral-300 last:border-b-0">
+    <div className="mb-4 grid grid-cols-[25px_auto] items-start pb-4 last:mb-0 last:pb-0 border-b-1 border-primary-300 last:border-b-0">
       <span className="flex h-2 w-2 translate-y-1 rounded-full bg-primary-500" />
       <div className="space-y-3">
         <div className={"flex flex-row items-start justify-between w-full"}>

@@ -23,6 +23,7 @@ import {
   UserStatus,
   ApprovalStatus,
   CardStatus,
+  PlateStatus,
 } from "@/common/enum";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -35,6 +36,7 @@ export interface TableData {
   [key: string]:
     | null
     | undefined
+    | boolean
     | string
     | number
     | Date
@@ -43,7 +45,9 @@ export interface TableData {
     | Role
     | UserStatus
     | ApprovalStatus
-    | CardStatus;
+    | CardStatus
+    | PlateStatus
+    | object;
 }
 
 export interface RowAction {
@@ -85,6 +89,10 @@ const isCardStatus = (value: unknown): value is CardStatus => {
   return Object.values(CardStatus).includes(value as CardStatus);
 };
 
+const isPlateStatus = (value: unknown): value is PlateStatus => {
+  return Object.values(PlateStatus).includes(value as PlateStatus);
+};
+
 export function DataTableWButton({
   headers,
   data,
@@ -94,6 +102,7 @@ export function DataTableWButton({
 }: DataTableProps) {
   return (
     <Table>
+      {/* Table Header */}
       <TableHeader>
         <TableRow>
           {headers.map((header) => (
@@ -104,92 +113,100 @@ export function DataTableWButton({
               {header.title}
             </TableHead>
           ))}
-          <TableHead className="text-center text-xs w-[100px]">{""}</TableHead>
+          <TableHead className="text-center text-xs w-[60px]">{""}</TableHead>
         </TableRow>
       </TableHeader>
+
+      {/* Table Body */}
       <TableBody>
-        {data.slice(0, itemsPerPage).map((row, rowIndex) => (
-          <TableRow key={rowIndex}>
-            {headers.map((header, colIndex) => {
-              const cellValue = row[header.key];
-              return (
-                <TableCell key={colIndex} className="text-xs text-center">
-                  {/* Date Formatting */}
-                  {cellValue instanceof Date ? (
-                    <div className="flex flex-col gap-1">
-                      <p>
-                        {format(cellValue.toDateString(), "LLL. d yyyy") ??
-                          "--"}
-                      </p>
-                      <p className="font-light">
-                        {format(cellValue.toDateString(), "hh:mm:ss a") ?? ""}
-                      </p>
-                    </div>
-                  ) : isPaymentStatus(cellValue) ||
-                    isPlateNumberStatus(cellValue) ||
-                    isUserRole(cellValue) ||
-                    isUserStatus(cellValue) ||
-                    isApprovalStatus(cellValue) ||
-                    isCardStatus(cellValue) ? (
-                    <span
-                      className={cn(
-                        "capitalize px-4 py-1 rounded-full",
-                        (cellValue === PaymentStatus.PAID ||
-                          cellValue === PlateNumberStatus.ASSIGNED ||
-                          cellValue === UserStatus.ACTIVE ||
-                          cellValue === ApprovalStatus.APPROVED) &&
-                          "bg-success-100 text-success-500",
-                        (cellValue === PaymentStatus.NOTPAID ||
-                          cellValue === PlateNumberStatus.UNASSIGNED ||
-                          cellValue === UserStatus.DEACTIVATED ||
-                          cellValue === ApprovalStatus.NOTAPPROVED) &&
-                          "bg-failed text-danger",
-                        cellValue === CardStatus.PENDING &&
-                          "text-pending-500 bg-pending-100",
-                        isUserRole(cellValue) && "bg-role text-white"
-                      )}
-                    >
-                      {cellValue}
-                    </span>
-                  ) : (
-                    (cellValue?.toString() ?? "--")
-                  )}
-                </TableCell>
-              );
-            })}
-            <TableCell className="text-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    className="border border-neutral-300 p-2 rounded-md"
-                    variant="ghost"
-                    size="icon"
-                  >
-                    {isLoading && rowIndex + 1 === row.id ? (
-                      <CircularProgress />
-                    ) : (
-                      <MoreHorizontal className="h-5 w-5" />
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {rowActions &&
-                    rowActions(row).map((action, idx) => (
-                      <DropdownMenuItem
-                        key={idx}
-                        onClick={action.action}
-                        className={
-                          "flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50"
-                        }
-                      >
-                        {action.title}
-                      </DropdownMenuItem>
-                    ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+        {data.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={headers.length + 1} className="text-center">
+              No data available
             </TableCell>
           </TableRow>
-        ))}
+        ) : (
+          data.slice(0, itemsPerPage).map((row, rowIndex) => (
+            <TableRow key={rowIndex}>
+              {headers.map((header, colIndex) => {
+                const cellValue = row[header.key];
+                return (
+                  <TableCell key={colIndex} className="text-xs text-center">
+                    {/* Date Formatting */}
+                    {cellValue instanceof Date ? (
+                      <div className="flex flex-col gap-1">
+                        <p>{format(cellValue, "LLL. d yyyy") ?? "--"}</p>
+                        <p className="font-light">
+                          {format(cellValue, "hh:mm:ss a") ?? ""}
+                        </p>
+                      </div>
+                    ) : isPaymentStatus(cellValue) ||
+                      isPlateNumberStatus(cellValue) ||
+                      isUserRole(cellValue) ||
+                      isUserStatus(cellValue) ||
+                      isApprovalStatus(cellValue) ||
+                      isCardStatus(cellValue) ||
+                      isPlateStatus(cellValue) ? (
+                      <span
+                        className={cn(
+                          "capitalize px-4 py-1 rounded-full",
+                          (cellValue === PaymentStatus.PAID ||
+                            cellValue === PlateNumberStatus.ASSIGNED ||
+                            cellValue === UserStatus.ACTIVE ||
+                            cellValue === ApprovalStatus.APPROVED) &&
+                            "bg-success-100 text-primary-800",
+                          (cellValue === PaymentStatus.NOTPAID ||
+                            cellValue === PlateNumberStatus.UNASSIGNED ||
+                            cellValue === UserStatus.DEACTIVATED ||
+                            cellValue === ApprovalStatus.NOTAPPROVED) &&
+                            "bg-failed text-red-800",
+                          (cellValue === PlateStatus.SOLD ||
+                            cellValue === CardStatus.PENDING) &&
+                            "text-pending-800 bg-pending-100",
+                          isUserRole(cellValue) && "bg-role text-white"
+                        )}
+                      >
+                        {cellValue}
+                      </span>
+                    ) : (
+                      (cellValue?.toString() ?? "--")
+                    )}
+                  </TableCell>
+                );
+              })}
+              {rowActions && (
+                <TableCell className="text-center">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="border border-primary-300 p-2 rounded-md"
+                        variant="ghost"
+                        size="icon"
+                      >
+                        {isLoading && data[rowIndex]?.id === row.id ? (
+                          <CircularProgress size={20} />
+                        ) : (
+                          <MoreHorizontal className="h-5 w-5" />
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {rowActions(row).map((action, idx) => (
+                        <DropdownMenuItem
+                          key={idx}
+                          onClick={action.action}
+                          className="flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50"
+                        >
+                          {action.title}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              )}
+            </TableRow>
+          ))
+        )}
       </TableBody>
     </Table>
   );

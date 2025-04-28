@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import html2canvas from "html2canvas-pro";
 import { jsPDF } from "jspdf";
-import BGLogo from "../../assets/logo/KW_logo.png";
+import BGLogo from "../../../public/assets/logo/KW_logo.png";
 import { Notice } from "./notice";
 import { Signature } from "./signature";
 
@@ -167,12 +167,12 @@ export const Receipt: FC<ReceiptProps> = ({ icon, state, data }) => {
             </div>
 
             <CardContainer>
-              <InformationCardX title={"Buyer's Information"} data={cardData} />
+              <InformationCardX title={"Buyer Information"} data={cardData} />
             </CardContainer>
 
             <CardContainer>
               <InformationCardX
-                title={"Vehicle's Information"}
+                title={"Vehicle Information"}
                 data={vehicleData}
               />
             </CardContainer>

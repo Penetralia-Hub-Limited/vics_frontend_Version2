@@ -1,5 +1,5 @@
 import { FC, Dispatch, SetStateAction } from "react";
-import DashboardCompSelect from "../../dashboard-component-select";
+import InputWithLabel from "@/components/auth/input-comp";
 
 export type IAddVehicleStep3Props = {
   plateNumber: string;
@@ -17,28 +17,36 @@ export const AddVehicleStep3: FC<IAddVehicleStep3> = ({
 }) => {
   return (
     <div className={"flex flex-col gap-6 w-full"}>
-      <DashboardCompSelect
-        title={"Plate Number Type"}
-        placeholder={"-- Select Plate Type --"}
-        items={["Nigeria", "Camerron"]}
-        selected={inputValues.plateNumberType}
-        onSelect={(selected) =>
+      <InputWithLabel
+        items={{
+          id: "plateNumberType",
+          label: "Plate Number Type",
+          placeholder: "Plate Number Type",
+          type: "text",
+          htmlfor: "plateNumberType",
+        }}
+        value={inputValues.plateNumberType || ""}
+        onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
-            plateNumberType: (selected as string) ?? "",
+            plateNumberType: e.target.value,
           }))
         }
       />
 
-      <DashboardCompSelect
-        title={"Plate Number"}
-        placeholder={"-- Select Plate Number --"}
-        items={["Nigeria", "Camerron"]}
-        selected={inputValues.plateNumber}
-        onSelect={(selected) =>
+      <InputWithLabel
+        items={{
+          id: "plateNumber",
+          label: "Plate Number",
+          placeholder: "Plate Number",
+          type: "text",
+          htmlfor: "plateNumber",
+        }}
+        value={inputValues.plateNumber || ""}
+        onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
-            plateNumber: (selected as string) ?? "",
+            plateNumber: e.target.value,
           }))
         }
       />

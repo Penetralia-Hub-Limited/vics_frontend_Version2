@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 
 interface IModal {
@@ -42,14 +43,16 @@ const Modal: FC<IModal> = ({
         <Button variant={btnVariant}>{btnText}</Button>
       </DialogTrigger>
       <DialogContent
-        className={"lg:max-w-screen-sm max-h-screen p-0 m-0 overflow-y-auto"}
+        className={"lg:max-w-screen-sm max-h-screen p-0 m-0 overflow-visible"}
       >
         <DialogHeader className={"bg-neutral-300 p-4 h-15"}>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div>{content}</div>
-        <DialogFooter className={"p-4"}>{footerBtn}</DialogFooter>
+        <DialogFooter className={"p-4"}>
+          {footerBtn && <DialogClose asChild>{footerBtn}</DialogClose>}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

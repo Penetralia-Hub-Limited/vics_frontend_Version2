@@ -9,16 +9,18 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, DraftSVG, SalesSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import ProgressTable from "@/components/dashboard/dashboard-progress-table";
-import { payments } from "@/components/dashboard/dashboard-progress-table";
+import { useSelector } from "react-redux";
+import { selectSalesPlateNumber } from "@/store/plate-number-orders/plate-number-order-selector";
 
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchDrafts, setSearchDraft] = useState<string>("");
+  const salesDraftData = useSelector(selectSalesPlateNumber);
 
-  const totalPages = Math.ceil(payments.length / itemsPerPage);
-  const paginatedData = payments.slice(
+  const totalPages = Math.ceil(salesDraftData.length / itemsPerPage);
+  const paginatedData = salesDraftData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -35,10 +37,10 @@ export default function Page() {
           {
             label: "Sales Dashboard",
             Icon: SalesSVG,
-            link: "/mla-admin/sales",
+            link: "/mla-admin/sales/sales-dashboard",
           },
           {
-            label: "Vehicle Dashboard",
+            label: "Drafts",
             Icon: DraftSVG,
             link: "/mla-admin/sales/drafts",
           },

@@ -1,25 +1,61 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useState, Suspense, useEffect, useMemo } from "react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import { storeManagerSidebarItems } from "@/common/side-bar";
 import useGetPathName from "@/hooks/usePathName";
 import Loading from "../loading";
+import { IsAuth } from "@/components/general/is-auth";
+import { useDispatch } from "react-redux";
+import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
+import { PlateNumberService } from "@/services/PlateNumberService";
+import { ServiceTypeService } from "@/services/ServiceTypesService";
+import { LgaService } from "@/services/LgaService";
 
 export default function StoreManagerDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { getPathName } = useGetPathName("storeAdmin");
+  // trigger services
+  const plateNumberOrderService = useMemo(
+    () => new PlateNumberOrderService(dispatch),
+    [dispatch]
+  );
+  const plateNumberService = useMemo(
+    () => new PlateNumberService(dispatch),
+    [dispatch]
+  );
+  const serviceTypeService = useMemo(
+    () => new ServiceTypeService(dispatch),
+    [dispatch]
+  );
+  const lgaService = useMemo(() => new LgaService(dispatch), [dispatch]);
+
+  // API triggers
+  useEffect(() => {
+    (async () => {
+      await plateNumberOrderService.getAllPlateNumberOrders();
+      await plateNumberService.getAllPlateNumbers();
+      await serviceTypeService.getAllServiceTypes();
+      await lgaService.getAllLgas();
+    })();
+  }, [
+    plateNumberOrderService,
+    plateNumberService,
+    serviceTypeService,
+    lgaService,
+  ]);
 
   return (
-    <SidebarProvider>
+    <IsAuth>
       <AppSidebar sidebarData={storeManagerSidebarItems} />
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading screen={"main"} />}>
         <main className={"flex-1 flex-col w-fit overflow-hidden"}>
           <div
             className={
@@ -36,6 +72,6 @@ export default function StoreManagerDashboardLayout({
           <div className="px-4 py-8 bg-neutral-100/30">{children}</div>
         </main>
       </Suspense>
-    </SidebarProvider>
+    </IsAuth>
   );
 }

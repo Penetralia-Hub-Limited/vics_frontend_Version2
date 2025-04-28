@@ -11,117 +11,18 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import { DashboardSVG, ReportSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { formattedAmount } from "@/common/helpers";
+import { PlateNumberType } from "@/common/enum";
+import { useSelector } from "react-redux";
+import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
 
 const plateNoReportHeader = [
-  { title: "S/N", key: "id" },
+  { title: "S/N", key: "sid" },
   { title: "MLA", key: "mla" },
-  { title: "Plate Number", key: "platenumber" },
-  { title: "Plate Type", key: "platetype" },
-  { title: "Station", key: "station" },
-  { title: "Transaction Date", key: "date" },
+  { title: "Plate Number", key: "number" },
+  { title: "Plate Type", key: "type" },
+  // { title: "Station", key: "station" },
+  { title: "Transaction Date", key: "created_at" },
   { title: "Amount", key: "amount" },
-];
-
-const plateNoReportData = [
-  {
-    id: 1,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 2,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 3,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 4,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 5,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 6,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 7,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 8,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 9,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 10,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
-  {
-    id: 11,
-    mla: "INV001",
-    station: "South West",
-    platenumber: "ILHST76",
-    platetype: "Private (Direct)",
-    date: new Date(),
-    amount: 76233,
-  },
 ];
 
 export default function Page() {
@@ -129,23 +30,26 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
+  const mlaReportData = useSelector(selectPlateNumber);
 
   const [inputValues, setInputValues] = useState<{
     station: string;
-    plateType: string;
+    plateType: PlateNumberType | undefined;
   }>({
     station: "",
-    plateType: "",
+    plateType: undefined,
   });
 
   // finding the total amount
-  const totalAmount = plateNoReportData.reduce(
-    (sum, item) => sum + item.amount,
+  const totalAmount = mlaReportData.reduce(
+    (acc, sum) => acc + sum.int_amount,
     0
   );
 
-  const totalPages = Math.ceil(plateNoReportData.length / itemsPerPage);
-  const paginatedData = plateNoReportData.slice(
+  console.log(totalAmount);
+
+  const totalPages = Math.ceil(mlaReportData.length / itemsPerPage);
+  const paginatedData = mlaReportData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -157,12 +61,12 @@ export default function Page() {
           {
             label: "Dashboard",
             Icon: DashboardSVG,
-            link: "/super-admin/dashboard",
+            link: "/mla-admin/dashboard",
           },
           {
             label: "MLA Reports",
             Icon: ReportSVG,
-            link: "/super-admin/report/plate-number-sales",
+            link: "/mla-admin/report",
           },
         ]}
       />
@@ -190,12 +94,12 @@ export default function Page() {
           <DashboardCompSelect
             title={"Plate Type"}
             placeholder={"-- Select Type --"}
-            items={["Private", "Commercial"]}
+            items={[...Object.values(PlateNumberType)]}
             selected={inputValues.plateType}
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                plateType: selected ? String(selected) : "",
+                plateType: (selected as PlateNumberType) ?? undefined,
               }))
             }
           />
@@ -210,16 +114,16 @@ export default function Page() {
       </CardContainer>
 
       {/* Table Section */}
-      <div className="flex flex-col gap-3 border border-neutral-300 rounded-lg">
+      <div className="flex flex-col gap-3 border border-primary-300 rounded-lg">
         <div className={"flex flex-row justify-between p-3"}>
           <p className={"text-sm"}>
             Total Plate Number Sales:{" "}
-            <span className={"font-semibold"}>{plateNoReportData.length}</span>
+            <span className={"font-semibold"}>{mlaReportData.length}</span>
           </p>
           <p className={"text-sm"}>
             Total Amount Sold:{" "}
             <span className={"font-semibold"}>
-              {formattedAmount(totalAmount)}
+              {formattedAmount(isNaN(totalAmount) ? 0 : totalAmount)}
             </span>
           </p>
         </div>

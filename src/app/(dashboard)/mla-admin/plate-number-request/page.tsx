@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -14,90 +15,64 @@ import {
   DataTableWButton,
   RowAction,
 } from "@/components/dashboard/dashboard-table-w-button";
-import { InsuranceStatus, RequestStatus } from "@/common/enum";
+import { InsuranceStatus, RequestStatus, PlateNumberType } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import {
-  CreatePlateNumber,
-  PlateNumberInitialValues,
-  PlateNumberTypeProps,
-} from "@/components/dashboard/verification-forms/select-plate-number-type";
+  CreatePlateRequestInitialValues,
+  CreatePlateRequestProps,
+  CreateNewPlatRequest,
+} from "@/components/dashboard/verification-forms/Create-Plate-Request";
+import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
+import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
+import { generateTrackingId } from "@/common/helpers";
+import { selectStateIDFromStateName } from "@/store/states/state-selector";
+import { toast } from "sonner";
+import { ResponseModalX } from "@/components/general/response-modalx";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "trackingid", title: "Tracking ID" },
-  { key: "platenumbertype", title: "Plate Number Type" },
-  { key: "platerequested", title: "No. of Plate Requested" },
-  { key: "platerecommended", title: "No. of Plate Recommended" },
-  { key: "numberassigned", title: "No. Assigned" },
-  { key: "date", title: "Date" },
-  { key: "recommendingofficer", title: "Recommending Officer" },
-  { key: "firstapprovalofficer", title: "First Approval Officer" },
-  { key: "requeststatus", title: "Request Status Officer" },
-  { key: "insurancestatus", title: "Insurance Status" },
-];
-
-const tableData = [
-  {
-    id: 1,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    requeststatus: RequestStatus.PENDING,
-    insurancestatus: InsuranceStatus.APPROVED,
-  },
-  {
-    id: 2,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    requeststatus: RequestStatus.PENDING,
-    insurancestatus: InsuranceStatus.APPROVED,
-  },
-  {
-    id: 3,
-    trackingid: "JK",
-    platenumbertype: "Private (Direct)",
-    platerequested: "Akanbi S.",
-    platerecommended: 401,
-    numberassigned: 0,
-    date: new Date(),
-    recommendingofficer: "Dave E ",
-    requeststatus: RequestStatus.PENDING,
-    insurancestatus: InsuranceStatus.APPROVED,
-  },
+  { key: "sid", title: "S/N" },
+  { key: "tracking_id", title: "Tracking ID" },
+  { key: "plate_number_type", title: "Plate Number Type" },
+  { key: "total_number_requested", title: "No. of Plate Requested" },
+  { key: "recommended_number", title: "No. of Plate Recommended" },
+  { key: "number_assigned", title: "No. Assigned" },
+  { key: "created_at", title: "Date" },
+  { key: "recommender", title: "Recommending Officer" },
+  { key: "approver", title: "First Approval Officer" },
+  { key: "status", title: "Request Status Officer" },
+  { key: "insurance_status", title: "Insurance Status" },
 ];
 
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
+  const dispatch = useDispatch();
+  const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
+  const plateOrderService = new PlateNumberOrderService(dispatch);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<{
     trackingid: string;
-    insuranceStatus: string;
-    plateNumberType: string;
-    requestStatus: string;
+    insuranceStatus: InsuranceStatus | undefined;
+    plateNumberType: PlateNumberType | undefined;
+    requestStatus: RequestStatus | undefined;
   }>({
     trackingid: "",
-    insuranceStatus: "",
-    plateNumberType: "",
-    requestStatus: "",
+    insuranceStatus: undefined,
+    plateNumberType: undefined,
+    requestStatus: undefined,
   });
-  const [modalInput, setModalInput] = useState<PlateNumberTypeProps>(
-    PlateNumberInitialValues
+  const [modalInput, setModalInput] = useState<CreatePlateRequestProps>(
+    CreatePlateRequestInitialValues
+  );
+  const state_id = useSelector((state) =>
+    selectStateIDFromStateName(state, modalInput?.state)
   );
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const totalPages = Math.ceil(plateNumbertableData.length / itemsPerPage);
+  const paginatedData = plateNumbertableData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -108,9 +83,27 @@ export default function Page() {
       {
         title: "View",
         action: () =>
-          router.push("/super-admin/tax-payer/tax-payer-information"),
+          router.push("/mla-admin/plate-number-request/view-request"),
       },
     ];
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const res = await plateOrderService.createPlateNumberOrder({
+        tracking_id: generateTrackingId(),
+        state_id: state_id,
+        ...modalInput,
+      });
+
+      if (res.status) {
+        console.log("Creating plate ", res);
+        setOpenModal(true);
+      }
+    } catch (error) {
+      console.error("Failed:", error);
+      toast(error as unknown as string);
+    }
   };
 
   return (
@@ -138,10 +131,14 @@ export default function Page() {
         <Modal
           title={"Create New Plate Number Request"}
           content={
-            <CreatePlateNumber input={modalInput} setInput={setModalInput} />
+            <CreateNewPlatRequest input={modalInput} setInput={setModalInput} />
           }
           btnText={"Create New Request"}
-          footerBtn={<Button type="submit">Submit</Button>}
+          footerBtn={
+            <Button onClick={handleSubmit} type="submit">
+              Submit
+            </Button>
+          }
         />
       </div>
 
@@ -167,12 +164,12 @@ export default function Page() {
           <DashboardCompSelect
             title={"Plate Number Type"}
             placeholder={"-- Select Type --"}
-            items={["private", "commercial"]}
+            items={[...Object.values(PlateNumberType)]}
             selected={inputValues.plateNumberType}
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                plateNumberType: selected ? String(selected) : "",
+                plateNumberType: (selected as PlateNumberType) ?? undefined,
               }))
             }
           />
@@ -180,12 +177,12 @@ export default function Page() {
           <DashboardCompSelect
             title={"Insurance Status"}
             placeholder={"-- Select status --"}
-            items={["lagos", "abuja"]}
+            items={[...Object.values(InsuranceStatus)]}
             selected={inputValues.insuranceStatus}
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                insuranceStatus: selected ? String(selected) : "",
+                insuranceStatus: (selected as InsuranceStatus) ?? undefined,
               }))
             }
           />
@@ -195,12 +192,12 @@ export default function Page() {
           <DashboardCompSelect
             title={"Request Status"}
             placeholder={"-- Select status --"}
-            items={["lagos", "abuja"]}
+            items={[...Object.values(RequestStatus)]}
             selected={inputValues.requestStatus}
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                requestStatus: selected ? String(selected) : "",
+                requestStatus: (selected as RequestStatus) ?? undefined,
               }))
             }
           />
@@ -217,10 +214,10 @@ export default function Page() {
       </CardContainer>
 
       <div
-        className={"flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"}
+        className={"flex flex-col gap-3 border-1 border-primary-300 rounded-lg"}
       >
         <div
-          className={"border-t-1 border-neutral-300 rounded-lg overflow-hidden"}
+          className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
           <DataTableWButton
             headers={tableColumns}
@@ -232,6 +229,18 @@ export default function Page() {
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
+
+      <ResponseModalX
+        title={"Request Created Successfully"}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={<>You have successfully created a new request</>}
+        status={"success"}
+        footerBtnText={"Done"}
+        footerTrigger={() =>
+          router.push("/mla-admin/plate-number-request/view-request")
+        }
+      />
     </main>
   );
 }

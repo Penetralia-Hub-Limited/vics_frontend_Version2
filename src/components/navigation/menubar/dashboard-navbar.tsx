@@ -1,7 +1,7 @@
-import { FC, Dispatch, SetStateAction, ChangeEvent } from "react";
+import { FC, Dispatch, SetStateAction } from "react";
 import UserProfile from "./user-profile";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useSelector } from "react-redux";
+import { AuthState } from "@/store/auth/auth-user-types";
 
 interface IDashboardNavBar {
   pageTitle: string;
@@ -11,34 +11,42 @@ interface IDashboardNavBar {
 
 const DashboardNavBar: FC<IDashboardNavBar> = ({
   pageTitle,
-  searchQuery,
-  setSearchQuery,
+  // searchQuery,
+  // setSearchQuery,
 }) => {
+  const { data } = useSelector((state: { auth: AuthState }) => state.auth);
+
+  const firstInitials = data?.user?.firstname?.charAt(0);
+  const lastInitials = data?.user?.lastname?.charAt(0);
+
   return (
     <div className="flex items-center justify-between gap-4 w-full px-4 py-3 bg-white ">
       <div className="w-full flex items-center gap-6">
-        <p className="font-bold text-lg uppercase hidden md:block">
-          {pageTitle}
-        </p>
+        <p className="font-bold text-lg uppercase">{pageTitle}</p>
 
-        <div className="relative w-fit md:w-full max-w-md">
+        {/* <div className="relative w-fit md:w-full max-w-md">
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
             size={20}
           />
           <Input
             type="text"
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-700 transition-all"
+            className="w-full pl-10 pr-4 py-2 border border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
             placeholder="Search..."
             value={searchQuery}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setSearchQuery(e.target.value)
             }
           />
-        </div>
+        </div> */}
       </div>
 
-      <UserProfile fullName="USERNAME" role="Store Admin" />
+      <UserProfile
+        fullName={data?.user?.firstname ?? "USERNAME"}
+        role={data?.user?.role ?? "Admin"}
+        profileImage={data?.user?.image ?? undefined}
+        initials={`${firstInitials}.${lastInitials}`}
+      />
     </div>
   );
 };

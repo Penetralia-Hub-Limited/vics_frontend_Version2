@@ -7,9 +7,9 @@ import { formattedAmount } from "@/common/helpers";
 interface ICheckboxItem {
   label: string;
   id: string;
-  amount: number;
   isChecked: boolean;
   onChange: (checked: boolean) => void;
+  amount?: number;
 }
 
 const CheckboxItem: FC<ICheckboxItem> = ({
@@ -35,9 +35,13 @@ const CheckboxItem: FC<ICheckboxItem> = ({
         </label>
       </div>
 
-      <div>
-        <p className={"text-sm font-semibold"}>{formattedAmount(amount)}</p>
-      </div>
+      {amount && (
+        <div>
+          <p className={"text-sm font-semibold"}>
+            {formattedAmount(amount ?? undefined)}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -70,8 +70,8 @@ export default function Page() {
       </div>
 
       <div className={"flex flex-col md:flex-row gap-4"}>
-        <InformationCard title={"Buyers Information"} data={data} />
-        <InformationCard title={"Vehicle's Information"} data={data} />
+        <InformationCard title={"Buyer Information"} data={data} />
+        <InformationCard title={"Vehicle Information"} data={data} />
       </div>
     </main>
   );

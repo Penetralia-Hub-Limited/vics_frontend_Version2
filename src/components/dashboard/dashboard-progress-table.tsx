@@ -16,90 +16,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { Progress } from "@/components/ui/progress";
+import { PlateNumberOrderData } from "@/store/plate-number-orders/plate-number-order-types";
 
-export type Payment = {
-  id: number;
-  name: string;
-  date: string;
-  time: string;
-  status: number;
+type PlateNumberProp = PlateNumberOrderData & {
+  sid: number;
+  date_created: string;
 };
 
-export const payments: Payment[] = [
-  {
-    id: 1,
-    name: "Akanbi Sarah Olupelumi",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 75,
-  },
-  {
-    id: 2,
-    name: "Sheik Akanji Toluwalese",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 50,
-  },
-  {
-    id: 3,
-    name: "Lola Sabo Mohammed",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 25,
-  },
-  {
-    id: 4,
-    name: "Abdullah Al-Ikory Kunle",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 75,
-  },
-  {
-    id: 5,
-    name: "Sheik Akanji Toluwalese",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 50,
-  },
-  {
-    id: 6,
-    name: "Lola Sabo Mohammed",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 25,
-  },
-  {
-    id: 7,
-    name: "Akanbi Sarah Olupelumi",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 75,
-  },
-  {
-    id: 8,
-    name: "Sheik Akanji Toluwalese",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 50,
-  },
-  {
-    id: 9,
-    name: "Lola Sabo Mohammed",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 25,
-  },
-  {
-    id: 10,
-    name: "Abdullah Al-Ikory Kunle",
-    date: "Mar 4, 2025",
-    time: "09:32:44 AM",
-    status: 75,
-  },
-];
-
 interface IProgressTable {
-  data: Payment[];
+  data: PlateNumberProp[];
   trigger: () => void;
 }
 
@@ -111,24 +36,34 @@ const ProgressTable: FC<IProgressTable> = ({ data, trigger }) => {
           <TableHead className="text-xs w-16 text-center">S/N</TableHead>
           <TableHead className="text-xs text-center">Name</TableHead>
           <TableHead className="text-xs text-center">Date</TableHead>
-          <TableHead className="text-xs text-center">Payment Status</TableHead>
+          <TableHead className="text-xs text-center w-[30%]">
+            Payment Status
+          </TableHead>
           <TableHead className="w-10"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data.map((progress) => (
-          <TableRow key={progress.id}>
-            <TableCell className="text-xs text-center">{progress.id}</TableCell>
-            <TableCell className="text-xs text-center font-medium">
-              {progress.name}
+          <TableRow key={progress?.sid}>
+            <TableCell className="text-xs text-center">
+              {progress?.sid}
             </TableCell>
             <TableCell className="text-xs text-center">
-              {progress.date} | {progress.time}
+              {progress?.creator?.firstname ?? "-"}{" "}
+              {progress?.creator?.lastname ?? "-"}
+            </TableCell>
+            <TableCell className="text-xs text-center">
+              {progress.date_created}
             </TableCell>
             <TableCell>
-              <div className="flex flex-row w-full items-center gap-2">
-                <Progress value={progress.status} className="w-[60%]" />
-                <p className={"font-semibold text-xs"}>{progress.status}%</p>
+              <div className="flex flex-row w-full items-center justify-center gap-2">
+                <Progress
+                  value={progress?.total_steps / progress?.steps_completed}
+                  className="w-[60%]"
+                />
+                <p className={"font-semibold text-xs"}>
+                  {progress?.total_steps / progress?.steps_completed / 100}%
+                </p>
               </div>
             </TableCell>
             <TableCell>
@@ -136,9 +71,9 @@ const ProgressTable: FC<IProgressTable> = ({ data, trigger }) => {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="border border-neutral-300 p-2 rounded-md"
+                    className="border border-primary-500 p-1 rounded-md"
                   >
-                    <EllipsisVertical className="h-5 w-5" />
+                    <EllipsisVertical className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

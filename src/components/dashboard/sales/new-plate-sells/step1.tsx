@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, Dispatch, SetStateAction } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "../../dashboard-component-select";
@@ -14,7 +16,7 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
   setInputValues,
 }) => {
   return (
-    <div className={"flex flex-col gap-6 w-full"}>
+    <div className={"flex flex-col gap-4 md:gap-6 w-full"}>
       <InputWithLabel
         items={{
           id: "fullname",
@@ -23,7 +25,7 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
           type: "text",
           htmlfor: "fullname",
         }}
-        value={inputValues.fullName}
+        value={inputValues.fullName || ""}
         onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
@@ -32,7 +34,7 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
         }
       />
 
-      <div className={"flex flex-col md:flex-row gap-2"}>
+      <div className={"flex flex-col md:flex-row gap-4 md:gap-2"}>
         <InputWithLabel
           items={{
             id: "email",
@@ -41,7 +43,7 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
             type: "email",
             htmlfor: "email",
           }}
-          value={inputValues.email}
+          value={inputValues.email || ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
@@ -58,7 +60,7 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
             type: "text",
             htmlfor: "phonenumber",
           }}
-          value={inputValues.phoneNumber}
+          value={inputValues.phoneNumber || ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
@@ -76,7 +78,7 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
           type: "text",
           htmlfor: "address",
         }}
-        value={inputValues.address}
+        value={inputValues.address || ""}
         onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
@@ -85,12 +87,12 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
         }
       />
 
-      <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
+      <div className={"grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-2"}>
         <DashboardCompSelect
           title={"Nationality"}
           placeholder={"-- Select Nationality --"}
-          items={["Nigeria", "Camerron"]}
-          selected={inputValues.nationality}
+          items={["Nigerian"]}
+          selected={inputValues.nationality || ""}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,

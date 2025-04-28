@@ -1,6 +1,5 @@
 import { FC, Dispatch, SetStateAction } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
-import DashboardCompSelect from "../../dashboard-component-select";
 import { IAddVehicleStep2Props } from "../vehicle-constant";
 
 interface IAddVehicleStep2 {
@@ -17,41 +16,74 @@ export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
         <InputWithLabel
           items={{
-            id: "chasisnumber",
+            id: "chasis_number",
             label: "Chasis Number",
             placeholder: "Chasis Number",
             type: "text",
-            htmlfor: "chasisnumber",
+            htmlfor: "chasis_number",
           }}
-          value={inputValues.chasisnumber}
+          value={inputValues.chasis_number}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              chasisnumber: e.target.value,
+              chasis_number: e.target.value,
             }))
           }
         />
 
         <InputWithLabel
           items={{
-            id: "enginenumber",
+            id: "engine_number",
             label: "Engine Number",
             placeholder: "Engine Number",
             type: "text",
-            htmlfor: "enginenumber",
+            htmlfor: "engine_number",
           }}
-          value={inputValues.enginenumber}
+          value={inputValues.engine_number}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              enginenumber: e.target.value,
+              engine_number: e.target.value,
             }))
           }
         />
       </div>
 
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
-        <DashboardCompSelect
+        <InputWithLabel
+          items={{
+            id: "model",
+            label: "Vehicle Modal",
+            placeholder: "Vehicle Modal",
+            type: "text",
+            htmlfor: "model",
+          }}
+          value={inputValues.model}
+          onChange={(e) =>
+            setInputValues((prev) => ({
+              ...prev,
+              model: e.target.value,
+            }))
+          }
+        />
+
+        <InputWithLabel
+          items={{
+            id: "make",
+            label: "Vehicle Make",
+            placeholder: "Vehicle Make",
+            type: "text",
+            htmlfor: "make",
+          }}
+          value={inputValues.make}
+          onChange={(e) =>
+            setInputValues((prev) => ({
+              ...prev,
+              make: e.target.value,
+            }))
+          }
+        />
+        {/* <DashboardCompSelect
           title={"Vehicle Make"}
           placeholder={"-- Select make --"}
           items={["Nigeria", "Camerron"]}
@@ -62,9 +94,9 @@ export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
               vehicleMake: (selected as string) ?? "",
             }))
           }
-        />
+        /> */}
 
-        <DashboardCompSelect
+        {/* <DashboardCompSelect
           title={"Vehicle Model"}
           placeholder={"-- Select model --"}
           items={["Nigeria", "Camerron"]}
@@ -75,11 +107,45 @@ export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
               vehicleModel: (selected as string) ?? "",
             }))
           }
-        />
+        /> */}
       </div>
 
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
-        <DashboardCompSelect
+        <InputWithLabel
+          items={{
+            id: "year",
+            label: "Model Year",
+            placeholder: "Model Year",
+            type: "text",
+            htmlfor: "year",
+          }}
+          value={inputValues.year || ""}
+          onChange={(e) =>
+            setInputValues((prev) => ({
+              ...prev,
+              year: e.target.value,
+            }))
+          }
+        />
+
+        <InputWithLabel
+          items={{
+            id: "vehicleCategory",
+            label: "Vehicle Category",
+            placeholder: "Vehicle Category",
+            type: "text",
+            htmlfor: "vehicleCategory",
+          }}
+          value={inputValues.capacity}
+          onChange={(e) =>
+            setInputValues((prev) => ({
+              ...prev,
+              vehicleCategory: e.target.value,
+            }))
+          }
+        />
+
+        {/* <DashboardCompSelect
           title={"Model Year"}
           placeholder={"-- Select year --"}
           items={["Nigeria", "Camerron"]}
@@ -103,11 +169,43 @@ export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
               vehicleCategory: (selected as string) ?? "",
             }))
           }
-        />
+        /> */}
       </div>
 
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
-        <DashboardCompSelect
+        <InputWithLabel
+          items={{
+            id: "policy_sector",
+            label: "Policy Sector",
+            placeholder: "Policy Sector",
+            type: "text",
+            htmlfor: "policy_sector",
+          }}
+          value={inputValues.policy_sector || ""}
+          onChange={(e) =>
+            setInputValues((prev) => ({
+              ...prev,
+              policy_sector: e.target.value,
+            }))
+          }
+        />{" "}
+        <InputWithLabel
+          items={{
+            id: "color",
+            label: "Vehicle Color",
+            placeholder: "Vehicle Color",
+            type: "text",
+            htmlfor: "color",
+          }}
+          value={inputValues.color || ""}
+          onChange={(e) =>
+            setInputValues((prev) => ({
+              ...prev,
+              color: e.target.value,
+            }))
+          }
+        />
+        {/* <DashboardCompSelect
           title={"Policy Sector"}
           placeholder={"-- Select sector --"}
           items={["Nigeria", "Camerron"]}
@@ -131,24 +229,23 @@ export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
               vehicleColor: (selected as string) ?? "",
             }))
           }
-        />
+        /> */}
       </div>
 
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
         <InputWithLabel
-          min={0}
           items={{
-            id: "novehiclecapacity",
+            id: "capacity",
             label: "No. of Persons Vehicle Can Carry",
             placeholder: "0",
-            type: "number",
-            htmlfor: "novehiclecapacity",
+            type: "text",
+            htmlfor: "capacity",
           }}
-          value={inputValues.novehiclecapacity}
+          value={inputValues.capacity || 0}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              novehiclecapacity: parseInt(e.target.value) || 0,
+              capacity: e.target.value ?? "",
             }))
           }
         />
@@ -161,7 +258,7 @@ export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
             type: "text",
             htmlfor: "netweight",
           }}
-          value={inputValues.netweight}
+          value={inputValues.netweight || ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
@@ -189,7 +286,23 @@ export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
           }
         />
 
-        <DashboardCompSelect
+        <InputWithLabel
+          items={{
+            id: "load",
+            label: "Vehicle Load Weight",
+            placeholder: "Vehicle Load Weight",
+            type: "text",
+            htmlfor: "load",
+          }}
+          value={inputValues.load || ""}
+          onChange={(e) =>
+            setInputValues((prev) => ({
+              ...prev,
+              load: e.target.value,
+            }))
+          }
+        />
+        {/* <DashboardCompSelect
           title={"Vehicle Load Weight"}
           placeholder={"-- Select Load Weight --"}
           items={["Nigeria", "Camerron"]}
@@ -200,7 +313,7 @@ export const AddVehicleStep2: FC<IAddVehicleStep2> = ({
               vehicleLoad: (selected as string) ?? "",
             }))
           }
-        />
+        /> */}
       </div>
     </div>
   );

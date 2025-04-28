@@ -1,4 +1,4 @@
-import { FC, Dispatch, SetStateAction } from "react";
+import React, { FC, Dispatch, SetStateAction } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import {
@@ -23,7 +23,7 @@ const DatePicker: FC<IDatePicker> = ({ title, date, setDate }) => {
         <PopoverTrigger asChild>
           <Button
             variant="date"
-            className="font-normal border border-neutral-500"
+            className="font-normal border border-primary-500 hover:border-primary-500/50"
           >
             {date ? date.toLocaleDateString() : "mm/dd/yy"}
             <CalendarIcon className="ml-auto" />
@@ -34,7 +34,7 @@ const DatePicker: FC<IDatePicker> = ({ title, date, setDate }) => {
             mode="single"
             selected={date}
             onSelect={setDate}
-            className="rounded-md border border-neutral-500"
+            className="rounded-md border border-primary-500"
           />
         </PopoverContent>
       </Popover>
@@ -42,4 +42,4 @@ const DatePicker: FC<IDatePicker> = ({ title, date, setDate }) => {
   );
 };
 
-export default DatePicker;
+export default React.memo(DatePicker);

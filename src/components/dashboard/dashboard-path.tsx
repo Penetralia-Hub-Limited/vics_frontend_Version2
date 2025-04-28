@@ -14,7 +14,7 @@ interface IDashboardPath {
 
 const DashboardPath: FC<IDashboardPath> = ({ pathdata, active }) => {
   return (
-    <div className={"flex flex-row gap-3"}>
+    <div className={"flex flex-row flex-wrap gap-3"}>
       {pathdata.map((data, index) => {
         return (
           <div

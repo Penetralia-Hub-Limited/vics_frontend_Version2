@@ -5,20 +5,25 @@ import SummaryCard from "@/components/dashboard/dashboard-summary-card";
 import { format } from "date-fns";
 import { SetStateAction, useState } from "react";
 import { DateRange } from "@/common/enum";
-
-const summaryItems1 = [
-  { title: "Plate Requests", amount: 318 },
-  { title: "Stock Level", amount: 1743, isCurrency: true },
-];
-const summaryItems2 = [
-  { title: "New Plate Sales", amount: 202 },
-  { title: "Plate Number Amount", amount: 51433750, isCurrency: true },
-  { title: "Total Sales", amount: 83536200 },
-];
+import { useSelector } from "react-redux";
+import { AuthState } from "@/store/auth/auth-user-types";
+import {
+  selectNewPlateSales,
+  selectPlateRequested,
+  selectPlateStockLevel,
+  selectPlateNumberAmount,
+  selectPlateNumberTotalSales,
+} from "@/store/plate-number-orders/plate-number-order-selector";
 
 export default function Page() {
   const currentDate = new Date();
   const formattedDate = format(currentDate, "MMM. d, yyyy | h:mmaaa");
+  const { data } = useSelector((state: { auth: AuthState }) => state.auth);
+  const plateNumberRequested = useSelector(selectPlateRequested);
+  const plateNumberAmount = useSelector(selectPlateNumberAmount);
+  const plateNumberStockLevel = useSelector(selectPlateStockLevel);
+  const plateNumberTotalSales = useSelector(selectPlateNumberTotalSales);
+  const plateNumberNewPlateSales = useSelector(selectNewPlateSales);
 
   const [selectedRanges1, setSelectedRanges1] = useState<
     Record<string, DateRange>
@@ -33,6 +38,25 @@ export default function Page() {
     "Plate Number Amount": DateRange.TODAY,
     "Total Sales": DateRange.TODAY,
   });
+
+  const summaryItems1 = [
+    {
+      title: "Plate Requests",
+      amount: plateNumberRequested,
+      route: "/smr-admin/plate-number-request",
+    },
+    { title: "Stock Level", amount: plateNumberStockLevel },
+  ];
+
+  const summaryItems2 = [
+    { title: "New Plate Sales", amount: plateNumberNewPlateSales },
+    {
+      title: "Plate Number Amount",
+      amount: plateNumberAmount,
+      isCurrency: true,
+    },
+    { title: "Total Sales", amount: plateNumberTotalSales, isCurrency: true },
+  ];
 
   const updateDateRange1 =
     (title: string) => (newRange: SetStateAction<DateRange>) => {
@@ -59,35 +83,40 @@ export default function Page() {
   return (
     <main>
       <div className="flex flex-col md:flex-row justify-between items-center pb-6">
-        <p className="text-xl md:text-3xl font-bold">Welcome, Username</p>
+        <p className="text-xl md:text-3xl font-bold">
+          Welcome, {data?.user?.firstname ?? "User"}
+        </p>
         <p className="text-sm text-neutral-700">{formattedDate}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[2fr_auto] gap-2 items-start">
         <div className="flex flex-col md:gap-3 gap-6 w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
-            {summaryItems1.map(({ title, amount, isCurrency }) => (
+            {summaryItems1.map(({ title, amount, route }, index) => (
               <SummaryCard
-                key={title}
+                key={index}
                 title={title}
+                route={route}
                 amount={amount}
-                isCurrency={isCurrency}
                 selectedRange={selectedRanges1[title] || DateRange.TODAY}
                 setSelectedRange={updateDateRange1(title)}
               />
             ))}
           </div>
 
-          <div className="grid grid-cols-1  gap-4">
-            {summaryItems2.map(({ title, amount }) => (
-              <SummaryCard
-                key={title}
-                title={title}
-                amount={amount}
-                selectedRange={selectedRanges2[title] || DateRange.TODAY}
-                setSelectedRange={updateDateRange2(title)}
-              />
-            ))}
+          <div className={"flex flex-col flex-wrap gap-4"}>
+            {summaryItems2.map(({ title, amount, isCurrency }, index) => {
+              return (
+                <SummaryCard
+                  key={index}
+                  title={title}
+                  amount={amount}
+                  isCurrency={isCurrency}
+                  selectedRange={selectedRanges2[title] || DateRange.TODAY}
+                  setSelectedRange={updateDateRange2(title)}
+                />
+              );
+            })}
           </div>
         </div>
 

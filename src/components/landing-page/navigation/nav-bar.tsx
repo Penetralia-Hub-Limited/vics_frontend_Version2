@@ -1,6 +1,6 @@
 import Image from "next/image";
 import NavBarItems from "./nav-bar-items";
-import IconGreen from "@/assets/logo/icon_green.svg";
+import IconGreen from "../../../../public/assets/logo/icon_green.svg";
 import NavBarMobile from "./nav-drop-mobile";
 
 const LPNavBar = () => {
@@ -21,6 +21,7 @@ const LPNavBar = () => {
           }
         >
           <Image
+            fetchPriority="high"
             src={IconGreen}
             alt="Logo"
             className={"object-contain shrink-0 self-stretch my-auto h-full"}

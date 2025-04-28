@@ -44,14 +44,14 @@ const Pagination: FC<IPagination> = ({ totalPages, setCurrentPage }) => {
 
       {/* Navigation Buttons */}
       <button
-        className={"cursor-pointer p-2 rounded-lg border-1 border-neutral-500"}
+        className={"cursor-pointer p-2 rounded-lg border-1 border-primary-500"}
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
         <ChevronLeft size={15} />
       </button>
       <button
-        className={"cursor-pointer p-2 rounded-lg border-1 border-neutral-500"}
+        className={"cursor-pointer p-2 rounded-lg border-1 border-primary-500"}
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >

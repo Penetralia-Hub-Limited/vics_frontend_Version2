@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
-import { DashboardSVG, VehicleSVG } from "@/common/svgs";
+import StepsDetails from "@/components/dashboard/steps-details";
+import { ResponseModalX } from "@/components/general/response-modalx";
 import { AddVehicleStep1 } from "@/components/dashboard/vehicle/new-vehicle/step1";
 import { AddVehicleStep2 } from "@/components/dashboard/vehicle/new-vehicle/step2";
 import { AddVehicleStep3 } from "@/components/dashboard/vehicle/new-vehicle/step3";
-import { ChevronRight, ChevronLeft } from "lucide-react";
-import StepsDetails from "@/components/dashboard/steps-details";
-import SuccessModal from "@/components/general/success-response";
 import {
   initialValuesStep1,
   inputVehiclePropsStep1,
@@ -20,11 +21,18 @@ import {
   initialValuesStep3,
   inputVehiclePropsStep3,
 } from "@/components/dashboard/vehicle/vehicle-constant";
+import {
+  selectVehicleOwnerIDFromName,
+  selectVehicleDatafromID,
+} from "@/store/vehicle/vehicle-selector";
+import { VehicleService } from "@/services/VehicleService";
+import { DashboardSVG, VehicleSVG } from "@/common/svgs";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const stepdetails = [
   {
     title: "Buyer's Details",
-    description: "Kindly fill out the buyers information",
+    description: "Kindly fill out the buyer's information",
   },
   {
     title: "Vehicle Information",
@@ -36,27 +44,116 @@ const stepdetails = [
   },
 ];
 
-export default function Page() {
+export default function AddVehiclePage() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const totalSteps = stepdetails.length;
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const [step1InputValues, setStep1InputValues] =
+  const [openModal, setOpenModal] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [step1Values, setStep1Values] =
     useState<inputVehiclePropsStep1>(initialValuesStep1);
-
-  const [step2InputValues, setStep2InputValues] =
+  const [step2Values, setStep2Values] =
     useState<IAddVehicleStep2Props>(initialValuesStep2);
-
-  const [step3InputValues, setStep3InputValues] =
+  const [step3Values, setStep3Values] =
     useState<inputVehiclePropsStep3>(initialValuesStep3);
 
-  console.log(step1InputValues, step2InputValues, step3InputValues);
+  const vehicleService = new VehicleService(dispatch);
+  const userID = useSelector((state) =>
+    selectVehicleOwnerIDFromName(state, step1Values.userid)
+  );
+  const vehicleInfo = useSelector((state) =>
+    selectVehicleDatafromID(state, userID)
+  )[0];
 
-  const handleNextStep = () => {
-    setCurrentStep((prev) => (prev < totalSteps ? prev + 1 : prev));
+  useEffect(() => {
+    if (!userID || !vehicleInfo) return;
+
+    setStep1Values((prev) => ({
+      ...prev,
+      fullName: `${vehicleInfo.owner?.firstname ?? ""} ${vehicleInfo.owner?.lastname ?? ""}`,
+      email: vehicleInfo.owner?.email ?? "",
+      phoneNumber: vehicleInfo.owner?.phone ?? "",
+      address: vehicleInfo.owner?.address ?? "",
+    }));
+
+    setStep2Values({
+      ...vehicleInfo,
+      category: vehicleInfo.category?.toString() ?? "",
+      netweight: vehicleInfo.weight?.toString() ?? "",
+      vehicleenginecapacity: vehicleInfo.engine_capacity?.toString() ?? "",
+    });
+
+    setStep3Values((prev) => ({
+      ...prev,
+      plateNumber: vehicleInfo.plate_number?.number?.toString() ?? "",
+      plateNumberType: vehicleInfo.type ?? "",
+    }));
+  }, [userID, vehicleInfo]);
+
+  const handleStepChange = (direction: "next" | "prev") => {
+    setCurrentStep((prev) =>
+      direction === "next"
+        ? Math.min(prev + 1, totalSteps)
+        : Math.max(prev - 1, 1)
+    );
   };
 
-  const handlePreviousStep = () => {
-    setCurrentStep((prev) => (prev > 1 ? prev - 1 : prev));
+  const handleCreateVehicle = async () => {
+    try {
+      const payload = {
+        state_id: vehicleInfo?.state_id,
+        status: "Active",
+        capacity: step2Values.capacity,
+        chasis_number: step2Values.chasis_number,
+        color: step2Values.color,
+        engine_number: step2Values.engine_number,
+        load: step2Values.load,
+        make: step2Values.make,
+        model: step2Values.model,
+        year: step2Values.year,
+        policy_sector: step2Values.policy_sector,
+        category: step2Values.category,
+        engine_capacity: step2Values.capacity,
+        model_year: step2Values.year,
+        no_of_persons: 25,
+      };
+
+      const res = await vehicleService.createVehicle(payload);
+      if (res?.status) {
+        setOpenModal(true);
+      }
+    } catch (error) {
+      console.error("Failed to create vehicle:", error);
+      toast.error("Failed to create vehicle.");
+    }
+  };
+
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <AddVehicleStep1
+            inputValues={step1Values}
+            setInputValues={setStep1Values}
+          />
+        );
+      case 2:
+        return (
+          <AddVehicleStep2
+            inputValues={step2Values}
+            setInputValues={setStep2Values}
+          />
+        );
+      case 3:
+        return (
+          <AddVehicleStep3
+            inputValues={step3Values}
+            setInputValues={setStep3Values}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -83,67 +180,35 @@ export default function Page() {
 
       <div className="grid grid-cols-[2fr_1fr] gap-2 w-full">
         <CardContainer className="flex flex-col gap-10 items-center justify-center">
-          <div className="flex flex-col gap-2 items-center justify-center">
+          <div className="text-center">
             <p className="text-lg font-semibold">Registering New Vehicle</p>
             <p className="text-sm font-light">
               {stepdetails[currentStep - 1]?.description}
             </p>
           </div>
 
-          {/* Steps */}
-          <div className="w-full">
-            {currentStep === 1 && (
-              <AddVehicleStep1
-                inputValues={step1InputValues}
-                setInputValues={setStep1InputValues}
-              />
-            )}
-            {currentStep === 2 && (
-              <AddVehicleStep2
-                inputValues={step2InputValues}
-                setInputValues={setStep2InputValues}
-              />
-            )}
-            {currentStep === 3 && (
-              <AddVehicleStep3
-                inputValues={step3InputValues}
-                setInputValues={setStep3InputValues}
-              />
-            )}
-          </div>
+          <div className="w-full">{renderCurrentStep()}</div>
 
-          {/* Navigation Buttons */}
-          <div className="flex flex-row items-center justify-between w-full">
+          <div className="flex justify-between items-center w-full">
             <Button variant="outline">Save as Draft</Button>
-
-            <div className="flex flex-row gap-2 items-center ml-auto">
+            <div className="flex gap-2 ml-auto">
               <Button
                 variant="outline"
-                className="flex flex-row items-center gap-1"
-                onClick={handlePreviousStep}
+                className="flex items-center gap-1"
+                onClick={() => handleStepChange("prev")}
                 disabled={currentStep === 1}
               >
-                <ChevronLeft />
-                <p>Previous</p>
+                <ChevronLeft /> Previous
               </Button>
-
               {currentStep === totalSteps ? (
-                <SuccessModal
-                  title={"Success"}
-                  content={<p>New Vehicle was Registered Successfully</p>}
-                  btnText={"Proceed"}
-                  trigger={() => router.push("/super-admin/vehicle")}
-                  footerBtnText={"Done"}
-                />
+                <Button onClick={handleCreateVehicle}>Proceed</Button>
               ) : (
                 <Button
                   variant="outline"
-                  className="flex flex-row items-center gap-1"
-                  onClick={handleNextStep}
-                  disabled={currentStep === totalSteps}
+                  className="flex items-center gap-1"
+                  onClick={() => handleStepChange("next")}
                 >
-                  <p>Next</p>
-                  <ChevronRight />
+                  Next <ChevronRight />
                 </Button>
               )}
             </div>
@@ -154,6 +219,16 @@ export default function Page() {
           <StepsDetails activeStep={currentStep} steps={stepdetails} />
         </CardContainer>
       </div>
+
+      <ResponseModalX
+        title="New Vehicle was Registered Successfully"
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={<></>}
+        status="success"
+        footerBtnText="Done"
+        footerTrigger={() => router.push("/super-admin/vehicle")}
+      />
     </main>
   );
 }
