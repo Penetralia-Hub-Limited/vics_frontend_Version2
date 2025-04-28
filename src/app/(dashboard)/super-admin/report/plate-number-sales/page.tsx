@@ -101,7 +101,7 @@ export default function Page() {
     ) {
       setPlateSalesData(salesAssessmentData);
     }
-  }, [salesAssessmentData, inputValues]);
+  }, [salesAssessmentData, plateNumber, plateNumberType, startDate, endDate]);
 
   const totalAmount = plateSalesData.reduce(
     (sum, item) => sum + item.int_amount,

@@ -134,7 +134,7 @@ export default function Page() {
     ) {
       setUsers(userData);
     }
-  }, [userData, inputValues]);
+  }, [userData, name, email, status, role, from, to]);
 
   const totalPages = Math.ceil(users.length / itemsPerPage);
   const paginatedData = users.slice(

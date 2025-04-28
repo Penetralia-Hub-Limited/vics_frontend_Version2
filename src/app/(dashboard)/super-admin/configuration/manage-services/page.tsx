@@ -82,7 +82,7 @@ export default function Page() {
     if (_.isEmpty(servicename) && _.isEmpty(from) && _.isEmpty(to)) {
       setServices(serviceData);
     }
-  }, [serviceData, inputValues]);
+  }, [serviceData, servicename, from, to]);
 
   const totalPages = Math.ceil(services.length / itemsPerPage);
   const paginatedData = services.slice(

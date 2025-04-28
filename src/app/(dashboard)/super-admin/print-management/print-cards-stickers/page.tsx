@@ -158,7 +158,7 @@ export default function Page() {
     ) {
       setPrintData(tableData);
     }
-  }, [tableData, inputValues]);
+  }, [plateNumber, zonalOffice, cardType, cardStatus, startDate, endDate]);
 
   const totalPages = Math.ceil(printData.length / itemsPerPage);
   const paginatedData = printData.slice(

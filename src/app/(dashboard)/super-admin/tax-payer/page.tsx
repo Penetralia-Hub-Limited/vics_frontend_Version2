@@ -135,7 +135,7 @@ export default function Page() {
     ) {
       setTaxPayersData(taxPayers);
     }
-  }, [taxPayers, inputValues]);
+  }, [taxPayers, phone, firstname, lastname, email, startDate, endDate]);
 
   const totalPages = Math.ceil(taxPayersData.length / itemsPerPage);
   const paginatedData = taxPayersData.slice(

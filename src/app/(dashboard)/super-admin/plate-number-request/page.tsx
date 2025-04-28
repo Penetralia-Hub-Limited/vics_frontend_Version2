@@ -157,7 +157,15 @@ export default function Page() {
     ) {
       setPlateNumberData(plateNumbertableData);
     }
-  }, [plateNumbertableData, inputValues]);
+  }, [
+    plateNumbertableData,
+    trackingid,
+    insuranceStatus,
+    plateNumberType,
+    requestStatus,
+    startDate,
+    endDate,
+  ]);
 
   const totalPages = Math.ceil(plateNumberData.length / itemsPerPage);
   const paginatedData = plateNumberData.slice(
@@ -166,6 +174,7 @@ export default function Page() {
   );
 
   const getRowActions = (row: unknown): RowAction[] => {
+    console.log(row);
     return [
       {
         title: "View",

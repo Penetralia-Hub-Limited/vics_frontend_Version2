@@ -145,7 +145,7 @@ export default function Page() {
     ) {
       setDocumentData(tableData);
     }
-  }, [tableData, inputValues]);
+  }, [name, mla, invoiceNumber, from, to]);
 
   const totalPages = Math.ceil(documentData.length / itemsPerPage);
   const paginatedData = documentData.slice(

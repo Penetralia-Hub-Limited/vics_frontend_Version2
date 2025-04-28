@@ -108,7 +108,14 @@ export default function Page() {
     ) {
       setSalesAssessment(salesAssessmentData);
     }
-  }, [salesAssessmentData, inputValues]);
+  }, [
+    salesAssessmentData,
+    plateNumber,
+    paymentStatus,
+    invoiceNumber,
+    startDate,
+    endDate,
+  ]);
 
   const totalPages = Math.ceil(salesAssessment.length / itemsPerPage);
   const paginatedData = salesAssessment.slice(

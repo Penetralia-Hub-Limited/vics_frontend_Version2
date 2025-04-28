@@ -130,7 +130,7 @@ export default function Page() {
     ) {
       setSalesReport(salesReportData);
     }
-  }, [salesReportData, inputValues]);
+  }, [salesReportData, plateNumber, paymentStatus, invoiceNumber, from, to]);
 
   const totalPages = Math.ceil(salesReport.length / itemsPerPage);
   const paginatedData = salesReport.slice(

@@ -19,7 +19,6 @@ import {
   PlateStatus,
   RequestStatus,
 } from "@/common/enum";
-import Loading from "@/app/(dashboard)/loading";
 
 interface TableHeader {
   title: string;

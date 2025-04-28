@@ -113,7 +113,14 @@ export default function Page() {
     ) {
       setAssignedPlateData(assignedPlateNumber);
     }
-  }, [assignedPlateNumber, inputValues]);
+  }, [
+    assignedPlateNumber,
+    plateNumber,
+    plateNumberType,
+    lga,
+    startDate,
+    endDate,
+  ]);
 
   const length = assignedPlateData.length;
   const totalPages = Math.ceil(length / itemsPerPage);
