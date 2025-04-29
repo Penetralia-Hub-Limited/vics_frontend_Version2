@@ -413,18 +413,18 @@ export const SMRAdminSidebar = [
         Icon: VICSSVG,
         url: "/smr-admin/plate-number-request",
       },
-      {
-        id: 3,
-        title: "Assessment",
-        Icon: AssessmentSVG,
-        url: "/smr-admin/assessment",
-      },
-      {
-        id: 4,
-        title: "Reports",
-        Icon: ReportSVG,
-        url: "/smr-admin/report",
-      },
+      // {
+      //   id: 3,
+      //   title: "Assessment",
+      //   Icon: AssessmentSVG,
+      //   url: "/smr-admin/assessment",
+      // },
+      // {
+      //   id: 4,
+      //   title: "Reports",
+      //   Icon: ReportSVG,
+      //   url: "/smr-admin/report",
+      // },
     ],
   },
   {
@@ -437,12 +437,12 @@ export const SMRAdminSidebar = [
         Icon: ReportSVG,
         url: "/smr-admin/sales/service-sales-report",
       },
-      {
-        id: 2,
-        title: "Change of Ownership",
-        Icon: PenSVG,
-        url: "/smr-admin/change-of-ownership",
-      },
+      // {
+      //   id: 2,
+      //   title: "Change of Ownership",
+      //   Icon: PenSVG,
+      //   url: "/smr-admin/change-of-ownership",
+      // },
     ],
   },
 ];

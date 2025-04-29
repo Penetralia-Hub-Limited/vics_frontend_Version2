@@ -132,7 +132,7 @@ export enum PlateNumberOrderType {
 
 export enum PlateStatus {
   SOLD = "Sold",
-  NOTSOLD = "Not_sold",
+  NOTSOLD = "Not Sold",
 }
 
 export enum VehicleCategory {
