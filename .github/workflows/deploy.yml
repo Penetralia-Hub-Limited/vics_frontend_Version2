@@ -60,6 +60,15 @@ jobs:
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/lightsail_key
           chmod 600 ~/.ssh/lightsail_key
 
+      - name: Create .env file from secrets
+        run: |
+          cat <<EOF > .env
+          NEXT_PUBLIC_AUTH_API_KEY=${{ secrets.ENV_NEXT_PUBLIC_AUTH_API_KEY }}
+          NEXT_PUBLIC_API_URL=${{ secrets.ENV_NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_JWT_SECRET=${{ secrets.ENV_NEXT_PUBLIC_JWT_SECRET }}
+          NEXT_PUBLIC_GEMINI_API_KEY=${{ secrets.ENV_NEXT_PUBLIC_GEMINI_API_KEY }}
+          EOF
+
       - name: Deploy Next.js Application to AWS Lightsail
         env:
           LIGHTSAIL_IP: "13.43.41.67"  # Replace with your Lightsail instance IP
@@ -99,9 +108,7 @@ jobs:
               sudo apt install -y npm
             fi
 
-            # Always reinstall node_modules freshly
             npm ci
-
             npm run build
 
             if ! command -v pm2 &> /dev/null; then
