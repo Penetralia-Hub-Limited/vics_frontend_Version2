@@ -12,7 +12,7 @@ export enum PaymentStatus {
 
 export enum PlateNumberStatus {
   ASSIGNED = "Assigned",
-  UNASSIGNED = "Unassigned",
+  UNASSIGNED = "Not Assigned",
 }
 
 export enum Role {

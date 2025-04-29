@@ -15,7 +15,12 @@ import Modal from "@/components/general/modal";
 import { useSelector, useDispatch } from "react-redux";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
-import { InsuranceStatus, RequestStatus, PlateNumberType } from "@/common/enum";
+import {
+  InsuranceStatus,
+  RequestStatus,
+  PlateNumberType,
+  PlateNumberOrderType,
+} from "@/common/enum";
 import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
 import {
   CreatePlateRequestInitialValues,
@@ -189,6 +194,7 @@ export default function Page() {
       const res = await plateOrderService.createPlateNumberOrder({
         tracking_id: generateTrackingId(),
         state_id: state_id,
+        type: PlateNumberOrderType.REQUEST,
         ...modalInput,
       });
 

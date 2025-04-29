@@ -23,11 +23,11 @@ export const hotline: IHotline[] = [
 export const supportMail: ISupportMail[] = [
   {
     id: 1,
-    mail: "support@kw-ivas.gov.ng",
+    mail: "support@vicsportal.com ",
   },
   {
     id: 2,
-    mail: "helpdesk@kw-ivas.gov.ng",
+    mail: "helpdesk@vicsportal.com",
   },
 ];
 

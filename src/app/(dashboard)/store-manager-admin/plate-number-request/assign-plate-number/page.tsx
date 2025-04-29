@@ -1,67 +1,131 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
 import PlateTable from "@/components/dashboard/check-table/dashboard-check-table";
 import ArrowButton from "@/components/general/arrow-button";
-import { IPlateData } from "@/common/types";
 import { Button } from "@/components/ui/button";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import CardContainer from "@/components/general/card-container";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
-
-const generatePlates = (): IPlateData[] => {
-  return [
-    { sn: 1, plateNumber: "ASA113JK", plateType: "Private (Direct)" },
-    { sn: 2, plateNumber: "ASA114JK", plateType: "Private (Direct)" },
-    { sn: 3, plateNumber: "ASA115JK", plateType: "Private (Direct)" },
-    { sn: 4, plateNumber: "ASA116JK", plateType: "Private (Direct)" },
-    { sn: 5, plateNumber: "ASA117JK", plateType: "Private (Direct)" },
-    { sn: 6, plateNumber: "ASA118JK", plateType: "Private (Direct)" },
-    { sn: 7, plateNumber: "ASA119JK", plateType: "Private (Direct)" },
-    { sn: 8, plateNumber: "ASA120JK", plateType: "Private (Direct)" },
-    { sn: 9, plateNumber: "ASA121JK", plateType: "Private (Direct)" },
-    { sn: 10, plateNumber: "ASA122JK", plateType: "Private (Direct)" },
-    { sn: 11, plateNumber: "ASA123JK", plateType: "Private (Direct)" },
-    { sn: 12, plateNumber: "ASA124JK", plateType: "Private (Direct)" },
-  ];
-};
+import { useSelector, useDispatch } from "react-redux";
+import { selectUnassignedPlates } from "@/store/plateNumber/plate-number-selector";
+import { PlateNumberData } from "@/store/plateNumber/plate-number-types";
+import { PlateNumberService } from "@/services/PlateNumberService";
+import { toast } from "sonner";
+import { PlateNumberStatus } from "@/common/enum";
+import { ResponseModalX } from "@/components/general/response-modalx";
 
 const PlateSelectionPage: React.FC = () => {
-  const [allPlates, setAllPlates] = useState<IPlateData[]>([]);
-  const [selectedPlates, setSelectedPlates] = useState<Set<number>>(new Set());
+  const dispatch = useDispatch();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const unassignedPlates = useSelector(selectUnassignedPlates);
+  const [plateNumber, setPlateNumber] = useState("");
+  const [allPlates, setAllPlates] = useState(unassignedPlates);
+  const [selectedPlates, setSelectedPlates] = useState<
+    (PlateNumberData & { sid: number })[]
+  >([]);
+  const plateNumberService = new PlateNumberService(dispatch);
 
-  // Initialize plates data
-  useEffect(() => {
-    const plates = generatePlates();
-    setAllPlates(plates);
-  }, []);
+  const handleAssignedPlate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const totalPlates = allPlates.length;
-  const totalSelectedPlates = selectedPlates.size;
-
-  const handleSelectChange = (plate: IPlateData, selected: boolean) => {
-    const newSelectedPlates = new Set(selectedPlates);
-
-    if (selected) {
-      newSelectedPlates.add(plate.sn);
-    } else {
-      newSelectedPlates.delete(plate.sn);
+    if (_.isEmpty(_.trim(plateNumber))) {
+      setAllPlates(unassignedPlates);
+      return;
     }
 
-    setSelectedPlates(newSelectedPlates);
+    const filteredData = _.filter(unassignedPlates, (plateData) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(plateNumber))) {
+        matches =
+          matches ||
+          _.toLower(plateData?.number || "") === _.toLower(plateNumber);
+      }
+      return matches;
+    });
+    setAllPlates(filteredData);
+
+    const payload = {
+      assigned_status: PlateNumberStatus.ASSIGNED,
+    };
+
+    try {
+      const response = await plateNumberService.updatePlateNumber(
+        filteredData[0]?.id,
+        payload
+      );
+
+      if (response.status) {
+        setOpenModal(true);
+      }
+    } catch (error) {
+      console.error("Failed:", error);
+      if (error instanceof Error) {
+        toast(`Error assigning Plate. ${error.message}`);
+      } else {
+        toast("Error assigning Plate. An unknown error occurred.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (_.isEmpty(_.trim(plateNumber))) {
+      setAllPlates(unassignedPlates);
+      return;
+    }
+  }, [unassignedPlates, plateNumber]);
+
+  const handleSelectChange = (
+    plate: PlateNumberData & { sid: number },
+    selected: boolean
+  ) => {
+    if (selected) {
+      if (!selectedPlates.some((p) => p.sid === plate.sid)) {
+        setSelectedPlates((prev) => [...prev, plate]);
+      }
+    } else {
+      setSelectedPlates((prev) => prev.filter((p) => p.sid !== plate.sid));
+    }
   };
 
   const handleSelectAll = (selected: boolean) => {
     if (selected) {
-      const allSNs = new Set(allPlates.map((plate) => plate.sn));
-      setSelectedPlates(allSNs);
+      setSelectedPlates(allPlates);
     } else {
-      setSelectedPlates(new Set());
+      setSelectedPlates([]);
     }
   };
 
+  const handleAssignPlateSelected = async () => {
+    const updates = selectedPlates.map((plate) => {
+      const payload = {
+        assigned_status: PlateNumberStatus.ASSIGNED,
+      };
+
+      return plateNumberService.updatePlateNumber(plate.id, payload);
+    });
+    try {
+      const response = await Promise.all(updates);
+
+      if (response) {
+        setOpenModal(true);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast(`Error assigning Plate. ${error.message}`);
+      } else {
+        toast("Error assigning Plate. An unknown error occurred.");
+      }
+    }
+  };
+
+  const totalPlates = allPlates.length;
+  const totalSelectedPlates = selectedPlates.length;
+
   return (
-    <div className="flex flex-col gap-8 mx-auto w-full max-w-7xl">
+    <div className="flex flex-col gap-8 mx-auto w-full max-w-7xl h-full min-h-screen">
       <DashboardPath
         pathdata={[
           {
@@ -84,28 +148,38 @@ const PlateSelectionPage: React.FC = () => {
 
       <div className="flex flex-col gap-8 mx-auto w-full max-w-7xl">
         <CardContainer>
-          <div className="grid grid-cols-1 md:grid-cols-[2.5fr_auto] gap-4 items-end">
-            <div className={"flex flex-col gap-3"}>
-              <p className={"font-semibold"}>
-                Enter the number of the plate you wish to assign
-              </p>
-              <div
-                className={
-                  "grid grid-cols-[3fr_1fr] items-center jusity-between border border-neutral-300 rounded-md"
-                }
-              >
-                <input
-                  type={"text"}
-                  placeholder={"placeholder"}
-                  className={"border-0 p-3 focus:none w-full text-sm ring-0"}
-                />
-                <p className={"px-2 text-sm font-semibold ml-auto"}>
-                  of {allPlates.length} plates in store
+          <form action="#" onSubmit={handleAssignedPlate}>
+            <div className="grid grid-cols-1 md:grid-cols-[2.5fr_auto] gap-4 items-end">
+              <div className={"flex flex-col gap-3"}>
+                <p className={"font-semibold"}>
+                  Enter the number of the plate you wish to assign
                 </p>
+                <div
+                  className={
+                    "grid grid-cols-[3fr_1fr] items-center justify-between border border-primary-300 rounded-md"
+                  }
+                >
+                  <input
+                    type={"text"}
+                    placeholder={"placeholder"}
+                    className={
+                      "border-0 p-3 focus:none w-full text-sm ring-0 focus:outline-0"
+                    }
+                    value={plateNumber}
+                    onChange={(e) => setPlateNumber(e.target.value)}
+                  />
+                  <p
+                    className={"px-2 text-xs md:text-sm font-semibold ml-auto"}
+                  >
+                    of {allPlates.length} plates in store
+                  </p>
+                </div>
               </div>
+              <Button onClick={() => {}} type="submit">
+                Assign Plate Numbers
+              </Button>
             </div>
-            <Button>Assign Plate Numbers</Button>
-          </div>
+          </form>
         </CardContainer>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
@@ -143,7 +217,7 @@ const PlateSelectionPage: React.FC = () => {
             </div>
           </div>
 
-          <Button onClick={() => {}}>Assign</Button>
+          <Button onClick={handleAssignPlateSelected}>Assign</Button>
         </div>
 
         <PlateTable
@@ -153,6 +227,16 @@ const PlateSelectionPage: React.FC = () => {
           onSelectAll={handleSelectAll}
         />
       </div>
+
+      <ResponseModalX
+        title={"Updated Successfully"}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={<>You have successfully updated the new request</>}
+        status={"success"}
+        footerBtnText={"Done"}
+        footerTrigger={() => setOpenModal(false)}
+      />
     </div>
   );
 };

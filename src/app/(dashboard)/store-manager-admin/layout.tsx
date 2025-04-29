@@ -13,6 +13,7 @@ import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
 import { PlateNumberService } from "@/services/PlateNumberService";
 import { ServiceTypeService } from "@/services/ServiceTypesService";
 import { LgaService } from "@/services/LgaService";
+import { StateService } from "@/services/StatesServices";
 
 export default function StoreManagerDashboardLayout({
   children,
@@ -36,6 +37,7 @@ export default function StoreManagerDashboardLayout({
     [dispatch]
   );
   const lgaService = useMemo(() => new LgaService(dispatch), [dispatch]);
+  const stateService = useMemo(() => new StateService(dispatch), [dispatch]);
 
   // API triggers
   useEffect(() => {
@@ -43,12 +45,14 @@ export default function StoreManagerDashboardLayout({
       await plateNumberOrderService.getAllPlateNumberOrders();
       await plateNumberService.getAllPlateNumbers();
       await serviceTypeService.getAllServiceTypes();
+      await stateService.getAllStates();
       await lgaService.getAllLgas();
     })();
   }, [
     plateNumberOrderService,
     plateNumberService,
     serviceTypeService,
+    stateService,
     lgaService,
   ]);
 

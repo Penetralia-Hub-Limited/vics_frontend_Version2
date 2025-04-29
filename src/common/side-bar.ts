@@ -585,18 +585,18 @@ export const storeManagerSidebarItems = [
         Icon: VICSSVG,
         url: "/store-manager-admin/plate-number-request",
       },
-      {
-        id: 3,
-        title: "Assessment",
-        Icon: AssessmentSVG,
-        url: "/store-manager-admin/assessment",
-      },
-      {
-        id: 4,
-        title: "Reports",
-        Icon: ReportSVG,
-        url: "/store-manager-admin/report",
-      },
+      // {
+      //   id: 3,
+      //   title: "Assessment",
+      //   Icon: AssessmentSVG,
+      //   url: "/store-manager-admin/assessment",
+      // },
+      // {
+      //   id: 4,
+      //   title: "Reports",
+      //   Icon: ReportSVG,
+      //   url: "/store-manager-admin/report",
+      // },
     ],
   },
   {
@@ -611,22 +611,22 @@ export const storeManagerSidebarItems = [
       },
     ],
   },
-  {
-    id: 3,
-    groupName: "Vehicle Management",
-    navigation: [
-      {
-        id: 1,
-        title: "Reports",
-        Icon: ReportSVG,
-        url: "/store-manager-admin/reports",
-      },
-      {
-        id: 2,
-        title: "Change of Ownership",
-        Icon: PenSVG,
-        url: "/store-manager-admin/change-of-ownership",
-      },
-    ],
-  },
+  // {
+  //   id: 3,
+  //   groupName: "Vehicle Management",
+  //   navigation: [
+  //     // {
+  //     //   id: 1,
+  //     //   title: "Reports",
+  //     //   Icon: ReportSVG,
+  //     //   url: "/store-manager-admin/reports",
+  //     // },
+  //     {
+  //       id: 2,
+  //       title: "Change of Ownership",
+  //       Icon: PenSVG,
+  //       url: "/store-manager-admin/change-of-ownership",
+  //     },
+  //   ],
+  // },
 ];

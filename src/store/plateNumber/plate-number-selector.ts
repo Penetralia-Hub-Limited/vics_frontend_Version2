@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSelector } from "reselect";
 import { RootState } from "../store";
-import { RequestStatus } from "@/common/enum";
+import { RequestStatus, PlateNumberStatus } from "@/common/enum";
 import { formattedAmount } from "@/common/helpers";
 import { format } from "date-fns";
 import { PlateNumberData } from "./plate-number-types";
@@ -25,6 +25,24 @@ export const selectSoldPlateNumber = createSelector(
       : []
 );
 
+export const selectUnassignedPlates = createSelector(
+  [selectPlateNumberReducer],
+  (plateNumber) =>
+    Array.isArray(plateNumber)
+      ? plateNumber
+          .filter(
+            (plate) => plate.assigned_status === PlateNumberStatus.UNASSIGNED
+          )
+          .map((plate, index) => {
+            return {
+              sid: index + 1,
+              date_created: `${format(plate?.created_at ? new Date(plate.created_at) : "-", "LLL. d yyyy")} | ${format(plate?.created_at ? new Date(plate.created_at) : "-", "hh:mm:ss a")}`,
+              ...plate,
+            };
+          })
+      : []
+);
+
 export const selectPlateNumber = createSelector(
   [selectPlateNumberReducer],
   (plateNumber) =>
@@ -33,6 +51,7 @@ export const selectPlateNumber = createSelector(
           return {
             sid: index + 1,
             ...plate,
+            end_code: plate?.number?.slice(-3) ?? "-",
             buyer: `${plate?.owner?.firstname ?? "-"} ${plate?.owner?.lastname ?? "-"}`,
             int_amount: plate?.invoice?.amount ?? index * 6 + 3,
             amount: formattedAmount(plate?.invoice?.amount ?? index * 6 + 3),
@@ -75,4 +94,11 @@ export const selectUsersFromPlateNumber = createSelector(
   [selectPlateNumberReducer, (_, userID: string) => userID],
   (plateNumber, userID) =>
     plateNumber.filter((plate: PlateNumberData) => plate?.owner_id === userID)
+);
+
+// Get plate Data from number
+export const selectPlateNumberFromID = createSelector(
+  [selectPlateNumberReducer, (_, number: string) => number],
+  (plateNumber, number) =>
+    plateNumber.filter((plate: PlateNumberData) => plate?.number === number)
 );
