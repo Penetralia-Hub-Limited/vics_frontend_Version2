@@ -79,7 +79,6 @@ jobs:
             -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key" \
             ./ ubuntu@$LIGHTSAIL_IP:/var/www/html
 
-          # Send .env file securely (optional: use GitHub Secret or external source)
           if [ -f .env ]; then
             echo "Uploading .env file..."
             scp -o StrictHostKeyChecking=no -i ~/.ssh/lightsail_key .env ubuntu@$LIGHTSAIL_IP:/var/www/html/.env
@@ -100,9 +99,8 @@ jobs:
               sudo apt install -y npm
             fi
 
-            if [ ! -d 'node_modules' ]; then
-              npm ci
-            fi
+            # Always reinstall node_modules freshly
+            npm ci
 
             npm run build
 
