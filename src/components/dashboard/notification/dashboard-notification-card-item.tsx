@@ -7,20 +7,23 @@ import { format } from "date-fns";
 interface IDashboardNotificationCardItem {
   notification: {
     title: string;
-    description: string;
-    date: Date;
-    onClick?: () => void;
+    content: string;
+    created_at: string;
   };
+  onClick?: () => void;
 }
 
 const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
   notification,
+  onClick,
 }) => {
-  const [idate] = useState<Date>(notification?.date);
-  const formattedDate = format(idate.toDateString(), "h:mm:ss aaa");
+  const formattedDate = format(
+    new Date(notification.created_at),
+    "h:mm:ss aaa"
+  );
 
   return (
-    <div className="mb-4 grid grid-cols-[25px_auto] items-start pb-4 last:mb-0 last:pb-0 border-b-1 border-primary-300 last:border-b-0">
+    <div className="w-full mb-4 grid grid-cols-[25px_auto] items-start pb-4 last:mb-0 last:pb-0 border-b-1 border-primary-300 last:border-b-0">
       <span className="flex h-2 w-2 translate-y-1 rounded-full bg-primary-500" />
       <div className="space-y-3">
         <div className={"flex flex-row items-start justify-between w-full"}>
@@ -38,9 +41,11 @@ const DashboardNotificationCardItem: FC<IDashboardNotificationCardItem> = ({
           </p>
         </div>
         <p className="text-xs md:text-sm text-neutral-800 line-clamp-1">
-          {notification.description}
+          {notification.title}
         </p>
-        <Button variant={"outline"}>View</Button>
+        <Button onClick={onClick} variant={"outline"}>
+          Mark as read
+        </Button>
       </div>
     </div>
   );

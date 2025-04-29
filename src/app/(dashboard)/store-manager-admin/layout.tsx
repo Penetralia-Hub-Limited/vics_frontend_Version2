@@ -14,6 +14,7 @@ import { PlateNumberService } from "@/services/PlateNumberService";
 import { ServiceTypeService } from "@/services/ServiceTypesService";
 import { LgaService } from "@/services/LgaService";
 import { StateService } from "@/services/StatesServices";
+import { NotificationsService } from "@/services/NotificationService";
 
 export default function StoreManagerDashboardLayout({
   children,
@@ -36,6 +37,10 @@ export default function StoreManagerDashboardLayout({
     () => new ServiceTypeService(dispatch),
     [dispatch]
   );
+  const notificationsService = useMemo(
+    () => new NotificationsService(dispatch),
+    [dispatch]
+  );
   const lgaService = useMemo(() => new LgaService(dispatch), [dispatch]);
   const stateService = useMemo(() => new StateService(dispatch), [dispatch]);
 
@@ -43,6 +48,7 @@ export default function StoreManagerDashboardLayout({
   useEffect(() => {
     (async () => {
       await plateNumberOrderService.getAllPlateNumberOrders();
+      await notificationsService.getAllNotifications();
       await plateNumberService.getAllPlateNumbers();
       await serviceTypeService.getAllServiceTypes();
       await stateService.getAllStates();
@@ -50,6 +56,7 @@ export default function StoreManagerDashboardLayout({
     })();
   }, [
     plateNumberOrderService,
+    notificationsService,
     plateNumberService,
     serviceTypeService,
     stateService,

@@ -17,6 +17,7 @@ import { LgaService } from "@/services/LgaService";
 import { UserService } from "@/services/UserService";
 import { ServiceTypeService } from "@/services/ServiceTypesService";
 import { VehicleService } from "@/services/VehicleService";
+import { NotificationsService } from "@/services/NotificationService";
 
 export default function SuperAdminDashboardLayout({
   children,
@@ -51,11 +52,16 @@ export default function SuperAdminDashboardLayout({
     () => new ServiceTypeService(dispatch),
     [dispatch]
   );
+  const notificationsService = useMemo(
+    () => new NotificationsService(dispatch),
+    [dispatch]
+  );
 
   // API triggers
   useEffect(() => {
     (async () => {
       await plateNumberOrderService.getAllPlateNumberOrders();
+      await notificationsService.getAllNotifications();
       await plateNumberService.getAllPlateNumbers();
       await serviceTypeService.getAllServiceTypes();
       await invoiceService.getAllInvoices();
@@ -65,10 +71,11 @@ export default function SuperAdminDashboardLayout({
       await lgaService.getAllLgas();
     })();
   }, [
-    invoiceService,
     plateNumberOrderService,
+    notificationsService,
     plateNumberService,
     serviceTypeService,
+    invoiceService,
     vehicleService,
     stateService,
     userService,

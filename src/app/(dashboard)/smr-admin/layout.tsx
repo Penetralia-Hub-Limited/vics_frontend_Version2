@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
 import { PlateNumberService } from "@/services/PlateNumberService";
 import { ServiceTypeService } from "@/services/ServiceTypesService";
+import { NotificationsService } from "@/services/NotificationService";
 
 export default function SMRDashboardLayout({
   children,
@@ -35,15 +36,25 @@ export default function SMRDashboardLayout({
     () => new ServiceTypeService(dispatch),
     [dispatch]
   );
+  const notificationsService = useMemo(
+    () => new NotificationsService(dispatch),
+    [dispatch]
+  );
 
   // API triggers
   useEffect(() => {
     (async () => {
       await plateNumberOrderService.getAllPlateNumberOrders();
+      await notificationsService.getAllNotifications();
       await plateNumberService.getAllPlateNumbers();
       await serviceTypeService.getAllServiceTypes();
     })();
-  }, [plateNumberOrderService, plateNumberService, serviceTypeService]);
+  }, [
+    plateNumberOrderService,
+    notificationsService,
+    plateNumberService,
+    serviceTypeService,
+  ]);
 
   return (
     <IsAuth>
