@@ -10,7 +10,12 @@ export const customResponses: CustomResponse[] = [
       "VICS stands for Vehicle Identification and Certification System. It helps manage plate numbers, verifications, and more.",
   },
   {
-    keywords: ["renew plate", "plate renewal", "renew my number"],
+    keywords: [
+      "renew plate",
+      "plate renewal",
+      "renew my plate number",
+      "renew my plate",
+    ],
     answer:
       "To renew your plate number, go to the Renewal section, input your vehicle and payment details, and follow the instructions.",
   },

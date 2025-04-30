@@ -14,7 +14,11 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ManagementSVG } from "@/common/svgs";
-import { PlateNumberType, PlateNumberOrderType } from "@/common/enum";
+import {
+  PlateNumberType,
+  PlateNumberOrderType,
+  PlateNumberStatus,
+} from "@/common/enum";
 import Modal from "@/components/general/modal";
 import {
   CreateNewStock,
@@ -159,7 +163,7 @@ export default function Page() {
       const platePromises = [];
 
       for (let i = 0; i < total; i++) {
-        const number = `${modalInput.lga.slice(3)}-${start + i}-${modalInput.endCode}`;
+        const number = `${modalInput.lga.slice(0, 3).toUpperCase()}-${start + i}-${modalInput.endCode}`;
 
         const modifiedPayload = {
           state_id,
@@ -167,7 +171,7 @@ export default function Page() {
           owner_id: null,
           number,
           number_status: "Paid",
-          assigned_status: null,
+          assigned_status: PlateNumberStatus.UNASSIGNED,
           type: modalInput.plate_number_type
             ? String(modalInput.plate_number_type)
             : null,
@@ -184,8 +188,9 @@ export default function Page() {
       }
 
       const responses = await Promise.all(platePromises);
+      console.log(responses);
       // Check if all the plate creation responses are successful
-      const allSuccess = responses.every((response) => response.status === 200);
+      const allSuccess = responses.every((response) => response.status);
 
       if (res.status && allSuccess) {
         setOpenModal(true);
