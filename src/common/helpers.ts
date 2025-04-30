@@ -60,7 +60,7 @@ export const getRowActions = (
 
 // Generate Plate Number Tracking ID
 export const generateTrackingId = (): string => {
-  const randomPart = Math.floor(1000 + Math.random() * 9000); // 6-digit number
+  const randomPart = Math.floor(100 + Math.random() * 900); // 3-digit number
   return `TRK-${randomPart}`;
 };
 
