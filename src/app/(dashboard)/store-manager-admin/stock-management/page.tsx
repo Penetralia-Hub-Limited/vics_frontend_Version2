@@ -22,6 +22,7 @@ import {
   CreateNewStockPropsInitialValues,
 } from "@/components/dashboard/verification-forms/create-new-stock";
 import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
+import { PlateNumberService } from "@/services/PlateNumberService";
 import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
@@ -69,6 +70,7 @@ export default function Page() {
   const [inputValues, setInputValues] =
     useState<inputValuesProp>(inputInitialValues);
   const plateOrderService = new PlateNumberOrderService(dispatch);
+  const plateService = new PlateNumberService(dispatch);
   const { lgas } = useSelector((state: RootState) => state?.lga);
   const filteredLGA = lgas.map((lga) => lga.name);
   const stock = useSelector(selectPlateNumber);
@@ -146,12 +148,46 @@ export default function Page() {
     try {
       const res = await plateOrderService.createPlateNumberOrder({
         tracking_id: generateTrackingId(),
-        state_id: state_id,
+        state_id,
         type: PlateNumberOrderType.REQUEST,
         ...modalInput,
       });
 
-      if (res.status) {
+      const total = Number(modalInput?.total_number_requested);
+      const start = Number(modalInput?.startNumber);
+
+      const platePromises = [];
+
+      for (let i = 0; i < total; i++) {
+        const number = `${modalInput.lga.slice(3)}-${start + i}-${modalInput.endCode}`;
+
+        const modifiedPayload = {
+          state_id,
+          agent_id: null,
+          owner_id: null,
+          number,
+          number_status: "Paid",
+          assigned_status: null,
+          type: modalInput.plate_number_type
+            ? String(modalInput.plate_number_type)
+            : null,
+          sub_type: modalInput.plate_number_sub_type
+            ? String(modalInput.plate_number_sub_type)
+            : null,
+          status: "Sold",
+          request_id: null,
+          stock_id: null,
+          assigned_date: null,
+        };
+
+        platePromises.push(plateService.createPlateNumber(modifiedPayload));
+      }
+
+      const responses = await Promise.all(platePromises);
+      // Check if all the plate creation responses are successful
+      const allSuccess = responses.every((response) => response.status === 200);
+
+      if (res.status && allSuccess) {
         setOpenModal(true);
       }
     } catch (error) {

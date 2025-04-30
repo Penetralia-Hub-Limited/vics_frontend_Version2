@@ -51,7 +51,7 @@ export const selectPlateNumber = createSelector(
           return {
             sid: index + 1,
             ...plate,
-            end_code: plate?.number?.slice(-3) ?? "-",
+            end_code: plate?.number?.slice(-2) ?? "-",
             buyer: `${plate?.owner?.firstname ?? "-"} ${plate?.owner?.lastname ?? "-"}`,
             int_amount: plate?.invoice?.amount ?? index * 6 + 3,
             amount: formattedAmount(plate?.invoice?.amount ?? index * 6 + 3),
