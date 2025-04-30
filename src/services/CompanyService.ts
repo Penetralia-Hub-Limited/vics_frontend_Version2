@@ -11,7 +11,7 @@ import {
 } from "@/store/company/company-slice";
 
 export class CompanyService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/companies";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/companies`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

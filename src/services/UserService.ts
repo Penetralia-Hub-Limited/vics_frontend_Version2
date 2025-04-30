@@ -13,7 +13,7 @@ import {
 } from "@/store/user/user-slice";
 
 export class UserService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/users";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/users`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {
