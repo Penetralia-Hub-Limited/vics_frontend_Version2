@@ -61,6 +61,7 @@ export interface CreatePlateNumberOrderProps {
   vehicle_id?: string | null;
   type?: PlateNumberOrderType;
   status?: string;
+  insurance_status?: string;
   assignment_status?: string;
   fancy_plate?: string;
   prefix?: number | null;

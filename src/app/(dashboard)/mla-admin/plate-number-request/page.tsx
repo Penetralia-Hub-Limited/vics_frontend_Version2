@@ -237,8 +237,9 @@ export default function Page() {
         content={<>You have successfully created a new request</>}
         status={"success"}
         footerBtnText={"Done"}
-        footerTrigger={() =>
-          router.push("/mla-admin/plate-number-request/view-request")
+        footerTrigger={
+          () => {}
+          // router.push("/mla-admin/plate-number-request/view-request")
         }
       />
     </main>

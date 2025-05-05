@@ -54,6 +54,7 @@ export interface RowAction {
   title: string;
   action: () => void;
   rowData?: TableData;
+  color?: string;
 }
 
 type DataTableProps = {
@@ -195,7 +196,10 @@ export function DataTableWButton({
                         <DropdownMenuItem
                           key={idx}
                           onClick={action.action}
-                          className="flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50"
+                          className={cn(
+                            action.color ? action.color : "",
+                            "flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50"
+                          )}
                         >
                           {action.title}
                         </DropdownMenuItem>

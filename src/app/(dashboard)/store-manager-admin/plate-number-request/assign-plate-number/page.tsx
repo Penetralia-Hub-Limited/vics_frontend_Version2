@@ -49,6 +49,7 @@ const PlateSelectionPage: React.FC = () => {
 
     const payload = {
       assigned_status: PlateNumberStatus.ASSIGNED,
+      assigned_date: new Date().toDateString(),
     };
 
     try {

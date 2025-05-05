@@ -18,6 +18,8 @@ import {
   PlateNumberType,
   PlateNumberOrderType,
   PlateNumberStatus,
+  RequestStatus,
+  InsuranceStatus,
 } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import {
@@ -153,6 +155,8 @@ export default function Page() {
       const res = await plateOrderService.createPlateNumberOrder({
         tracking_id: generateTrackingId(),
         state_id,
+        status: RequestStatus.SUCCESS,
+        insurance_status: InsuranceStatus.NOTAPPROVED,
         type: PlateNumberOrderType.REQUEST,
         ...modalInput,
       });

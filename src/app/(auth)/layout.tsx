@@ -23,11 +23,12 @@ export default function AuthLayout({
 
         <div
           className={
-            "py-18 bg-cover bg-center flex w-full items-center justify-center grayscale-[0.5]"
+            "relative py-18 bg-cover bg-center flex w-full items-center justify-center grayscale-[0.5]"
           }
           style={{ backgroundImage: `url(${BG.src})` }}
         >
-          {children}
+          <div className="absolute inset-0 bg-black opacity-50 top-0 h-full"></div>
+          <div className="relative z-10 w-full h-full">{children}</div>
         </div>
 
         <Footer

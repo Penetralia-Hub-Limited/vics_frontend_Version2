@@ -116,3 +116,14 @@ export const selectVehicleCreatorIDFromPlateNumberOrders = createSelector(
     return matchedOrder?.invoice?.payer_id ?? null;
   }
 );
+
+// Get plate order object from plate number order ID
+export const selectPlateNumberOrderFromID = createSelector(
+  [selectPlateNumberOrderReducer, (_: any, plateid: string | null) => plateid],
+  (plateNumberOrders, plateid) => {
+    const filteredPlate = plateNumberOrders.find(
+      (order) => order?.id === plateid
+    );
+    return filteredPlate ?? null;
+  }
+);
