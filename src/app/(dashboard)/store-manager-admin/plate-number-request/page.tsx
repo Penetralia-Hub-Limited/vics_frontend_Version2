@@ -13,13 +13,14 @@ import DashboardCompSelect from "@/components/dashboard/dashboard-component-sele
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
 import { useSelector } from "react-redux";
-import { PlateNumberType, InsuranceStatus } from "@/common/enum";
+import { PlateNumberType, InsuranceStatus, Role } from "@/common/enum";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import {
   RowAction,
   TableData,
 } from "@/components/dashboard/dashboard-table-w-button";
 import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
+import { RootState } from "@/store/store";
 
 const tableHeaders = [
   { key: "sid", title: "S/N" },
@@ -60,6 +61,10 @@ const inputInitialValues = {
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 10;
+  const mlaUsers = useSelector((state: RootState) => state.user.users);
+  const filteredMLAs = mlaUsers
+    .filter((user) => user.role === Role.MLA)
+    .map((user) => `${user.firstname} ${user.lastname}`);
   const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [inputValues, setInputValues] =
@@ -225,7 +230,7 @@ export default function Page() {
             <DashboardCompSelect
               title={"MLA"}
               placeholder={"-- Select MLA --"}
-              items={["MLA1", "MLA2"]}
+              items={filteredMLAs}
               selected={inputValues.mla}
               onSelect={(selected) =>
                 setInputValues((prev) => ({

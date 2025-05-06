@@ -113,11 +113,11 @@ export const NewPlateSalesStep2: FC<INewPlateSalesStep2> = ({
             type: "text",
             htmlfor: "vehicleCategory",
           }}
-          value={inputValues.capacity}
+          value={inputValues.category}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              vehicleCategory: e.target.value,
+              category: e.target.value,
             }))
           }
         />

@@ -147,7 +147,9 @@ export default function Page() {
                   title={"Success"}
                   content={<p>Invoice Issued Successfully</p>}
                   btnText={"Proceed"}
-                  trigger={() => router.push("/mla-admin/renewal/dashboard")}
+                  trigger={() =>
+                    router.push("/mla-admin/renewal/renewal-dashboard")
+                  }
                   footerBtnText={"Done"}
                 />
               ) : (

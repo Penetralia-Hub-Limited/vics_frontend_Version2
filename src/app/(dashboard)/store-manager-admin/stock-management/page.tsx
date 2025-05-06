@@ -14,13 +14,7 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ManagementSVG } from "@/common/svgs";
-import {
-  PlateNumberType,
-  PlateNumberOrderType,
-  PlateNumberStatus,
-  RequestStatus,
-  InsuranceStatus,
-} from "@/common/enum";
+import { PlateNumberType } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import {
   CreateNewStock,
@@ -35,6 +29,7 @@ import { RootState } from "@/store/store";
 import { toast } from "sonner";
 import { generateTrackingId } from "@/common/helpers";
 import { selectStateIDFromStateName } from "@/store/states/state-selector";
+import { AuthState } from "@/store/auth/auth-user-types";
 
 const tableHeaders = [
   { title: "S/N", key: "sid" },
@@ -77,6 +72,7 @@ export default function Page() {
     useState<inputValuesProp>(inputInitialValues);
   const plateOrderService = new PlateNumberOrderService(dispatch);
   const plateService = new PlateNumberService(dispatch);
+  const { data } = useSelector((state: { auth: AuthState }) => state.auth);
   const { lgas } = useSelector((state: RootState) => state?.lga);
   const filteredLGA = lgas.map((lga) => lga.name);
   const stock = useSelector(selectPlateNumber);
@@ -152,14 +148,7 @@ export default function Page() {
 
   const handleSubmit = async () => {
     try {
-      const res = await plateOrderService.createPlateNumberOrder({
-        tracking_id: generateTrackingId(),
-        state_id,
-        status: RequestStatus.SUCCESS,
-        insurance_status: InsuranceStatus.NOTAPPROVED,
-        type: PlateNumberOrderType.REQUEST,
-        ...modalInput,
-      });
+      // store manager should create stock
 
       const total = Number(modalInput?.total_number_requested);
       const start = Number(modalInput?.startNumber);
@@ -174,15 +163,11 @@ export default function Page() {
           agent_id: null,
           owner_id: null,
           number,
-          number_status: "Paid",
-          assigned_status: PlateNumberStatus.UNASSIGNED,
-          type: modalInput.plate_number_type
-            ? String(modalInput.plate_number_type)
-            : null,
-          sub_type: modalInput.plate_number_sub_type
-            ? String(modalInput.plate_number_sub_type)
-            : null,
-          status: "Sold",
+          number_status: null,
+          assigned_status: null,
+          type: String(modalInput.plate_number_type) ?? null,
+          sub_type: String(modalInput.plate_number_sub_type) ?? null,
+          status: null,
           request_id: null,
           stock_id: null,
           assigned_date: null,
@@ -196,7 +181,7 @@ export default function Page() {
       // Check if all the plate creation responses are successful
       const allSuccess = responses.every((response) => response.status);
 
-      if (res.status && allSuccess) {
+      if (allSuccess) {
         setOpenModal(true);
       }
     } catch (error) {
@@ -341,7 +326,9 @@ export default function Page() {
         status={"success"}
         footerBtnText={"Done"}
         footerTrigger={() =>
-          router.push("/store-manager-admin/plate-number-request")
+          router.push(
+            "/store-manager-admin/plate-number-request/assign-plate-number"
+          )
         }
       />
     </main>

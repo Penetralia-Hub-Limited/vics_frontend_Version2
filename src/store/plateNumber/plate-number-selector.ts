@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSelector } from "reselect";
 import { RootState } from "../store";
-import { RequestStatus, PlateNumberStatus } from "@/common/enum";
+import { PlateNumberStatus } from "@/common/enum";
 import { formattedAmount } from "@/common/helpers";
 import { format } from "date-fns";
 import { PlateNumberData } from "./plate-number-types";
@@ -14,7 +14,7 @@ export const selectSoldPlateNumber = createSelector(
   (plateNumber) =>
     Array.isArray(plateNumber)
       ? plateNumber
-          .filter((plate) => plate.status === RequestStatus.SOLD)
+          .filter((plate) => plate.status === PlateNumberStatus.ASSIGNED)
           .map((plate, index) => {
             return {
               sid: index + 1,
@@ -101,4 +101,23 @@ export const selectPlateNumberFromID = createSelector(
   [selectPlateNumberReducer, (_, number: string) => number],
   (plateNumber, number) =>
     plateNumber.filter((plate: PlateNumberData) => plate?.number === number)
+);
+
+// Get the assigned plate number
+export const selectAssignedPlateNumber = createSelector(
+  [selectPlateNumberReducer],
+  (plateNumber) =>
+    Array.isArray(plateNumber)
+      ? plateNumber
+          .filter(
+            (plate) => plate.assigned_status === PlateNumberStatus.ASSIGNED
+          )
+          .map((plate, index) => {
+            return {
+              sid: index + 1,
+              date_created: `${format(plate?.created_at ? new Date(plate.created_at) : "-", "LLL. d yyyy")} | ${format(plate?.created_at ? new Date(plate.created_at) : "-", "hh:mm:ss a")}`,
+              ...plate,
+            };
+          })
+      : []
 );

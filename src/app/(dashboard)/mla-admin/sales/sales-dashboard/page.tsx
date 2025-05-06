@@ -263,6 +263,8 @@ export default function Page() {
         footerTrigger={() => {
           if (isNumberVerified && doesUserExist?.owner_id) {
             router.push(`/mla-admin/sales/newsales/${doesUserExist?.owner_id}`);
+          } else {
+            router.push("/mla-admin/sales/newsales/new");
           }
         }}
       />

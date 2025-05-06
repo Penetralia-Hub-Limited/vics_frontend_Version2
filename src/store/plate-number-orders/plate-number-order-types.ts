@@ -58,10 +58,14 @@ export interface PlateNumberOrderResponse {
 export interface CreatePlateNumberOrderProps {
   invoice_id?: string | null;
   state_id?: string | null;
+  approver_id?: string | null;
+  recommender_id?: string | null;
+  agent_id?: string | null;
   vehicle_id?: string | null;
   type?: PlateNumberOrderType;
   status?: string;
   insurance_status?: string;
+  issuance_status?: string;
   assignment_status?: string;
   fancy_plate?: string;
   prefix?: number | null;

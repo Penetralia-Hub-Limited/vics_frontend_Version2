@@ -19,7 +19,12 @@ import {
   RecommendPlateNoRequestProp,
   RecommendPlateNoRequestInitialValues,
 } from "@/components/dashboard/verification-forms/recommend-and-update";
-import { RequestStatus, InsuranceStatus, PlateNumberType } from "@/common/enum";
+import {
+  RequestStatus,
+  InsuranceStatus,
+  PlateNumberType,
+  Role,
+} from "@/common/enum";
 import { ModalX } from "@/components/general/modalX";
 import {
   selectPlateNumberRequestTableData,
@@ -28,6 +33,7 @@ import {
 import { PlateNumberOrderData } from "@/store/plate-number-orders/plate-number-order-types";
 import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
 import { toast } from "sonner";
+import { RootState } from "@/store/store";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -80,6 +86,10 @@ export default function Page() {
   const singlePlateData = useSelector((plateState) =>
     selectPlateNumberOrderFromID(plateState, plateID)
   );
+  const mlaUsers = useSelector((state: RootState) => state.user.users);
+  const filteredMLAs = mlaUsers
+    .filter((user) => user.role === Role.MLA)
+    .map((user) => `${user.firstname} ${user.lastname}`);
 
   const totalPages = Math.ceil(plateNumbertableData.length / itemsPerPage);
   const paginatedData = plateNumbertableData.slice(
@@ -99,8 +109,8 @@ export default function Page() {
 
   const handleUpdate = async (id: string, status: "approve" | "disapprove") => {
     const payload = {
-      status:
-        status === "approve" ? RequestStatus.SUCCESS : RequestStatus.PENDING,
+      recommended_number:
+        status === "approve" ? singlePlateData?.total_number_requested : 0,
     };
 
     try {
@@ -119,7 +129,6 @@ export default function Page() {
   const handleRecommend = async (id: string) => {
     const payload = {
       recommended_number: modalInput.plateQty,
-      number_assigned: modalInput.plateQty,
     };
 
     try {
@@ -210,7 +219,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"MLA"}
             placeholder={"-- Select MLA --"}
-            items={["MLA1", "MLA2"]}
+            items={filteredMLAs}
             selected={inputValues.mla}
             onSelect={(selected) =>
               setInputValues((prev) => ({

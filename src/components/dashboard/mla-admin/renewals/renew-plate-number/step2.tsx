@@ -2,6 +2,7 @@ import { FC, Dispatch, SetStateAction } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { inputRenewPlateNumberPropsStep2 } from "./renew-plate-constant";
+import { VehicleCategory } from "@/common/enum";
 
 interface IRenewPlateNumberStep2 {
   inputValues: inputRenewPlateNumberPropsStep2;
@@ -54,7 +55,7 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <DashboardCompSelect
           title={"Vehicle Make"}
           placeholder={"-- Select make --"}
-          items={["Nigeria", "Camerron"]}
+          items={[...Object.values(VehicleCategory)]}
           selected={inputValues.vehicleMake}
           onSelect={(selected) =>
             setInputValues((prev) => ({
@@ -82,7 +83,7 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <DashboardCompSelect
           title={"Model Year"}
           placeholder={"-- Select year --"}
-          items={["Nigeria", "Camerron"]}
+          items={[...Object.values(VehicleCategory)]}
           selected={inputValues.modelYear}
           onSelect={(selected) =>
             setInputValues((prev) => ({

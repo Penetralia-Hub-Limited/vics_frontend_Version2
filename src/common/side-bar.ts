@@ -503,12 +503,11 @@ export const mlaSideBarItems = [
         id: 2,
         title: "Tax Payer",
         Icon: TaxPayerSVG,
-        url: "/mla-admin/tax-payer",
         dropdown: [
           {
             id: 1,
             title: "Tax Payer Dashboard",
-            url: "/mla-admin/tax-payer/dashboard",
+            url: "/mla-admin/tax-payer/tax-payer-dashboard",
           },
           {
             id: 2,

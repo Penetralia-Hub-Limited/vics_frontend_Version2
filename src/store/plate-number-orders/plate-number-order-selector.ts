@@ -82,7 +82,7 @@ export const selectPlateNumberRequestTableData = createSelector(
           return {
             sid: index + 1,
             ...order,
-            created_by: `${order?.creator?.firstname ?? "-"} ${order?.creator?.lastname ?? "-"}`,
+            mla: `${order?.creator?.firstname ?? "-"} ${order?.creator?.lastname ?? "-"}`,
             date_created: `${format(order?.created_at ?? null, "LLL. d yyyy")} | ${format(order?.created_at ?? null, "hh:mm:ss a")}`,
             recommender: `${order.recommender?.firstname ?? "-"} ${order.recommender?.lastname ?? "-"}`,
             approver: `${order.approver?.firstname ?? "-"} ${order.approver?.lastname ?? "-"}`,

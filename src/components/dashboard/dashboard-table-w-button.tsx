@@ -24,6 +24,8 @@ import {
   ApprovalStatus,
   CardStatus,
   PlateStatus,
+  IssuanceStatus,
+  RequestStatus,
 } from "@/common/enum";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -47,6 +49,8 @@ export interface TableData {
     | ApprovalStatus
     | CardStatus
     | PlateStatus
+    | IssuanceStatus
+    | RequestStatus
     | object;
 }
 
@@ -92,6 +96,14 @@ const isCardStatus = (value: unknown): value is CardStatus => {
 
 const isPlateStatus = (value: unknown): value is PlateStatus => {
   return Object.values(PlateStatus).includes(value as PlateStatus);
+};
+
+const isIssuanceStatus = (value: unknown): value is IssuanceStatus => {
+  return Object.values(IssuanceStatus).includes(value as IssuanceStatus);
+};
+
+const isRequestStatus = (value: unknown): value is RequestStatus => {
+  return Object.values(RequestStatus).includes(value as RequestStatus);
 };
 
 export function DataTableWButton({
@@ -147,6 +159,8 @@ export function DataTableWButton({
                       isUserStatus(cellValue) ||
                       isApprovalStatus(cellValue) ||
                       isCardStatus(cellValue) ||
+                      isIssuanceStatus(cellValue) ||
+                      isRequestStatus(cellValue) ||
                       isPlateStatus(cellValue) ? (
                       <span
                         className={cn(
@@ -154,14 +168,18 @@ export function DataTableWButton({
                           (cellValue === PaymentStatus.PAID ||
                             cellValue === PlateNumberStatus.ASSIGNED ||
                             cellValue === UserStatus.ACTIVE ||
+                            cellValue === IssuanceStatus.ASSIGNED ||
+                            cellValue === RequestStatus.SUCCESS ||
                             cellValue === ApprovalStatus.APPROVED) &&
                             "bg-success-100 text-primary-800",
                           (cellValue === PaymentStatus.NOTPAID ||
                             cellValue === PlateNumberStatus.UNASSIGNED ||
                             cellValue === UserStatus.DEACTIVATED ||
+                            cellValue === IssuanceStatus.UNASSIGNED ||
                             cellValue === ApprovalStatus.NOTAPPROVED) &&
                             "bg-failed text-red-800",
                           (cellValue === PlateStatus.SOLD ||
+                            cellValue === RequestStatus.PENDING ||
                             cellValue === CardStatus.PENDING) &&
                             "text-pending-800 bg-pending-100",
                           isUserRole(cellValue) && "bg-role text-white"

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "@/utils/axios-instance";
 import { getCookie } from "cookies-next";
 import { AppDispatch } from "@/store/store";

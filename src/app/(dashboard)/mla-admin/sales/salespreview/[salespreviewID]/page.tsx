@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 
 const tableHeaders = [
   { key: "id", title: "S/N" },
-  // { key: "paymentdescription", title: "Payment Description" },
+  { key: "paymentdescription", title: "Payment Description" },
   { key: "qty", title: "Quantity" },
   { key: "unitprice", title: "Unit Price" },
   { key: "totalamount", title: "Total Amount" },

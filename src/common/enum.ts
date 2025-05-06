@@ -44,14 +44,19 @@ export enum CardStatus {
 
 export enum RequestStatus {
   PENDING = "Pending",
-  SOLD = "Sold",
-  SUCCESS = "Success",
+  APPROVED = "Approved",
+  NOTAPPROVED = "Not Approved",
 }
 
 export enum SelectCardStatus {
   PRINTED = "Printed",
   NOTPRINTED = "Not Printed",
   NOTPAID = "Not Paid",
+}
+
+export enum IssuanceStatus {
+  ASSIGNED = "Assigned",
+  UNASSIGNED = "Unassigned",
 }
 
 export enum InsuranceStatus {

@@ -23,6 +23,7 @@ export interface IFieldItems {
   name?: string;
   type?: string;
   placeholder?: string;
+  compulsory?: boolean;
 }
 
 export interface IVehiceManagement {
