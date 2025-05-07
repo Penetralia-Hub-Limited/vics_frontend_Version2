@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import CardContainer from "@/components/general/card-container";
 import DashboardPath from "@/components/dashboard/dashboard-path";
@@ -22,6 +23,8 @@ import {
   inputRenewPlateNumberPropsStep3,
   inputRenewPlateNumberPropsStep4,
 } from "@/components/dashboard/mla-admin/renewals/renew-plate-number/renew-plate-constant";
+import { selectUsersInfoFromPlateNumber } from "@/store/plateNumber/plate-number-selector";
+import { selectVehicleInfoFromPlateID } from "@/store/vehicle/vehicle-selector";
 
 const stepdetails = [
   {
@@ -44,21 +47,60 @@ const stepdetails = [
 
 export default function Page() {
   const router = useRouter();
+  const params = useParams<{ plateId: string }>();
+  const { plateId } = params;
   const totalSteps = stepdetails.length;
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const userInfo = useSelector((state) =>
+    selectUsersInfoFromPlateNumber(state, plateId)
+  )[0];
+  const vehicleInfo = useSelector((state) =>
+    selectVehicleInfoFromPlateID(state, plateId)
+  );
+
+  console.log("VI ", vehicleInfo);
+
   const [step1InputValues, setStep1InputValues] =
     useState<inputRenewPlateNumberPropsStep1>(initialValuesStep1);
-
   const [step2InputValues, setStep2InputValues] =
     useState<inputRenewPlateNumberPropsStep2>(initialValuesStep2);
-
   const [step3InputValues, setStep3InputValues] =
     useState<inputRenewPlateNumberPropsStep3>(initialValuesStep3);
-
   const [step4InputValues, setStep4InputValues] =
     useState<inputRenewPlateNumberPropsStep4>({
       selectedServices: {},
     });
+
+  useEffect(() => {
+    setStep1InputValues((prev) => ({
+      ...prev,
+      fullName: userInfo
+        ? `${userInfo?.firstname} ${userInfo?.lastname}`
+        : "Not available",
+      ...userInfo,
+    }));
+
+    setStep2InputValues((prev) => ({
+      ...prev,
+      chasis_number: vehicleInfo?.chasis_number ?? "",
+      engine_number: vehicleInfo?.engine_number ?? "",
+      make: vehicleInfo?.make ?? "",
+      model: vehicleInfo?.model ?? "",
+      year: vehicleInfo?.year ?? "",
+      category: vehicleInfo?.category ?? "",
+      policy_sector: vehicleInfo?.policy_sector ?? "",
+      color: vehicleInfo?.color ?? "",
+      capacity: vehicleInfo?.capacity ?? "",
+      weight: vehicleInfo?.weight?.toString() ?? "",
+      engine_capacity: vehicleInfo?.engine_capacity ?? "",
+      load: vehicleInfo?.load ?? "",
+    }));
+
+    setStep3InputValues((prev) => ({
+      ...prev,
+      ...vehicleInfo,
+    }));
+  }, [plateId]);
 
   const handleNextStep = () => {
     setCurrentStep((prev) => (prev < totalSteps ? prev + 1 : prev));

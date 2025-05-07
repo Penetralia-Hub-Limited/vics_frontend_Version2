@@ -15,6 +15,7 @@ import invoiceTypeReducer from "./invoice-type/invoice-type-slice";
 import plateNumberOrderReducer from "./plate-number-orders/plate-number-order-slice";
 import offenceReducer from "./offence/offence-slice";
 import notificationReducer from "./notifications/notifications-slice";
+import stockReducer from "./stock/stock-slice";
 
 const persistConfig = {
   key: "root",
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   platenumberorder: plateNumberOrderReducer,
   offences: offenceReducer,
   notification: notificationReducer,
+  stock: stockReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

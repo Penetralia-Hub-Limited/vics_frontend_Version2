@@ -16,6 +16,23 @@ export const formattedAmount = (amount: number) =>
   }).format();
 
 /**
+ * Re-format currency to a number
+ */
+export function parseCurrency(
+  value: string,
+  symbolToRemove: string = "₦"
+): number {
+  if (!value) return 0;
+
+  const cleaned = value
+    .replace(symbolToRemove, "") // Remove the currency symbol
+    .replace(/,/g, "") // Remove commas
+    .trim(); // Remove leading/trailing spaces
+
+  return Number(cleaned) || 0;
+}
+
+/**
  * Date ranges for the select component
  */
 export const DATE_RANGES: Record<

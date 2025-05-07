@@ -1,7 +1,7 @@
 export type inputSalesPropsStep1 = {
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   address: string;
   nationality: string;
   date: Date | undefined;
@@ -12,7 +12,7 @@ export type inputSalesPropsStep1 = {
 export const initialSalesValuesStep1 = {
   fullName: "",
   email: "",
-  phoneNumber: "",
+  phone: "",
   address: "",
   nationality: "",
   userID: "",
@@ -30,8 +30,8 @@ export const initialSalesValuesStep2 = {
   policy_sector: "",
   color: "",
   capacity: "",
-  netweight: "",
-  vehicleenginecapacity: "",
+  weight: "",
+  engine_capacity: "",
   load: "",
 };
 
@@ -45,25 +45,25 @@ export type inputSalesPropsStep2 = {
   policy_sector: string;
   color: string;
   capacity: string;
-  netweight: string;
-  vehicleenginecapacity: string;
+  weight: string;
+  engine_capacity: string;
   load: string;
 };
 
 export type inputSalesPropsStep3 = {
   plateNumber: string;
-  plateNumberType: string;
+  type: string;
 };
 
 export const initialSalesValuesStep3 = {
   plateNumber: "",
-  plateNumberType: "",
+  type: "",
 };
 
 export type inputSalesPropsStep4 = {
-  insurance: string;
+  insurance_number: string;
 };
 
 export const initialSalesValuesStep4 = {
-  insurance: "",
+  insurance_number: "",
 };

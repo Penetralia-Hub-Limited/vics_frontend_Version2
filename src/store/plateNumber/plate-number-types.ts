@@ -43,13 +43,13 @@ export interface PlateNumberResponse {
 export interface CreatePlateNumberProps {
   state_id: string;
   number: string;
-  number_status: string | null;
-  status: string | null;
-  agent_id: string | null;
-  owner_id: string | null;
-  request_id: string | null;
-  stock_id: string | null;
-  type: string | null;
-  sub_type: string | null;
-  assigned_status: string | null;
+  number_status?: string | null;
+  status?: string | null;
+  agent_id?: string | null;
+  owner_id?: string | null;
+  request_id?: string | null;
+  stock_id?: string | null;
+  type?: string | null;
+  sub_type?: string | null;
+  assigned_status?: string | null;
 }

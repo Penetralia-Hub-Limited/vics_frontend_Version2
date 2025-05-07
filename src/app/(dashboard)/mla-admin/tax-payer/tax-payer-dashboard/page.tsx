@@ -64,7 +64,10 @@ export default function Page() {
     return [
       {
         title: "Preview",
-        action: () => router.push("/mla-admin/tax-payer/tax-payer-information"),
+        action: () =>
+          router.push(
+            `/mla-admin/tax-payer/tax-payer-information/${tableRow.id}`
+          ),
       },
       {
         title: "Edit",

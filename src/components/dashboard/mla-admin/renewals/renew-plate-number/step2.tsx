@@ -2,7 +2,14 @@ import { FC, Dispatch, SetStateAction } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { inputRenewPlateNumberPropsStep2 } from "./renew-plate-constant";
-import { VehicleCategory } from "@/common/enum";
+import {
+  VehicleModels,
+  VehicleCategory,
+  VehicleMakes,
+  EngineCapacity,
+  LoadWeight,
+} from "@/common/enum";
+import { generateYears } from "@/common/helpers";
 
 interface IRenewPlateNumberStep2 {
   inputValues: inputRenewPlateNumberPropsStep2;
@@ -18,34 +25,35 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
         <InputWithLabel
           items={{
-            id: "chasisnumber",
+            id: "chasis_number",
             label: "Chasis Number",
             placeholder: "Chasis Number",
             type: "text",
-            htmlfor: "chasisnumber",
+            htmlfor: "chasis_number",
+            compulsory: true,
           }}
-          value={inputValues.chasisnumber}
+          value={inputValues.chasis_number ?? ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              chasisnumber: e.target.value,
+              chasis_number: e.target.value,
             }))
           }
         />
 
         <InputWithLabel
           items={{
-            id: "enginenumber",
+            id: "engine_number",
             label: "Engine Number",
             placeholder: "Engine Number",
             type: "text",
-            htmlfor: "enginenumber",
+            htmlfor: "engine_number",
           }}
-          value={inputValues.enginenumber}
+          value={inputValues.engine_number ?? ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              enginenumber: e.target.value,
+              engine_number: e.target.value,
             }))
           }
         />
@@ -55,12 +63,12 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <DashboardCompSelect
           title={"Vehicle Make"}
           placeholder={"-- Select make --"}
-          items={[...Object.values(VehicleCategory)]}
-          selected={inputValues.vehicleMake}
+          items={[...Object.values(VehicleMakes)]}
+          selected={inputValues.make}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              vehicleMake: (selected as string) ?? "",
+              make: (selected as string) ?? "",
             }))
           }
         />
@@ -68,12 +76,12 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <DashboardCompSelect
           title={"Vehicle Model"}
           placeholder={"-- Select model --"}
-          items={["Nigeria", "Camerron"]}
-          selected={inputValues.vehicleModel}
+          items={[...Object.values(VehicleModels)]}
+          selected={inputValues.model}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              vehicleModel: (selected as string) ?? "",
+              model: (selected as string) ?? "",
             }))
           }
         />
@@ -83,12 +91,12 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <DashboardCompSelect
           title={"Model Year"}
           placeholder={"-- Select year --"}
-          items={[...Object.values(VehicleCategory)]}
-          selected={inputValues.modelYear}
+          items={generateYears()}
+          selected={inputValues.year}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              modelYear: (selected as string) ?? "",
+              year: (selected as string) ?? "",
             }))
           }
         />
@@ -96,12 +104,12 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <DashboardCompSelect
           title={"Vehicle Category"}
           placeholder={"-- Select category --"}
-          items={["Nigeria", "Camerron"]}
-          selected={inputValues.vehicleCategory}
+          items={[...Object.values(VehicleCategory)]}
+          selected={inputValues.category}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              vehicleCategory: (selected as string) ?? "",
+              category: (selected as string) ?? "",
             }))
           }
         />
@@ -111,25 +119,30 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <DashboardCompSelect
           title={"Policy Sector"}
           placeholder={"-- Select sector --"}
-          items={["Nigeria", "Camerron"]}
-          selected={inputValues.policySector}
+          items={["Individual", "Group"]}
+          selected={inputValues.policy_sector}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              policySector: (selected as string) ?? "",
+              policy_sector: (selected as string) ?? "",
             }))
           }
         />
 
-        <DashboardCompSelect
-          title={"Vehicle Color"}
-          placeholder={"-- Select color --"}
-          items={["Nigeria", "Camerron"]}
-          selected={inputValues.vehicleColor}
-          onSelect={(selected) =>
+        <InputWithLabel
+          items={{
+            id: "color",
+            label: "Vehicle Color",
+            placeholder: "Vehicle Color",
+            type: "text",
+            htmlfor: "color",
+            compulsory: true,
+          }}
+          value={inputValues.color ?? ""}
+          onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              vehicleColor: (selected as string) ?? "",
+              color: e.target.value,
             }))
           }
         />
@@ -139,53 +152,49 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <InputWithLabel
           min={0}
           items={{
-            id: "novehiclecapacity",
+            id: "capacity",
             label: "No. of Persons Vehicle Can Carry",
             placeholder: "0",
             type: "number",
-            htmlfor: "novehiclecapacity",
+            htmlfor: "capacity",
           }}
-          value={inputValues.novehiclecapacity}
+          value={inputValues.capacity ?? ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              novehiclecapacity: parseInt(e.target.value) || 0,
+              capacity: e.target.value ?? "",
             }))
           }
         />
 
         <InputWithLabel
           items={{
-            id: "netweight",
+            id: "weight",
             label: "Net Weight",
             placeholder: "Net Weight",
             type: "text",
-            htmlfor: "netweight",
+            htmlfor: "weight",
           }}
-          value={inputValues.netweight}
+          value={inputValues.weight ?? ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              netweight: e.target.value,
+              weight: e.target.value,
             }))
           }
         />
       </div>
 
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
-        <InputWithLabel
-          items={{
-            id: "vehicleenginecapacity",
-            label: "Vehicle Engine Capacity",
-            placeholder: "Vehicle Engine Capacity",
-            type: "text",
-            htmlfor: "vehicleenginecapacity",
-          }}
-          value={inputValues.vehicleenginecapacity}
-          onChange={(e) =>
+        <DashboardCompSelect
+          title={"Vehicle Engine Capacity"}
+          placeholder={"-- Select Engine Capacity --"}
+          items={[...Object.values(EngineCapacity)]}
+          selected={inputValues.engine_capacity}
+          onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              vehicleenginecapacity: e.target.value,
+              engine_capacity: (selected as string) ?? "",
             }))
           }
         />
@@ -193,12 +202,12 @@ export const RenewPlateNumberStep2: FC<IRenewPlateNumberStep2> = ({
         <DashboardCompSelect
           title={"Vehicle Load Weight"}
           placeholder={"-- Select Load Weight --"}
-          items={["Nigeria", "Camerron"]}
-          selected={inputValues.vehicleLoad}
+          items={[...Object.values(LoadWeight)]}
+          selected={inputValues.load}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              vehicleLoad: (selected as string) ?? "",
+              load: (selected as string) ?? "",
             }))
           }
         />

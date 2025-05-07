@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Button } from "../ui/button";
-import Loading from "@/app/(dashboard)/loading";
+import Loading from "@/components/general/spinner";
 
 interface IForm {
   title: string;

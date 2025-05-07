@@ -37,10 +37,12 @@ export default function Page() {
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [plateNumber, setPlateNumber] = useState<string>("");
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const isPlateNumberValid = useSelector((plateNumberReducer) =>
+  const plateNumberInfo = useSelector((plateNumberReducer) =>
     selectValidPlateNumber(plateNumberReducer, plateNumber)
   );
   const plateRenewalData = useSelector(selectPlateNumber);
+
+  console.log(plateNumberInfo);
 
   const totalPages = Math.ceil(plateRenewalData.length / itemsPerPage);
   const paginatedData = plateRenewalData.slice(
@@ -48,10 +50,8 @@ export default function Page() {
     currentPage * itemsPerPage
   );
 
-  console.log(isPlateNumberValid);
-
   const handleSubmit = () => {
-    if (isPlateNumberValid) {
+    if (plateNumberInfo) {
       setOpenModal(true);
     }
   };
@@ -86,7 +86,9 @@ export default function Page() {
           status={"success"}
           footerBtnText={"Continue"}
           footerTrigger={() =>
-            router.push("/mla-admin/renewal/renew-plate-number")
+            router.push(
+              `/mla-admin/renewal/renew-plate-number/${plateNumberInfo?.id}`
+            )
           }
         />
 

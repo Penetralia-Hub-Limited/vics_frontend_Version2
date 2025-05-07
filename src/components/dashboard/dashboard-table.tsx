@@ -16,7 +16,6 @@ import {
   UserStatus,
   ApprovalStatus,
   CardStatus,
-  PlateStatus,
   RequestStatus,
   IssuanceStatus,
 } from "@/common/enum";
@@ -40,7 +39,6 @@ interface TableData {
     | UserStatus
     | ApprovalStatus
     | CardStatus
-    | PlateStatus
     | IssuanceStatus
     | RequestStatus
     | object;
@@ -75,10 +73,6 @@ const isApprovalStatus = (value: unknown): value is ApprovalStatus => {
 
 const isCardStatus = (value: unknown): value is CardStatus => {
   return Object.values(CardStatus).includes(value as CardStatus);
-};
-
-const isPlateStatus = (value: unknown): value is PlateStatus => {
-  return Object.values(PlateStatus).includes(value as PlateStatus);
 };
 
 const isRequestStatus = (value: unknown): value is RequestStatus => {
@@ -138,7 +132,6 @@ const DashboardTable: FC<IDashboardTable> = ({
                       isUserStatus(cellValue) ||
                       isApprovalStatus(cellValue) ||
                       isCardStatus(cellValue) ||
-                      isPlateStatus(cellValue) ||
                       isIssuanceStatus(cellValue) ||
                       isRequestStatus(cellValue) ? (
                       <span
@@ -147,7 +140,7 @@ const DashboardTable: FC<IDashboardTable> = ({
                           (cellValue === PaymentStatus.PAID ||
                             cellValue === PlateNumberStatus.ASSIGNED ||
                             cellValue === UserStatus.ACTIVE ||
-                            cellValue === RequestStatus.SUCCESS ||
+                            cellValue === RequestStatus.APPROVED ||
                             cellValue === IssuanceStatus.ASSIGNED ||
                             cellValue === ApprovalStatus.APPROVED) &&
                             "bg-success-100 text-primary-800",
@@ -157,8 +150,7 @@ const DashboardTable: FC<IDashboardTable> = ({
                             cellValue === IssuanceStatus.UNASSIGNED ||
                             cellValue === ApprovalStatus.NOTAPPROVED) &&
                             "bg-failed text-red-800",
-                          (cellValue === PlateStatus.SOLD ||
-                            cellValue === RequestStatus.PENDING ||
+                          (cellValue === RequestStatus.PENDING ||
                             cellValue === CardStatus.PENDING) &&
                             "text-pending-800 bg-pending-100",
                           isUserRole(cellValue) && "bg-role text-white"

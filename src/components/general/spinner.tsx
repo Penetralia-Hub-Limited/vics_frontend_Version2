@@ -2,13 +2,15 @@ import * as React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { cn } from "@/lib/utils";
 
-interface ILoading {
+// import Spinner from 'react-bootstrap/Spinner'; downloaded from https://react-bootstrap.netlify.app/docs/components/spinners
+
+interface ISpinner {
   screen: "main" | "default";
   size?: string | number;
   color?: string;
 }
 
-export default function Loading({ size, color = "#025F33", screen }: ILoading) {
+export default function Spinner({ size, color = "#025F33", screen }: ISpinner) {
   return (
     <div
       className={cn(

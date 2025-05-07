@@ -1,5 +1,10 @@
 import { PaginationProp } from "@/common/types";
 
+type PaymentDes = {
+  unit_price?: number;
+  description?: string;
+};
+
 export interface CompanyData {
   id: string;
   state_id: string;
@@ -13,6 +18,7 @@ export interface CompanyData {
   logo_svg: string | null;
   created_at: string;
   updated_at: string;
+  payment_descriptions?: PaymentDes;
 }
 
 export interface CompanyResponse {

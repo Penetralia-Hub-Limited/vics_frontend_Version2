@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Loading from "@/app/(dashboard)/loading";
+import Loading from "@/components/general/spinner";
 
 interface IDashboardCompSelect {
   placeholder: string;

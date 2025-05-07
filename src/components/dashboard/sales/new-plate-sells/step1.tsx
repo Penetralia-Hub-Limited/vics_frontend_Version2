@@ -5,6 +5,9 @@ import InputWithLabel from "@/components/auth/input-comp";
 import DashboardCompSelect from "../../dashboard-component-select";
 import DatePicker from "../../dashboard-datepicker";
 import { inputSalesPropsStep1 } from "../sales-constants";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { StatesData } from "@/store/states/states-types";
 
 interface INewPlateSalesStep1 {
   inputValues: inputSalesPropsStep1;
@@ -15,6 +18,9 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
   inputValues,
   setInputValues,
 }) => {
+  const states = useSelector((state: RootState) => state.states);
+  const filteredState = states.states.map((state: StatesData) => state.name);
+
   return (
     <div className={"flex flex-col gap-4 md:gap-6 w-full"}>
       <InputWithLabel
@@ -54,17 +60,17 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
 
         <InputWithLabel
           items={{
-            id: "phonenumber",
+            id: "phone",
             label: "Phone Number",
             placeholder: "Phone Number",
             type: "text",
-            htmlfor: "phonenumber",
+            htmlfor: "phone",
           }}
-          value={inputValues.phoneNumber || ""}
+          value={inputValues.phone || ""}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              phoneNumber: e.target.value,
+              phone: e.target.value,
             }))
           }
         />
@@ -89,14 +95,14 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
 
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-2"}>
         <DashboardCompSelect
-          title={"Nationality"}
-          placeholder={"-- Select Nationality --"}
-          items={["Nigerian"]}
-          selected={inputValues.nationality || ""}
+          title={"State"}
+          placeholder={"-- Select State --"}
+          items={filteredState}
+          selected={inputValues.state || ""}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              nationality: (selected as string) ?? "",
+              state: (selected as string) ?? "",
             }))
           }
         />

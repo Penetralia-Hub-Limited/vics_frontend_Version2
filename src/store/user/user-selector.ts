@@ -35,12 +35,26 @@ export const selectTaxPayers = createSelector([selectUserReducer], (user) =>
     : []
 );
 
-// Get User by ID
+// Get Tax Payer User by ID
 export const selectTaxPayersByID = createSelector(
   [selectUserReducer, (_: any, taxpayerid: string) => taxpayerid],
   (user, taxpayerid) =>
     user
       .filter((user) => user.id === taxpayerid)
+      .map((user) => {
+        return {
+          fullname: `${user?.firstname ?? "-"} ${user?.lastname ?? "-"}`,
+          ...user,
+        };
+      })
+);
+
+// Get User by ID
+export const selectUserByID = createSelector(
+  [selectUserReducer, (_: any, userId: string) => userId],
+  (user, userId) =>
+    user
+      .filter((user) => user.id === userId)
       .map((user) => {
         return {
           fullname: `${user?.firstname ?? "-"} ${user?.lastname ?? "-"}`,

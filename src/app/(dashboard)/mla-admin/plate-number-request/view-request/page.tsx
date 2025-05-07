@@ -10,7 +10,7 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
-import { PlateNumberType, PlateStatus } from "@/common/enum";
+import { PlateNumberType, PlateNumberStatus } from "@/common/enum";
 import { useSelector } from "react-redux";
 import { selectAssignedPlateNumber } from "@/store/plateNumber/plate-number-selector";
 import { RootState } from "@/store/store";
@@ -123,7 +123,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Status"}
             placeholder={"-- Select Status --"}
-            items={[...Object.values(PlateStatus)]}
+            items={[...Object.values(PlateNumberStatus)]}
             selected={inputValues.status}
             onSelect={(selected) =>
               setInputValues((prev) => ({

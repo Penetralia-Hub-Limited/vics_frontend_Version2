@@ -82,7 +82,7 @@ export const selectValidPlateNumber = createSelector(
     (_: any, platenumber: string | null) => platenumber,
   ],
   (plateNumber, platenumber) => {
-    const foundPlateNumber = plateNumber.some(
+    const foundPlateNumber = plateNumber.find(
       (plate: PlateNumberData) => plate?.number === platenumber
     );
     return foundPlateNumber;
@@ -94,6 +94,15 @@ export const selectUsersFromPlateNumber = createSelector(
   [selectPlateNumberReducer, (_, userID: string) => userID],
   (plateNumber, userID) =>
     plateNumber.filter((plate: PlateNumberData) => plate?.owner_id === userID)
+);
+
+// Get User by ID in Plate Number API
+export const selectUsersInfoFromPlateNumber = createSelector(
+  [selectPlateNumberReducer, (_, plateId: string) => plateId],
+  (plateNumber, plateId) =>
+    plateNumber
+      .filter((plate: PlateNumberData) => plate?.id === plateId)
+      .map((plateNumber) => plateNumber.owner)
 );
 
 // Get plate Data from number

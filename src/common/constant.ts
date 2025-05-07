@@ -463,12 +463,12 @@ export const vehicleData = [
 ];
 
 export const invoiceColumns = [
-  { key: "id", title: "S/N" },
-  { key: "invoiceid", title: "Invoice ID" },
-  { key: "amount", title: "Amount" },
-  { key: "paymentreference", title: "Payment Reference" },
-  { key: "paymentstatus" as PaymentStatus, title: "Payment Status" },
-  { key: "date", title: "Date" },
+  { key: "sid", title: "S/N" },
+  { key: "invoice_number", title: "Invoice ID" },
+  { key: "total_amount", title: "Amount" },
+  { key: "payment_reference", title: "Payment Reference" },
+  { key: "payment_status" as PaymentStatus, title: "Payment Status" },
+  { key: "payment_date", title: "Date" },
 ];
 
 export const invoiceData = [

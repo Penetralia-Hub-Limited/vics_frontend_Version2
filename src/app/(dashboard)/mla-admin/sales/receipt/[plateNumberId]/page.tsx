@@ -1,21 +1,18 @@
 "use client";
 
-import { Invoice } from "@/components/general/invoice";
+import { Receipt } from "@/components/general/receipt";
+
 import { useParams } from "next/navigation";
-import { selectFoundVehicleDatafromUserID } from "@/store/vehicle/vehicle-selector";
+import { selectVehicleInfoFromPlateID } from "@/store/vehicle/vehicle-selector";
 import { useSelector } from "react-redux";
-import { selectUserByID } from "@/store/user/user-selector";
 
 export default function Page() {
-  const params = useParams<{ userInvoiceID: string }>();
+  const params = useParams<{ plateNumberId: string }>();
   const vehicleInfo = useSelector((state) =>
-    selectFoundVehicleDatafromUserID(state, params.userInvoiceID)
-  )[0];
-  const userInfo = useSelector((state) =>
-    selectUserByID(state, params.userInvoiceID)
-  )[0];
+    selectVehicleInfoFromPlateID(state, params.plateNumberId)
+  );
 
-  if (!userInfo) {
+  if (!vehicleInfo) {
     return (
       <p className="h-screen flex items-center justify-center text-center text-primary-500">
         Data not found.
@@ -23,31 +20,30 @@ export default function Page() {
     );
   }
 
-  const invoiceData = {
-    invoiceID: params.userInvoiceID,
+  const receiptData = {
+    plateNumberId: params.plateNumberId,
   };
 
   const userData = [
     {
       label: "Full Name",
-      value: userInfo.firstname
-        ? `${userInfo?.firstname} ${userInfo?.lastname}`
+      value: vehicleInfo
+        ? `${vehicleInfo?.owner?.firstname} ${vehicleInfo?.owner?.lastname}`
         : "Not Available",
     },
     {
       label: "Email",
-      value: userInfo?.email ?? "Not Available",
+      value: vehicleInfo?.owner?.email ?? "Not Available",
     },
     {
       label: "Phone Number",
-      value: userInfo.phone ?? "Not Available",
+      value: vehicleInfo?.owner?.phone ?? "Not Available",
     },
     {
       label: "Address",
-      value: userInfo.address ?? "Not Available",
+      value: vehicleInfo.owner?.address ?? "Not Available",
     },
   ];
-
   const vehicleData = [
     { label: "Chasis Number", value: vehicleInfo.chasis_number ?? "N/A" },
     { label: "Engine Number", value: vehicleInfo.engine_number ?? "N/A" },
@@ -58,11 +54,12 @@ export default function Page() {
 
   return (
     <div className="flex flex-col gap-5">
-      <Invoice
-        invoice_link={`/mla-admin/invoice/${invoiceData.invoiceID}`}
+      <Receipt
+        date={vehicleInfo?.created_at}
         state={"KWARA state"}
-        data={invoiceData}
-        buyerInfo={userData}
+        data={receiptData}
+        qrcode_link={`/mla-admin/invoice/${receiptData.plateNumberId}`}
+        userInfo={userData}
         vehicleInfo={vehicleData}
       />
     </div>

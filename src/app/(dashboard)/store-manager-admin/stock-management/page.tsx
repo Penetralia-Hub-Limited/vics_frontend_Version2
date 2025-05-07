@@ -21,26 +21,25 @@ import {
   CreateNewStockProps,
   CreateNewStockPropsInitialValues,
 } from "@/components/dashboard/verification-forms/create-new-stock";
-import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
+import { selectLGAIDFromName } from "@/store/lgas/lga-selector";
 import { PlateNumberService } from "@/services/PlateNumberService";
-import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { toast } from "sonner";
-import { generateTrackingId } from "@/common/helpers";
 import { selectStateIDFromStateName } from "@/store/states/state-selector";
-import { AuthState } from "@/store/auth/auth-user-types";
+import { selectAllStock } from "@/store/stock/stock-selector";
+import { StockService } from "@/services/StockService";
 
 const tableHeaders = [
   { title: "S/N", key: "sid" },
-  { title: "LGA", key: "lga" },
+  { title: "LGA", key: "lga_name" },
   { title: "Range", key: "range" },
   { title: "End Code", key: "end_code" },
   { title: "Type", key: "type" },
   { title: "Created By", key: "created_by" },
   { title: "Date", key: "created_at" },
-  { title: "Initial Quantity", key: "initialQty" },
-  { title: "Current Quantity", key: "currentQty" },
+  { title: "Initial Quantity", key: "intial_quantity" },
+  { title: "Current Quantity", key: "current_quantity" },
 ];
 
 type inputValuesProp = {
@@ -63,6 +62,7 @@ export default function Page() {
   const itemsPerPage = 10;
   const router = useRouter();
   const dispatch = useDispatch();
+
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalInput, setModalInput] = useState<CreateNewStockProps>(
@@ -70,15 +70,18 @@ export default function Page() {
   );
   const [inputValues, setInputValues] =
     useState<inputValuesProp>(inputInitialValues);
-  const plateOrderService = new PlateNumberOrderService(dispatch);
+
   const plateService = new PlateNumberService(dispatch);
-  const { data } = useSelector((state: { auth: AuthState }) => state.auth);
+  const stockService = new StockService(dispatch);
   const { lgas } = useSelector((state: RootState) => state?.lga);
   const filteredLGA = lgas.map((lga) => lga.name);
-  const stock = useSelector(selectPlateNumber);
-  const [plateStock, setPlateStock] = useState(stock);
+  const stockData = useSelector(selectAllStock);
+  const [plateStock, setPlateStock] = useState(stockData);
   const state_id = useSelector((state) =>
     selectStateIDFromStateName(state, modalInput?.state)
+  );
+  const lga_id = useSelector((state) =>
+    selectLGAIDFromName(state, modalInput?.lga)
   );
 
   const { plateNumberEndCode, lga, plateNumberType, startDate, endDate } =
@@ -93,11 +96,11 @@ export default function Page() {
       _.isEmpty(startDate) &&
       _.isEmpty(endDate)
     ) {
-      setPlateStock(stock);
+      setPlateStock(stockData);
       return;
     }
 
-    const filteredData = _.filter(stock, (stockData) => {
+    const filteredData = _.filter(stockData, (stockData) => {
       let matches = false;
 
       if (!_.isEmpty(_.trim(plateNumberEndCode))) {
@@ -136,9 +139,9 @@ export default function Page() {
       _.isEmpty(startDate) &&
       _.isEmpty(endDate)
     ) {
-      setPlateStock(stock);
+      setPlateStock(stockData);
     }
-  }, [stock, plateNumberEndCode, lga, plateNumberType, startDate, endDate]);
+  }, [stockData, plateNumberEndCode, lga, plateNumberType, startDate, endDate]);
 
   const totalPages = Math.ceil(plateStock.length / itemsPerPage);
   const paginatedData = plateStock.slice(
@@ -148,7 +151,22 @@ export default function Page() {
 
   const handleSubmit = async () => {
     try {
+      const stockPayload = {
+        state_id,
+        lga_id,
+        end_code: modalInput.endCode,
+        type: modalInput.plate_number_type,
+        status: "Active Created",
+        range: `${modalInput.startNumber} - ${modalInput.endNoPlate}`,
+        intial_quantity: modalInput.total_number_requested,
+        current_quantity: modalInput.total_number_requested,
+        plate_type: {
+          type: modalInput.plate_number_type ?? "",
+          stock_total: modalInput.total_number_requested,
+        },
+      };
       // store manager should create stock
+      const stockRes = await stockService.createNewStock(stockPayload);
 
       const total = Number(modalInput?.total_number_requested);
       const start = Number(modalInput?.startNumber);
@@ -181,12 +199,15 @@ export default function Page() {
       // Check if all the plate creation responses are successful
       const allSuccess = responses.every((response) => response.status);
 
-      if (allSuccess) {
+      if (stockRes.status && allSuccess) {
         setOpenModal(true);
       }
     } catch (error) {
-      console.error("Failed:", error);
-      toast(error as unknown as string);
+      if (error instanceof Error) {
+        toast(`Error Creating Stock. ${error.message}`);
+      } else {
+        toast("Error Creating Stock. An unknown error occurred.");
+      }
     }
   };
 
@@ -213,11 +234,11 @@ export default function Page() {
         />
 
         <Modal
-          title={"Create New Plate Number Request"}
+          title={"Create New Stock"}
           content={
             <CreateNewStock input={modalInput} setInput={setModalInput} />
           }
-          btnText={"Create New Request"}
+          btnText={"Create New Stock"}
           footerBtn={
             <Button type="submit" onClick={handleSubmit}>
               Submit

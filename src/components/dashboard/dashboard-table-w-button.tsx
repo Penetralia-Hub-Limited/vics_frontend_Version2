@@ -23,7 +23,6 @@ import {
   UserStatus,
   ApprovalStatus,
   CardStatus,
-  PlateStatus,
   IssuanceStatus,
   RequestStatus,
 } from "@/common/enum";
@@ -48,7 +47,6 @@ export interface TableData {
     | UserStatus
     | ApprovalStatus
     | CardStatus
-    | PlateStatus
     | IssuanceStatus
     | RequestStatus
     | object;
@@ -92,10 +90,6 @@ const isApprovalStatus = (value: unknown): value is ApprovalStatus => {
 
 const isCardStatus = (value: unknown): value is CardStatus => {
   return Object.values(CardStatus).includes(value as CardStatus);
-};
-
-const isPlateStatus = (value: unknown): value is PlateStatus => {
-  return Object.values(PlateStatus).includes(value as PlateStatus);
 };
 
 const isIssuanceStatus = (value: unknown): value is IssuanceStatus => {
@@ -160,8 +154,7 @@ export function DataTableWButton({
                       isApprovalStatus(cellValue) ||
                       isCardStatus(cellValue) ||
                       isIssuanceStatus(cellValue) ||
-                      isRequestStatus(cellValue) ||
-                      isPlateStatus(cellValue) ? (
+                      isRequestStatus(cellValue) ? (
                       <span
                         className={cn(
                           "capitalize px-4 py-1 rounded-full",
@@ -169,7 +162,7 @@ export function DataTableWButton({
                             cellValue === PlateNumberStatus.ASSIGNED ||
                             cellValue === UserStatus.ACTIVE ||
                             cellValue === IssuanceStatus.ASSIGNED ||
-                            cellValue === RequestStatus.SUCCESS ||
+                            cellValue === RequestStatus.APPROVED ||
                             cellValue === ApprovalStatus.APPROVED) &&
                             "bg-success-100 text-primary-800",
                           (cellValue === PaymentStatus.NOTPAID ||
@@ -178,8 +171,7 @@ export function DataTableWButton({
                             cellValue === IssuanceStatus.UNASSIGNED ||
                             cellValue === ApprovalStatus.NOTAPPROVED) &&
                             "bg-failed text-red-800",
-                          (cellValue === PlateStatus.SOLD ||
-                            cellValue === RequestStatus.PENDING ||
+                          (cellValue === RequestStatus.PENDING ||
                             cellValue === CardStatus.PENDING) &&
                             "text-pending-800 bg-pending-100",
                           isUserRole(cellValue) && "bg-role text-white"
