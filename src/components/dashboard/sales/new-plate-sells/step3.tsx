@@ -2,6 +2,8 @@
 
 import { FC, Dispatch, SetStateAction } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
+import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
+import { PlateNumberType } from "@/common/enum";
 import { inputSalesPropsStep3 } from "../sales-constants";
 
 interface INewPlateSalesStep3 {
@@ -15,19 +17,15 @@ export const NewPlateSalesStep3: FC<INewPlateSalesStep3> = ({
 }) => {
   return (
     <div className={"flex flex-col gap-4 md:gap-6 w-full"}>
-      <InputWithLabel
-        items={{
-          id: "plateNumberType",
-          label: "Plate Number Type",
-          placeholder: "Plate Number Type",
-          type: "text",
-          htmlfor: "plateNumberType",
-        }}
-        value={inputValues.plateNumberType || ""}
-        onChange={(e) =>
+      <DashboardCompSelect
+        title={"Plate Number Type"}
+        placeholder={"-- Select Type --"}
+        items={[...Object.values(PlateNumberType)]}
+        selected={inputValues.type}
+        onSelect={(selected) =>
           setInputValues((prev) => ({
             ...prev,
-            plateNumberType: e.target.value,
+            type: (selected as string) ?? "",
           }))
         }
       />
@@ -48,18 +46,6 @@ export const NewPlateSalesStep3: FC<INewPlateSalesStep3> = ({
           }))
         }
       />
-      {/* <DashboardCompSelect
-        title={"Plate Number Type"}
-        placeholder={"-- Select Plate Type --"}
-        items={[...Object.values(PlateNumberType)]}
-        selected={inputValues.plateNumberType}
-        onSelect={(selected) =>
-          setInputValues((prev) => ({
-            ...prev,
-            plateNumberType: (selected as PlateNumberType) ?? undefined,
-          }))
-        }
-      /> */}
     </div>
   );
 };

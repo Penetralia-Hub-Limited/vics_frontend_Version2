@@ -16,6 +16,8 @@ import {
   selectServices,
 } from "@/store/service-type/service-selector";
 import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { Role } from "@/common/enum";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -32,6 +34,10 @@ const tableColumns = [
 export default function Page() {
   const itemsPerPage = 10;
   const serviceTypesNames = useSelector(selectServiceTypeName);
+  const mlaUsers = useSelector((state: RootState) => state.user.users);
+  const filteredMLAs = mlaUsers
+    .filter((user) => user.role === Role.MLA)
+    .map((user) => `${user.firstname} ${user.lastname}`);
   const serviceTypes = useSelector(selectServices);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fromDate, setFromDate] = useState<Date | undefined>();
@@ -118,7 +124,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"MLA"}
             placeholder={"-- Select MLA --"}
-            items={["MLA1", "mla2"]}
+            items={filteredMLAs}
             selected={inputValues.mla}
             onSelect={(selected) =>
               setInputValues((prev) => ({

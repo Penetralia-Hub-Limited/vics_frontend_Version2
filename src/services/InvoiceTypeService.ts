@@ -11,7 +11,7 @@ import {
 import { CreateInvoiceTypeProps } from "@/store/invoice-type/invoice-type-types";
 
 export class InvoiceTypeService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/invoice_types";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/invoice_types`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

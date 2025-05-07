@@ -44,7 +44,7 @@ type inputValuesProp = {
   name: string;
   email: string;
   status: string;
-  role: string;
+  role: Role | undefined;
   from: Date | undefined;
   to: Date | undefined;
 };
@@ -53,7 +53,7 @@ const inputInitialValues = {
   name: "",
   email: "",
   status: "",
-  role: "",
+  role: undefined,
   from: undefined,
   to: undefined,
 };
@@ -146,23 +146,6 @@ export default function Page() {
     try {
       const res = await userService.createUser({
         state_id: state_id,
-        area_id: null,
-        creator_id: null,
-        lga_id: null,
-        office_id: null,
-        othername: "Other",
-        image: "image-src-url",
-        nin: "762356467874",
-        password: "Password@1234",
-        gender: "male",
-        status: UserStatus.ACTIVE,
-        approval_status: null,
-        registeration_type: "registration",
-        state_verification_no: "6t4hsdjf",
-        date_of_birth: "2025-03-21 09:59:32",
-        is_email_verified: false,
-        email_verified_at: "2025-03-21 09:59:32",
-        date_deactivated: "2025-03-21 09:59:32",
         ...modalInput,
       });
 

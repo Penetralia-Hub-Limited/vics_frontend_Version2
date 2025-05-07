@@ -7,7 +7,7 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, TaxPayerSVG } from "@/common/svgs";
 import { TaxPayerInformationCard } from "@/components/dashboard/tax-payer/information-card";
 import DashboardTable from "@/components/dashboard/dashboard-table";
-import { vehicleColumns, invoiceColumns, invoiceData } from "@/common/constant";
+import { vehicleColumns, invoiceColumns } from "@/common/constant";
 import { selectTaxPayersByID } from "@/store/user/user-selector";
 import { selectVehicleMatchedByUser } from "@/store/vehicle/vehicle-selector";
 import { selectInvoicesWithUserID } from "@/store/invoice/invoice-selector";
@@ -26,8 +26,6 @@ export default function Page() {
     selectInvoicesWithUserID(invoiceState, taxPayerID)
   );
   const taxpayer = taxPayerInformation[0];
-
-  console.log(invoiceInfo);
 
   const taxPayerInfo = {
     fullName: taxpayer?.fullname ?? "Not Available",
@@ -66,7 +64,7 @@ export default function Page() {
         >
           <div className={"border-t-1 border-primary-300 rounded-lg"}>
             <p className={"font-bold p-4"}>Vehicle(s) Information</p>
-            <DashboardTable headers={vehicleColumns} data={[]} />
+            <DashboardTable headers={vehicleColumns} data={vehicleInfo} />
           </div>
         </div>
       )}
@@ -76,7 +74,7 @@ export default function Page() {
       >
         <div className={"border-t-1 border-primary-300 rounded-lg"}>
           <p className={"font-bold p-4"}>Invoice(s) Information</p>
-          <DashboardTable headers={invoiceColumns} data={invoiceData} />
+          <DashboardTable headers={invoiceColumns} data={invoiceInfo} />
         </div>
       </div>
     </main>

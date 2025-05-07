@@ -82,7 +82,7 @@ export const selectPlateNumberRequestTableData = createSelector(
           return {
             sid: index + 1,
             ...order,
-            created_by: `${order?.creator?.firstname ?? "-"} ${order?.creator?.lastname ?? "-"}`,
+            mla: `${order?.creator?.firstname ?? "-"} ${order?.creator?.lastname ?? "-"}`,
             date_created: `${format(order?.created_at ?? null, "LLL. d yyyy")} | ${format(order?.created_at ?? null, "hh:mm:ss a")}`,
             recommender: `${order.recommender?.firstname ?? "-"} ${order.recommender?.lastname ?? "-"}`,
             approver: `${order.approver?.firstname ?? "-"} ${order.approver?.lastname ?? "-"}`,
@@ -114,5 +114,16 @@ export const selectVehicleCreatorIDFromPlateNumberOrders = createSelector(
       (order) => order?.vehicle?.creator_id === payerID
     );
     return matchedOrder?.invoice?.payer_id ?? null;
+  }
+);
+
+// Get plate order object from plate number order ID
+export const selectPlateNumberOrderFromID = createSelector(
+  [selectPlateNumberOrderReducer, (_: any, plateid: string | null) => plateid],
+  (plateNumberOrders, plateid) => {
+    const filteredPlate = plateNumberOrders.find(
+      (order) => order?.id === plateid
+    );
+    return filteredPlate ?? null;
   }
 );

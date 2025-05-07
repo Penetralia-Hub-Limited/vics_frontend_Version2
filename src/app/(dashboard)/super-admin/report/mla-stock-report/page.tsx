@@ -8,9 +8,10 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DashboardSVG, ReportSVG } from "@/common/svgs";
-import { PlateNumberType } from "@/common/enum";
+import { PlateNumberType, Role } from "@/common/enum";
 import { useSelector } from "react-redux";
 import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
+import { RootState } from "@/store/store";
 
 const stockReportHeaders = [
   { title: "S/N", key: "sid" },
@@ -32,6 +33,10 @@ export default function Page() {
     mla: "",
     plateNumberType: undefined,
   });
+  const mlaUsers = useSelector((state: RootState) => state.user.users);
+  const filteredMLAs = mlaUsers
+    .filter((user) => user.role === Role.MLA)
+    .map((user) => `${user.firstname} ${user.lastname}`);
   const salesAssessmentData = useSelector(selectPlateNumberRequestTableData);
   const totalMLA = salesAssessmentData.length;
   const totalPages = Math.ceil(salesAssessmentData.length / itemsPerPage);
@@ -76,7 +81,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"MLA"}
             placeholder={"-- Select MLA --"}
-            items={["MLA1", "MLA2"]}
+            items={filteredMLAs}
             selected={inputValues.mla}
             onSelect={(selected) =>
               setInputValues((prev) => ({

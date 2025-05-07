@@ -80,20 +80,29 @@ export default function Page() {
       address: vehicleInfo?.owner?.address,
     }));
 
-    setStep2InputValues({
-      ...vehicleInfo,
-      category: vehicleInfo.category?.toString() ?? "",
-      netweight: vehicleInfo.weight?.toString() ?? "",
-      vehicleenginecapacity: vehicleInfo.engine_capacity?.toString() ?? "",
-    });
+    setStep2InputValues((prev) => ({
+      ...prev,
+      chasis_number: vehicleInfo?.chasis_number ?? "",
+      engine_number: vehicleInfo?.engine_number ?? "",
+      make: vehicleInfo?.make ?? "",
+      model: vehicleInfo?.model ?? "",
+      year: vehicleInfo?.year ?? "",
+      category: vehicleInfo?.category ?? "",
+      policy_sector: vehicleInfo?.policy_sector ?? "",
+      color: vehicleInfo?.color ?? "",
+      capacity: vehicleInfo?.capacity ?? "",
+      weight: vehicleInfo?.weight?.toString() ?? "",
+      engine_capacity: vehicleInfo?.engine_capacity ?? "",
+      load: vehicleInfo?.load ?? "",
+    }));
 
-    setStep3InputValues({
-      plateNumber: vehicleInfo?.plate_number?.number,
-      plateNumberType: vehicleInfo?.plate_number?.type,
-    });
+    setStep3InputValues((prev) => ({
+      ...prev,
+      ...vehicleInfo,
+    }));
 
     setStep4InputValues({
-      insurance: vehicleInfo?.insurance_number,
+      insurance_number: vehicleInfo?.insurance_number,
     });
   }, [vehicleInfo]);
 
@@ -111,10 +120,10 @@ export default function Page() {
         state_id: vehicleInfo?.owner?.state_id,
         agent_id: null,
         owner_id: vehicleInfo?.owner_id,
-        number: step3InputValues.plateNumber,
+        number: step3InputValues.number,
         number_status: "Paid",
         assigned_status: null,
-        type: step3InputValues.plateNumberType,
+        type: step3InputValues.type,
         status: "Sold",
         request_id: null,
         stock_id: null,

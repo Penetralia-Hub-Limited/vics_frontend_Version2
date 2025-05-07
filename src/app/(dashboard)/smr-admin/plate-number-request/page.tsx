@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -10,21 +10,35 @@ import DashboardCompSelect from "@/components/dashboard/dashboard-component-sele
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, VICSSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import {
+  DataTableWButton,
+  RowAction,
+} from "@/components/dashboard/dashboard-table-w-button";
 import {
   RecommendPlateNoRequest,
   RecommendPlateNoRequestProp,
   RecommendPlateNoRequestInitialValues,
 } from "@/components/dashboard/verification-forms/recommend-and-update";
-import { RequestStatus, InsuranceStatus, PlateNumberType } from "@/common/enum";
-import { getRowActions } from "@/common/helpers";
+import {
+  RequestStatus,
+  InsuranceStatus,
+  PlateNumberType,
+  Role,
+} from "@/common/enum";
 import { ModalX } from "@/components/general/modalX";
-import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
+import {
+  selectPlateNumberRequestTableData,
+  selectPlateNumberOrderFromID,
+} from "@/store/plate-number-orders/plate-number-order-selector";
+import { PlateNumberOrderData } from "@/store/plate-number-orders/plate-number-order-types";
+import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
+import { toast } from "sonner";
+import { RootState } from "@/store/store";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
   { key: "mla", title: "MLA" },
-  // { key: "mla_station", title: "MLA Station" },
+  { key: "mla_station", title: "MLA Station" },
   { key: "tracking_id", title: "Tracking ID" },
   { key: "plate_number_type", title: "Plate Number Type" },
   { key: "total_number_requested", title: "No. of Plate Requested" },
@@ -37,31 +51,45 @@ const tableColumns = [
   { key: "insurance_status", title: "Insurance Status" },
 ];
 
+interface InputType {
+  trackingid: string;
+  insuranceStatus: InsuranceStatus | undefined;
+  plateNumberType: PlateNumberType | undefined;
+  requestStatus: RequestStatus | undefined;
+  mla: string;
+  zoneoffice: string;
+}
+
+const InputValues = {
+  trackingid: "",
+  plateNumberType: undefined,
+  insuranceStatus: undefined,
+  requestStatus: undefined,
+  mla: "",
+  zoneoffice: "",
+};
+
 export default function Page() {
   const itemsPerPage = 10;
+  const dispatch = useDispatch();
+  const plateOrderService = new PlateNumberOrderService(dispatch);
   const plateNumbertableData = useSelector(selectPlateNumberRequestTableData);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [inputValues, setInputValues] = useState<{
-    trackingid: string;
-    insuranceStatus: InsuranceStatus | undefined;
-    plateNumberType: PlateNumberType | undefined;
-    requestStatus: RequestStatus | undefined;
-    mla: string;
-    zoneoffice: string;
-  }>({
-    trackingid: "",
-    plateNumberType: undefined,
-    insuranceStatus: undefined,
-    requestStatus: undefined,
-    mla: "",
-    zoneoffice: "",
-  });
+  const [inputValues, setInputValues] = useState<InputType>(InputValues);
   const [modalInput, setModalIinput] = useState<RecommendPlateNoRequestProp>(
     RecommendPlateNoRequestInitialValues
   );
+  const [plateID, setPlateID] = useState<string>("");
+  const singlePlateData = useSelector((plateState) =>
+    selectPlateNumberOrderFromID(plateState, plateID)
+  );
+  const mlaUsers = useSelector((state: RootState) => state.user.users);
+  const filteredMLAs = mlaUsers
+    .filter((user) => user.role === Role.MLA)
+    .map((user) => `${user.firstname} ${user.lastname}`);
 
   const totalPages = Math.ceil(plateNumbertableData.length / itemsPerPage);
   const paginatedData = plateNumbertableData.slice(
@@ -69,20 +97,80 @@ export default function Page() {
     currentPage * itemsPerPage
   );
 
-  const rowActions = [
-    {
-      title: "Approve",
-      action: () => {},
-    },
-    {
-      title: "Recommend & Approve",
-      action: () => setOpenModal(true),
-    },
-    {
-      title: "Disapprove",
-      action: () => console.log("Disapprove"),
-    },
-  ];
+  useEffect(() => {
+    if (plateID)
+      setModalIinput({
+        mlaplaterequest: singlePlateData?.total_number_requested ?? 0,
+        plateNumberType: singlePlateData?.type,
+        availablePlateNumber: 400,
+        plateQty: modalInput.plateQty,
+      });
+  }, [
+    plateID,
+    modalInput.plateQty,
+    singlePlateData?.total_number_requested,
+    singlePlateData?.type,
+  ]);
+
+  const handleUpdate = async (id: string, status: "approve" | "disapprove") => {
+    const payload = {
+      recommended_number:
+        status === "approve" ? singlePlateData?.total_number_requested : 0,
+    };
+
+    try {
+      const res = await plateOrderService.updatePlateNumberOrder(id, payload);
+
+      if (res.status) setOpenModal(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast(`Error Recommending Plates. ${error.message}`);
+      } else {
+        toast("Error Recommending Plates. An unknown error occurred.");
+      }
+    }
+  };
+
+  const handleRecommend = async (id: string) => {
+    const payload = {
+      recommended_number: modalInput.plateQty,
+    };
+
+    try {
+      const res = await plateOrderService.updatePlateNumberOrder(id, payload);
+
+      if (res.status) setOpenModal(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast(`Error Recommending Plates. ${error.message}`);
+      } else {
+        toast("Error Recommending Plates. An unknown error occurred.");
+      }
+    }
+  };
+
+  const getRowActions = (row: unknown): RowAction[] => {
+    const tableRow = row as PlateNumberOrderData & { sid: number };
+    return [
+      {
+        title: "Approve",
+        action: () => handleUpdate(tableRow?.id, "approve"),
+        color: "text-success-500",
+      },
+      {
+        title: "Recommend & Approve",
+        action: () => {
+          setOpenModal(true);
+          setPlateID(tableRow?.id);
+        },
+      },
+      {
+        title: "Disapprove",
+        action: () => handleUpdate(tableRow?.id, "disapprove"),
+        color: "text-danger",
+      },
+    ];
+  };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -136,7 +224,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"MLA"}
             placeholder={"-- Select MLA --"}
-            items={["MLA1", "MLA2"]}
+            items={filteredMLAs}
             selected={inputValues.mla}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -213,7 +301,7 @@ export default function Page() {
           <DataTableWButton
             headers={tableColumns}
             data={paginatedData}
-            rowActions={(row) => getRowActions(row, rowActions)}
+            rowActions={getRowActions}
           />
         </div>
         <div className={"p-5 ml-auto"}>
@@ -221,22 +309,25 @@ export default function Page() {
         </div>
       </div>
 
-      {openModal && (
-        <ModalX
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-          content={
-            <RecommendPlateNoRequest
-              input={modalInput}
-              setInput={setModalIinput}
-            />
-          }
-          title={"Recommend and Update Plate Number Request"}
-          footerBtn={
-            <Button className="w-fit m-auto">Recommend and Update</Button>
-          }
-        />
-      )}
+      <ModalX
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={
+          <RecommendPlateNoRequest
+            input={modalInput}
+            setInput={setModalIinput}
+          />
+        }
+        title={"Recommend and Update Plate Number Request"}
+        footerBtn={
+          <Button
+            onClick={() => plateID && handleRecommend(plateID)}
+            className="w-fit m-auto"
+          >
+            Recommend and Update
+          </Button>
+        }
+      />
     </main>
   );
 }

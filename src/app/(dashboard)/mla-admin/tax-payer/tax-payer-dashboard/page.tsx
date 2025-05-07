@@ -64,7 +64,10 @@ export default function Page() {
     return [
       {
         title: "Preview",
-        action: () => router.push("/mla-admin/tax-payer/tax-payer-information"),
+        action: () =>
+          router.push(
+            `/mla-admin/tax-payer/tax-payer-information/${tableRow.id}`
+          ),
       },
       {
         title: "Edit",
@@ -89,8 +92,6 @@ export default function Page() {
       [id]: parsedValue,
     }));
   };
-
-  console.log(inputValues);
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>

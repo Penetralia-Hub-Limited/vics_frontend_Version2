@@ -114,7 +114,7 @@ export default function Page() {
 
 const FooterElement = () => {
   return (
-    <div className="flex flex-row gap-2 items-center justify-center">
+    <div className="flex flex-row gap-1 md:gap-2 items-center justify-center">
       <p className="text-sm">Need help?</p>
       <Link href={"/"}>
         <p

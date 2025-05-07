@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSelector } from "reselect";
 import { RootState } from "../store";
-import { RequestStatus } from "@/common/enum";
+import { PlateNumberStatus } from "@/common/enum";
 import { formattedAmount } from "@/common/helpers";
 import { format } from "date-fns";
 import { PlateNumberData } from "./plate-number-types";
@@ -14,7 +14,25 @@ export const selectSoldPlateNumber = createSelector(
   (plateNumber) =>
     Array.isArray(plateNumber)
       ? plateNumber
-          .filter((plate) => plate.status === RequestStatus.SOLD)
+          .filter((plate) => plate.status === PlateNumberStatus.ASSIGNED)
+          .map((plate, index) => {
+            return {
+              sid: index + 1,
+              date_created: `${format(plate?.created_at ? new Date(plate.created_at) : "-", "LLL. d yyyy")} | ${format(plate?.created_at ? new Date(plate.created_at) : "-", "hh:mm:ss a")}`,
+              ...plate,
+            };
+          })
+      : []
+);
+
+export const selectUnassignedPlates = createSelector(
+  [selectPlateNumberReducer],
+  (plateNumber) =>
+    Array.isArray(plateNumber)
+      ? plateNumber
+          .filter(
+            (plate) => plate.assigned_status === PlateNumberStatus.UNASSIGNED
+          )
           .map((plate, index) => {
             return {
               sid: index + 1,
@@ -33,6 +51,7 @@ export const selectPlateNumber = createSelector(
           return {
             sid: index + 1,
             ...plate,
+            end_code: plate?.number?.slice(-2) ?? "-",
             buyer: `${plate?.owner?.firstname ?? "-"} ${plate?.owner?.lastname ?? "-"}`,
             int_amount: plate?.invoice?.amount ?? index * 6 + 3,
             amount: formattedAmount(plate?.invoice?.amount ?? index * 6 + 3),
@@ -63,7 +82,7 @@ export const selectValidPlateNumber = createSelector(
     (_: any, platenumber: string | null) => platenumber,
   ],
   (plateNumber, platenumber) => {
-    const foundPlateNumber = plateNumber.some(
+    const foundPlateNumber = plateNumber.find(
       (plate: PlateNumberData) => plate?.number === platenumber
     );
     return foundPlateNumber;
@@ -75,4 +94,39 @@ export const selectUsersFromPlateNumber = createSelector(
   [selectPlateNumberReducer, (_, userID: string) => userID],
   (plateNumber, userID) =>
     plateNumber.filter((plate: PlateNumberData) => plate?.owner_id === userID)
+);
+
+// Get User by ID in Plate Number API
+export const selectUsersInfoFromPlateNumber = createSelector(
+  [selectPlateNumberReducer, (_, plateId: string) => plateId],
+  (plateNumber, plateId) =>
+    plateNumber
+      .filter((plate: PlateNumberData) => plate?.id === plateId)
+      .map((plateNumber) => plateNumber.owner)
+);
+
+// Get plate Data from number
+export const selectPlateNumberFromID = createSelector(
+  [selectPlateNumberReducer, (_, number: string) => number],
+  (plateNumber, number) =>
+    plateNumber.filter((plate: PlateNumberData) => plate?.number === number)
+);
+
+// Get the assigned plate number
+export const selectAssignedPlateNumber = createSelector(
+  [selectPlateNumberReducer],
+  (plateNumber) =>
+    Array.isArray(plateNumber)
+      ? plateNumber
+          .filter(
+            (plate) => plate.assigned_status === PlateNumberStatus.ASSIGNED
+          )
+          .map((plate, index) => {
+            return {
+              sid: index + 1,
+              date_created: `${format(plate?.created_at ? new Date(plate.created_at) : "-", "LLL. d yyyy")} | ${format(plate?.created_at ? new Date(plate.created_at) : "-", "hh:mm:ss a")}`,
+              ...plate,
+            };
+          })
+      : []
 );

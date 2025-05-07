@@ -11,7 +11,7 @@ import {
 import { CreateInvoicePayload } from "@/store/invoice/invoice-types";
 
 export class InvoiceService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/invoices";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/invoices`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

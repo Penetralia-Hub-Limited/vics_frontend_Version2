@@ -12,7 +12,7 @@ import {
 import { CreateVehiclePayload } from "@/store/vehicle/vehicle-type";
 
 export class VehicleService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/vehicles";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/vehicles`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

@@ -34,8 +34,8 @@ export default function RootLayout({
         <StoreProvider>
           <SidebarProvider>
             <WebVitals />
-            <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
             <Toaster />
+            <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
           </SidebarProvider>
         </StoreProvider>
       </body>

@@ -13,7 +13,7 @@ import {
 } from "@/store/plateNumber/plate-number-slice";
 
 export class PlateNumberService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/plate_numbers";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/plate_numbers`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

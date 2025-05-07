@@ -11,13 +11,6 @@ export interface ISupportMail {
   mail: string;
 }
 
-export interface IPlateData {
-  sn: number;
-  plateNumber: string;
-  plateType: string;
-  selected?: boolean;
-}
-
 export interface IHotline {
   id: number;
   line: string;
@@ -30,6 +23,7 @@ export interface IFieldItems {
   name?: string;
   type?: string;
   placeholder?: string;
+  compulsory?: boolean;
 }
 
 export interface IVehiceManagement {

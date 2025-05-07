@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { isWithinInterval } from "date-fns";
 import InputWithLabel from "@/components/auth/input-comp";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
-import { tableInvoices } from "@/common/constant";
+import { ResponseModalX } from "@/components/general/response-modalx";
 import CardContainer from "@/components/general/card-container";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DatePicker from "@/components/dashboard/dashboard-datepicker";
@@ -18,46 +21,195 @@ import {
   CreateNewStockProps,
   CreateNewStockPropsInitialValues,
 } from "@/components/dashboard/verification-forms/create-new-stock";
-import { useSelector } from "react-redux";
+import { selectLGAIDFromName } from "@/store/lgas/lga-selector";
+import { PlateNumberService } from "@/services/PlateNumberService";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
+import { toast } from "sonner";
+import { selectStateIDFromStateName } from "@/store/states/state-selector";
+import { selectAllStock } from "@/store/stock/stock-selector";
+import { StockService } from "@/services/StockService";
 
 const tableHeaders = [
-  { title: "S/N", key: "id" },
-  { title: "LGA", key: "lga" },
-  { title: "Range", key: "lga" },
-  { title: "End Code", key: "lga" },
+  { title: "S/N", key: "sid" },
+  { title: "LGA", key: "lga_name" },
+  { title: "Range", key: "range" },
+  { title: "End Code", key: "end_code" },
   { title: "Type", key: "type" },
-  { title: "Created By", key: "createdby" },
-  { title: "Date", key: "Date" },
-  { title: "Initial Quantity", key: "initialQty" },
-  { title: "Current Quantity", key: "currentQty" },
+  { title: "Created By", key: "created_by" },
+  { title: "Date", key: "created_at" },
+  { title: "Initial Quantity", key: "intial_quantity" },
+  { title: "Current Quantity", key: "current_quantity" },
 ];
+
+type inputValuesProp = {
+  plateNumberEndCode: string;
+  lga: string;
+  plateNumberType: PlateNumberType | undefined;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+};
+
+const inputInitialValues = {
+  plateNumberEndCode: "",
+  lga: "",
+  plateNumberType: undefined,
+  startDate: undefined,
+  endDate: undefined,
+};
 
 export default function Page() {
   const itemsPerPage = 10;
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalInput, setModalInput] = useState<CreateNewStockProps>(
     CreateNewStockPropsInitialValues
   );
-  const [inputValues, setInputValues] = useState<{
-    plateNumberEndCode: string;
-    lga: string;
-    plateNumberType: PlateNumberType | undefined;
-  }>({
-    plateNumberEndCode: "",
-    lga: "",
-    plateNumberType: undefined,
-  });
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
+
+  const plateService = new PlateNumberService(dispatch);
+  const stockService = new StockService(dispatch);
   const { lgas } = useSelector((state: RootState) => state?.lga);
   const filteredLGA = lgas.map((lga) => lga.name);
+  const stockData = useSelector(selectAllStock);
+  const [plateStock, setPlateStock] = useState(stockData);
+  const state_id = useSelector((state) =>
+    selectStateIDFromStateName(state, modalInput?.state)
+  );
+  const lga_id = useSelector((state) =>
+    selectLGAIDFromName(state, modalInput?.lga)
+  );
 
-  const totalPages = Math.ceil(tableInvoices.length / itemsPerPage);
-  const paginatedData = tableInvoices.slice(
+  const { plateNumberEndCode, lga, plateNumberType, startDate, endDate } =
+    inputValues;
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      _.isEmpty(_.trim(plateNumberEndCode)) &&
+      _.isEmpty(_.trim(lga)) &&
+      _.isEmpty(_.trim(plateNumberType)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setPlateStock(stockData);
+      return;
+    }
+
+    const filteredData = _.filter(stockData, (stockData) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(plateNumberEndCode))) {
+        matches =
+          matches ||
+          _.toLower(stockData?.end_code || "") ===
+            _.toLower(plateNumberEndCode);
+      }
+
+      if (!_.isEmpty(_.trim(plateNumberType))) {
+        matches =
+          matches ||
+          _.toLower(stockData?.type || "") === _.toLower(plateNumberType);
+      }
+
+      if (startDate && endDate) {
+        matches =
+          matches ||
+          isWithinInterval(new Date(stockData?.created_at as string), {
+            start: new Date(startDate),
+            end: new Date(endDate),
+          });
+      }
+
+      return matches;
+    });
+
+    setPlateStock(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(plateNumberEndCode)) &&
+      _.isEmpty(_.trim(lga)) &&
+      _.isEmpty(_.trim(plateNumberType)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setPlateStock(stockData);
+    }
+  }, [stockData, plateNumberEndCode, lga, plateNumberType, startDate, endDate]);
+
+  const totalPages = Math.ceil(plateStock.length / itemsPerPage);
+  const paginatedData = plateStock.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const handleSubmit = async () => {
+    try {
+      const stockPayload = {
+        state_id,
+        lga_id,
+        end_code: modalInput.endCode,
+        type: modalInput.plate_number_type,
+        status: "Active Created",
+        range: `${modalInput.startNumber} - ${modalInput.endNoPlate}`,
+        intial_quantity: modalInput.total_number_requested,
+        current_quantity: modalInput.total_number_requested,
+        plate_type: {
+          type: modalInput.plate_number_type ?? "",
+          stock_total: modalInput.total_number_requested,
+        },
+      };
+      // store manager should create stock
+      const stockRes = await stockService.createNewStock(stockPayload);
+
+      const total = Number(modalInput?.total_number_requested);
+      const start = Number(modalInput?.startNumber);
+
+      const platePromises = [];
+
+      for (let i = 0; i < total; i++) {
+        const number = `${modalInput.lga.slice(0, 3).toUpperCase()}-${start + i}-${modalInput.endCode}`;
+
+        const modifiedPayload = {
+          state_id,
+          agent_id: null,
+          owner_id: null,
+          number,
+          number_status: null,
+          assigned_status: null,
+          type: String(modalInput.plate_number_type) ?? null,
+          sub_type: String(modalInput.plate_number_sub_type) ?? null,
+          status: null,
+          request_id: null,
+          stock_id: null,
+          assigned_date: null,
+        };
+
+        platePromises.push(plateService.createPlateNumber(modifiedPayload));
+      }
+
+      const responses = await Promise.all(platePromises);
+      console.log(responses);
+      // Check if all the plate creation responses are successful
+      const allSuccess = responses.every((response) => response.status);
+
+      if (stockRes.status && allSuccess) {
+        setOpenModal(true);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast(`Error Creating Stock. ${error.message}`);
+      } else {
+        toast("Error Creating Stock. An unknown error occurred.");
+      }
+    }
+  };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12"}>
@@ -82,75 +234,96 @@ export default function Page() {
         />
 
         <Modal
-          title={"Create New Plate Number Request"}
+          title={"Create New Stock"}
           content={
             <CreateNewStock input={modalInput} setInput={setModalInput} />
           }
-          btnText={"Create New Request"}
-          footerBtn={<Button type="submit">Submit</Button>}
+          btnText={"Create New Stock"}
+          footerBtn={
+            <Button type="submit" onClick={handleSubmit}>
+              Submit
+            </Button>
+          }
         />
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-          <DashboardCompSelect
-            title={"LGA"}
-            placeholder={"-- Select LGA --"}
-            items={filteredLGA}
-            selected={inputValues.lga}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                lga: selected ? String(selected) : "",
-              }))
+        <form action="" onSubmit={handleSearch}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <DashboardCompSelect
+              title={"LGA"}
+              placeholder={"-- Select LGA --"}
+              items={filteredLGA}
+              selected={inputValues.lga}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  lga: selected ? String(selected) : "",
+                }))
+              }
+            />
+
+            <DashboardCompSelect
+              title={"Plate Number Type"}
+              placeholder={"-- Select Type --"}
+              items={[...Object.values(PlateNumberType)]}
+              selected={inputValues.plateNumberType}
+              onSelect={(selected) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  plateNumberType: selected as PlateNumberType | undefined,
+                }))
+              }
+            />
+
+            <InputWithLabel
+              items={{
+                id: "plateNumber",
+                label: "Plate Number End Code",
+                placeholder: "Plate Number",
+                type: "text",
+                htmlfor: "plateNumber",
+              }}
+              value={inputValues.plateNumberEndCode}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  plateNumberEndCode: e.target.value,
+                }))
+              }
+            />
+          </div>
+
+          <div
+            className={
+              "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
             }
-          />
+          >
+            <DatePicker
+              title={"Start Date"}
+              date={inputValues.startDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  startDate: date as Date | undefined,
+                }))
+              }
+            />
 
-          <DashboardCompSelect
-            title={"Plate Number Type"}
-            placeholder={"-- Select Type --"}
-            items={[...Object.values(PlateNumberType)]}
-            selected={inputValues.plateNumberType}
-            onSelect={(selected) =>
-              setInputValues((prev) => ({
-                ...prev,
-                plateNumberType: selected as PlateNumberType | undefined,
-              }))
-            }
-          />
+            <DatePicker
+              title={"End Date"}
+              date={inputValues.endDate}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  endDate: date as Date | undefined,
+                }))
+              }
+            />
 
-          <InputWithLabel
-            items={{
-              id: "plateNumber",
-              label: "Plate Number End Code",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "plateNumber",
-            }}
-            value={inputValues.plateNumberEndCode}
-            onChange={(e) =>
-              setInputValues((prev) => ({
-                ...prev,
-                plateNumberEndCode: e.target.value,
-              }))
-            }
-          />
-        </div>
-
-        <div
-          className={
-            "grid grid-cols-1 md:grid-cols-[2fr_2fr_1fr] gap-4 mt-4 items-end"
-          }
-        >
-          <DatePicker
-            date={startDate}
-            setDate={setStartDate}
-            title={"Start Date"}
-          />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
-
-          <Button>Search Store</Button>
-        </div>
+            <Button type="submit">Search Store</Button>
+          </div>
+        </form>
       </CardContainer>
 
       <div
@@ -165,6 +338,20 @@ export default function Page() {
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
+
+      <ResponseModalX
+        title={"Stock Created Successfully"}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        content={<>You have successfully created a new stock</>}
+        status={"success"}
+        footerBtnText={"Done"}
+        footerTrigger={() =>
+          router.push(
+            "/store-manager-admin/plate-number-request/assign-plate-number"
+          )
+        }
+      />
     </main>
   );
 }

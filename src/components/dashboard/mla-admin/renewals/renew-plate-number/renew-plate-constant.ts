@@ -1,7 +1,7 @@
 export const initialValuesStep1 = {
   fullName: "",
   email: "",
-  phoneNumber: "",
+  phone: "",
   address: "",
   nationality: "",
   date: undefined as Date | undefined,
@@ -10,50 +10,50 @@ export const initialValuesStep1 = {
 export type inputRenewPlateNumberPropsStep1 = {
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   address: string;
   nationality: string;
   date: Date | undefined;
 };
 
 export const initialValuesStep2 = {
-  chasisnumber: "",
-  enginenumber: "",
-  vehicleMake: "",
-  vehicleModel: "",
-  modelYear: "",
-  vehicleCategory: "",
-  policySector: "",
-  vehicleColor: "",
-  novehiclecapacity: 0,
-  netweight: "",
-  vehicleenginecapacity: "",
-  vehicleLoad: "",
+  chasis_number: "",
+  engine_number: "",
+  make: "",
+  model: "",
+  year: "",
+  category: "",
+  policy_sector: "",
+  color: "",
+  capacity: "",
+  weight: "",
+  engine_capacity: "",
+  load: "",
 };
 
 export type inputRenewPlateNumberPropsStep2 = {
-  chasisnumber: string;
-  enginenumber: string;
-  vehicleMake: string;
-  vehicleModel: string;
-  modelYear: string;
-  vehicleCategory: string;
-  policySector: string;
-  vehicleColor: string;
-  novehiclecapacity: number;
-  netweight: string;
-  vehicleenginecapacity: string;
-  vehicleLoad: string;
+  chasis_number: string;
+  engine_number: string;
+  make: string;
+  model: string;
+  year: string;
+  category: string;
+  policy_sector: string;
+  color: string;
+  capacity: string | null;
+  weight: string;
+  engine_capacity: string;
+  load: string;
 };
 
 export type inputRenewPlateNumberPropsStep3 = {
-  plateNumber: string;
-  plateNumberType: string;
+  number: string;
+  type: string;
 };
 
 export const initialValuesStep3 = {
-  plateNumber: "",
-  plateNumberType: "",
+  number: "",
+  type: "",
 };
 
 export interface SelectedServices {

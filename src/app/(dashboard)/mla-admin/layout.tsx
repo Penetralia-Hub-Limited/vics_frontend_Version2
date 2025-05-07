@@ -7,7 +7,7 @@ import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import useGetPathName from "@/hooks/usePathName";
 import { mlaSideBarItems } from "@/common/side-bar";
-import Loading from "../loading";
+import Loading from "./loading";
 import { useDispatch } from "react-redux";
 import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
 import { PlateNumberService } from "@/services/PlateNumberService";
@@ -17,6 +17,7 @@ import { StateService } from "@/services/StatesServices";
 import { InvoiceService } from "@/services/InvoiceService";
 import { VehicleService } from "@/services/VehicleService";
 import { UserService } from "@/services/UserService";
+import { NotificationsService } from "@/services/NotificationService";
 
 export default function MLADashboardLayout({
   children,
@@ -48,6 +49,10 @@ export default function MLADashboardLayout({
     () => new VehicleService(dispatch),
     [dispatch]
   );
+  const notificationsService = useMemo(
+    () => new NotificationsService(dispatch),
+    [dispatch]
+  );
   const userService = useMemo(() => new UserService(dispatch), [dispatch]);
   const lgaService = useMemo(() => new LgaService(dispatch), [dispatch]);
   const stateService = useMemo(() => new StateService(dispatch), [dispatch]);
@@ -55,6 +60,7 @@ export default function MLADashboardLayout({
   useEffect(() => {
     (async () => {
       await plateNumberOrderService.getAllPlateNumberOrders();
+      await notificationsService.getAllNotifications();
       await plateNumberService.getAllPlateNumbers();
       await serviceTypeService.getAllServiceTypes();
       await vehicleService.getAllVehicles();
@@ -65,6 +71,7 @@ export default function MLADashboardLayout({
     })();
   }, [
     plateNumberOrderService,
+    notificationsService,
     plateNumberService,
     serviceTypeService,
     vehicleService,
@@ -77,23 +84,25 @@ export default function MLADashboardLayout({
   return (
     <IsAuth>
       <AppSidebar sidebarData={mlaSideBarItems} />
-      <Suspense fallback={<Loading screen={"main"} />}>
-        <main className={"flex-1 flex-col w-fit overflow-hidden"}>
-          <div
-            className={
-              "pl-4 md:pl-0 flex flex items-center h-20 border-b border-neutral-500 sticky top-0 z-40 bg-white"
-            }
-          >
-            <SidebarTrigger className={"block md:hidden"} />
-            <DashboardNavBar
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              pageTitle={getPathName()}
-            />
+      <main className={"flex-1 flex-col w-fit overflow-hidden"}>
+        <div
+          className={
+            "pl-4 md:pl-0 flex flex items-center h-20 border-b border-neutral-500 sticky top-0 z-40 bg-white"
+          }
+        >
+          <SidebarTrigger className={"block md:hidden"} />
+          <DashboardNavBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            pageTitle={getPathName()}
+          />
+        </div>
+        <Suspense fallback={<Loading />}>
+          <div className="min-h-screen px-4 py-8 bg-neutral-100/30">
+            {children}
           </div>
-          <div className="px-4 py-8 bg-neutral-100/30">{children}</div>
-        </main>
-      </Suspense>
+        </Suspense>
+      </main>
     </IsAuth>
   );
 }

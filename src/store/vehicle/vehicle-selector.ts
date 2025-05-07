@@ -85,7 +85,7 @@ export const selectFoundVehicleDatafromUserID = createSelector(
 export const selectVehicleMatchedByUser = createSelector(
   [selectVehicleReducer, (_: any, userid: string) => userid],
   (vehicle, userid) =>
-    vehicle.vehicles.find((vehicle) => vehicle.owner.id === userid)
+    vehicle.vehicles.filter((vehicle) => vehicle.owner.id === userid)
 );
 
 // Get Individual Vehicle User By Selecting the Name
@@ -98,5 +98,16 @@ export const selectVehicleOwnerIDFromName = createSelector(
       );
     });
     return foundState?.id || null;
+  }
+);
+
+// Get vehicle information that match plate number id
+export const selectVehicleInfoFromPlateID = createSelector(
+  [selectVehicleReducer, (_: any, plateId: string) => plateId],
+  (vehicle, plateId) => {
+    const foundState = vehicle.vehicles.find((vehicle) => {
+      return vehicle.plate_number_id === plateId;
+    });
+    return foundState || null;
   }
 );

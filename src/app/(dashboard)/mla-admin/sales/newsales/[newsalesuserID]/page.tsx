@@ -11,6 +11,9 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
 import { PlateNumberService } from "@/services/PlateNumberService";
 import { toast } from "sonner";
+import { UserService } from "@/services/UserService";
+import { VehicleService } from "@/services/VehicleService";
+import Spinner from "@/components/general/spinner";
 
 import {
   inputSalesPropsStep1,
@@ -22,12 +25,14 @@ import {
   inputSalesPropsStep4,
   initialSalesValuesStep4,
 } from "@/components/dashboard/sales/sales-constants";
-import { selectFoundVehicleDatafromUserID } from "@/store/vehicle/vehicle-selector";
+import { selectStateIDFromStateName } from "@/store/states/state-selector";
+import { selectUserByID } from "@/store/user/user-selector";
 
 import { NewPlateSalesStep1 } from "@/components/dashboard/sales/new-plate-sells/step1";
 import { NewPlateSalesStep2 } from "@/components/dashboard/sales/new-plate-sells/step2";
 import { NewPlateSalesStep3 } from "@/components/dashboard/sales/new-plate-sells/step3";
 import { NewPlateSalesStep4 } from "@/components/dashboard/sales/new-plate-sells/step4";
+import { Role, VehicleStatus } from "@/common/enum";
 
 const stepdetails = [
   {
@@ -53,11 +58,13 @@ export default function Page() {
   const params = useParams<{ newsalesuserID: string }>();
   const dispatch = useDispatch();
   const totalSteps = stepdetails.length;
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const userService = new UserService(dispatch);
+  const vehicleService = new VehicleService(dispatch);
   const plateService = new PlateNumberService(dispatch);
-
-  const vehicleInfo = useSelector((state) =>
-    selectFoundVehicleDatafromUserID(state, params.newsalesuserID)
+  const userInfo = useSelector((state) =>
+    selectUserByID(state, params.newsalesuserID)
   )[0];
 
   // Input values start
@@ -71,32 +78,18 @@ export default function Page() {
     useState<inputSalesPropsStep4>(initialSalesValuesStep4);
   // Input values end
 
+  const state_id = useSelector((state) =>
+    selectStateIDFromStateName(state, step1InputValues?.state)
+  );
+
   useEffect(() => {
-    if (!vehicleInfo) return;
+    if (!userInfo) return;
     setStep1InputValues((prev) => ({
       ...prev,
-      fullName: `${vehicleInfo?.owner?.firstname} ${vehicleInfo?.owner?.lastname}`,
-      email: vehicleInfo?.owner.email,
-      phoneNumber: vehicleInfo?.owner.phone,
-      address: vehicleInfo?.owner?.address,
+      fullName: `${userInfo?.firstname} ${userInfo?.lastname}`,
+      ...userInfo,
     }));
-
-    setStep2InputValues({
-      ...vehicleInfo,
-      category: vehicleInfo.category?.toString() ?? "",
-      netweight: vehicleInfo.weight?.toString() ?? "",
-      vehicleenginecapacity: vehicleInfo.engine_capacity?.toString() ?? "",
-    });
-
-    setStep3InputValues({
-      plateNumber: vehicleInfo?.plate_number?.number,
-      plateNumberType: vehicleInfo?.plate_number?.type,
-    });
-
-    setStep4InputValues({
-      insurance: vehicleInfo?.insurance_number,
-    });
-  }, [vehicleInfo]);
+  }, [userInfo]);
 
   const handleNextStep = () => {
     setCurrentStep((prev) => (prev < totalSteps ? prev + 1 : prev));
@@ -107,41 +100,66 @@ export default function Page() {
   };
 
   const createNewPlateSalesRequest = async () => {
+    setIsProcessing(true);
     try {
-      const payload = {
-        state_id: vehicleInfo?.owner?.state_id,
-        agent_id: null,
-        owner_id: vehicleInfo?.owner_id,
-        number: step3InputValues.plateNumber,
-        number_status: "Paid",
-        assigned_status: null,
-        type: step3InputValues.plateNumberType,
-        status: "Sold",
-        request_id: null,
-        stock_id: null,
-        sub_type: null,
-        assigned_date: null,
+      const [firstname = "", lastname = ""] =
+        step1InputValues.fullName?.split(" ") || [];
+
+      // Construct user payload
+      const userPayload = {
+        state_id: state_id,
+        firstname: firstname,
+        lastname: lastname,
+        role: Role.TAXPAYER,
+        password: "Adminshd@23434",
+        ...step1InputValues,
       };
 
-      const response = await plateService.createPlateNumber(payload);
-
-      if (response.status) {
-        router.push(`/mla-admin/sales/salespreview/${vehicleInfo?.owner_id}`);
+      // If user does not exist, create one
+      let newUser = userInfo;
+      if (!userInfo) {
+        const userRes = await userService.createUser(userPayload);
+        if (!userRes.status) throw new Error("Failed to create user");
+        newUser = userRes.data; // assuming the created user is in `data`
+        console.log(userRes);
       }
+
+      const vehiclePayload = {
+        state_id,
+        status: VehicleStatus.ACTIVE,
+        owner_id: newUser?.id,
+        ...step2InputValues,
+      };
+
+      const vehicleRes = await vehicleService.createVehicle(vehiclePayload);
+      if (!vehicleRes) throw new Error("Failed to create vehicle");
+
+      const platePayload = {
+        state_id: state_id,
+        agent_id: null,
+        owner_id: newUser?.id,
+        number_status: "Paid",
+        number: step3InputValues.plateNumber,
+        type: step3InputValues.type,
+        status: "Sold",
+      };
+
+      // Create plate number
+      const plateRes = await plateService.createPlateNumber(platePayload);
+      if (!plateRes.status) throw new Error("Failed to create plate number");
+
+      // if all passes, redirect to preview
+      router.push(`/mla-admin/sales/salespreview/${newUser?.id}`);
+      setIsProcessing(false);
     } catch (error) {
-      console.error("Failed:", error);
-      toast("Error creating new Plate Sales");
+      setIsProcessing(false);
+      if (error instanceof Error) {
+        toast(`Error. ${error.message}`);
+      } else {
+        toast("Error. An unknown error occurred.");
+      }
     }
   };
-
-  // const updatePlateSalesRequest = async () => {
-  //   try {
-  //     const response = await plateService.updatePlateNumber("", {});
-  //   } catch (error) {
-  //     console.error("Failed:", error);
-  //     toast(error as unknown as string);
-  //   }
-  // };
 
   return (
     <main className="flex flex-col gap-8 md:gap-12">
@@ -224,6 +242,9 @@ export default function Page() {
                   className="flex flex-row items-center gap-1"
                   onClick={createNewPlateSalesRequest}
                 >
+                  {isProcessing && (
+                    <Spinner color="white" size={10} screen={"default"} />
+                  )}
                   <p>Preview</p>
                   <ChevronRight />
                 </Button>

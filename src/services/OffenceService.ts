@@ -11,7 +11,7 @@ import {
 import { CreateOffenceProps } from "@/store/offence/offence-types";
 
 export class OffenceService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/offences";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/offences`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

@@ -13,8 +13,7 @@ import {
 import { CreatePlateNumberOrderProps } from "@/store/plate-number-orders/plate-number-order-types";
 
 export class PlateNumberOrderService {
-  static url =
-    "https://benion-vics-api.onrender.com/api/v1/plate_number_orders";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/plate_number_orders`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

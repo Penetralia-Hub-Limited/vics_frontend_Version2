@@ -23,11 +23,11 @@ export const hotline: IHotline[] = [
 export const supportMail: ISupportMail[] = [
   {
     id: 1,
-    mail: "support@kw-ivas.gov.ng",
+    mail: "support@vicsportal.com ",
   },
   {
     id: 2,
-    mail: "helpdesk@kw-ivas.gov.ng",
+    mail: "helpdesk@vicsportal.com",
   },
 ];
 
@@ -116,7 +116,7 @@ export const tableInvoices = [
   },
   {
     id: 2,
-    lga: "INV001",
+    lga: "INV003",
     range: "Paid",
     endcode: "$250.00",
     type: "Credit Card",
@@ -463,12 +463,12 @@ export const vehicleData = [
 ];
 
 export const invoiceColumns = [
-  { key: "id", title: "S/N" },
-  { key: "invoiceid", title: "Invoice ID" },
-  { key: "amount", title: "Amount" },
-  { key: "paymentreference", title: "Payment Reference" },
-  { key: "paymentstatus" as PaymentStatus, title: "Payment Status" },
-  { key: "date", title: "Date" },
+  { key: "sid", title: "S/N" },
+  { key: "invoice_number", title: "Invoice ID" },
+  { key: "total_amount", title: "Amount" },
+  { key: "payment_reference", title: "Payment Reference" },
+  { key: "payment_status" as PaymentStatus, title: "Payment Status" },
+  { key: "payment_date", title: "Date" },
 ];
 
 export const invoiceData = [
