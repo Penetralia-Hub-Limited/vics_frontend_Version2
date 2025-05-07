@@ -195,7 +195,12 @@ export default function Page() {
         availablePlateNumber: 400,
         plateQty: approvalModalInput.plateQty,
       });
-  }, [plateID]);
+  }, [
+    plateID,
+    approvalModalInput.plateQty,
+    singlePlateData?.total_number_requested,
+    singlePlateData?.type,
+  ]);
 
   const totalPages = Math.ceil(plateNumberData.length / itemsPerPage);
   const paginatedData = plateNumberData.slice(

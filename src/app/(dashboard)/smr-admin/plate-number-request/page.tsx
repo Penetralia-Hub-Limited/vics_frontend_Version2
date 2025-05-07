@@ -105,7 +105,12 @@ export default function Page() {
         availablePlateNumber: 400,
         plateQty: modalInput.plateQty,
       });
-  }, [plateID]);
+  }, [
+    plateID,
+    modalInput.plateQty,
+    singlePlateData?.total_number_requested,
+    singlePlateData?.type,
+  ]);
 
   const handleUpdate = async (id: string, status: "approve" | "disapprove") => {
     const payload = {

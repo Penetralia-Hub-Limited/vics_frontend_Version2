@@ -51,12 +51,12 @@ export type inputSalesPropsStep2 = {
 };
 
 export type inputSalesPropsStep3 = {
-  plateNumber: string;
+  number: string;
   type: string;
 };
 
 export const initialSalesValuesStep3 = {
-  plateNumber: "",
+  number: "",
   type: "",
 };
 

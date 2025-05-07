@@ -108,12 +108,6 @@ export default function Page() {
     }
   };
 
-  useEffect(() => {
-    if (_.isEmpty(_.trim(vehicleMake))) {
-      setFilteredVehicleInfo(vehiclesData);
-    }
-  }, [vehiclesData]);
-
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
       <div

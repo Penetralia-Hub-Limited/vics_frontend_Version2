@@ -58,8 +58,6 @@ export default function Page() {
     selectVehicleInfoFromPlateID(state, plateId)
   );
 
-  console.log("VI ", vehicleInfo);
-
   const [step1InputValues, setStep1InputValues] =
     useState<inputRenewPlateNumberPropsStep1>(initialValuesStep1);
   const [step2InputValues, setStep2InputValues] =
@@ -100,7 +98,7 @@ export default function Page() {
       ...prev,
       ...vehicleInfo,
     }));
-  }, [plateId]);
+  }, [plateId, userInfo, vehicleInfo]);
 
   const handleNextStep = () => {
     setCurrentStep((prev) => (prev < totalSteps ? prev + 1 : prev));

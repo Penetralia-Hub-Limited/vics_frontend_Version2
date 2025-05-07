@@ -149,6 +149,7 @@ export default function Page() {
   }, [
     plateNumbertableData,
     trackingid,
+    startDate,
     insuranceStatus,
     plateNumberType,
     zoneoffice,
