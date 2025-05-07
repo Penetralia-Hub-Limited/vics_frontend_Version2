@@ -153,7 +153,6 @@ export default function Page() {
     insuranceStatus,
     plateNumberType,
     zoneoffice,
-    zoneoffice,
     mla,
     endDate,
   ]);

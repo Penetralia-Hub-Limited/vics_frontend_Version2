@@ -139,7 +139,7 @@ export default function Page() {
         agent_id: null,
         owner_id: newUser?.id,
         number_status: "Paid",
-        number: step3InputValues.plateNumber,
+        number: step3InputValues.number,
         type: step3InputValues.type,
         status: "Sold",
       };
