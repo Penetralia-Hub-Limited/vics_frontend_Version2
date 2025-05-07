@@ -32,17 +32,17 @@ export const NewPlateSalesStep3: FC<INewPlateSalesStep3> = ({
 
       <InputWithLabel
         items={{
-          id: "plateNumber",
+          id: "number",
           label: "Plate Number",
           placeholder: "Plate Number",
           type: "text",
-          htmlfor: "plateNumber",
+          htmlfor: "number",
         }}
-        value={inputValues.plateNumber || ""}
+        value={inputValues.number || ""}
         onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
-            plateNumber: e.target.value,
+            number: e.target.value,
           }))
         }
       />
