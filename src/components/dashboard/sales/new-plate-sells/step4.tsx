@@ -23,11 +23,11 @@ export const NewPlateSalesStep4: FC<INewPlateSalesStep4> = ({
           type: "text",
           htmlfor: "insurance",
         }}
-        value={inputValues.insurance || ""}
+        value={inputValues.insurance_number || ""}
         onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
-            insurance: e.target.value,
+            insurance_number: e.target.value,
           }))
         }
       />

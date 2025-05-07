@@ -52,17 +52,17 @@ export const RenewPlateNumberStep1: FC<IRenewPlateNumberStep1> = ({
 
         <InputWithLabel
           items={{
-            id: "phonenumber",
+            id: "phone",
             label: "Phone Number",
             placeholder: "Phone Number",
             type: "text",
-            htmlfor: "phonenumber",
+            htmlfor: "phone",
           }}
-          value={inputValues.phoneNumber}
+          value={inputValues.phone}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              phoneNumber: e.target.value,
+              phone: e.target.value,
             }))
           }
         />

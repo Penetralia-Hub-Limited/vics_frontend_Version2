@@ -15,7 +15,7 @@ import {
   DataTableWButton,
   RowAction,
 } from "@/components/dashboard/dashboard-table-w-button";
-import { InsuranceStatus, RequestStatus, PlateNumberType } from "@/common/enum";
+import { RequestStatus, PlateNumberType, IssuanceStatus } from "@/common/enum";
 import Modal from "@/components/general/modal";
 import {
   CreatePlateRequestInitialValues,
@@ -40,7 +40,7 @@ const tableColumns = [
   { key: "recommender", title: "Recommending Officer" },
   { key: "approver", title: "First Approval Officer" },
   { key: "status", title: "Request Status Officer" },
-  { key: "insurance_status", title: "Insurance Status" },
+  { key: "assignment_status", title: "Issuance Status" },
 ];
 
 export default function Page() {
@@ -55,12 +55,12 @@ export default function Page() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [inputValues, setInputValues] = useState<{
     trackingid: string;
-    insuranceStatus: InsuranceStatus | undefined;
+    issuanceStatus: IssuanceStatus | undefined;
     plateNumberType: PlateNumberType | undefined;
     requestStatus: RequestStatus | undefined;
   }>({
     trackingid: "",
-    insuranceStatus: undefined,
+    issuanceStatus: undefined,
     plateNumberType: undefined,
     requestStatus: undefined,
   });
@@ -92,6 +92,8 @@ export default function Page() {
     try {
       const res = await plateOrderService.createPlateNumberOrder({
         tracking_id: generateTrackingId(),
+        status: RequestStatus.PENDING,
+        issuance_status: IssuanceStatus.UNASSIGNED,
         state_id: state_id,
         ...modalInput,
       });
@@ -175,14 +177,14 @@ export default function Page() {
           />
 
           <DashboardCompSelect
-            title={"Insurance Status"}
+            title={"Issuance Status"}
             placeholder={"-- Select status --"}
-            items={[...Object.values(InsuranceStatus)]}
-            selected={inputValues.insuranceStatus}
+            items={[...Object.values(IssuanceStatus)]}
+            selected={inputValues.issuanceStatus}
             onSelect={(selected) =>
               setInputValues((prev) => ({
                 ...prev,
-                insuranceStatus: (selected as InsuranceStatus) ?? undefined,
+                issuanceStatus: (selected as IssuanceStatus) ?? undefined,
               }))
             }
           />
@@ -237,8 +239,9 @@ export default function Page() {
         content={<>You have successfully created a new request</>}
         status={"success"}
         footerBtnText={"Done"}
-        footerTrigger={() =>
-          router.push("/mla-admin/plate-number-request/view-request")
+        footerTrigger={
+          () => {}
+          // router.push("/mla-admin/plate-number-request/view-request")
         }
       />
     </main>

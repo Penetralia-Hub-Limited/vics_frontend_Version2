@@ -14,6 +14,8 @@ import serviceTypeReducer from "./service-type/service-type-slice";
 import invoiceTypeReducer from "./invoice-type/invoice-type-slice";
 import plateNumberOrderReducer from "./plate-number-orders/plate-number-order-slice";
 import offenceReducer from "./offence/offence-slice";
+import notificationReducer from "./notifications/notifications-slice";
+import stockReducer from "./stock/stock-slice";
 
 const persistConfig = {
   key: "root",
@@ -35,6 +37,8 @@ const rootReducer = combineReducers({
   platenumber: plateNumberReducer,
   platenumberorder: plateNumberOrderReducer,
   offences: offenceReducer,
+  notification: notificationReducer,
+  stock: stockReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -53,5 +57,5 @@ export const store = makeStore();
 export const persistor = persistStore(store);
 
 export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore["getState"]>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = AppStore["dispatch"];

@@ -1,10 +1,13 @@
 import React from "react";
-import { IPlateData } from "@/common/types";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PlateNumberData } from "@/store/plateNumber/plate-number-types";
 
 interface PlateRowProps {
-  plate: IPlateData;
-  onSelectChange: (plate: IPlateData, selected: boolean) => void;
+  plate: { sid: number } & PlateNumberData;
+  onSelectChange: (
+    plate: PlateNumberData & { sid: number },
+    selected: boolean
+  ) => void;
   isSelected: boolean;
 }
 
@@ -14,10 +17,10 @@ const PlateRow: React.FC<PlateRowProps> = ({
   isSelected,
 }) => {
   return (
-    <tr className="plate-row border-b border-gray-200">
-      <td className="py-4 pl-6 text-xs text-gray-600">{plate.sn}</td>
-      <td className="py-4 pl-6 text-xs font-medium">{plate.plateNumber}</td>
-      <td className="py-4 pl-6 text-xs text-gray-500">{plate.plateType}</td>
+    <tr className="plate-row border-b border-primary-300 last:border-0">
+      <td className="py-4 pl-6 text-xs text-gray-600">{plate.sid}</td>
+      <td className="py-4 pl-6 text-xs font-medium">{plate.number}</td>
+      <td className="py-4 pl-6 text-xs text-gray-500">{plate.type}</td>
       <td className="py-4 pr-6 text-right">
         <label className="inline-flex items-center">
           <Checkbox
@@ -29,7 +32,7 @@ const PlateRow: React.FC<PlateRowProps> = ({
                 : ""
             }
           />
-          <span className="sr-only">Select plate {plate.plateNumber}</span>
+          <span className="sr-only">Select plate {plate.number}</span>
         </label>
       </td>
     </tr>

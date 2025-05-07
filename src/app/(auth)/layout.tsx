@@ -3,7 +3,7 @@
 import { StoreProvider } from "../store-provider";
 import { hotline, supportMail } from "@/common/constant";
 import WhiteLogo from "../../../public/assets/logo/icon_white.svg";
-import BG from "../../../public/assets/landing-page/login_hero.jpg";
+import BG from "../../../public/assets/images/kwara_img.webp";
 import Footer from "@/components/landing-page/navigation/footer";
 import LPNavBar from "@/components/landing-page/navigation/nav-bar";
 import LandingContactBar from "@/components/landing-page/navigation/contact-bar";
@@ -23,11 +23,12 @@ export default function AuthLayout({
 
         <div
           className={
-            "py-18 bg-cover bg-center flex w-full items-center justify-center grayscale-[0.5]"
+            "relative py-18 bg-cover bg-center flex w-full items-center justify-center"
           }
           style={{ backgroundImage: `url(${BG.src})` }}
         >
-          {children}
+          <div className="absolute inset-0 bg-black opacity-50 top-0 h-full"></div>
+          <div className="relative z-10 w-full h-full">{children}</div>
         </div>
 
         <Footer

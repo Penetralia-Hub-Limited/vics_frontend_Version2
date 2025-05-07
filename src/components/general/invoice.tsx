@@ -33,38 +33,46 @@ interface InvoiceProps {
   invoice_link: string;
 }
 
-const paymentRows: PaymentItem[] = [
+const paymentRows: Array<PaymentItem> = [
   {
-    description: "Road Worthiness - Private Car Above 2200CC",
+    status: PaymentStatus.NOTPAID,
+    description: "ROADWORTHINESS/COMPUTERIZED VEHICLE-PRIVATE CAR ABOVE 2000CC",
+    quantity: 1,
+    unitPrice: 3750,
+    totalAmount: 3750,
+    reference: "2025050312501",
+  },
+  {
+    status: PaymentStatus.NOTPAID,
+    description: "PLATE NUMBER VEHICLE - Private Vehicle Between 2.1 - 3.0",
+    quantity: 1,
+    unitPrice: 18750,
+    totalAmount: 18750,
+    reference: "2556505031201",
+  },
+  {
+    description: "Motor Vehicle Operation Card Fee",
     status: PaymentStatus.NOTPAID,
     quantity: 1,
-    unitPrice: 3500,
-    totalAmount: 3500,
-    reference: "2025050312501",
+    unitPrice: 1000,
+    totalAmount: 1 * 1000,
+    reference: "3025050312501",
   },
   {
-    description: "Insurance Private",
-    status: PaymentStatus.PAID,
+    description: "VEHICLE LICENSE-PRIVATE VEHICLE BETWEEN 2.1 - 3.0",
+    status: PaymentStatus.NOTPAID,
+    quantity: 1,
+    unitPrice: 2500,
+    totalAmount: 2500,
+    reference: "2020000312501",
+  },
+  {
+    description: "INSURANCE PRIVATE",
+    status: PaymentStatus.NOTPAID,
     quantity: 1,
     unitPrice: 15000,
     totalAmount: 15000,
-    reference: "2025050312501",
-  },
-  {
-    description: "Insurance Private",
-    status: PaymentStatus.PAID,
-    quantity: 1,
-    unitPrice: 15000,
-    totalAmount: 15000,
-    reference: "2025050312501",
-  },
-  {
-    description: "Insurance Private",
-    status: PaymentStatus.PAID,
-    quantity: 1,
-    unitPrice: 15000,
-    totalAmount: 15000,
-    reference: "2025050312501",
+    reference: "2025052332501",
   },
 ];
 
@@ -122,6 +130,11 @@ export const Invoice: FC<InvoiceProps> = ({
     }
   };
 
+  const getTotal = paymentRows.reduce(
+    (acc, table) => acc + table.totalAmount,
+    0
+  );
+
   return (
     <div className={cn("flex flex-col gap-6")}>
       <div ref={printRef}>
@@ -161,7 +174,7 @@ export const Invoice: FC<InvoiceProps> = ({
                 <PaymentTable data={paymentRows} />
               </div>
               <div className={"w-full border-t-1 border-neutral-300"}>
-                <AmountDisplay amount={34230} />
+                <AmountDisplay amount={getTotal} />
               </div>
             </div>
 

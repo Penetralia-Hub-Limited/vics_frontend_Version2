@@ -72,12 +72,8 @@ export default function Page() {
     const tableRow = row as TableRow;
     return [
       {
-        title: "View Details",
-        action: () => console.log("Viewing details for:", tableRow),
-      },
-      {
         title: "Print Receipt",
-        action: () => console.log("Viewing details for:", tableRow),
+        action: () => router.push(`/mla-admin/sales/receipt/${tableRow.id}`),
       },
     ];
   };
@@ -229,7 +225,7 @@ export default function Page() {
         onClose={() => setOpenModal(false)}
         content={
           <>
-            {isNumberVerified ? (
+            {isNumberVerified && (
               <div className="flex flex-col gap-4 py-5">
                 <div className={"grid grid-cols-[1fr_2fr]"}>
                   <p className={"text-sm"}>Name:</p>
@@ -253,8 +249,6 @@ export default function Page() {
                   </p>
                 </div>
               </div>
-            ) : (
-              <>Please enter the correct number, and try again</>
             )}
           </>
         }
@@ -263,6 +257,8 @@ export default function Page() {
         footerTrigger={() => {
           if (isNumberVerified && doesUserExist?.owner_id) {
             router.push(`/mla-admin/sales/newsales/${doesUserExist?.owner_id}`);
+          } else {
+            router.push("/mla-admin/sales/newsales/new");
           }
         }}
       />

@@ -1,18 +1,19 @@
 import { FC, Dispatch, SetStateAction } from "react";
 import InputWithLabel from "@/components/auth/input-comp";
+import { PlateNumberOrderType } from "@/common/enum";
 
 export const RecommendPlateNoRequestInitialValues = {
-  mlaplaterequest: "",
-  plateNumberType: "",
-  availablePlateNumber: "",
-  plateQty: "",
+  mlaplaterequest: undefined,
+  plateNumberType: undefined,
+  availablePlateNumber: undefined,
+  plateQty: undefined,
 };
 
 export interface RecommendPlateNoRequestProp {
-  mlaplaterequest: string;
-  plateNumberType: string;
-  availablePlateNumber: string;
-  plateQty: string;
+  mlaplaterequest: number | undefined;
+  plateNumberType: PlateNumberOrderType | undefined;
+  availablePlateNumber: number | undefined;
+  plateQty: number | undefined;
 }
 
 interface IRecommendPlateNoRequest {
@@ -28,6 +29,7 @@ export const RecommendPlateNoRequest: FC<IRecommendPlateNoRequest> = ({
     <div className={"p-4 flex flex-col gap-5"}>
       <div className={"grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-3"}>
         <InputWithLabel
+          disabled
           items={{
             id: "mlaplaterequest",
             label: "MLA Plate Request",
@@ -35,15 +37,16 @@ export const RecommendPlateNoRequest: FC<IRecommendPlateNoRequest> = ({
             type: "text",
             htmlfor: "mlaplaterequest",
           }}
-          value={input.mlaplaterequest}
+          value={input.mlaplaterequest || 0}
           onChange={(e) =>
             setInput((prev) => ({
               ...prev,
-              mlaplaterequest: e.target.value,
+              mlaplaterequest: Number(e.target.value),
             }))
           }
         />
         <InputWithLabel
+          disabled
           items={{
             id: "plateNumberType",
             label: "Plate Number Type",
@@ -55,25 +58,26 @@ export const RecommendPlateNoRequest: FC<IRecommendPlateNoRequest> = ({
           onChange={(e) =>
             setInput((prev) => ({
               ...prev,
-              plateNumberType: e.target.value,
+              plateNumberType: e.target.value as PlateNumberOrderType,
             }))
           }
         />
       </div>
 
       <InputWithLabel
+        disabled
         items={{
           id: "availablePlateNumber",
-          label: "Number of Privvate Plate Number Available in the Store",
-          placeholder: "Email Address",
+          label: "Number of Private Plate Number Available in the Store",
+          placeholder: "Plate Number Available in the Store",
           type: "number",
           htmlfor: "availablePlateNumber",
         }}
-        value={input.availablePlateNumber}
+        value={input.availablePlateNumber || 0}
         onChange={(e) =>
           setInput((prev) => ({
             ...prev,
-            availablePlateNumber: e.target.value,
+            availablePlateNumber: Number(e.target.value),
           }))
         }
       />
@@ -87,11 +91,11 @@ export const RecommendPlateNoRequest: FC<IRecommendPlateNoRequest> = ({
           type: "number",
           htmlfor: "plateQty",
         }}
-        value={input.plateQty}
+        value={input.plateQty ?? ""}
         onChange={(e) =>
           setInput((prev) => ({
             ...prev,
-            plateQty: e.target.value,
+            plateQty: Number(e.target.value),
           }))
         }
       />

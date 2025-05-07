@@ -19,7 +19,7 @@ const Footer: FC<IFooter> = ({ state, hotline, support, icon }) => {
   return (
     <div
       className={
-        "flex flex-col justify-between bg-primary-500 h-full md:h-72 mb-auto px-4 md:px-12 md:w-[100%] w-full"
+        "flex flex-col justify-between bg-primary-500 h-fit md:h-72 mb-auto px-4 md:px-12 md:w-[100%] w-full"
       }
     >
       <div

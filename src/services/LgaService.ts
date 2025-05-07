@@ -11,7 +11,7 @@ import {
 import { CreateLGAProps } from "@/store/lgas/lga-type";
 
 export class LgaService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/lgas";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/lgas`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

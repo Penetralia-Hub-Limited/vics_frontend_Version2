@@ -8,7 +8,6 @@ import PaymentTable from "./payment-summary-table";
 import { PaymentItem } from "./payment-summary-table";
 import { PaymentStatus } from "@/common/enum";
 import LogoComponent from "./logo";
-import { PlateNumberType } from "@/common/enum";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import html2canvas from "html2canvas-pro";
@@ -16,68 +15,25 @@ import { jsPDF } from "jspdf";
 import BGLogo from "../../../public/assets/logo/KW_logo.png";
 import { Notice } from "./notice";
 import { Signature } from "./signature";
+import QRCodeWithLogo from "./qr-code";
+import logo from "../../../public/assets/logo/kwara_logo.webp";
+import Icon from "../../../public/assets/logo/icon_green.svg";
 
-interface ReceiptProps {
-  icon: string;
-  state: string;
-  data: {
-    receiptID: number;
-  };
+interface cardInfo {
+  label: string;
+  value: string;
 }
 
-const cardData = [
-  {
-    label: "Full Name",
-    value: "Bernard David Ikechukwu",
-  },
-  {
-    label: "Email",
-    value: "Bernard@DavidIkechukwu.com",
-  },
-  {
-    label: "Phone Number",
-    value: "23232323333",
-  },
-  {
-    label: "Address",
-    value: "121 Pastoral lane Briks",
-  },
-];
-
-const vehicleData = [
-  {
-    label: "Chasis Number",
-    value: 33435342324,
-  },
-  {
-    label: "Engine Number",
-    value: "JKLWJKJ348723",
-  },
-  {
-    label: "Vehicle Make",
-    value: "Mercedez-Benz",
-  },
-  {
-    label: "Vehicle Model",
-    value: "Mercedez E-300",
-  },
-  {
-    label: "Vehicle Category",
-    value: "Vehicle Between 3.0 - 4.0",
-  },
-  {
-    label: "Plate Type",
-    value: PlateNumberType.PRIVATE,
-  },
-  {
-    label: "Plate Number",
-    value: "MORORK232",
-  },
-  {
-    label: "Color",
-    value: "Black",
-  },
-];
+interface ReceiptProps {
+  date: string;
+  state: string;
+  data: {
+    plateNumberId: string;
+  };
+  userInfo: cardInfo[];
+  vehicleInfo: cardInfo[];
+  qrcode_link: string;
+}
 
 const paymentRows: PaymentItem[] = [
   {
@@ -97,25 +53,46 @@ const paymentRows: PaymentItem[] = [
     reference: "2025050312501",
   },
   {
-    description: "Insurance Private",
+    description: "Motor Vehicle Operations Card Fee",
     status: PaymentStatus.PAID,
     quantity: 1,
-    unitPrice: 15000,
-    totalAmount: 15000,
+    unitPrice: 2000,
+    totalAmount: 2000,
     reference: "2025050312501",
   },
   {
-    description: "Insurance Private",
+    description: "Vehicle REG - Private Vehicle Card",
     status: PaymentStatus.PAID,
     quantity: 1,
-    unitPrice: 15000,
-    totalAmount: 15000,
+    unitPrice: 3250,
+    totalAmount: 3250,
+    reference: "2025050312501",
+  },
+  {
+    description: "Plate Number Vehicle - Private Vehicle Cars up to 1.7",
+    status: PaymentStatus.PAID,
+    quantity: 1,
+    unitPrice: 18750,
+    totalAmount: 18750,
+    reference: "2025050312501",
+  },
+  {
+    description: "Vehicle License - Private Vehicle Cars up to 1.7",
+    status: PaymentStatus.PAID,
+    quantity: 1,
+    unitPrice: 1870,
+    totalAmount: 1870,
     reference: "2025050312501",
   },
 ];
 
-export const Receipt: FC<ReceiptProps> = ({ icon, state, data }) => {
-  const { receiptID } = data;
+export const Receipt: FC<ReceiptProps> = ({
+  date,
+  state,
+  qrcode_link,
+  userInfo,
+  vehicleInfo,
+}) => {
   const printRef = useRef(null);
 
   const handleDownloadPDF = async () => {
@@ -144,6 +121,11 @@ export const Receipt: FC<ReceiptProps> = ({ icon, state, data }) => {
     }
   };
 
+  const getTotal = paymentRows.reduce(
+    (acc, table) => acc + table.totalAmount,
+    0
+  );
+
   return (
     <div className={cn("flex flex-col gap-6")}>
       <div ref={printRef}>
@@ -156,24 +138,22 @@ export const Receipt: FC<ReceiptProps> = ({ icon, state, data }) => {
             }}
           >
             <div>
-              <LogoComponent logo={icon} state={state} />
+              <LogoComponent logo={Icon} state={state} />
             </div>
 
             <div className={"py-4 flex flex-row items-center justify-between"}>
               <p className="text-xl font-bold">Receipt</p>
-              <p className="text-xl uppercase font-bold">
-                #RC{receiptID ?? 233443}
-              </p>
+              <p className="text-xl uppercase font-bold">#RC{233443}</p>
             </div>
 
             <CardContainer>
-              <InformationCardX title={"Buyer Information"} data={cardData} />
+              <InformationCardX title={"Buyer Information"} data={userInfo} />
             </CardContainer>
 
             <CardContainer>
               <InformationCardX
                 title={"Vehicle Information"}
-                data={vehicleData}
+                data={vehicleInfo}
               />
             </CardContainer>
 
@@ -190,13 +170,13 @@ export const Receipt: FC<ReceiptProps> = ({ icon, state, data }) => {
                 <PaymentTable data={paymentRows} />
               </div>
               <div className={"w-full border-t-1 border-neutral-300"}>
-                <AmountDisplay amount={34230} />
+                <AmountDisplay amount={getTotal} />
               </div>
             </div>
 
-            <div className={"grid md:grid-cols-[2fr_1fr]"}>
-              <Notice date={new Date()} />
-              <p>BAR CODE</p>
+            <div className={"grid md:grid-cols-[2fr_1fr] pt-5"}>
+              <Notice date={new Date(date ?? new Date())} />
+              <QRCodeWithLogo value={qrcode_link} logoUrl={logo.src} />
             </div>
 
             <Signature

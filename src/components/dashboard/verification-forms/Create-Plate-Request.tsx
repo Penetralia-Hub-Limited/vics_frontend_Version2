@@ -93,7 +93,7 @@ export const CreateNewPlatRequest: FC<ICreateNewStock> = ({
                 e.preventDefault();
                 setInput((prev) => ({
                   ...prev,
-                  total_number_requested: parseInt(e.target.value) || 0,
+                  total_number_requested: parseInt(e.target.value),
                 }));
               }}
             />

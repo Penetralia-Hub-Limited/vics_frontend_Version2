@@ -23,7 +23,7 @@ class AuthService {
     this.dispatch(authStart());
     try {
       const response = await axiosInstance.post(
-        "https://benion-vics-api.onrender.com/api/v1/login",
+        `${process.env.NEXT_PUBLIC_API_URL}/login`,
         credentials
       );
       const { status, data, message } = response.data;
@@ -41,9 +41,7 @@ class AuthService {
   // log out user
   async logout() {
     try {
-      await axiosInstance.post(
-        "https://benion-vics-api.onrender.com/api/v1/logout"
-      );
+      await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`);
     } catch (error) {
       console.error("Logout failed (API):", error);
     } finally {
@@ -57,7 +55,7 @@ class AuthService {
     this.dispatch(authStart());
     try {
       const res = await axios.post(
-        "https://benion-vics-api.onrender.com/api/v1/reset-password",
+        `${process.env.NEXT_PUBLIC_API_URL}/reset-password`,
         { email }
       );
       console.log("Reset success:", res.data.message);

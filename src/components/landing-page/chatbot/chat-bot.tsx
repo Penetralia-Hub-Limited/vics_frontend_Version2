@@ -72,7 +72,7 @@ export const VICSChatBot: FC<IVICSChatBot> = ({ status, setStatus }) => {
   }, [chatHistory]);
 
   return (
-    <div className={"flex flex-col gap-3 p-4 w-[25rem]"}>
+    <div className={"flex flex-col gap-3 p-4 w-[20rem] md:w-[25rem]"}>
       <div
         className={
           "border border-primary-500 rounded-lg overflow-hidden bg-white"
@@ -99,7 +99,7 @@ export const VICSChatBot: FC<IVICSChatBot> = ({ status, setStatus }) => {
         {/* Chat box */}
         <div
           ref={chatBodyRef}
-          className="p-2 min-h-[20rem] max-h-[25rem] overflow-y-auto overflow-x-hidden flex flex-col gap-2 scrollbar-width"
+          className="p-2 h-[18rem] md:min-h-[20rem] md:max-h-[25rem] overflow-y-auto overflow-x-hidden flex flex-col gap-2 scrollbar-width"
         >
           <div className={"flex flex-row gap-2 items-end"}>
             <div className="rounded-full bg-primary-500 p-1">

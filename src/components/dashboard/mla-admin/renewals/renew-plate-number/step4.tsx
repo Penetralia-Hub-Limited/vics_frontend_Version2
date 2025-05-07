@@ -18,7 +18,7 @@ const checkboxItems = [
     id: "vehicleLicense",
     label:
       "Vehicle License - Private Vehicle Cars, Mini Buses, & Vvehicles Up to 3.0 - 4.0",
-    price: 1500,
+    price: 2500,
   },
   {
     id: "insurancePrivate",
@@ -28,7 +28,7 @@ const checkboxItems = [
   {
     id: "renewalFee",
     label: "Motor Vehicle Ownership Renewal Fee",
-    price: 1500,
+    price: 2000,
   },
 ];
 

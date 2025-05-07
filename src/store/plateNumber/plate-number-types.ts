@@ -1,4 +1,5 @@
 import { PaginationProp } from "@/common/types";
+import { PlateNumberStatus } from "@/common/enum";
 import { User } from "../user/user-type";
 import { StatesData } from "../states/states-types";
 import { CompanyData } from "../company/company-types";
@@ -22,6 +23,7 @@ export interface PlateNumberData {
   sub_type: string;
   date_deactivated: string | null;
   created_at: string | null;
+  assigned_status: PlateNumberStatus;
   assigned_date: string | null;
   updated_at: string | null;
   creator: User;
@@ -41,13 +43,13 @@ export interface PlateNumberResponse {
 export interface CreatePlateNumberProps {
   state_id: string;
   number: string;
-  number_status: string | null;
-  status: string | null;
-  agent_id: string | null;
-  owner_id: string | null;
-  request_id: string | null;
-  stock_id: string | null;
-  type: string | null;
-  sub_type: string | null;
-  assigned_status: string | null;
+  number_status?: string | null;
+  status?: string | null;
+  agent_id?: string | null;
+  owner_id?: string | null;
+  request_id?: string | null;
+  stock_id?: string | null;
+  type?: string | null;
+  sub_type?: string | null;
+  assigned_status?: string | null;
 }

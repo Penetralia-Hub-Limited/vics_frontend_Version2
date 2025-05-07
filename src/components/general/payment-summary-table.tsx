@@ -29,7 +29,7 @@ const PaymentTable = ({ data }: PaymentTableProps) => {
       <TableHeader>
         <TableRow>
           <TableHead className={"text-xs w-[60px]"}>S/N</TableHead>
-          <TableHead className={"text-xs mx-auto"}>
+          <TableHead className={"text-xs w-[60px] mx-auto"}>
             Payment Description
           </TableHead>
           <TableHead className={"text-xs"}>Status</TableHead>
@@ -42,13 +42,13 @@ const PaymentTable = ({ data }: PaymentTableProps) => {
       <TableBody>
         {data.map((item, index) => (
           <TableRow key={index}>
-            <TableCell className="text-sm">{index + 1}</TableCell>
-            <TableCell className="text-sm mx-auto text-wrap">
+            <TableCell className="text-xs">{index + 1}</TableCell>
+            <TableCell className="text-xs mx-auto w-[60px]">
               {item.description}
             </TableCell>
             <TableCell
               className={cn(
-                "text-sm",
+                "text-xs",
                 item.status === PaymentStatus.PAID
                   ? "text-primary-500 font-medium"
                   : "text-danger font-semibold"
@@ -56,14 +56,14 @@ const PaymentTable = ({ data }: PaymentTableProps) => {
             >
               {item.status}
             </TableCell>
-            <TableCell className="text-sm">{item.quantity}</TableCell>
-            <TableCell className="text-sm">
+            <TableCell className="text-xs">{item.quantity}</TableCell>
+            <TableCell className="text-xs">
               {formattedAmount(item.unitPrice)}
             </TableCell>
-            <TableCell className="text-sm">
+            <TableCell className="text-xs">
               {formattedAmount(item.totalAmount)}
             </TableCell>
-            <TableCell className="text-sm font-semibold">
+            <TableCell className="text-xs font-semibold">
               {item.reference}
             </TableCell>
           </TableRow>

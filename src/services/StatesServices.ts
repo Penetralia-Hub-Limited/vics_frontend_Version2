@@ -11,7 +11,7 @@ import {
 import { AppDispatch } from "@/store/store";
 
 export class StateService {
-  static url = "https://benion-vics-api.onrender.com/api/v1/states";
+  static url = `${process.env.NEXT_PUBLIC_API_URL}/states`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowDropDown } from "@mui/icons-material";
 import AvatarProfile from "@/components/general/avatar-profile";
@@ -9,6 +9,13 @@ import { AppDispatch } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { AuthState } from "@/store/auth/auth-user-types";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface IUserProfile {
   fullName: string;
@@ -25,7 +32,6 @@ const UserProfile: FC<IUserProfile> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const authService = new AuthService(dispatch);
-  const [openDropDown, setOpenDropDown] = useState<boolean>(false);
   const router = useRouter();
 
   const { isLoggedIn, data, isLoading } = useSelector(
@@ -36,14 +42,10 @@ const UserProfile: FC<IUserProfile> = ({
     if (!(isLoggedIn && data)) router.push("/login");
   }, [isLoggedIn, data, router]);
 
-  const handleDropDown = () => {
-    setOpenDropDown(!openDropDown);
-  };
-
   async function handleLogOut() {
-    router.replace("/login");
     try {
       await authService.logout();
+      router.replace("/login");
     } catch (error) {
       console.error(error as unknown as string);
       toast("Error logging out.");
@@ -60,28 +62,23 @@ const UserProfile: FC<IUserProfile> = ({
       <div className={"flex flex-col"}>
         <p className={"text-sm font-semibold uppercase"}>{fullName}</p>
 
-        <div className={"relative"}>
-          <div
-            onClick={handleDropDown}
-            className={"flex flex-row w-full items-center cursor-pointer"}
-          >
-            <p className={"text-[10px] font-light text-nowrap"}>{role}</p>
-            <ArrowDropDown sx={{ fontSize: 15 }} className={""} />
-          </div>
-
-          {openDropDown && (
-            <div
-              className={
-                "absolute top-[100%] bg-white cursor-pointer mt-2 p-3 border border-neutral-500 rounded-md z-40 shadow-sm"
-              }
-              onClick={handleLogOut}
-            >
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="flex flex-row gap-1 h-3" variant="logout">
+              <p className={"ml-[-10px] text-[10px] font-light text-nowrap"}>
+                {role}
+              </p>
+              <ArrowDropDown sx={{ fontSize: 15 }} className={""} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="min-w-5">
+            <DropdownMenuItem className="cursor-pointer" onClick={handleLogOut}>
               <p className={"text-xs font-semibold"}>
                 {isLoading ? "Loading..." : "Log Out"}
               </p>
-            </div>
-          )}
-        </div>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

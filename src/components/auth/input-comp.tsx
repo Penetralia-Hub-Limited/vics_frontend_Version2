@@ -12,10 +12,14 @@ interface InputWithLabelProps extends InputHTMLAttributes<HTMLInputElement> {
 const InputWithLabel: FC<InputWithLabelProps> = ({ items, ...rest }) => {
   return (
     <div className={"grid w-full items-center gap-3"}>
-      <Label className={"capitalize text-sm"} htmlFor={items.htmlfor}>
-        {items.label}
-      </Label>
+      <div className="flex flex-row gap-2 items-center">
+        <Label className={"capitalize text-sm"} htmlFor={items.htmlfor}>
+          {items.label}
+        </Label>
+        {items.compulsory && <p className="text-danger">*</p>}
+      </div>
       <Input
+        required={items.compulsory}
         autoComplete={items.id}
         id={items.id}
         type={items.type}
