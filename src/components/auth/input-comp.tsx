@@ -22,7 +22,7 @@ const InputWithLabel: FC<InputWithLabelProps> = ({ items, ...rest }) => {
         required={items.compulsory}
         autoComplete={items.id}
         id={items.id}
-        type={items.type}
+        type={items.type?.trim()}
         placeholder={items.placeholder}
         {...rest}
       />

@@ -17,7 +17,7 @@ import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
 
 const plateNoReportHeader = [
   { title: "S/N", key: "sid" },
-  { title: "MLA", key: "mla" },
+  { title: "MLA", key: "created_by" },
   { title: "Plate Number", key: "number" },
   { title: "Plate Type", key: "type" },
   // { title: "Station", key: "station" },

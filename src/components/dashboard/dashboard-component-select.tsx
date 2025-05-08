@@ -7,8 +7,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectSeparator,
+  SelectGroup,
+  SelectLabel,
 } from "@/components/ui/select";
 import Loading from "@/components/general/spinner";
+import { Button } from "../ui/button";
 
 interface IDashboardCompSelect {
   placeholder: string;
@@ -38,15 +42,29 @@ const DashboardCompSelect: FC<IDashboardCompSelect> = ({
           <SelectValue className={"capitalize"} placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {items.length === 0 ? (
-            <Loading screen={"default"} size={20} />
-          ) : (
-            items.map((item, index) => (
-              <SelectItem className={"capitalize"} key={index} value={item}>
-                {item}
-              </SelectItem>
-            ))
-          )}
+          <SelectGroup>
+            <SelectLabel>Select</SelectLabel>
+            {items.length === 0 ? (
+              <Loading screen={"default"} size={20} />
+            ) : (
+              items.map((item, index) => (
+                <SelectItem className={"capitalize"} key={index} value={item}>
+                  {item}
+                </SelectItem>
+              ))
+            )}
+          </SelectGroup>
+          <Button
+            className="hover:bg-danger/20 text-danger w-full px-2"
+            variant="secondary"
+            size="sm"
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              onSelect("");
+            }}
+          >
+            Clear
+          </Button>
         </SelectContent>
       </Select>
     </div>

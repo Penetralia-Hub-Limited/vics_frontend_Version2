@@ -15,6 +15,7 @@ export const selectVehicles = createSelector(
           return {
             sid: index + 1,
             platenumber: vehicle?.plate_number?.number ?? "--",
+            payment_status: vehicle?.plate_number?.number_status,
             payment_ref: vehicle?.invoice?.payment_reference ?? "--",
             vio_approval: vehicle?.invoice?.vio_approved
               ? ApprovalStatus.APPROVED
