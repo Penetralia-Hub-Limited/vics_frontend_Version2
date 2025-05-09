@@ -17,7 +17,7 @@ import {
 } from "@/store/service-type/service-selector";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { Role } from "@/common/enum";
+import { Role, RegistrationType } from "@/common/enum";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -31,6 +31,24 @@ const tableColumns = [
   { key: "service_price", title: "Amount" },
 ];
 
+const inputInitialValues = {
+  serviceType: "",
+  regType: "",
+  zoneoffice: "",
+  mla: "",
+  fromDate: undefined,
+  toDate: undefined,
+};
+
+interface initialValuesProps {
+  serviceType: string;
+  regType: string;
+  zoneoffice: string;
+  mla: string;
+  fromDate: Date | undefined;
+  toDate: Date | undefined;
+}
+
 export default function Page() {
   const itemsPerPage = 10;
   const serviceTypesNames = useSelector(selectServiceTypeName);
@@ -40,19 +58,8 @@ export default function Page() {
     .map((user) => `${user.firstname} ${user.lastname}`);
   const serviceTypes = useSelector(selectServices);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [fromDate, setFromDate] = useState<Date | undefined>();
-  const [toDate, setToDate] = useState<Date | undefined>();
-  const [inputValues, setInputValues] = useState<{
-    serviceType: string;
-    zoneoffice: string;
-    regType: string;
-    mla: string;
-  }>({
-    serviceType: "",
-    zoneoffice: "",
-    regType: "",
-    mla: "",
-  });
+  const [inputValues, setInputValues] =
+    useState<initialValuesProps>(inputInitialValues);
 
   // const totalAmount = serviceTypes.reduce((sum, item) => sum + item.amount, 0);
   const totalPages = Math.ceil(serviceTypes.length / itemsPerPage);
@@ -96,7 +103,7 @@ export default function Page() {
           <DashboardCompSelect
             title={"Registration Type"}
             placeholder={"-- Select Type --"}
-            items={["Reg1", "Reg2"]}
+            items={[...Object.values(RegistrationType)]}
             selected={inputValues.regType}
             onSelect={(selected) =>
               setInputValues((prev) => ({
@@ -134,8 +141,27 @@ export default function Page() {
             }
           />
 
-          <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
-          <DatePicker date={toDate} setDate={setToDate} title={"To"} />
+          <DatePicker
+            date={inputValues.fromDate}
+            setDate={(date) =>
+              setInputValues((prev) => ({
+                ...prev,
+                fromDate: date as Date | undefined,
+              }))
+            }
+            title={"From"}
+          />
+
+          <DatePicker
+            date={inputValues.toDate}
+            setDate={(date) =>
+              setInputValues((prev) => ({
+                ...prev,
+                toDate: date as Date | undefined,
+              }))
+            }
+            title={"To"}
+          />
 
           <Button className={"flex flex-row gap-2"}>
             <p>Download Report</p>

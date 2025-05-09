@@ -46,8 +46,6 @@ export default function Page() {
     0
   );
 
-  console.log(totalAmount);
-
   const totalPages = Math.ceil(mlaReportData.length / itemsPerPage);
   const paginatedData = mlaReportData.slice(
     (currentPage - 1) * itemsPerPage,

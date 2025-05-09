@@ -531,7 +531,7 @@ export const mlaSideBarItems = [
         id: 4,
         title: "Reports",
         Icon: ReportSVG,
-        url: "/mla-admin/report",
+        url: "/mla-admin/service-sales-report",
       },
       {
         id: 5,
