@@ -21,7 +21,7 @@ import {
   CreateNewStockProps,
   CreateNewStockPropsInitialValues,
 } from "@/components/dashboard/verification-forms/create-new-stock";
-import { selectLGAIDFromName } from "@/store/lgas/lga-selector";
+import { selectLGAFromName } from "@/store/lgas/lga-selector";
 import { PlateNumberService } from "@/services/PlateNumberService";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
@@ -80,8 +80,8 @@ export default function Page() {
   const state_id = useSelector((state) =>
     selectStateIDFromStateName(state, modalInput?.state)
   );
-  const lga_id = useSelector((state) =>
-    selectLGAIDFromName(state, modalInput?.lga)
+  const lgaInfo = useSelector((state) =>
+    selectLGAFromName(state, modalInput?.lga)
   );
 
   const { plateNumberEndCode, lga, plateNumberType, startDate, endDate } =
@@ -153,7 +153,8 @@ export default function Page() {
     try {
       const stockPayload = {
         state_id,
-        lga_id,
+        lga_id: lgaInfo?.id,
+        lga: lgaInfo,
         end_code: modalInput.endCode,
         type: modalInput.plate_number_type,
         status: "Active Created",
@@ -173,34 +174,36 @@ export default function Page() {
 
       const platePromises = [];
 
-      for (let i = 0; i < total; i++) {
-        const number = `${modalInput.lga.slice(0, 3).toUpperCase()}-${start + i}-${modalInput.endCode}`;
+      if (stockRes.status) {
+        for (let i = 0; i < total; i++) {
+          const number = `${modalInput.lga.slice(0, 3).toUpperCase()}-${start + i}-${modalInput.endCode}`;
 
-        const modifiedPayload = {
-          state_id,
-          agent_id: null,
-          owner_id: null,
-          number,
-          number_status: null,
-          assigned_status: null,
-          type: String(modalInput.plate_number_type) ?? null,
-          sub_type: String(modalInput.plate_number_sub_type) ?? null,
-          status: null,
-          request_id: null,
-          stock_id: null,
-          assigned_date: null,
-        };
+          const modifiedPayload = {
+            state_id,
+            agent_id: null,
+            owner_id: null,
+            number,
+            number_status: null,
+            assigned_status: null,
+            type: String(modalInput.plate_number_type) ?? null,
+            sub_type: String(modalInput.plate_number_sub_type) ?? null,
+            status: null,
+            request_id: null,
+            stock_id: stockRes?.data?.id,
+            assigned_date: null,
+          };
 
-        platePromises.push(plateService.createPlateNumber(modifiedPayload));
-      }
+          platePromises.push(plateService.createPlateNumber(modifiedPayload));
+        }
 
-      const responses = await Promise.all(platePromises);
-      console.log(responses);
-      // Check if all the plate creation responses are successful
-      const allSuccess = responses.every((response) => response.status);
+        const responses = await Promise.all(platePromises);
+        console.log(responses);
+        // Check if all the plate creation responses are successful
+        const allSuccess = responses.every((response) => response.status);
 
-      if (stockRes.status && allSuccess) {
-        setOpenModal(true);
+        if (stockRes.status && allSuccess) {
+          setOpenModal(true);
+        }
       }
     } catch (error) {
       if (error instanceof Error) {

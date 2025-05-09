@@ -130,3 +130,11 @@ export const selectAssignedPlateNumber = createSelector(
           })
       : []
 );
+
+/**
+ * Get an array of plate numbers
+ */
+export const selectPlateNumberArr = createSelector(
+  [selectPlateNumberReducer],
+  (plateNumber) => plateNumber.map((plate) => plate.number)
+);

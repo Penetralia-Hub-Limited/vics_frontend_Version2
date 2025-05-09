@@ -1,9 +1,10 @@
 "use client";
 
 import { FC, Dispatch, SetStateAction } from "react";
-import InputWithLabel from "@/components/auth/input-comp";
-import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { PlateNumberType } from "@/common/enum";
+import { useSelector } from "react-redux";
+import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
+import { selectPlateNumberArr } from "@/store/plateNumber/plate-number-selector";
 import { inputSalesPropsStep3 } from "../sales-constants";
 
 interface INewPlateSalesStep3 {
@@ -15,6 +16,7 @@ export const NewPlateSalesStep3: FC<INewPlateSalesStep3> = ({
   inputValues,
   setInputValues,
 }) => {
+  const plates = useSelector(selectPlateNumberArr);
   return (
     <div className={"flex flex-col gap-4 md:gap-6 w-full"}>
       <DashboardCompSelect
@@ -30,19 +32,15 @@ export const NewPlateSalesStep3: FC<INewPlateSalesStep3> = ({
         }
       />
 
-      <InputWithLabel
-        items={{
-          id: "number",
-          label: "Plate Number",
-          placeholder: "Plate Number",
-          type: "text",
-          htmlfor: "number",
-        }}
-        value={inputValues.number || ""}
-        onChange={(e) =>
+      <DashboardCompSelect
+        title={"Plate Number"}
+        placeholder={"-- Select Number --"}
+        items={plates}
+        selected={inputValues.number}
+        onSelect={(selected) =>
           setInputValues((prev) => ({
             ...prev,
-            number: e.target.value,
+            number: (selected as string) ?? "",
           }))
         }
       />

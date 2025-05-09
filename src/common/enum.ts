@@ -16,6 +16,12 @@ export enum PlateNumberStatus {
   SOLD = "Sold",
 }
 
+export enum RegistrationType {
+  REGISTRATION = "Registration",
+  RENEWAL = "Renewal",
+  NONVEHICLE = "Non Vehicle",
+}
+
 export enum Role {
   SUPERADMIN = "Super Admin",
   MLA = "MLA", // motor licensing authority

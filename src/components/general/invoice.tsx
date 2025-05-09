@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useRef } from "react";
-import CardContainer from "./card-container";
 import { InformationCardX } from "./information-card";
 import { AmountDisplay } from "./display-amount";
 import PaymentTable from "./payment-summary-table";
@@ -11,12 +10,11 @@ import { TermsAndConditions } from "./terms";
 import LogoComponent from "./logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import html2canvas from "html2canvas-pro";
-import { jsPDF } from "jspdf";
 import QRCodeWithLogo from "./qr-code";
 import BGLogo from "../../../public/assets/logo/KW_logo.png";
 import logo from "../../../public/assets/logo/kwara_logo.webp";
 import Icon from "../../../public/assets/logo/icon_green.svg";
+import { useMultiFileDownloader } from "@/hooks/userFileDownloader";
 
 interface cardInfo {
   label: string;
@@ -102,32 +100,11 @@ export const Invoice: FC<InvoiceProps> = ({
   buyerInfo,
   vehicleInfo,
 }) => {
-  const printRef = useRef(null);
+  const printRef = useRef<HTMLDivElement>(null);
+  const { downloadAsPDF } = useMultiFileDownloader();
 
   const handleDownloadPDF = async () => {
-    const element = printRef.current;
-    if (!element) return;
-
-    try {
-      const canvas = await html2canvas(element, {
-        scale: 2,
-      });
-      const data = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "px",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-
-      pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("invoice.pdf");
-    } catch (error) {
-      console.log(error as string);
-    }
+    downloadAsPDF(printRef as React.RefObject<HTMLDivElement>, "invoice.pdf");
   };
 
   const getTotal = paymentRows.reduce(
@@ -137,8 +114,8 @@ export const Invoice: FC<InvoiceProps> = ({
 
   return (
     <div className={cn("flex flex-col gap-6")}>
-      <div ref={printRef}>
-        <CardContainer className="bg-white">
+      <div className={"p-5 bg-white border border-neutral-200"} ref={printRef}>
+        <div>
           <div
             className="flex flex-col gap-5 bg-contain bg-center bg-no-repeat"
             style={{
@@ -163,17 +140,17 @@ export const Invoice: FC<InvoiceProps> = ({
 
             <div
               className={
-                "flex flex-col gap-3 border-1 border-neutral-300 rounded-lg"
+                "flex flex-col gap-3 border-1 border-primary-500 rounded-lg"
               }
             >
               <div
                 className={
-                  "border-t-1 border-neutral-300 rounded-t-lg overflow-hidden"
+                  "border-t-[0.2px] border-primary-500 rounded-t-lg overflow-hidden"
                 }
               >
                 <PaymentTable data={paymentRows} />
               </div>
-              <div className={"w-full border-t-1 border-neutral-300"}>
+              <div className={"w-full border-t-1 border-primary-500"}>
                 <AmountDisplay amount={getTotal} />
               </div>
             </div>
@@ -183,7 +160,7 @@ export const Invoice: FC<InvoiceProps> = ({
               <QRCodeWithLogo value={invoice_link} logoUrl={logo.src} />
             </div>
           </div>
-        </CardContainer>
+        </div>
       </div>
 
       <div className={"flex flex-row gap-4 mx-auto w-fit"}>

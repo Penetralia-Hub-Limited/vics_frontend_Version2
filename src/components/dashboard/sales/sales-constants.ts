@@ -1,3 +1,5 @@
+import { StatesData } from "@/store/states/states-types";
+
 export type inputSalesPropsStep1 = {
   fullName: string;
   email: string;
@@ -6,7 +8,7 @@ export type inputSalesPropsStep1 = {
   nationality: string;
   date: Date | undefined;
   userID: string;
-  state: string;
+  state: StatesData | null;
 };
 
 export const initialSalesValuesStep1 = {
@@ -17,7 +19,7 @@ export const initialSalesValuesStep1 = {
   nationality: "",
   userID: "",
   date: undefined,
-  state: "",
+  state: null,
 };
 
 export const initialSalesValuesStep2 = {

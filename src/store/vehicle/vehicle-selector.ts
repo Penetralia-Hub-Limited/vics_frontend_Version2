@@ -15,6 +15,7 @@ export const selectVehicles = createSelector(
           return {
             sid: index + 1,
             platenumber: vehicle?.plate_number?.number ?? "--",
+            payment_status: vehicle?.plate_number?.number_status,
             payment_ref: vehicle?.invoice?.payment_reference ?? "--",
             vio_approval: vehicle?.invoice?.vio_approved
               ? ApprovalStatus.APPROVED
@@ -72,6 +73,8 @@ export const selectFoundVehicleDatafromUserID = createSelector(
       .map((vehicle, index) => {
         return {
           sid: index + 1,
+          platenumber: vehicle?.plate_number?.number,
+          platetype: vehicle?.plate_number?.type,
           payment_ref: vehicle?.invoice?.payment_reference ?? "--",
           owner_name: `${vehicle?.owner?.firstname ?? "-"} ${vehicle?.owner?.lastname ?? "-"}`,
           amount: formattedAmount(vehicle?.invoice?.amount ?? 0),

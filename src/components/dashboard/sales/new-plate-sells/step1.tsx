@@ -31,11 +31,11 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
           type: "text",
           htmlfor: "fullname",
         }}
-        value={inputValues.fullName || ""}
+        value={inputValues.fullName}
         onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
-            fullName: e.target.value,
+            fullName: e.target.value ?? "",
           }))
         }
       />
@@ -49,11 +49,11 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
             type: "email",
             htmlfor: "email",
           }}
-          value={inputValues.email || ""}
+          value={inputValues.email}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              email: e.target.value,
+              email: e.target.value ?? "",
             }))
           }
         />
@@ -66,11 +66,11 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
             type: "text",
             htmlfor: "phone",
           }}
-          value={inputValues.phone || ""}
+          value={inputValues.phone}
           onChange={(e) =>
             setInputValues((prev) => ({
               ...prev,
-              phone: e.target.value,
+              phone: e.target.value ?? "",
             }))
           }
         />
@@ -84,11 +84,11 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
           type: "text",
           htmlfor: "address",
         }}
-        value={inputValues.address || ""}
+        value={inputValues.address}
         onChange={(e) =>
           setInputValues((prev) => ({
             ...prev,
-            address: e.target.value,
+            address: e.target.value ?? "",
           }))
         }
       />
@@ -98,11 +98,14 @@ export const NewPlateSalesStep1: FC<INewPlateSalesStep1> = ({
           title={"State"}
           placeholder={"-- Select State --"}
           items={filteredState}
-          selected={inputValues.state || ""}
+          selected={inputValues.state?.name}
           onSelect={(selected) =>
             setInputValues((prev) => ({
               ...prev,
-              state: (selected as string) ?? "",
+              state:
+                states.states.find(
+                  (state: StatesData) => state.name === (selected as string)
+                ) ?? null,
             }))
           }
         />

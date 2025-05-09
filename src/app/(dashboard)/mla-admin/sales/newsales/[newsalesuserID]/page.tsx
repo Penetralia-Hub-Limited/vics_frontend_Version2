@@ -9,7 +9,6 @@ import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, SalesSVG } from "@/common/svgs";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import StepsDetails from "@/components/dashboard/steps-details";
-import { PlateNumberService } from "@/services/PlateNumberService";
 import { toast } from "sonner";
 import { UserService } from "@/services/UserService";
 import { VehicleService } from "@/services/VehicleService";
@@ -26,6 +25,7 @@ import {
   initialSalesValuesStep4,
 } from "@/components/dashboard/sales/sales-constants";
 import { selectStateIDFromStateName } from "@/store/states/state-selector";
+import { selectValidPlateNumber } from "@/store/plateNumber/plate-number-selector";
 import { selectUserByID } from "@/store/user/user-selector";
 
 import { NewPlateSalesStep1 } from "@/components/dashboard/sales/new-plate-sells/step1";
@@ -62,7 +62,6 @@ export default function Page() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const userService = new UserService(dispatch);
   const vehicleService = new VehicleService(dispatch);
-  const plateService = new PlateNumberService(dispatch);
   const userInfo = useSelector((state) =>
     selectUserByID(state, params.newsalesuserID)
   )[0];
@@ -79,7 +78,10 @@ export default function Page() {
   // Input values end
 
   const state_id = useSelector((state) =>
-    selectStateIDFromStateName(state, step1InputValues?.state)
+    selectStateIDFromStateName(state, step1InputValues?.state?.name ?? null)
+  );
+  const validPlate = useSelector((state) =>
+    selectValidPlateNumber(state, step3InputValues?.number)
   );
 
   useEffect(() => {
@@ -128,25 +130,13 @@ export default function Page() {
         state_id,
         status: VehicleStatus.ACTIVE,
         owner_id: newUser?.id,
+        plate_number_id: validPlate?.id,
+        plate_number: validPlate,
         ...step2InputValues,
       };
 
       const vehicleRes = await vehicleService.createVehicle(vehiclePayload);
       if (!vehicleRes) throw new Error("Failed to create vehicle");
-
-      const platePayload = {
-        state_id: state_id,
-        agent_id: null,
-        owner_id: newUser?.id,
-        number_status: "Paid",
-        number: step3InputValues.number,
-        type: step3InputValues.type,
-        status: "Sold",
-      };
-
-      // Create plate number
-      const plateRes = await plateService.createPlateNumber(platePayload);
-      if (!plateRes.status) throw new Error("Failed to create plate number");
 
       // if all passes, redirect to preview
       router.push(`/mla-admin/sales/salespreview/${newUser?.id}`);

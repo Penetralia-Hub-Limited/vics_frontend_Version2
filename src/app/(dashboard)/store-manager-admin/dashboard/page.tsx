@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, SetStateAction } from "react";
+import { useState, SetStateAction, useEffect } from "react";
 import { format } from "date-fns";
 import { DateRange } from "@/common/enum";
 import SummaryCard from "@/components/dashboard/dashboard-summary-card";
@@ -16,8 +16,17 @@ import { useSelector } from "react-redux";
 import { AuthState } from "@/store/auth/auth-user-types";
 
 export default function Page() {
-  const currentDate = new Date();
-  const formattedDate = format(currentDate, "LLL. d yyyy ; h:maaa");
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const formattedDate = format(currentDate, "MMM. d, yyyy | hh:mm aaa");
   const { data } = useSelector((state: { auth: AuthState }) => state.auth);
   const plateNumberRequested = useSelector(selectPlateRequested);
   const plateNumberAmount = useSelector(selectPlateNumberAmount);
