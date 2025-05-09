@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { selectStateIDFromStateName } from "@/store/states/state-selector";
 import { selectAllStock } from "@/store/stock/stock-selector";
 import { StockService } from "@/services/StockService";
+import { PlateNumberStatus } from "@/common/enum";
 
 const tableHeaders = [
   { title: "S/N", key: "sid" },
@@ -184,7 +185,7 @@ export default function Page() {
             owner_id: null,
             number,
             number_status: null,
-            assigned_status: null,
+            assigned_status: PlateNumberStatus.UNASSIGNED,
             type: String(modalInput.plate_number_type) ?? null,
             sub_type: String(modalInput.plate_number_sub_type) ?? null,
             status: null,
