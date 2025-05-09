@@ -73,6 +73,8 @@ export const selectFoundVehicleDatafromUserID = createSelector(
       .map((vehicle, index) => {
         return {
           sid: index + 1,
+          platenumber: vehicle?.plate_number?.number,
+          platetype: vehicle?.plate_number?.type,
           payment_ref: vehicle?.invoice?.payment_reference ?? "--",
           owner_name: `${vehicle?.owner?.firstname ?? "-"} ${vehicle?.owner?.lastname ?? "-"}`,
           amount: formattedAmount(vehicle?.invoice?.amount ?? 0),

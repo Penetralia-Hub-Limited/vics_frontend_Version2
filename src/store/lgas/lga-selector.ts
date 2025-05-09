@@ -7,10 +7,10 @@ const selectLGAReducer = (state: RootState) => state.lga;
 /**
  * Get LGA ID from LGA NAme
  */
-export const selectLGAIDFromName = createSelector(
+export const selectLGAFromName = createSelector(
   [selectLGAReducer, (_: any, LGAName: string | null) => LGAName],
   (lga, LGAName) => {
     const foundLGA = lga.lgas.find((state) => state.name === LGAName);
-    return foundLGA?.id || "";
+    return foundLGA;
   }
 );

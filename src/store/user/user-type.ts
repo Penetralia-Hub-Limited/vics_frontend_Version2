@@ -1,5 +1,8 @@
 import { PaginationProp } from "@/common/types";
 import { ApprovalStatus, Role, UserStatus } from "@/common/enum";
+import { StatesData } from "../states/states-types";
+import { CompanyData } from "../company/company-types";
+import { LGAData } from "../lgas/lga-type";
 
 export interface User {
   id: string;
@@ -30,6 +33,9 @@ export interface User {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
+  company?: CompanyData;
+  state?: StatesData;
+  lga?: LGAData;
 }
 
 export interface UserResponse {

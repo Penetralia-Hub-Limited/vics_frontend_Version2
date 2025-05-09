@@ -1,7 +1,6 @@
 "use client";
 
-import _ from "lodash";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";

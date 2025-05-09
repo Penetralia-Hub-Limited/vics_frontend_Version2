@@ -28,8 +28,8 @@ const vehicleHeaders = [
   { key: "engine_number", title: "Engine No." },
   { key: "make", title: "Vehicle Make" },
   { key: "category", title: "Vehicle Category" },
-  { key: "type", title: "Plate Type" },
-  { key: "number", title: "Plate Number" },
+  { key: "platetype", title: "Plate Type" },
+  { key: "platenumber", title: "Plate Number" },
   { key: "color", title: "Color" },
 ];
 
@@ -141,7 +141,6 @@ export default function Page() {
 
       <div className={"flex flex-col gap-4"}>
         <InformationCardX title={"Buyer Information"} data={userData} />
-        {/* <InformationCardX title={"Vehicle Information"} data={vehicleData} /> */}
       </div>
 
       <div

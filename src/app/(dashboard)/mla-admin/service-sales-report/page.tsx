@@ -17,7 +17,6 @@ import {
   selectServices,
 } from "@/store/service-type/service-selector";
 import { useMultiFileDownloader } from "@/hooks/userFileDownloader";
-import { Invoice } from "@/components/general/invoice";
 
 const plateNoReportHeader = [
   { title: "S/N", key: "sid" },
@@ -82,7 +81,7 @@ export default function Page() {
       case "pdf":
         return downloadMultiple([
           {
-            ref: printRef as React.RefObject<HTMLElement>,
+            ref: printRef as React.RefObject<HTMLDivElement>,
             filename: "invoice.pdf",
             type: "pdf",
           },
@@ -207,7 +206,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className={""} ref={printRef}>
+      <div className={"h-full"} ref={printRef}>
         <CardContainer>
           <p>I am free</p>
         </CardContainer>

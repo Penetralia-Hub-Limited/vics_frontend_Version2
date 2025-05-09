@@ -9,10 +9,10 @@ export const selectAllStock = createSelector([selectStockReducer], (stock) =>
   stock.stocks.map((stock, index) => {
     return {
       sid: index + 1,
-      created_by: stock?.creator_id
+      created_by: stock?.creator
         ? `${stock?.creator?.firstname} ${stock?.creator?.lastname}`
         : "--",
-      lga_name: stock.lga_id ? stock?.lga?.name : "--",
+      lga_name: stock.lga ? stock?.lga?.name : "--",
       ...stock,
     };
   })

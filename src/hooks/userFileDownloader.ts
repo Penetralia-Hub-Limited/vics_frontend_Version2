@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
 import { useCallback } from "react";
 import html2canvas from "html2canvas-pro";
 import { jsPDF } from "jspdf";
