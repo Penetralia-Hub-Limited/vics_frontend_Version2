@@ -142,9 +142,11 @@ export function DataTableWButton({
                     {/* Date Formatting */}
                     {cellValue instanceof Date ? (
                       <div className="flex flex-col gap-1">
-                        <p>{format(cellValue, "LLL. d yyyy") ?? "--"}</p>
+                        <p>
+                          {format(new Date(cellValue), "LLL. d yyyy") ?? "--"}
+                        </p>
                         <p className="font-light">
-                          {format(cellValue, "hh:mm:ss a") ?? ""}
+                          {format(new Date(cellValue), "hh:mm:ss a") ?? ""}
                         </p>
                       </div>
                     ) : isPaymentStatus(cellValue) ||

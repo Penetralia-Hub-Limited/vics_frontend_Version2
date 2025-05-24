@@ -298,9 +298,9 @@ export const superAdminSidebar = [
       },
       {
         id: 4,
-        title: "Audit Trial",
+        title: "Audit Trail",
         Icon: AuditTrialSVG,
-        url: "/super-admin/audit-trial",
+        url: "/super-admin/audit-trail",
       },
     ],
   },

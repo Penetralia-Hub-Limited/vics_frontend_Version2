@@ -25,14 +25,20 @@ function ChatMessage({ message, sender }: IChatMessage) {
               "mt-2 bg-primary-500 rounded-l-lg p-2 mb-2 ml-auto"
           )}
         >
-          <p
-            className={cn(
-              "text-sm text-pretty",
-              sender === "user" && "text-white"
-            )}
-          >
-            {addParagraphs(message)}
-          </p>
+          {addParagraphs(message)
+            .split("\n\n")
+            .map((para, idx) => (
+              <p
+                key={idx}
+                className={cn(
+                  "text-sm text-pretty",
+                  sender === "user" && "text-white",
+                  "mb-3"
+                )}
+              >
+                {para.trim()}
+              </p>
+            ))}
         </div>
         {sender === "user" && (
           <div className="rounded-full bg-primary-50 p-1">

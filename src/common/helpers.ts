@@ -97,7 +97,12 @@ export const generateYears = (startYear: number = 1996): string[] => {
   return years;
 };
 
-// Hard Refresh
+/*
+  |--------------------------------------------------------------------------
+  | Perform a Hard Refresh
+  |--------------------------------------------------------------------------
+  |
+*/
 export const hardRefresh = () => {
   window.location.reload();
 };

@@ -1,7 +1,9 @@
 "use client";
 
 import _ from "lodash";
-import { useState, useEffect } from "react";
+import { useReactToPrint } from "react-to-print";
+import { useRef, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
@@ -10,10 +12,11 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, PrintSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { CardStatus, SelectCardStatus, SelectCardType } from "@/common/enum";
+import { CardStatus, CardPrintStatus, SelectCardType } from "@/common/enum";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import CardPrint from "@/components/general/card-print";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -29,7 +32,7 @@ const tableColumns = [
 
 type inputValuesProp = {
   plateNumber: string;
-  zonalOffice: string;
+  // zonalOffice: string;
   cardType: string;
   cardStatus: string;
   startDate: Date | undefined;
@@ -38,7 +41,7 @@ type inputValuesProp = {
 
 const inputInitialValues = {
   plateNumber: "",
-  zonalOffice: "",
+  // zonalOffice: "",
   cardType: "",
   cardStatus: "",
   startDate: undefined,
@@ -53,9 +56,9 @@ const tableData = [
     cardtype: SelectCardType.COMPUTERIZED,
     zonaloffice: "Lagos",
     createdby: "Mr Julius",
-    activationdate: new Date(),
-    expirydate: new Date(),
-    cardstatus: CardStatus.PENDING,
+    activationdate: "2022-10-04",
+    expirydate: "2023-10-04",
+    cardstatus: CardPrintStatus.NOTPAID,
   },
   {
     id: 2,
@@ -64,9 +67,9 @@ const tableData = [
     cardtype: SelectCardType.COMPUTERIZED,
     zonaloffice: "Lagos",
     createdby: "Mr Drake",
-    activationdate: new Date(),
-    expirydate: new Date(),
-    cardstatus: CardStatus.PENDING,
+    activationdate: "2023-03-12",
+    expirydate: "2024-03-12",
+    cardstatus: CardPrintStatus.NOTPAID,
   },
   {
     id: 3,
@@ -75,28 +78,30 @@ const tableData = [
     cardtype: SelectCardType.CARD,
     zonaloffice: "Lagos",
     createdby: "Mr Moses",
-    activationdate: new Date(),
-    expirydate: new Date(),
-    cardstatus: CardStatus.PENDING,
+    activationdate: "2024-08-02",
+    expirydate: "2025-08-02",
+    cardstatus: CardPrintStatus.NOTPAID,
   },
 ];
 
 export default function Page() {
   const itemsPerPage = 10;
+  const router = useRouter();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [inputValues, setInputValues] =
     useState<inputValuesProp>(inputInitialValues);
   const [printData, setPrintData] = useState(tableData);
 
-  const { plateNumber, zonalOffice, cardType, cardStatus, startDate, endDate } =
-    inputValues;
+  const { plateNumber, cardType, cardStatus, startDate, endDate } = inputValues;
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (
       _.isEmpty(_.trim(plateNumber)) &&
-      _.isEmpty(_.trim(zonalOffice)) &&
+      // _.isEmpty(_.trim(zonalOffice)) &&
       _.isEmpty(_.trim(cardType)) &&
       _.isEmpty(_.trim(cardStatus)) &&
       _.isEmpty(startDate) &&
@@ -115,11 +120,12 @@ export default function Page() {
           _.toLower(print?.platenumber || "") === _.toLower(plateNumber);
       }
 
-      if (!_.isEmpty(_.trim(zonalOffice))) {
-        matches =
-          matches ||
-          _.toLower(print?.zonaloffice || "") === _.toLower(zonalOffice);
-      }
+      // Does not relate to the table data
+      // if (!_.isEmpty(_.trim(zonalOffice))) {
+      //   matches =
+      //     matches ||
+      //     _.toLower(print?.zonaloffice || "") === _.toLower(zonalOffice);
+      // }
 
       if (!_.isEmpty(_.trim(cardType))) {
         matches =
@@ -150,7 +156,7 @@ export default function Page() {
   useEffect(() => {
     if (
       _.isEmpty(_.trim(plateNumber)) &&
-      _.isEmpty(_.trim(zonalOffice)) &&
+      // _.isEmpty(_.trim(zonalOffice)) &&
       _.isEmpty(_.trim(cardType)) &&
       _.isEmpty(_.trim(cardStatus)) &&
       _.isEmpty(startDate) &&
@@ -158,7 +164,7 @@ export default function Page() {
     ) {
       setPrintData(tableData);
     }
-  }, [plateNumber, zonalOffice, cardType, cardStatus, startDate, endDate]);
+  }, [plateNumber, cardType, cardStatus, startDate, endDate]);
 
   const totalPages = Math.ceil(printData.length / itemsPerPage);
   const paginatedData = printData.slice(
@@ -182,8 +188,8 @@ export default function Page() {
     const tableRow = row as TableRow;
     return [
       {
-        title: "View",
-        action: () => console.log("Viewing details for:", tableRow),
+        title: "Print",
+        action: () => reactToPrintFn,
       },
     ];
   };
@@ -208,7 +214,23 @@ export default function Page() {
       <CardContainer className={"flex flex-col gap-5"}>
         <form action="" onSubmit={handleSearch}>
           <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 items-end"}>
-            <DashboardCompSelect
+            <InputWithLabel
+              items={{
+                id: "plateNumber",
+                label: "Plate Number",
+                placeholder: "Plate Number",
+                type: "text",
+                htmlfor: "plateNumber",
+              }}
+              value={inputValues.plateNumber}
+              onChange={(e) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  plateNumber: e.target.value,
+                }))
+              }
+            />
+            {/* <DashboardCompSelect
               title={"Zonal Office"}
               placeholder={"-- Select Office --"}
               items={["abia", "lagos"]}
@@ -219,11 +241,12 @@ export default function Page() {
                   zonalOffice: selected ? String(selected) : "",
                 }))
               }
-            />
+            /> */}
+
             <DashboardCompSelect
               title={"Card Status"}
               placeholder={"-- Select Status --"}
-              items={[...Object.values(SelectCardStatus)]}
+              items={[...Object.values(CardPrintStatus)]}
               selected={inputValues.cardStatus}
               onSelect={(selected) =>
                 setInputValues((prev) => ({
@@ -248,24 +271,8 @@ export default function Page() {
           </div>
 
           <div
-            className={"grid grid-cols-1 md:grid-cols-4 gap-3 mt-4 items-end"}
+            className={"grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 items-end"}
           >
-            <InputWithLabel
-              items={{
-                id: "plateNumber",
-                label: "Plate Number",
-                placeholder: "Plate Number",
-                type: "text",
-                htmlfor: "plateNumber",
-              }}
-              value={inputValues.plateNumber}
-              onChange={(e) =>
-                setInputValues((prev) => ({
-                  ...prev,
-                  plateNumber: e.target.value,
-                }))
-              }
-            />
             <DatePicker
               title={"Start Date"}
               date={inputValues.startDate}
