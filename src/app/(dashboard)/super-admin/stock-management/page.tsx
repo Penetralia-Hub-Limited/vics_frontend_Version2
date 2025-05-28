@@ -2,7 +2,6 @@
 
 import _ from "lodash";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { isWithinInterval } from "date-fns";
 import InputWithLabel from "@/components/auth/input-comp";
 import { Button } from "@/components/ui/button";
@@ -61,7 +60,6 @@ const inputInitialValues = {
 
 export default function Page() {
   const itemsPerPage = 10;
-  const router = useRouter();
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
