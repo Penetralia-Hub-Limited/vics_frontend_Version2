@@ -43,32 +43,32 @@ const inputInitialValues = {
 const tableData = [
   {
     id: 1,
-    payername: "Jay K.",
-    invoicenumber: "234232CDS2323",
-    amount: 401,
+    payername: "Threse Ukot",
+    invoicenumber: "234232CDS",
+    amount: 13500,
     createdby: "Akanbi S.",
-    datecreated: new Date(),
-    datepaid: new Date(),
+    datecreated: "2022-04-12",
+    datepaid: "2022-04-12",
     paymentstatus: PaymentStatus.PAID,
   },
   {
     id: 2,
     payername: "Jay K.",
-    invoicenumber: "234232CDS2323",
-    amount: 401,
+    invoicenumber: "345CDS2543",
+    amount: 12563,
     createdby: "Akanbi S.",
-    // datecreated: new Date(),
-    datepaid: new Date(),
+    datecreated: "2023-08-12",
+    datepaid: "2023-08-15",
     paymentstatus: PaymentStatus.PAID,
   },
   {
     id: 3,
-    payername: "Jay K.",
-    invoicenumber: "234232CDS2323",
-    amount: 401,
+    payername: "Moses Etim",
+    invoicenumber: "256C88723",
+    amount: 13500,
     createdby: "Akanbi S.",
-    datecreated: new Date(),
-    datepaid: new Date(),
+    datecreated: "2023-10-03",
+    datepaid: null,
     paymentstatus: PaymentStatus.NOTPAID,
   },
 ];
@@ -119,8 +119,8 @@ export default function Page() {
         matches =
           matches ||
           isWithinInterval(
-            document?.datecreated instanceof Date
-              ? document.datecreated
+            !isNaN(Date.parse(document?.datecreated))
+              ? new Date(document.datecreated)
               : new Date(),
             {
               start: new Date(from),
