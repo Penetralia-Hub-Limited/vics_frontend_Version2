@@ -6,6 +6,7 @@ import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import { SMRAdminSidebar } from "@/common/side-bar";
 import useGetPathName from "@/hooks/usePathName";
+import { useRoleAccess } from "@/hooks/use-roleaccess";
 import Loading from "./loading";
 import { IsAuth } from "@/components/general/is-auth";
 import { useDispatch } from "react-redux";
@@ -22,6 +23,7 @@ export default function SMRDashboardLayout({
   const dispatch = useDispatch();
   const { getPathName } = useGetPathName("smr");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  useRoleAccess(); // check if user has SMR rights
 
   // trigger services
   const plateNumberOrderService = useMemo(

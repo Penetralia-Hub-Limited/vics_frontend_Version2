@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { decryptToken, generateToken, initialAuthState } from "@/utils/helpers";
+import { decryptToken, generateToken } from "@/utils/helpers";
+import { initialAuthState } from "./auth-user-types";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 
 const getLoggedState = () => {

@@ -1,3 +1,23 @@
+export const authTypes = {
+  login: "login",
+  logout: "logout",
+  register: "register",
+};
+
+export interface initialAuthStateProp {
+  isLoading: boolean;
+  isLoggedIn: boolean;
+  data: Data | null;
+  error: string | null;
+}
+
+export const initialAuthState: initialAuthStateProp = {
+  isLoading: false,
+  isLoggedIn: false,
+  data: null,
+  error: null,
+};
+
 export interface RegisterCredentials {
   firstname: string;
   lastname: string;
@@ -21,8 +41,6 @@ export interface forgotPasswordCredentials {
 export interface Data {
   accessToken: string;
   user: User;
-  iat: number;
-  exp: number;
 }
 
 export interface User {

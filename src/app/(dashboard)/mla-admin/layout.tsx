@@ -6,6 +6,7 @@ import { IsAuth } from "@/components/general/is-auth";
 import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import useGetPathName from "@/hooks/usePathName";
+import { useRoleAccess } from "@/hooks/use-roleaccess";
 import { mlaSideBarItems } from "@/common/side-bar";
 import Loading from "./loading";
 import { useDispatch } from "react-redux";
@@ -27,6 +28,7 @@ export default function MLADashboardLayout({
   const dispatch = useDispatch();
   const { getPathName } = useGetPathName("mla");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  useRoleAccess(); // check if user has MLA rights
 
   // trigger services
   const plateNumberOrderService = useMemo(

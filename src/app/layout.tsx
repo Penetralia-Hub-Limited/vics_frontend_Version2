@@ -4,7 +4,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { StoreProvider } from "./store-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { WebVitals } from "@/components/general/web-vitals";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -33,7 +32,6 @@ export default function RootLayout({
       >
         <StoreProvider>
           <SidebarProvider>
-            <WebVitals />
             <Toaster />
             <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
           </SidebarProvider>

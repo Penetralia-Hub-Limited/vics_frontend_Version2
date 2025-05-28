@@ -9,6 +9,7 @@ import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import Loading from "./loading";
 import { IsAuth } from "@/components/general/is-auth";
 import { useDispatch } from "react-redux";
+import { useRoleAccess } from "@/hooks/use-roleaccess";
 import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
 import { InvoiceService } from "@/services/InvoiceService";
 import { StateService } from "@/services/StatesServices";
@@ -27,6 +28,7 @@ export default function SuperAdminDashboardLayout({
   const dispatch = useDispatch();
   const { getPathName } = useGetPathName("superAdmin");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  useRoleAccess(); // check if user has SUPER ADMIN rights
 
   // trigger services
   const plateNumberOrderService = useMemo(

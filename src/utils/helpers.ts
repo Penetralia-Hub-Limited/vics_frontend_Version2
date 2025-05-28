@@ -2,26 +2,6 @@
 import { User, AuthState, LoginResponse } from "@/store/auth/auth-user-types";
 import jwt, { SignOptions } from "jsonwebtoken";
 
-export const authTypes = {
-  login: "login",
-  logout: "logout",
-  register: "register",
-};
-
-export interface initialAuthStateProp {
-  isLoading: boolean;
-  isLoggedIn: boolean;
-  data: null;
-  error: string | null;
-}
-
-export const initialAuthState: initialAuthStateProp = {
-  isLoading: false,
-  isLoggedIn: false,
-  data: null,
-  error: null,
-};
-
 interface Payload {
   [key: string]: LoginResponse | User | AuthState;
 }
