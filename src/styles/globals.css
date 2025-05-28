@@ -47,3 +47,14 @@
 .scrollbar-width {
   scrollbar-width: thin;
 }
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .noprint {
+    visibility: hidden;
+  }
+}

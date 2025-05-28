@@ -2,7 +2,7 @@
 
 import _ from "lodash";
 import { useReactToPrint } from "react-to-print";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, forwardRef } from "react";
 import { useRouter } from "next/navigation";
 import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import { CardStatus, CardPrintStatus, SelectCardType } from "@/common/enum";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
-import CardPrint from "@/components/general/card-print";
+import { CardstableData } from "@/common/constant";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -48,42 +48,6 @@ const inputInitialValues = {
   endDate: undefined,
 };
 
-const tableData = [
-  {
-    id: 1,
-    platenumber: "XYY-4422",
-    cardowner: "Private (Direct)",
-    cardtype: SelectCardType.COMPUTERIZED,
-    zonaloffice: "Lagos",
-    createdby: "Mr Julius",
-    activationdate: "2022-10-04",
-    expirydate: "2023-10-04",
-    cardstatus: CardPrintStatus.NOTPAID,
-  },
-  {
-    id: 2,
-    platenumber: "ACX-4422",
-    cardowner: "Private (Direct)",
-    cardtype: SelectCardType.COMPUTERIZED,
-    zonaloffice: "Lagos",
-    createdby: "Mr Drake",
-    activationdate: "2023-03-12",
-    expirydate: "2024-03-12",
-    cardstatus: CardPrintStatus.NOTPAID,
-  },
-  {
-    id: 3,
-    platenumber: "AXC-4243",
-    cardowner: "Private",
-    cardtype: SelectCardType.CARD,
-    zonaloffice: "Lagos",
-    createdby: "Mr Moses",
-    activationdate: "2024-08-02",
-    expirydate: "2025-08-02",
-    cardstatus: CardPrintStatus.NOTPAID,
-  },
-];
-
 export default function Page() {
   const itemsPerPage = 10;
   const router = useRouter();
@@ -92,7 +56,7 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [inputValues, setInputValues] =
     useState<inputValuesProp>(inputInitialValues);
-  const [printData, setPrintData] = useState(tableData);
+  const [printData, setPrintData] = useState(CardstableData);
 
   const { plateNumber, cardType, cardStatus, startDate, endDate } = inputValues;
 
@@ -101,17 +65,16 @@ export default function Page() {
 
     if (
       _.isEmpty(_.trim(plateNumber)) &&
-      // _.isEmpty(_.trim(zonalOffice)) &&
       _.isEmpty(_.trim(cardType)) &&
       _.isEmpty(_.trim(cardStatus)) &&
       _.isEmpty(startDate) &&
       _.isEmpty(endDate)
     ) {
-      setPrintData(tableData);
+      setPrintData(CardstableData);
       return;
     }
 
-    const filteredData = _.filter(tableData, (print) => {
+    const filteredData = _.filter(CardstableData, (print) => {
       let matches = false;
 
       if (!_.isEmpty(_.trim(plateNumber))) {
@@ -119,13 +82,6 @@ export default function Page() {
           matches ||
           _.toLower(print?.platenumber || "") === _.toLower(plateNumber);
       }
-
-      // Does not relate to the table data
-      // if (!_.isEmpty(_.trim(zonalOffice))) {
-      //   matches =
-      //     matches ||
-      //     _.toLower(print?.zonaloffice || "") === _.toLower(zonalOffice);
-      // }
 
       if (!_.isEmpty(_.trim(cardType))) {
         matches =
@@ -156,13 +112,12 @@ export default function Page() {
   useEffect(() => {
     if (
       _.isEmpty(_.trim(plateNumber)) &&
-      // _.isEmpty(_.trim(zonalOffice)) &&
       _.isEmpty(_.trim(cardType)) &&
       _.isEmpty(_.trim(cardStatus)) &&
       _.isEmpty(startDate) &&
       _.isEmpty(endDate)
     ) {
-      setPrintData(tableData);
+      setPrintData(CardstableData);
     }
   }, [plateNumber, cardType, cardStatus, startDate, endDate]);
 
@@ -188,8 +143,11 @@ export default function Page() {
     const tableRow = row as TableRow;
     return [
       {
-        title: "Print",
-        action: () => reactToPrintFn,
+        title: "Preview",
+        action: () =>
+          router.push(
+            `/super-admin/print-management/print-cards-stickers/${tableRow.id}`
+          ),
       },
     ];
   };
@@ -211,6 +169,12 @@ export default function Page() {
         ]}
       />
 
+      {/* <div className={cn("hidden")}>
+        <div ref={contentRef}>
+          <CardPrint back={{}} front={} />
+        </div>
+      </div> */}
+
       <CardContainer className={"flex flex-col gap-5"}>
         <form action="" onSubmit={handleSearch}>
           <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 items-end"}>
@@ -230,18 +194,6 @@ export default function Page() {
                 }))
               }
             />
-            {/* <DashboardCompSelect
-              title={"Zonal Office"}
-              placeholder={"-- Select Office --"}
-              items={["abia", "lagos"]}
-              selected={inputValues.zonalOffice}
-              onSelect={(selected) =>
-                setInputValues((prev) => ({
-                  ...prev,
-                  zonalOffice: selected ? String(selected) : "",
-                }))
-              }
-            /> */}
 
             <DashboardCompSelect
               title={"Card Status"}
