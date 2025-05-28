@@ -509,16 +509,16 @@ export const mlaSideBarItems = [
             title: "Tax Payer Dashboard",
             url: "/mla-admin/tax-payer/tax-payer-dashboard",
           },
-          {
-            id: 2,
-            title: "Assessment",
-            url: "/mla-admin/tax-payer/assessment",
-          },
-          {
-            id: 3,
-            title: "Invoice to Tax",
-            url: "/mla-admin/tax-payer/invoice-to-tax",
-          },
+          // {
+          //   id: 2,
+          //   title: "Assessment",
+          //   url: "/mla-admin/tax-payer/assessment",
+          // },
+          // {
+          //   id: 3,
+          //   title: "Invoice to Tax",
+          //   url: "/mla-admin/tax-payer/invoice-to-tax",
+          // },
         ],
       },
       {
@@ -533,30 +533,30 @@ export const mlaSideBarItems = [
         Icon: ReportSVG,
         url: "/mla-admin/service-sales-report",
       },
-      {
-        id: 5,
-        title: "Change Request",
-        Icon: PenSVG,
-        url: "/mla-admin/change-request",
-      },
-      {
-        id: 6,
-        title: "Insurance",
-        Icon: InsuranceSVG,
-        url: "/mla-admin/insurance",
-      },
-      {
-        id: 7,
-        title: "Proof of Ownership",
-        Icon: OwnershipSVG,
-        url: "/mla-admin/proof-of-ownership",
-      },
-      {
-        id: 8,
-        title: "Collections",
-        Icon: CollectionsSVG,
-        url: "/mla-admin/collections",
-      },
+      // {
+      //   id: 5,
+      //   title: "Change Request",
+      //   Icon: PenSVG,
+      //   url: "/mla-admin/change-request",
+      // },
+      // {
+      //   id: 6,
+      //   title: "Insurance",
+      //   Icon: InsuranceSVG,
+      //   url: "/mla-admin/insurance",
+      // },
+      // {
+      //   id: 7,
+      //   title: "Proof of Ownership",
+      //   Icon: OwnershipSVG,
+      //   url: "/mla-admin/proof-of-ownership",
+      // },
+      // {
+      //   id: 8,
+      //   title: "Collections",
+      //   Icon: CollectionsSVG,
+      //   url: "/mla-admin/collections",
+      // },
       {
         id: 9,
         title: "Change of Ownership",

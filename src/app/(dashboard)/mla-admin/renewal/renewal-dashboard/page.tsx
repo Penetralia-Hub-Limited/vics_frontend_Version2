@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -29,23 +31,84 @@ const tableColumns = [
   { key: "number_status", title: "Payment Status" },
 ];
 
+type inputValuesProp = {
+  platenumber: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+};
+
+const inputInitialValues = {
+  platenumber: "",
+  startDate: undefined,
+  endDate: undefined,
+};
+
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
   const [plateNumber, setPlateNumber] = useState<string>("");
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const plateNumberInfo = useSelector((plateNumberReducer) =>
     selectValidPlateNumber(plateNumberReducer, plateNumber)
   );
   const plateRenewalData = useSelector(selectPlateNumber);
+  const [renewalData, setRenewalData] = useState(plateRenewalData);
+  const { platenumber, startDate, endDate } = inputValues;
 
-  console.log(plateNumberInfo);
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const totalPages = Math.ceil(plateRenewalData.length / itemsPerPage);
-  const paginatedData = plateRenewalData.slice(
+    if (
+      _.isEmpty(_.trim(platenumber)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setRenewalData(plateRenewalData);
+      return;
+    }
+
+    const filteredData = _.filter(plateRenewalData, (plate) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(platenumber))) {
+        matches =
+          matches || _.toLower(plate?.number || "") === _.toLower(platenumber);
+      }
+
+      if (startDate && endDate) {
+        matches =
+          matches ||
+          isWithinInterval(
+            new Date(plate.created_at ? plate?.created_at : ""),
+            {
+              start: new Date(startDate),
+              end: new Date(endDate),
+            }
+          );
+      }
+
+      return matches;
+    });
+
+    setRenewalData(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(platenumber)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setRenewalData(plateRenewalData);
+      return;
+    }
+  }, [plateRenewalData, startDate, endDate, platenumber]);
+
+  const totalPages = Math.ceil(renewalData.length / itemsPerPage);
+  const paginatedData = renewalData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -110,26 +173,50 @@ export default function Page() {
       </div>
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
+        <form
+          className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}
+          onSubmit={handleSearch}
+        >
           <InputWithLabel
             items={{
-              id: "plateNumber",
+              id: "platenumber",
               label: "Plate Number",
-              placeholder: "Plate number",
+              placeholder: "Plate Number",
               type: "text",
-              htmlfor: "plateNumber",
+              htmlfor: "platenumber",
             }}
+            value={inputValues.platenumber}
+            onChange={(e) =>
+              setInputValues((prev) => ({
+                ...prev,
+                platenumber: e.target.value,
+              }))
+            }
           />
 
           <DatePicker
-            date={startDate}
-            setDate={setStartDate}
             title={"Start Date"}
+            date={inputValues.startDate}
+            setDate={(date) =>
+              setInputValues((prev) => ({
+                ...prev,
+                startDate: date as Date | undefined,
+              }))
+            }
           />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+          <DatePicker
+            title={"End Date"}
+            date={inputValues.endDate}
+            setDate={(date) =>
+              setInputValues((prev) => ({
+                ...prev,
+                endDate: date as Date | undefined,
+              }))
+            }
+          />
 
-          <Button>Search</Button>
-        </div>
+          <Button type="submit">Search</Button>
+        </form>
       </CardContainer>
 
       <div
