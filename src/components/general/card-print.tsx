@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useRef } from "react";
+import Image from "next/image";
 import { useReactToPrint } from "react-to-print";
 import CardContainer from "./card-container";
 import { Button } from "../ui/button";
@@ -59,10 +60,12 @@ const CardFront: FC<CardFrontProp> = (data) => {
       <div
         className={"pt-5 px-5 flex flex-row gap-5 items-center justify-between"}
       >
-        <img
+        <Image
           className={"w-auto h-15 md:h-20 object-cover"}
           src={"/assets/logo/flag.png"}
           alt={"nigerian flag"}
+          width={100}
+          height={70}
         />
         <div>
           <p
@@ -80,10 +83,12 @@ const CardFront: FC<CardFrontProp> = (data) => {
             KWARA STATE GOVERNMENT
           </p>
         </div>
-        <img
+        <Image
           className={"w-auto h-15 md:h-20 object-cover"}
           src={"/assets/logo/vics-logo.png"}
           alt={"vics logo"}
+          width={100}
+          height={70}
         />
       </div>
 

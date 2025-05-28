@@ -1,8 +1,7 @@
 "use client";
 
 import _ from "lodash";
-import { useReactToPrint } from "react-to-print";
-import { useRef, useState, useEffect, forwardRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -51,8 +50,6 @@ const inputInitialValues = {
 export default function Page() {
   const itemsPerPage = 10;
   const router = useRouter();
-  const contentRef = useRef<HTMLDivElement>(null);
-  const reactToPrintFn = useReactToPrint({ contentRef });
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [inputValues, setInputValues] =
     useState<inputValuesProp>(inputInitialValues);

@@ -12,7 +12,6 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, RenewalsSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { PaymentStatus } from "@/common/enum";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { ResponseModalX } from "@/components/general/response-modalx";
 import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
