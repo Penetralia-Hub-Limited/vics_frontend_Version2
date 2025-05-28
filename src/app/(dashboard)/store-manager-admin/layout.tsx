@@ -6,9 +6,10 @@ import AppSidebar from "@/components/navigation/sidebar/sidebar";
 import DashboardNavBar from "@/components/navigation/menubar/dashboard-navbar";
 import { storeManagerSidebarItems } from "@/common/side-bar";
 import useGetPathName from "@/hooks/usePathName";
+import { useDispatch } from "react-redux";
+import { useRoleAccess } from "@/hooks/use-roleaccess";
 import Loading from "./loading";
 import { IsAuth } from "@/components/general/is-auth";
-import { useDispatch } from "react-redux";
 import { PlateNumberOrderService } from "@/services/PlateNumberOrdersService";
 import { PlateNumberService } from "@/services/PlateNumberService";
 import { ServiceTypeService } from "@/services/ServiceTypesService";
@@ -26,6 +27,8 @@ export default function StoreManagerDashboardLayout({
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { getPathName } = useGetPathName("storeAdmin");
+  useRoleAccess(); // check if user has STORE ADMIN rights
+
   // trigger services
   const plateNumberOrderService = useMemo(
     () => new PlateNumberOrderService(dispatch),
