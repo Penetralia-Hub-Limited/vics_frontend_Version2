@@ -253,7 +253,7 @@ export default function Page() {
 
       <CardContainer className={"flex flex-col gap-5"}>
         <form action="" onSubmit={handleSearch}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-end">
             <DashboardCompSelect
               title={"LGA"}
               placeholder={"-- Select LGA --"}
