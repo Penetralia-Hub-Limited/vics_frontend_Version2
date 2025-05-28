@@ -19,6 +19,7 @@ import { UserService } from "@/services/UserService";
 import { ServiceTypeService } from "@/services/ServiceTypesService";
 import { VehicleService } from "@/services/VehicleService";
 import { NotificationsService } from "@/services/NotificationService";
+import { StockService } from "@/services/StockService";
 
 export default function SuperAdminDashboardLayout({
   children,
@@ -58,6 +59,7 @@ export default function SuperAdminDashboardLayout({
     () => new NotificationsService(dispatch),
     [dispatch]
   );
+  const stockService = useMemo(() => new StockService(dispatch), [dispatch]);
 
   // API triggers
   useEffect(() => {
@@ -69,6 +71,7 @@ export default function SuperAdminDashboardLayout({
       await invoiceService.getAllInvoices();
       await vehicleService.getAllVehicles();
       await stateService.getAllStates();
+      await stockService.getAllStock();
       await userService.getAllUsers();
       await lgaService.getAllLgas();
     })();
@@ -79,6 +82,7 @@ export default function SuperAdminDashboardLayout({
     serviceTypeService,
     invoiceService,
     vehicleService,
+    stockService,
     stateService,
     userService,
     lgaService,
