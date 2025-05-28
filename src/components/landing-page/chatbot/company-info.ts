@@ -17,7 +17,7 @@ export const customResponses: CustomResponse[] = [
       "renew my plate",
     ],
     answer:
-      "To renew your plate number, gvisit the KWARA state Motor Licensing Authority Office at  27, Ahmadu Bello Way, GRA, Ilorin, Kwara State. No 3, Fate Road, Near Fate Roundabout, Ilorin, Kwara State.",
+      "To renew your plate number, visit the KWARA state Motor Licensing Authority Office at  27, Ahmadu Bello Way, GRA, Ilorin, Kwara State. No 3, Fate Road, Near Fate Roundabout, Ilorin, Kwara State.",
   },
   {
     keywords: ["verify vehicle", "vehicle verification"],
