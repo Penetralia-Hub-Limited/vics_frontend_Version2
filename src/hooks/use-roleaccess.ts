@@ -27,5 +27,5 @@ export const useRoleAccess = () => {
       toast(`Access denied for role "${user?.role}".`);
       router.replace("/login");
     }
-  }, [user, pathname]);
+  }, [user, pathname, router]);
 };
