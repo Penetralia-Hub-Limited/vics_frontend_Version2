@@ -124,7 +124,7 @@ export default function Page() {
     ) {
       setRenewalData(tableData);
     }
-  }, [tableData, plateNumber, startDate, endDate]);
+  }, [plateNumber, startDate, endDate]);
 
   const totalPages = Math.ceil(renewalData.length / itemsPerPage);
   const paginatedData = renewalData.slice(

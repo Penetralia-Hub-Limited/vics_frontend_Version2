@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useEffect, ReactNode, FC } from "react";
+import { useLayoutEffect, ReactNode, FC } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
