@@ -20,12 +20,6 @@ import { VehicleService } from "@/services/VehicleService";
 import { selectStateIDFromStateName } from "@/store/states/state-selector";
 import { toast } from "sonner";
 import _ from "lodash";
-// import { useRouter } from "next/navigation";
-// import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
-// import {
-//   RowAction,
-//   TableData,
-// } from "@/components/dashboard/dashboard-table-w-button";
 
 const tableColumns = [
   { key: "sid", title: "S/N" },
@@ -35,7 +29,6 @@ const tableColumns = [
 
 export default function Page() {
   const itemsPerPage = 10;
-  // const router = useRouter();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vehicleMake, setVehicleMake] = useState<string>("");
@@ -176,11 +169,7 @@ export default function Page() {
         <div
           className={"border-t-1 border-primary-300 rounded-lg overflow-hidden"}
         >
-          <DashboardTable
-            headers={tableColumns}
-            data={paginatedData}
-            // rowActions={getRowActions}
-          />
+          <DashboardTable headers={tableColumns} data={paginatedData} />
         </div>
         <div className={"p-5 ml-auto"}>
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />

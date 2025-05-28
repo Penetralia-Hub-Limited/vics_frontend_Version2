@@ -2,6 +2,7 @@
 
 import _ from "lodash";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
@@ -10,10 +11,11 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, PrintSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { CardStatus, SelectCardStatus, SelectCardType } from "@/common/enum";
+import { CardStatus, CardPrintStatus, SelectCardType } from "@/common/enum";
 import { RowAction } from "@/components/dashboard/dashboard-table-w-button";
 import DashboardCompSelect from "@/components/dashboard/dashboard-component-select";
 import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
+import { CardstableData } from "@/common/constant";
 
 const tableColumns = [
   { key: "id", title: "S/N" },
@@ -29,7 +31,7 @@ const tableColumns = [
 
 type inputValuesProp = {
   plateNumber: string;
-  zonalOffice: string;
+  // zonalOffice: string;
   cardType: string;
   cardStatus: string;
   startDate: Date | undefined;
@@ -38,87 +40,44 @@ type inputValuesProp = {
 
 const inputInitialValues = {
   plateNumber: "",
-  zonalOffice: "",
+  // zonalOffice: "",
   cardType: "",
   cardStatus: "",
   startDate: undefined,
   endDate: undefined,
 };
 
-const tableData = [
-  {
-    id: 1,
-    platenumber: "XYY-4422",
-    cardowner: "Private (Direct)",
-    cardtype: SelectCardType.COMPUTERIZED,
-    zonaloffice: "Lagos",
-    createdby: "Mr Julius",
-    activationdate: new Date(),
-    expirydate: new Date(),
-    cardstatus: CardStatus.PENDING,
-  },
-  {
-    id: 2,
-    platenumber: "ACX-4422",
-    cardowner: "Private (Direct)",
-    cardtype: SelectCardType.COMPUTERIZED,
-    zonaloffice: "Lagos",
-    createdby: "Mr Drake",
-    activationdate: new Date(),
-    expirydate: new Date(),
-    cardstatus: CardStatus.PENDING,
-  },
-  {
-    id: 3,
-    platenumber: "AXC-4243",
-    cardowner: "Private",
-    cardtype: SelectCardType.CARD,
-    zonaloffice: "Lagos",
-    createdby: "Mr Moses",
-    activationdate: new Date(),
-    expirydate: new Date(),
-    cardstatus: CardStatus.PENDING,
-  },
-];
-
 export default function Page() {
   const itemsPerPage = 10;
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [inputValues, setInputValues] =
     useState<inputValuesProp>(inputInitialValues);
-  const [printData, setPrintData] = useState(tableData);
+  const [printData, setPrintData] = useState(CardstableData);
 
-  const { plateNumber, zonalOffice, cardType, cardStatus, startDate, endDate } =
-    inputValues;
+  const { plateNumber, cardType, cardStatus, startDate, endDate } = inputValues;
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (
       _.isEmpty(_.trim(plateNumber)) &&
-      _.isEmpty(_.trim(zonalOffice)) &&
       _.isEmpty(_.trim(cardType)) &&
       _.isEmpty(_.trim(cardStatus)) &&
       _.isEmpty(startDate) &&
       _.isEmpty(endDate)
     ) {
-      setPrintData(tableData);
+      setPrintData(CardstableData);
       return;
     }
 
-    const filteredData = _.filter(tableData, (print) => {
+    const filteredData = _.filter(CardstableData, (print) => {
       let matches = false;
 
       if (!_.isEmpty(_.trim(plateNumber))) {
         matches =
           matches ||
           _.toLower(print?.platenumber || "") === _.toLower(plateNumber);
-      }
-
-      if (!_.isEmpty(_.trim(zonalOffice))) {
-        matches =
-          matches ||
-          _.toLower(print?.zonaloffice || "") === _.toLower(zonalOffice);
       }
 
       if (!_.isEmpty(_.trim(cardType))) {
@@ -150,15 +109,14 @@ export default function Page() {
   useEffect(() => {
     if (
       _.isEmpty(_.trim(plateNumber)) &&
-      _.isEmpty(_.trim(zonalOffice)) &&
       _.isEmpty(_.trim(cardType)) &&
       _.isEmpty(_.trim(cardStatus)) &&
       _.isEmpty(startDate) &&
       _.isEmpty(endDate)
     ) {
-      setPrintData(tableData);
+      setPrintData(CardstableData);
     }
-  }, [plateNumber, zonalOffice, cardType, cardStatus, startDate, endDate]);
+  }, [plateNumber, cardType, cardStatus, startDate, endDate]);
 
   const totalPages = Math.ceil(printData.length / itemsPerPage);
   const paginatedData = printData.slice(
@@ -182,8 +140,11 @@ export default function Page() {
     const tableRow = row as TableRow;
     return [
       {
-        title: "View",
-        action: () => console.log("Viewing details for:", tableRow),
+        title: "Preview",
+        action: () =>
+          router.push(
+            `/super-admin/print-management/print-cards-stickers/${tableRow.id}`
+          ),
       },
     ];
   };
@@ -205,25 +166,36 @@ export default function Page() {
         ]}
       />
 
+      {/* <div className={cn("hidden")}>
+        <div ref={contentRef}>
+          <CardPrint back={{}} front={} />
+        </div>
+      </div> */}
+
       <CardContainer className={"flex flex-col gap-5"}>
         <form action="" onSubmit={handleSearch}>
           <div className={"grid grid-cols-1 md:grid-cols-3 gap-4 items-end"}>
-            <DashboardCompSelect
-              title={"Zonal Office"}
-              placeholder={"-- Select Office --"}
-              items={["abia", "lagos"]}
-              selected={inputValues.zonalOffice}
-              onSelect={(selected) =>
+            <InputWithLabel
+              items={{
+                id: "plateNumber",
+                label: "Plate Number",
+                placeholder: "Plate Number",
+                type: "text",
+                htmlfor: "plateNumber",
+              }}
+              value={inputValues.plateNumber}
+              onChange={(e) =>
                 setInputValues((prev) => ({
                   ...prev,
-                  zonalOffice: selected ? String(selected) : "",
+                  plateNumber: e.target.value,
                 }))
               }
             />
+
             <DashboardCompSelect
               title={"Card Status"}
               placeholder={"-- Select Status --"}
-              items={[...Object.values(SelectCardStatus)]}
+              items={[...Object.values(CardPrintStatus)]}
               selected={inputValues.cardStatus}
               onSelect={(selected) =>
                 setInputValues((prev) => ({
@@ -248,24 +220,8 @@ export default function Page() {
           </div>
 
           <div
-            className={"grid grid-cols-1 md:grid-cols-4 gap-3 mt-4 items-end"}
+            className={"grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 items-end"}
           >
-            <InputWithLabel
-              items={{
-                id: "plateNumber",
-                label: "Plate Number",
-                placeholder: "Plate Number",
-                type: "text",
-                htmlfor: "plateNumber",
-              }}
-              value={inputValues.plateNumber}
-              onChange={(e) =>
-                setInputValues((prev) => ({
-                  ...prev,
-                  plateNumber: e.target.value,
-                }))
-              }
-            />
             <DatePicker
               title={"Start Date"}
               date={inputValues.startDate}

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "@/utils/axios-instance";
 import axios from "axios";
+import { persistor } from "@/store/store";
 import {
   authStart,
   authSuccess,
@@ -42,6 +43,7 @@ class AuthService {
   async logout() {
     try {
       await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`);
+      persistor.flush();
     } catch (error) {
       console.error("Logout failed (API):", error);
     } finally {

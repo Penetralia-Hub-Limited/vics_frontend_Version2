@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -9,105 +12,94 @@ import DatePicker from "@/components/dashboard/dashboard-datepicker";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, RenewalsSVG } from "@/common/svgs";
 import InputWithLabel from "@/components/auth/input-comp";
-import { PaymentStatus } from "@/common/enum";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { ResponseModalX } from "@/components/general/response-modalx";
+import { selectPlateNumber } from "@/store/plateNumber/plate-number-selector";
 
 const tableColumns = [
-  { key: "id", title: "S/N" },
-  { key: "platenumber", title: "Plate Number" },
-  { key: "platetype", title: "Plate Type" },
-  { key: "account", title: "Amount" },
+  { key: "sid", title: "S/N" },
+  { key: "number", title: "Plate Number" },
+  { key: "type", title: "Plate Type" },
+  { key: "amount", title: "Amount" },
   { key: "buyer", title: "Buyer" },
-  { key: "date", title: "Date Sold" },
-  { key: "paymentstatus", title: "Payment Status" },
+  { key: "created_at", title: "Date Sold" },
+  { key: "number_status", title: "Payment Status" },
 ];
 
-const tableData = [
-  {
-    id: 1,
-    platenumber: "ASDSDLKE",
-    platetype: "Private(Direct)",
-    account: 902222222,
-    buyer: "Askaair Dokk",
-    date: new Date(),
-    paymentstatus: PaymentStatus.PAID,
-  },
-  {
-    id: 2,
-    platenumber: "ASDSDLKE",
-    platetype: "Private(Direct)",
-    account: 902222222,
-    buyer: "Askaair Dokk",
-    date: new Date(),
-    paymentstatus: PaymentStatus.PAID,
-  },
-  {
-    id: 3,
-    platenumber: "ASDSDLKE",
-    platetype: "Private(Direct)",
-    account: 902222222,
-    buyer: "Askaair Dokk",
-    date: new Date(),
-    paymentstatus: PaymentStatus.PAID,
-  },
-  {
-    id: 4,
-    platenumber: "ASDSDLKE",
-    platetype: "Private(Direct)",
-    account: 902222222,
-    buyer: "Askaair Dokk",
-    date: new Date(),
-    paymentstatus: PaymentStatus.PAID,
-  },
-  {
-    id: 5,
-    platenumber: "ASDSDLKE",
-    platetype: "Private(Direct)",
-    account: 902222222,
-    buyer: "Askaair Dokk",
-    date: new Date(),
-    paymentstatus: PaymentStatus.NOTPAID,
-  },
-  {
-    id: 6,
-    platenumber: "ASDSDLKE",
-    platetype: "Private(Direct)",
-    account: 902222222,
-    buyer: "Askaair Dokk",
-    date: new Date(),
-    paymentstatus: PaymentStatus.PAID,
-  },
-  {
-    id: 7,
-    platenumber: "ASDSDLKE",
-    platetype: "Private(Direct)",
-    account: 902222222,
-    buyer: "Askaair Dokk",
-    date: new Date(),
-    paymentstatus: PaymentStatus.PAID,
-  },
-  {
-    id: 8,
-    platenumber: "ASDSDLKE",
-    platetype: "Private(Direct)",
-    account: 902222222,
-    buyer: "Askaair Dokk",
-    date: new Date(),
-    paymentstatus: PaymentStatus.NOTPAID,
-  },
-];
+type inputValuesProp = {
+  platenumber: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+};
+
+const inputInitialValues = {
+  platenumber: "",
+  startDate: undefined,
+  endDate: undefined,
+};
 
 export default function Page() {
   const router = useRouter();
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const plateRenewalData = useSelector(selectPlateNumber);
+  const [renewalData, setRenewalData] = useState(plateRenewalData);
+  const { platenumber, startDate, endDate } = inputValues;
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      _.isEmpty(_.trim(platenumber)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setRenewalData(plateRenewalData);
+      return;
+    }
+
+    const filteredData = _.filter(plateRenewalData, (plate) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(platenumber))) {
+        matches =
+          matches || _.toLower(plate?.number || "") === _.toLower(platenumber);
+      }
+
+      if (startDate && endDate) {
+        matches =
+          matches ||
+          isWithinInterval(
+            new Date(plate.created_at ? plate?.created_at : ""),
+            {
+              start: new Date(startDate),
+              end: new Date(endDate),
+            }
+          );
+      }
+
+      return matches;
+    });
+
+    setRenewalData(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(platenumber)) &&
+      _.isEmpty(startDate) &&
+      _.isEmpty(endDate)
+    ) {
+      setRenewalData(plateRenewalData);
+      return;
+    }
+  }, [plateRenewalData, startDate, endDate, platenumber]);
+
+  const totalPages = Math.ceil(renewalData.length / itemsPerPage);
+  const paginatedData = renewalData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -137,31 +129,55 @@ export default function Page() {
         status={"success"}
         footerBtnText={"Continue"}
         footerTrigger={() =>
-          router.push("/mla-admin/renewal/renew-plate-number")
+          router.push("/super-admin/renewal/renew-plate-number")
         }
       />
 
       <CardContainer className={"flex flex-col gap-5"}>
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
+        <form
+          onSubmit={handleSearch}
+          className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}
+        >
           <InputWithLabel
             items={{
-              id: "phonenumber",
-              label: "Phone Number",
-              placeholder: "phone number",
+              id: "platenumber",
+              label: "Plate Number",
+              placeholder: "Plate Number",
               type: "text",
-              htmlfor: "phonenumber",
+              htmlfor: "platenumber",
             }}
+            value={inputValues.platenumber}
+            onChange={(e) =>
+              setInputValues((prev) => ({
+                ...prev,
+                platenumber: e.target.value,
+              }))
+            }
           />
 
           <DatePicker
-            date={startDate}
-            setDate={setStartDate}
             title={"Start Date"}
+            date={inputValues.startDate}
+            setDate={(date) =>
+              setInputValues((prev) => ({
+                ...prev,
+                startDate: date as Date | undefined,
+              }))
+            }
           />
-          <DatePicker date={endDate} setDate={setEndDate} title={"End Date"} />
+          <DatePicker
+            title={"End Date"}
+            date={inputValues.endDate}
+            setDate={(date) =>
+              setInputValues((prev) => ({
+                ...prev,
+                endDate: date as Date | undefined,
+              }))
+            }
+          />
 
-          <Button>Search</Button>
-        </div>
+          <Button type="submit">Search</Button>
+        </form>
       </CardContainer>
 
       <div

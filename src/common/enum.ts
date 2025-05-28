@@ -55,7 +55,7 @@ export enum RequestStatus {
   NOTAPPROVED = "Not Approved",
 }
 
-export enum SelectCardStatus {
+export enum CardPrintStatus {
   PRINTED = "Printed",
   NOTPRINTED = "Not Printed",
   NOTPAID = "Not Paid",

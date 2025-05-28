@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
+import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -26,16 +28,75 @@ const tableColumns = [
   { key: "vio_approval", title: "Approval Status" },
 ];
 
+type inputValuesProp = {
+  platenumber: string;
+  from: Date | undefined;
+  to: Date | undefined;
+};
+
+const inputInitialValues = {
+  platenumber: "",
+  from: undefined,
+  to: undefined,
+};
+
 export default function Page() {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [fromDate, setFromDate] = useState<Date | undefined>();
-  const [toDate, setToDate] = useState<Date | undefined>();
-  const [plateNumber, setPlateNumber] = useState<string>("");
+  const [inputValues, setInputValues] =
+    useState<inputValuesProp>(inputInitialValues);
   const vehicleData = useSelector(selectVehicles);
+  const [vehiclesInfo, setVehicleInfo] = useState(vehicleData);
+  const { platenumber, from, to } = inputValues;
 
-  const totalPages = Math.ceil(vehicleData.length / itemsPerPage);
-  const paginatedData = vehicleData.slice(
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValues((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (_.isEmpty(_.trim(platenumber)) && _.isEmpty(from) && _.isEmpty(to)) {
+      setVehicleInfo(vehicleData);
+      return;
+    }
+
+    const filteredData = _.filter(vehicleData, (vehicle) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(platenumber))) {
+        matches =
+          matches ||
+          _.toLower(vehicle?.platenumber || "") === _.toLower(platenumber);
+      }
+
+      if (from && to) {
+        matches =
+          matches ||
+          isWithinInterval(
+            new Date(vehicle.created_at ? vehicle?.created_at : ""),
+            {
+              start: new Date(from),
+              end: new Date(to),
+            }
+          );
+      }
+      return matches;
+    });
+    setVehicleInfo(filteredData);
+  };
+
+  useEffect(() => {
+    if (_.isEmpty(_.trim(platenumber)) && _.isEmpty(from) && _.isEmpty(to)) {
+      setVehicleInfo(vehicleData);
+    }
+  }, [vehicleData, platenumber, from, to]);
+
+  const totalPages = Math.ceil(vehiclesInfo.length / itemsPerPage);
+  const paginatedData = vehiclesInfo.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -57,25 +118,48 @@ export default function Page() {
         ]}
       />
 
-      <CardContainer className={"flex flex-col gap-5"}>
-        <div className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}>
-          <InputWithLabel
-            items={{
-              id: "platenumber",
-              label: "Plate Number",
-              placeholder: "Plate Number",
-              type: "text",
-              htmlfor: "platenumber",
-            }}
-            value={plateNumber}
-            onChange={(e) => setPlateNumber(e.target.value)}
-          />
+      <CardContainer>
+        <form onSubmit={handleSearch} className={"flex flex-col gap-5"}>
+          <div
+            className={"grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 items-end"}
+          >
+            <InputWithLabel
+              items={{
+                id: "platenumber",
+                label: "Plate Number",
+                placeholder: "Plate Number",
+                type: "text",
+                htmlfor: "platenumber",
+              }}
+              value={inputValues.platenumber}
+              onChange={handleInputChange}
+            />
 
-          <DatePicker date={fromDate} setDate={setFromDate} title={"From"} />
-          <DatePicker date={toDate} setDate={setToDate} title={"To"} />
+            <DatePicker
+              title={"From"}
+              date={inputValues.from}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  from: date as Date | undefined,
+                }))
+              }
+            />
 
-          <Button>Search</Button>
-        </div>
+            <DatePicker
+              title={"To"}
+              date={inputValues.to}
+              setDate={(date) =>
+                setInputValues((prev) => ({
+                  ...prev,
+                  to: date as Date | undefined,
+                }))
+              }
+            />
+
+            <Button type={"submit"}>Search</Button>
+          </div>
+        </form>
       </CardContainer>
 
       <div

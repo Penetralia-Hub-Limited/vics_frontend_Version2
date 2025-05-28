@@ -17,11 +17,21 @@ export const customResponses: CustomResponse[] = [
       "renew my plate",
     ],
     answer:
-      "To renew your plate number, go to the Renewal section, input your vehicle and payment details, and follow the instructions.",
+      "To renew your plate number, gvisit the KWARA state Motor Licensing Authority Office at  27, Ahmadu Bello Way, GRA, Ilorin, Kwara State. No 3, Fate Road, Near Fate Roundabout, Ilorin, Kwara State.",
   },
   {
     keywords: ["verify vehicle", "vehicle verification"],
     answer:
       "You can verify your vehicle by entering your plate number in the verification section of the portal.",
+  },
+  {
+    keywords: [
+      "where can I renew my plate number",
+      "location",
+      "where can I go to",
+      "looking for where to renew my plate",
+    ],
+    answer:
+      "You can visit the KWARA state Motor Licensing Authority Office at  27, Ahmadu Bello Way, GRA, Ilorin, Kwara State. No 3, Fate Road, Near Fate Roundabout, Ilorin, Kwara State",
   },
 ];

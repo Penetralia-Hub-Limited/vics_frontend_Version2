@@ -205,12 +205,6 @@ export default function Page() {
           <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       </div>
-
-      <div className={"h-full"} ref={printRef}>
-        <CardContainer>
-          <p>I am free</p>
-        </CardContainer>
-      </div>
     </main>
   );
 }

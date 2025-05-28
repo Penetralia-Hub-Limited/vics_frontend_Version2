@@ -14,6 +14,7 @@ export const selectServices = createSelector(
       ? service.map((service, index) => {
           return {
             sid: index + 1,
+            amount: service?.price ?? 0,
             service_price: formattedAmount(service?.price ?? 0),
             date_created: `${format(service?.created_at ?? null, "LLL. d yyyy")} | ${format(service?.created_at ?? null, "hh:mm:ss a")}`,
             created_by: `${service?.creator?.firstname ?? "-"} ${service?.creator?.lastname ?? "-"}`,

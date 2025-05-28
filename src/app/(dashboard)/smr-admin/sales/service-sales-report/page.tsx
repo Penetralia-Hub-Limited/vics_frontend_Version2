@@ -61,7 +61,8 @@ export default function Page() {
   const [inputValues, setInputValues] =
     useState<initialValuesProps>(inputInitialValues);
 
-  // const totalAmount = serviceTypes.reduce((sum, item) => sum + item.amount, 0);
+  const totalAmount = serviceTypes.reduce((sum, item) => sum + item.amount, 0);
+
   const totalPages = Math.ceil(serviceTypes.length / itemsPerPage);
   const paginatedData = serviceTypes.slice(
     (currentPage - 1) * itemsPerPage,
@@ -178,7 +179,9 @@ export default function Page() {
           </p>
           <p className={"text-sm"}>
             Total Amount Sold:{" "}
-            <span className={"font-semibold"}>{formattedAmount(0)}</span>
+            <span className={"font-semibold"}>
+              {formattedAmount(totalAmount)}
+            </span>
           </p>
         </div>
         <div>

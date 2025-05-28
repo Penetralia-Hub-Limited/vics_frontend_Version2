@@ -68,7 +68,7 @@ const pathMappings: Record<string, Record<string, string>> = {
     printcardsstickers: "Print Management",
     printdocument: "Print Management",
     vioapproval: "Payment Report",
-    audittrial: "Audit Trial",
+    audittrail: "Audit Trail",
     salesreport: "Sales Dashboard",
     salespreview: "Super Admin Sales Dashboard",
   },

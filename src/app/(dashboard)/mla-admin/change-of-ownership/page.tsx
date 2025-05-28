@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import _ from "lodash";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import { isWithinInterval } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import CardContainer from "@/components/general/card-container";
@@ -44,7 +46,7 @@ const tableColumns = [
 ];
 
 interface InputValuesProps {
-  plateNumber: string;
+  platenumber: string;
   paymentStatus: string;
   invoiceNumber: string;
   fromDate: Date | undefined;
@@ -52,7 +54,7 @@ interface InputValuesProps {
 }
 
 const InitialInputValues = {
-  plateNumber: "",
+  platenumber: "",
   paymentStatus: "",
   invoiceNumber: "",
   fromDate: undefined,
@@ -67,11 +69,78 @@ export default function Page() {
   const [plateNumber, setPlateNumber] = useState<string>("");
   const [inputValues, setInputValues] =
     useState<InputValuesProps>(InitialInputValues);
-
   const vehicles = useSelector(selectVehicles);
+  const [vehiclesInfo, setVehiclesInfo] = useState(vehicles);
+  const { invoiceNumber, paymentStatus, platenumber, fromDate, toDate } =
+    inputValues;
+
   const isPlateValid = useSelector((state) =>
     selectValidPlateNumber(state, plateNumber)
   );
+
+  // search input fields
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      _.isEmpty(_.trim(platenumber)) &&
+      _.isEmpty(_.trim(invoiceNumber)) &&
+      _.isEmpty(_.trim(paymentStatus)) &&
+      _.isEmpty(fromDate) &&
+      _.isEmpty(toDate)
+    ) {
+      setVehiclesInfo(vehicles);
+      return;
+    }
+
+    const filteredData = _.filter(vehicles, (cof) => {
+      let matches = false;
+
+      if (!_.isEmpty(_.trim(platenumber))) {
+        matches =
+          matches ||
+          _.toLower(cof?.plate_number?.number || "") === _.toLower(platenumber);
+      }
+
+      if (!_.isEmpty(_.trim(invoiceNumber))) {
+        matches =
+          matches ||
+          _.toLower(cof?.invoice?.invoice_number || "") ===
+            _.toLower(invoiceNumber);
+      }
+
+      if (!_.isEmpty(_.trim(paymentStatus))) {
+        matches =
+          matches ||
+          _.toLower(cof?.invoice?.payment_status || "") ===
+            _.toLower(paymentStatus);
+      }
+
+      if (fromDate && toDate) {
+        matches =
+          matches ||
+          isWithinInterval(new Date(cof.created_at ? cof?.created_at : ""), {
+            start: new Date(fromDate),
+            end: new Date(toDate),
+          });
+      }
+
+      return matches;
+    });
+    setVehiclesInfo(filteredData);
+  };
+
+  useEffect(() => {
+    if (
+      _.isEmpty(_.trim(platenumber)) &&
+      _.isEmpty(_.trim(invoiceNumber)) &&
+      _.isEmpty(_.trim(paymentStatus)) &&
+      _.isEmpty(fromDate) &&
+      _.isEmpty(toDate)
+    ) {
+      setVehiclesInfo(vehicles);
+    }
+  }, [vehicles, invoiceNumber, paymentStatus, platenumber, fromDate, toDate]);
 
   const handlePlateValidation = () => {
     if (isPlateValid) {
@@ -79,8 +148,8 @@ export default function Page() {
     }
   };
 
-  const totalPages = Math.ceil(vehicles.length / itemsPerPage);
-  const paginatedData = vehicles.slice(
+  const totalPages = Math.ceil(vehiclesInfo.length / itemsPerPage);
+  const paginatedData = vehiclesInfo.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -98,8 +167,6 @@ export default function Page() {
       },
     ];
   };
-
-  const handleSearch = () => {};
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
@@ -145,17 +212,17 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <InputWithLabel
               items={{
-                id: "plateNumber",
+                id: "platenumber",
                 label: "Plate Number",
                 placeholder: "Plate Number",
                 type: "text",
-                htmlfor: "plateNumber",
+                htmlfor: "platenumber",
               }}
-              value={inputValues.plateNumber}
+              value={inputValues.platenumber}
               onChange={(e) =>
                 setInputValues((prev) => ({
                   ...prev,
-                  plateNumber: e.target.value,
+                  platenumber: e.target.value,
                 }))
               }
             />

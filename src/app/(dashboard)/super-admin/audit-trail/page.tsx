@@ -81,9 +81,9 @@ export default function Page() {
               link: "/super-admin/dashboard",
             },
             {
-              label: "Audit Trial",
+              label: "Audit Trail",
               Icon: AuditTrialSVG,
-              link: "/super-admin/configuration/vehicle-make-model",
+              link: "/super-admin/audit-trail",
             },
           ]}
         />

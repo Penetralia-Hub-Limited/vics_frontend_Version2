@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import Pagination from "@/components/general/pagination";
 import DashboardPath from "@/components/dashboard/dashboard-path";
 import { DashboardSVG, ConfigurationSVG } from "@/common/svgs";
-// import { DataTableWButton } from "@/components/dashboard/dashboard-table-w-button";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { useSelector } from "react-redux";
 import { selectPlateNumberRequestTableData } from "@/store/plate-number-orders/plate-number-order-selector";
@@ -40,33 +39,6 @@ export default function Page() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  // interface TableRow {
-  //   id: number;
-  //   endCode: string;
-  //   type: string;
-  //   createdBy: string;
-  //   date: Date;
-  //   initialQuantity: number;
-  //   currentQuantity: number;
-  //   assigned: number;
-  //   sold: number;
-  // }
-
-  // interface RowAction {
-  //   title: string;
-  //   action: () => void;
-  // }
-
-  // const getRowActions = (row: unknown): RowAction[] => {
-  //   const tableRow = row as TableRow;
-  //   return [
-  //     {
-  //       title: "View",
-  //       action: () => console.log("Viewing details for:", tableRow),
-  //     },
-  //   ];
-  // };
 
   return (
     <main className={"flex flex-col gap-8 md:gap-12 overflow-hidden"}>
