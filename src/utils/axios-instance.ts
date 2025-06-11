@@ -6,7 +6,8 @@ import { logout } from "@/store/auth/auth-slice";
 import { getCookie } from "cookies-next";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  // baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: "https://benion-vics-api.onrender.com/api/v1",
   timeout: 120000,
   headers: {
     "Content-Type": "application/json",
