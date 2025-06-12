@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { decryptToken, host } from "./helpers";
+import { decryptToken, host, xApiKey } from "./helpers";
 import { store, persistor } from "@/store/store";
 import { logout } from "@/store/auth/auth-slice";
 import { getCookie } from "cookies-next";
@@ -16,7 +16,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const apiKey = process.env.NEXT_PUBLIC_AUTH_API_KEY;
+    const apiKey = xApiKey;
     const url = host as string;
 
     if (config.url?.includes(url)) {

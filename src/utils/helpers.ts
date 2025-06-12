@@ -41,3 +41,5 @@ export const decryptToken = (token: string): DecryptTokenResult => {
 
 // export const host = process.env.NEXT_PUBLIC_API_URL
 export const host = "https://benion-vics-api.onrender.com/api/v1"
+// export const xApiKey = process.env.NEXT_PUBLIC_AUTH_API_KEY
+export const xApiKey = "b607f9a7c54ee577e4401fd8f701964cb020de0d938bf0cf888d7ba3e4995c40"
