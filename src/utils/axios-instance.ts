@@ -10,13 +10,13 @@ const axiosInstance = axios.create({
   timeout: 120000,
   headers: {
     "Content-Type": "application/json",
-    "Accept": "*/*",
+    "Access-Control-Allow-Origin": "*",
   },
 });
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const apiKey = xApiKey;
+    const apiKey = xApiKey as string;
     const url = host as string;
 
     if (config.url?.includes(url)) {
