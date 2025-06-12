@@ -38,3 +38,6 @@ export const decryptToken = (token: string): DecryptTokenResult => {
   });
   return tokenData;
 };
+
+// export const host = process.env.NEXT_PUBLIC_API_URL
+export const host = "https://benion-vics-api.onrender.com/api/v1"

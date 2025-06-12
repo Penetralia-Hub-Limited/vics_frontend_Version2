@@ -9,9 +9,10 @@ import {
   setSelectedInvoice,
 } from "@/store/invoice/invoice-slice";
 import { CreateInvoicePayload } from "@/store/invoice/invoice-types";
+import { host } from "@/utils/helpers";
 
 export class InvoiceService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/invoices`;
+  static url = `${host}/invoices`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

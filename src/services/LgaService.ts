@@ -9,9 +9,10 @@ import {
   setSelectedLGA,
 } from "@/store/lgas/lga-slice";
 import { CreateLGAProps } from "@/store/lgas/lga-type";
+import { host } from "@/utils/helpers";
 
 export class LgaService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/lgas`;
+  static url = `${host}/lgas`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

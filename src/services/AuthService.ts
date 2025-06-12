@@ -11,6 +11,7 @@ import {
 import { LoginCredentials } from "@/store/auth/auth-user-types";
 import { deleteCookie } from "cookies-next";
 import { AppDispatch } from "@/store/store";
+import { host } from "@/utils/helpers";
 
 class AuthService {
   private dispatch: AppDispatch;
@@ -24,7 +25,7 @@ class AuthService {
     this.dispatch(authStart());
     try {
       const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/login`,
+        `${host}/login`,
         credentials
       );
       const { status, data, message } = response.data;
@@ -42,7 +43,7 @@ class AuthService {
   // log out user
   async logout() {
     try {
-      await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`);
+      await axiosInstance.post(`${host}/logout`);
       persistor.flush();
     } catch (error) {
       console.error("Logout failed (API):", error);
@@ -57,7 +58,7 @@ class AuthService {
     this.dispatch(authStart());
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/reset-password`,
+        `${host}/reset-password`,
         { email }
       );
       console.log("Reset success:", res.data.message);

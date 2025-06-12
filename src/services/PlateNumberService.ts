@@ -11,9 +11,10 @@ import {
   addPlateNumber,
   updatePlateNumberInState,
 } from "@/store/plateNumber/plate-number-slice";
+import { host } from "@/utils/helpers";
 
 export class PlateNumberService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/plate_numbers`;
+  static url = `${host}/plate_numbers`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

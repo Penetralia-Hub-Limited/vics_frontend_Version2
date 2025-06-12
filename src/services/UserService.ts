@@ -11,9 +11,10 @@ import {
   userFail,
   setSelectedUser,
 } from "@/store/user/user-slice";
+import { host } from "@/utils/helpers";
 
 export class UserService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/users`;
+  static url = `${host}/users`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

@@ -9,9 +9,10 @@ import {
   companyFail,
   setSelectedCompany,
 } from "@/store/company/company-slice";
+import { host } from "@/utils/helpers";
 
 export class CompanyService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/companies`;
+  static url = `${host}/companies`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

@@ -11,9 +11,10 @@ import {
   setSelectedStock,
   updateStocksInState,
 } from "@/store/stock/stock-slice";
+import { host } from "@/utils/helpers";
 
 export class StockService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/stocks`;
+  static url = `${host}/stocks`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

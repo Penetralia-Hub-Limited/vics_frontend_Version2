@@ -9,9 +9,10 @@ import {
   clearNotifications,
 } from "@/store/notifications/notifications-slice";
 import { CreateNotificationsProp } from "@/store/notifications/notifications-type";
+import { host } from "@/utils/helpers";
 
 export class NotificationsService {
-  static baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/notifications`;
+  static baseUrl = `${host}/notifications`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

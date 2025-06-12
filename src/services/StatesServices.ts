@@ -9,9 +9,10 @@ import {
   setSelectedStates,
 } from "@/store/states/state-slice";
 import { AppDispatch } from "@/store/store";
+import { host } from "@/utils/helpers";
 
 export class StateService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/states`;
+  static url = `${host}/states`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

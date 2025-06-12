@@ -1,13 +1,12 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { decryptToken } from "./helpers";
+import { decryptToken, host } from "./helpers";
 import { store, persistor } from "@/store/store";
 import { logout } from "@/store/auth/auth-slice";
 import { getCookie } from "cookies-next";
 
 const axiosInstance = axios.create({
-  // baseURL: process.env.NEXT_PUBLIC_API_URL,
-  baseURL: "https://benion-vics-api.onrender.com/api/v1",
+  baseURL: host,
   timeout: 120000,
   headers: {
     "Content-Type": "application/json",
@@ -18,7 +17,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     const apiKey = process.env.NEXT_PUBLIC_AUTH_API_KEY;
-    const url = process.env.NEXT_PUBLIC_API_URL as string;
+    const url = host as string;
 
     if (config.url?.includes(url)) {
       config.headers["x-api-key"] = apiKey;

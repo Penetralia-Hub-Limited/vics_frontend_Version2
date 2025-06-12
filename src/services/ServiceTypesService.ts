@@ -9,9 +9,10 @@ import {
   setSelectedServiceType,
 } from "@/store/service-type/service-type-slice";
 import { CreateStateTypeProps } from "@/store/service-type/service-type-types";
+import { host } from "@/utils/helpers";
 
 export class ServiceTypeService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/service_types`;
+  static url = `${host}/service_types`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

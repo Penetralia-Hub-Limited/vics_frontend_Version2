@@ -10,9 +10,10 @@ import {
   addNewVehicle,
 } from "@/store/vehicle/vehicle-slice";
 import { CreateVehiclePayload } from "@/store/vehicle/vehicle-type";
+import { host } from "@/utils/helpers";
 
 export class VehicleService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/vehicles`;
+  static url = `${host}/vehicles`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {

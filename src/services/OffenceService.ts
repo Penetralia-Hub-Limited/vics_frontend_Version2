@@ -9,9 +9,10 @@ import {
   setSelectedOffence,
 } from "@/store/offence/offence-slice";
 import { CreateOffenceProps } from "@/store/offence/offence-types";
+import { host } from "@/utils/helpers";
 
 export class OffenceService {
-  static url = `${process.env.NEXT_PUBLIC_API_URL}/offences`;
+  static url = `${host}/offences`;
   private dispatch: AppDispatch;
 
   constructor(dispatch: AppDispatch) {
