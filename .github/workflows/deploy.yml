@@ -42,5 +42,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/vics
+            docker-compose down --remove-orphans
             docker-compose -f vics-deployment.yml pull
-            docker-compose -f vics-deployment.yml up -d --remove-orphans
+            docker-compose -f vics-deployment.yml up -d
