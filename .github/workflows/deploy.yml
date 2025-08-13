@@ -43,4 +43,4 @@ jobs:
           script: |
             cd /home/ubuntu/vics
             docker-compose -f vics-deployment.yml pull
-            docker-compose -f vics-deployment.yml up -d
+            docker-compose -f vics-deployment.yml up -d --remove-orphans
