@@ -30,10 +30,10 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Create .env file
         run: |
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env
-          echo "ENV_NEXT_PUBLIC_AUTH_API_KEY=${{ secrets.ENV_NEXT_PUBLIC_AUTH_API_KEY }}" >> .env
-          echo "ENV_NEXT_PUBLIC_GEMINI_API_KEY=${{ secrets.ENV_NEXT_PUBLIC_GEMINI_API_KEY }}" >> .env
-          echo "ENV_NEXT_PUBLIC_JWT_SECRET=${{ secrets.ENV_NEXT_PUBLIC_JWT_SECRET }}" >> .env
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.ENV_NEXT_PUBLIC_API_URL }}" >> .env
+          echo "NEXT_PUBLIC_AUTH_API_KEY=${{ secrets.ENV_NEXT_PUBLIC_AUTH_API_KEY }}" >> .env
+          echo "NEXT_PUBLIC_GEMINI_API_KEY=${{ secrets.ENV_NEXT_PUBLIC_GEMINI_API_KEY }}" >> .env
+          echo "NEXT_PUBLIC_JWT_SECRET=${{ secrets.ENV_NEXT_PUBLIC_JWT_SECRET }}" >> .env
           echo "NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}" >> .env
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env
       - name: Build Docker image
