@@ -51,6 +51,5 @@ jobs:
           script: |
             cd /home/ubuntu/vics
             docker-compose -f vics-frontend.yml down --remove-orphans
-            docker image prune -af  # prune only images, not volumes
             docker-compose -f vics-frontend.yml pull --ignore-pull-failures
             docker-compose -f vics-frontend.yml up -d --force-recreate
