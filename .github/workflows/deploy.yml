@@ -50,6 +50,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/vics
-            docker-compose -f vics-frontend.yml down --remove-orphans
+            docker-compose -f vics-frontend.yml down
             docker-compose -f vics-frontend.yml pull --ignore-pull-failures
             docker-compose -f vics-frontend.yml up -d --force-recreate
