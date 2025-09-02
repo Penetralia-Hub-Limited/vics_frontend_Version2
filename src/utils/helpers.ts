@@ -39,9 +39,5 @@ export const decryptToken = (token: string): DecryptTokenResult => {
   return tokenData;
 };
 
-// export const host = process.env.NEXT_PUBLIC_API_URL;
-// export const xApiKey = process.env.NEXT_PUBLIC_AUTH_API_KEY;
-export const host = "https://api-vics.penetraliahub.com/api/v1";
-export const xApiKey ="7f9035a810eb39c3daf48e6fdfb31da9834ffff5c4d213013fc7fb3ab8851740"
-
-  // "b607f9a7c54ee577e4401fd8f701964cb020de0d938bf0cf888d7ba3e4995c40";
+export const host = process.env.NEXT_PUBLIC_API_URL;
+export const xApiKey = process.env.NEXT_PUBLIC_AUTH_API_KEY;
