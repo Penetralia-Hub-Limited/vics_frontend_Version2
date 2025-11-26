@@ -196,7 +196,7 @@ const FooterElement = () => {
   return (
     <div className="flex flex-row gap-2 items-center justify-center">
       <p className="text-sm">Already Registered?</p>
-      <Link href={"/login"}>
+      <Link href={"login"}>
         <p
           className={
             "font-bold text-sm text-primary-500 hover:text-primary-500/90"

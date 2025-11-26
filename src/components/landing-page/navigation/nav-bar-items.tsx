@@ -44,7 +44,7 @@ const NavBarItems = () => {
 
       <Button
         onClick={() =>
-          isLoggedIn ? dispatch(logout()) : router.replace("/login")
+          isLoggedIn ? dispatch(logout()) : router.replace("login")
         }
         className={"text-white"}
       >

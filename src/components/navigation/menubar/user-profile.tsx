@@ -45,7 +45,7 @@ const UserProfile: FC<IUserProfile> = ({
   async function handleLogOut() {
     try {
       await authService.logout();
-      router.replace("/login");
+      router.replace("login");
     } catch (error) {
       console.error(error as unknown as string);
       toast("Error logging out.");
