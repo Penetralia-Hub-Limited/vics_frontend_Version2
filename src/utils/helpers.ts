@@ -39,5 +39,5 @@ export const decryptToken = (token: string): DecryptTokenResult => {
   return tokenData;
 };
 
-export const host = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '');
+export const host = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') + '/api/v1';
 export const xApiKey = process.env.NEXT_PUBLIC_AUTH_API_KEY;

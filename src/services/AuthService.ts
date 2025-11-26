@@ -25,7 +25,7 @@ class AuthService {
     this.dispatch(authStart());
     try {
       const response = await axiosInstance.post(
-        `${host}login`,
+        `${host}/login`,
         credentials
       );
       const { status, data, message } = response.data;
